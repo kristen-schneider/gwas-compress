@@ -131,11 +131,25 @@ def ks_ds_dict_cols_blocks(header, blocks, delimeter):
     *col1 here might be "chromosome"*
        
     '''
-
-    final_dict = dict.fromkeys(header, [])
-    
-    
-    print(final_dict)
+    values = [[] for b in blocks]
+    final_dict = dict.fromkeys(header, values)
+    for d in final_dict: print(d, final_dict[d])
+    for b in range(len(blocks)):
+        rows = blocks[b].split('\n')
+        print(rows)
+        for r in rows:
+            rows_list = r.split(delimeter)
+            print(rows_list)
+            for rl in range(len(rows_list)):
+                final_dict[header[rl]][0].append('chrm')
+#                for d in final_dict: print(d, final_dict[d])
+#                print(final_dict[header[rl]][b])
+#                print(rows_list[rl])
+#                final_dict[header[rl]][b].append(rows_list[rl])
+                
+    #print(final_dict['pos'])    
+             
+    for d in final_dict: print(d, final_dict[d])
 
 def ks_ds_dict_blocks_cols(blocks):        
     '''
