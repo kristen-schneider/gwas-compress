@@ -18,6 +18,7 @@ def main():
     blocks = make_blocks(TAB_FILE, BLOCK_SIZE)
     ks_ds_list_of_cols(len(header), blocks, tab_d)
     ks_ds_dict_cols_blocks(header, blocks, tab_d)
+    ks_ds_dict_blocks_cols(len(header), blocks, tab_d)
 
 def determine_delimeter(f):
     '''
@@ -111,8 +112,7 @@ def ks_ds_list_of_cols(num_columns, blocks, delimeter):
             for rl in range(len(rows_list)):
                 data = rows_list[rl] + delimeter
                 list_cols[rl] += data
-        all_blocks.append(list_cols)
-    
+        all_blocks.append(list_cols) 
     
     return all_blocks
 
@@ -131,27 +131,19 @@ def ks_ds_dict_cols_blocks(header, blocks, delimeter):
     *col1 here might be "chromosome"*
        
     '''
-    values = [[] for b in blocks]
-    final_dict = dict.fromkeys(header, values)
-    for d in final_dict: print(d, final_dict[d])
+    
+    final_dict = {col: [[] for i in range(len(blocks))] for col in header}
     for b in range(len(blocks)):
         rows = blocks[b].split('\n')
-        print(rows)
         for r in rows:
             rows_list = r.split(delimeter)
-            print(rows_list)
             for rl in range(len(rows_list)):
-                final_dict[header[rl]][0].append('chrm')
-#                for d in final_dict: print(d, final_dict[d])
-#                print(final_dict[header[rl]][b])
-#                print(rows_list[rl])
-#                final_dict[header[rl]][b].append(rows_list[rl])
+                final_dict[header[rl]][b].append(rows_list[rl])
                 
-    #print(final_dict['pos'])    
-             
-    for d in final_dict: print(d, final_dict[d])
+    #for d in final_dict: print(d, final_dict[d])
+    return final_dict    
 
-def ks_ds_dict_blocks_cols(blocks):        
+def ks_ds_dict_blocks_cols(num_cols, blocks, delimeter):        
     '''
     stores data in lists of cols data structure
 
@@ -165,6 +157,18 @@ def ks_ds_dict_blocks_cols(blocks):
          blockn: [col1, col2, ..., colm]]
     
     '''
+    header = ['chrm', 'pos', 'start', 'end', 'base']
+    final_dict = {block_num: [[] for i in range(num_cols)] for block_num in range(len(blocks))}
+    for b in range(len(blocks)):
+        rows = blocks[b].split('\n')
+        for r in rows:
+            rows_list = r.split(delimeter)
+            for rl in range(len(rows_list)):
+                final_dict[b][rl].append(rows_list[rl])
+    
+    #for d in final_dict: print(d, final_dict[d])
+    return final_dict
+ 
 
 if __name__ == '__main__':
     main()
