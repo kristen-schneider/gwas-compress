@@ -11,11 +11,13 @@ BLOCK_SIZE = 5
 
 def main():
     print('...converting to kristen format...')
-    determine_delimeter(TAB_FILE)
-    determine_delimeter(COMMA_FILE)
-    determine_delimeter(SPACE_FILE)
-    print(make_blocks(TAB_FILE, BLOCK_SIZE)[0].split('\n'))
-
+    tab_d = determine_delimeter(TAB_FILE)
+    comma_d = determine_delimeter(COMMA_FILE)
+    space_d = determine_delimeter(SPACE_FILE)
+    header = get_header(TAB_FILE, tab_d)
+    blocks = make_blocks(TAB_FILE, BLOCK_SIZE)
+    ks_ds_list_of_cols(len(header), blocks, tab_d)
+    ks_ds_dict_cols_blocks(header, blocks, tab_d)
 
 def determine_delimeter(f):
     '''
@@ -33,7 +35,22 @@ def determine_delimeter(f):
         elif len(header.split(',')) > 1: return ','
     
     f_open.close()
+
+def get_header(f, delimeter):
+    '''
+    stores a string which is the header of the file, so that we know what columns are included and need be stored
     
+    INPUTS
+    f = path to uncompressed input file
+    OUTPUTS
+    header = list of the first row of the file
+
+    '''
+    with open(f, 'r') as f_open:
+        header = f_open.readline().rstrip().split(delimeter)
+    return header
+
+ 
 def make_blocks(f, block_size):
     '''
     splits a file into blocks
@@ -68,37 +85,57 @@ def make_blocks(f, block_size):
     return all_blocks
             
 
-def ks_ds_list_of_cols(blocks): 
+def ks_ds_list_of_cols(num_columns, blocks, delimeter): 
     '''
     stores data in lists of cols
 
     INPUTS
+    num_columns: number of columns (usually len(header))
     blocks: list of strings, where each string is all lines in a block (e.g. '1\t100\t500\tA...\n1\t501\t600\G...'
+    delimeter: delimeter of file (e.g. tab, space, comma)
     OUTPUTS
     list of cols:
-        [[col1, col2, col3, ..., coln],[col1, col2, col3, ..., coln], ..., [col1, col2, col3, ..., coln]]
+        [[col1, col2, ..., coln],[col1, col2, ..., coln], ..., [col1, col2, ..., coln]]
         
-        all_blocks = [block1, block2, ..., blockn]
-            block1 = [col1, col2, col3, ..., colm]    
+        *specifically...*
+        list_cols = [block1, block2, ..., blockn]
+            block1 = [col1, col2, ..., colm]    
+    
     '''
+    all_blocks = []
+    for b in blocks:
+        list_cols = [''] * num_columns
+        rows = b.split('\n')
+        for r in rows:
+            rows_list = r.split(delimeter)
+            for rl in range(len(rows_list)):
+                data = rows_list[rl] + delimeter
+                list_cols[rl] += data
+        all_blocks.append(list_cols)
+    
+    
+    return all_blocks
 
-    list_cols = []
-    return list_cols
-
-def ks_ds_dict_cols_blocks(blocks):
+def ks_ds_dict_cols_blocks(header, blocks, delimeter):
     '''
     stores data in dictionary where keys are column names and values are list of blocks
 
     INPUTS
     blocks: list of strings, where each string is all lines in a block (e.g. '1\t100\t500\tA...\n1\t501\t600\G...'
     OUTPUTS
-    dictionary of blocks: cols:
-        [chr:[1, col2, col3, ..., coln],[col1, col2, col3, ..., coln], ..., [col1, col2, col3, ..., coln]]
-        
-        all_blocks = [block1, block2, ..., blockn]
-            block1 = [col1, col2, col3, ..., colm]    
+    dictionary of cols: blocks:
+        [col1:[block1, block2, ..., blockn],
+         col2:[block1, block2, ..., blockn], 
+            ...
+         colm:[block1, block2, ..., blockn]]
+    *col1 here might be "chromosome"*
+       
     '''
 
+    final_dict = dict.fromkeys(header, [])
+    
+    
+    print(final_dict)
 
 def ks_ds_dict_blocks_cols(blocks):        
     '''
@@ -106,6 +143,13 @@ def ks_ds_dict_blocks_cols(blocks):
 
     INPUTS
     blocks: list of strings, where each string is all lines in a block (e.g. '1\t100\t500\tA...\n1\t501\t600\G...'
+    OUTPUTS
+    dictionary of blocks: cols:
+        [block1: [col1, col2, ..., colm],
+         block2: [col1, col2, ..., colm], 
+            ...
+         blockn: [col1, col2, ..., colm]]
+    
     '''
 
 if __name__ == '__main__':
