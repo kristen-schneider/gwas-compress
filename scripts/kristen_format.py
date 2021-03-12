@@ -15,14 +15,10 @@ def main():
     tab_d = determine_delimeter(TAB_FILE)
     comma_d = determine_delimeter(COMMA_FILE)
     space_d = determine_delimeter(SPACE_FILE)
+    
     header = get_header(TAB_FILE, tab_d)
+    chr_flag = get_chr_format(TAB_FILE, header, tab_d)
     blocks = make_blocks(TAB_FILE, BLOCK_SIZE)
-    ds1 = ks_ds_list_of_cols(len(header), blocks, tab_d)
-    ds2 = ks_ds_dict_cols_blocks(header, blocks, tab_d)
-    ds3 = ks_ds_dict_blocks_cols(len(header), blocks, tab_d)
-    write_ds1(ds1)
-    write_ds2(ds2)
-    write_ds3(ds3)
     
 def determine_delimeter(f):
     '''
@@ -35,15 +31,16 @@ def determine_delimeter(f):
     '''
     with open(f, 'r') as f_open:
         header = f_open.readline()
-        if len(header.split('\t')) > 1: return '\t'
-        elif len(header.split(' ')) > 1: return ' '
-        elif len(header.split(',')) > 1: return ','
+        if len(header.split('\t')) > 1: delimeter = '\t'
+        elif len(header.split(' ')) > 1: delimeter = ' '
+        elif len(header.split(',')) > 1: delimeter = ','
     
     f_open.close()
+    return delimeter
 
 def get_header(f, delimeter):
     '''
-    stores a string which is the header of the file, so that we know what columns are included and need be stored
+    stores a list which is the header of the file, so that we know what columns are included and need be stored
     
     INPUTS
     f = path to uncompressed input file
@@ -53,18 +50,45 @@ def get_header(f, delimeter):
     '''
     with open(f, 'r') as f_open:
         header = f_open.readline().rstrip().split(delimeter)
+    
+    f_open.close()
     return header
 
-def get_chr_format(f, delimeter):
+def get_chr_format(f, header, delimeter):
     '''
     looking to see how the first column (chr) is formatted
-    
+         
     INPUTS
     f = path to uncompressed input file
-    
+    OUTPUTS
+    1 if chr is in front of the chromosomee number/character
+    0 if only the chromosome number/character is present
+    None otherwise
+   
     '''    
 
-
+    chr_flag = None
+    with open(f, 'r') as f_open:
+        # reads one line for header and one to get to data
+        h = f_open.readline()
+        first_data = f_open.readline().rstrip().split(delimeter)
+        try: 
+            chr_index = header.index('chr')
+            chr_format = first_data[chr_index]
+            if 'chr' in chr_format or 'chrm' in chr_format: chr_flag = 1
+            else: chr_flag = 0
+        except ValueError:
+            try:
+                chr_index = header.index('chrm')
+                chr_format = first_data[chr_index]
+                if 'chr' in chr_format or 'chrm' in chr_format: chr_flag = 1
+                else: chr_flag = 0
+            except ValueError:
+                chr_flag = None
+                print('VAL_ERROR: cannot find chromosome column to determine format of entries')
+    
+    f_open.close()        
+    return chr_flag
  
 def make_blocks(f, block_size):
     '''
@@ -99,4 +123,5 @@ def make_blocks(f, block_size):
     f_open.close()
     return all_blocks
             
-
+if __name__ == '__main__':
+    main()
