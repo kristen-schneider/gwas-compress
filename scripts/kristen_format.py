@@ -12,12 +12,17 @@ BLOCK_SIZE = 5000
 
 def main():
     print('...converting to kristen format...')
+    
+    # delimeters
     tab_d = determine_delimeter(TAB_FILE)
     comma_d = determine_delimeter(COMMA_FILE)
     space_d = determine_delimeter(SPACE_FILE)
-    
+    # header
     header = get_header(TAB_FILE, tab_d)
+    
+    #chromosome format
     chr_flag = get_chr_format(TAB_FILE, header, tab_d)
+    
     blocks = make_blocks(TAB_FILE, BLOCK_SIZE)
     
 def determine_delimeter(f):

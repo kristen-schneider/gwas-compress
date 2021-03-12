@@ -20,9 +20,11 @@ def main():
     ds1 = ks_ds_list_of_cols(len(header), blocks, tab_d)
     ds2 = ks_ds_dict_cols_blocks(header, blocks, tab_d)
     ds3 = ks_ds_dict_blocks_cols(len(header), blocks, tab_d)
-    write_ds1(ds1)
-    write_ds2(ds2)
-    write_ds3(ds3)
+    write_data(ds1)
+    
+    #write_ds1(ds1)
+    #write_ds2(ds2)
+    #write_ds3(ds3)
     
 
 def ks_ds_list_of_cols(num_columns, blocks, delimeter): 
@@ -107,7 +109,19 @@ def ks_ds_dict_blocks_cols(num_cols, blocks, delimeter):
                 #final_dict[b][rl].append(rows_list[rl])
     for d in final_dict: print(d, final_dict[d])
     return final_dict
- 
+
+def write_data(ds):
+    # open new gz file
+    out_file = open('/Users/kristen/Desktop/compression_sandbox/toy_data/ds_kristen.tsv.gz', 'ab')
+    out_file.truncate(0)
+    # write to gz file
+    for b in ds1:
+        for col in b:
+            bytes_data = bytes(col, 'utf-8')
+            compressed_data = gzip.compress(bytes_data)
+            out_file.write(compressed_data)
+    out_file.close()
+
 
 def write_ds1(ds1):
     '''
