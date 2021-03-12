@@ -39,6 +39,7 @@ class TestGZ(unittest.TestCase):
         # DS2: dictionary key = col, values = blocks
         self.assertEqual(len(kristen_format.ks_ds_dict_cols_blocks(header, blocks, delimeter)), len(header))
         # DS3: dictionary key = block, values = cols
-
+        self.assertEqual(len(kristen_format.ks_ds_dict_blocks_cols(num_cols, blocks, delimeter)), len(blocks))    
+    
 if __name__ == '__main__':
     unittest.main()
