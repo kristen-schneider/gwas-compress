@@ -2,9 +2,8 @@ import sys
 def main():
     A = [1,1,1,1,1]
     B = ['A', 'C', 'T', 'G', 'A']
-    print(len(serialize_data(A, sys.getsizeof(int()))))
-    print(sys.getsizeof(int()))
-    print(serialize_data(B, sys.getsizeof(str())))
+    print(serialize_data(A, 5))
+    print(serialize_data(B, 5))
     
     
 
@@ -17,16 +16,16 @@ def serialize_data(one_col_list, num_bytes_per_char):
     bytes object of list from input
     ''' 
     
-    byte_list = b''
+    bytes_string = b''
     
     for i in one_col_list:
         # to work on integets
         try:
-            byte_list += i.to_bytes(num_bytes_per_char, byteorder='big', signed = False)
+            bytes_string += i.to_bytes(num_bytes_per_char, byteorder='big', signed = False)
         # to work on strings
         except AttributeError: 
-            byte_list += bytes(i, 'utf-8')
+            bytes_string += bytes(i, 'utf-8')
 
-    return byte_list
+    return bytes_string
 
 if __name__ == '__main__': main()
