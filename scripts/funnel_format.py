@@ -11,7 +11,7 @@ SPACE_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-space
 BLOCK_SIZE = 5000
 
 def main():
-    print('...converting to kristen format...')
+    print('...converting to funnel format...')
     
     # delimeters
     tab_d = determine_delimeter(TAB_FILE)
