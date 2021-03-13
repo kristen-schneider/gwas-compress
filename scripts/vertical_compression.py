@@ -12,11 +12,11 @@ BLOCK_SIZE = 5000
 
 def main():
     print('...converting to kristen format...')
-    tab_d = determine_delimeter(TAB_FILE)
-    comma_d = determine_delimeter(COMMA_FILE)
-    space_d = determine_delimeter(SPACE_FILE)
-    header = get_header(TAB_FILE, tab_d)
-    blocks = make_blocks(TAB_FILE, BLOCK_SIZE)
+    tab_d = kristen_format.determine_delimeter(TAB_FILE)
+    comma_d = kristen_format.determine_delimeter(COMMA_FILE)
+    space_d = kristen_format.determine_delimeter(SPACE_FILE)
+    header = kristen_format.get_header(TAB_FILE, tab_d)
+    blocks = kristen_format.make_blocks(TAB_FILE, BLOCK_SIZE)
     ds1 = ks_ds_list_of_cols(len(header), blocks, tab_d)
     ds2 = ks_ds_dict_cols_blocks(header, blocks, tab_d)
     ds3 = ks_ds_dict_blocks_cols(len(header), blocks, tab_d)

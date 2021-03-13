@@ -5,8 +5,8 @@ import gzip
 
 
 
-# Testing gzip functionality
-class TestGZ(unittest.TestCase):
+# Testing funnel format
+class TestFunnelFormat(unittest.TestCase):
     
     HEADER = ['chr','pos','ref','alt','af_cases_EUR','af_controls_EUR','beta_EUR','se_EUR','pval_EUR','low_confidence_EUR']
     TAB_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
