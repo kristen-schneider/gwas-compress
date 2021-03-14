@@ -1,8 +1,12 @@
 import gzip
 
-def main():
-
-def decompress(bitstring):
-    return gzip.decompress(bitstring)
-
-if __name__ == '__main__': main()
+def decompress_data(c_bitstring):
+    '''
+    uses python's gzip.decompress
+    
+    INPUTS
+    c_bitstring: compressed bitstring (using python's gzip.compress)
+    OUTPUTS
+    decompressed bitstring (original bitstring from serialize function)
+    '''
+    return gzip.decompress(c_bitstring)
