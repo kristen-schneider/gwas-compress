@@ -35,8 +35,8 @@ class TestFunnelFormat(unittest.TestCase):
         self.assertEqual(len(funnel_format.split_into_blocks(self.TAB_FILE, self.BLOCK_SIZE)), math.ceil(self.NUM_LINES_IN_FILE/self.BLOCK_SIZE))  
     def test_make_one_block(self):
         self.assertEqual(len(funnel_format.make_one_block(self.BLOCK_STRING, len(self.HEADER), self.BLOCK_SIZE, '\t')), len(self.HEADER)) 
-    #def test_make_all_blocks(self):
-    #    assertEqual(1,1) 
+    def test_make_all_blocks(self):
+        self.assertEqual(len(funnel_format.make_all_blocks(self.TAB_FILE, self.BLOCK_SIZE, len(self.HEADER))), 2)
     
 
     #def test_make_blocks(self):
