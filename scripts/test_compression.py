@@ -4,6 +4,7 @@ import serialize
 import compress
 import decompress
 import deserialize
+import driver
 import unittest
 
 # Testing funnel format generation (where all incoming files can be split into the same format)
@@ -93,7 +94,19 @@ class TestSerializationToDeserialization(unittest.TestCase):
         # deserialize_list_bitstrings(dc_bitstring, num_columns, lengths_of_bitstrings, val_types_of_bitstrings, num_bytes_list)
         self.assertEqual(deserialize.deserialize_list_bitstrings(self.AB_dc, 2, [len(self.A_dc), len(self.B_dc)], [self.int_type, self.str_type], [self.num_bytes_int, self.num_bytes_str]), self.AB_ds) 
 
-        
+
+# Testing driver file which does all the workflow woohoo
+class TestDriver(unittest.TestCase):
+    HEADER = ['chr','pos','ref','alt','af_cases_EUR','af_controls_EUR','beta_EUR','se_EUR','pval_EUR','low_confidence_EUR']
+    TAB_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+    TAB_FILE_75 = '/Users/kristen/Desktop/compression_sandbox/toy_data/75-lines-tab.tsv'
+    COMMA_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-comma.csv'
+    SPACE_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-space.ssv'
+    BLOCK_SIZE = 10
+
+    def test_write_new_file(self):
+        self.assertEqual(driver.write_new_file(self.TAB_FILE, self.BLOCK_SIZE), 2)
+    
 
     
 if __name__ == '__main__':

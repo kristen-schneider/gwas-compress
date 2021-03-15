@@ -1,5 +1,3 @@
-import gzip
-
 '''
 to handle all input file formats and put them into the proper format to feed into compression system
 '''
