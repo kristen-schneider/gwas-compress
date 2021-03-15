@@ -20,7 +20,6 @@ def main():
     
     #chromosome format
     chr_flag = get_chr_format(TAB_FILE, header, tab_d)
-    
     blocks = make_blocks(TAB_FILE, BLOCK_SIZE)
     
 def determine_delimeter(f):
@@ -93,38 +92,79 @@ def get_chr_format(f, header, delimeter):
     f_open.close()        
     return chr_flag
  
-def make_blocks(f, block_size):
+def split_into_blocks(f, block_size):
     '''
-    splits a file into blocks
+    takes a file and splits into blocks. each block is just a long string of lines separated by newline character.
 
     INPUTS
     f = path to input file
-    block_size = number of lines per block
+    block_size = number of lines to go into a block
     OUTPUTS
-    a list of all blocks. one block is a string that might look like '1\t10294\t10306\tA...\n1\t10307\t10543\t...'
+    blocks = list of strings [block1, block2, ..., blockn]
+
     '''
-    # initialize variables
+    # initialize 
     all_blocks = []    
-    header = ''
+    header = None
     curr_block = ''
-    line_count_per_block = 0
-    
+    line_count = 0
+    last_block = False
+       
+ 
     f_open = open(f, 'r')
     for line in f_open:
-        # grab header
-        if header == '': header = line
-        # add new block every 'block_size' lines
-        else:
-            if line_count_per_block < block_size:
+        if header == None: header = line
+        else:   
+            if line_count < block_size:
+                last_block = False
                 curr_block += line
-                line_count_per_block += 1
+                line_count += 1
             else:
-                all_blocks.append(curr_block.rstrip())
+                all_blocks.append(curr_block)
+                last_block = True
                 curr_block = line
-                line_count_per_block = 1
-    all_blocks.append(curr_block.rstrip())
+                line_count = 0
+    
+    if not last_block: all_blocks.append(curr_block)
+        
     f_open.close()
     return all_blocks
+
+
+#def make_block(f, block_size, delimeter):
+#    '''
+#    splits a file into blocks
+#
+#    INPUTS
+#    f = path to input file
+#    block_size = number of lines per block
+#    OUTPUTS
+#    a list of all blocks. one block is a list of columns. (e.g. [[1,1,1,1,1],[100,200,300,400,500],['A', 'C', 'T', 'G', 'A'], ...)
+#
+#    '''
+#    # initialize variables
+#    all_blocks = []    
+#    header = None
+#    curr_block = []
+#    line_count_per_block = 0
+#    
+#    f_open = open(f, 'r')
+#    for line in f_open:
+#        # grab header
+#        if header == None: header = line.rstrip().split(delimeter)
+#        # add new block every 'block_size' lines
+#        else:
+#            if line_count_per_block < block_size:
+#                
+#                curr_block.append(line.rstrip().split(delimeter)
+#                line_count_per_block += 1
+#            else:
+#                all_blocks.append(curr_block.rstrip())
+#                curr_block = line
+#                line_count_per_block = 1
+#    all_blocks.append(curr_block.rstrip())
+#    f_open.close()
+#    return all_blocks
             
 if __name__ == '__main__':
     main()
