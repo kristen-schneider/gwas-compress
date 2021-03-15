@@ -1,22 +1,17 @@
 import gzip
-import serialize
 
-
-def compress_data(s_bitstring, t):
+def compress_data(s_bitstring, time):
     '''
-    uses python's gzip.compress
+    uses python's gzip.compress to compress a serialized bitstring
     
     INPUTS
     s_bitstring: serialized bitstring from the serialize_data method in serialize.py
+    time = mtime argument for gzip.compress
     OUTPUTS
-    compressed bitstring (using python's gzip.compress() function)
+    c_bitstring = compressed bitstring (using python's gzip.compress() function)
+    
     '''
-    return gzip.compress(s_bitstring, mtime=t)
 
-#A=[1,1,1,1,1]
-#A_s = serialize.serialize_data(A,5)
-#A_c = compress_data(A_s, 0)
+    c_bitstring = gzip.compress(s_bitstring, mtime=time) 
+    return c_bitstring
 
-#print(A_s)
-#print(A_c)
-#print(gzip.compress(A_s, mtime=0))

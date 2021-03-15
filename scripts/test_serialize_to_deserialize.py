@@ -17,14 +17,18 @@ class TestSerializationToDeserialization(unittest.TestCase):
     A_s = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01'
     A_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffc````d\xc0B\x00\x00s \xa8\xa5\x19\x00\x00\x00'
     A_dc = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01'
-    A_ds = [1,1,1,1,1]
+    A_ds = [[1,1,1,1,1]]
     
     B = ['A', 'C', 'T', 'G', 'A']
     B_s = b'ACTGA'
     B_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffst\x0eqw\x04\x00\x9f_F\xff\x05\x00\x00\x00'
     B_dc = b'ACTGA'
-    B_ds = ['A', 'C', 'T', 'G', 'A'] 
+    B_ds = [['A', 'C', 'T', 'G', 'A']] 
     
+    AB_dc = A_dc+B_dc
+    AB_ds = [A, B]
+   
+    print(AB_dc) 
     #C = [100, 150, 200, 250, 300]
     #D = scientific notation...    
 
@@ -46,11 +50,11 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_data(self.B, self.num_bytes), self.mtime)), self.B_dc)
     
     def test_deserialize(self):
-        self.assertEqual(deserialize.deserialize_data(self.A_dc, 0, len(self.A), self.num_bytes), self.A_ds)
-        self.assertEqual(deserialize.deserialize_data(decompress.decompress_data(compress.compress_data(serialize.serialize_data(self.A, self.num_bytes), self.mtime)), 0, len(self.A), self.num_bytes), self.A_ds)
-        self.assertEqual(deserialize.deserialize_data(self.B_dc, 1, len(self.B), self.num_bytes), self.B_ds)
-        self.assertEqual(deserialize.deserialize_data(decompress.decompress_data(compress.compress_data(serialize.serialize_data(self.B, self.num_bytes), self.mtime)), 1, len(self.B), self.num_bytes), self.B_ds)
-
+        self.assertEqual(deserialize.deserialize_data(self.A_dc, [len(self.A_dc)], [0], self.num_bytes), self.A_ds)
+        self.assertEqual(deserialize.deserialize_data(decompress.decompress_data(compress.compress_data(serialize.serialize_data(self.A, self.num_bytes), self.mtime)), [len(self.A)], [0], self.num_bytes), self.A_ds)
+        self.assertEqual(deserialize.deserialize_data(self.B_dc, [len(self.B_dc)], [1], self.num_bytes), self.B_ds)
+        self.assertEqual(deserialize.deserialize_data(decompress.decompress_data(compress.compress_data(serialize.serialize_data(self.B, self.num_bytes), self.mtime)), [len(self.B)], [1], self.num_bytes), self.B_ds)
+        self.assertEqual(deserialize.deserialize_data(self.AB_dc, [len(self.A_dc), len(self.B_dc)], [0,1], self.num_bytes), self.AB_ds)
 
     
 if __name__ == '__main__':
