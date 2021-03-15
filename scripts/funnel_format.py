@@ -1,27 +1,3 @@
-'''
-to handle all input file formats and put them into the proper format to feed into compression system
-'''
-TAB_FILE_10000 = '/Users/kristen/Desktop/compression_sandbox/toy_data/10000-lines-tab.tsv'
-TAB_FILE_75 = '/Users/kristen/Desktop/compression_sandbox/toy_data/75-lines-tab.tsv'
-TAB_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-COMMA_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-comma.csv'
-SPACE_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-space.ssv'
-BLOCK_SIZE = 5000
-
-def main():
-    print('...converting to funnel format...')
-    
-    # delimeters
-    tab_d = determine_delimeter(TAB_FILE)
-    comma_d = determine_delimeter(COMMA_FILE)
-    space_d = determine_delimeter(SPACE_FILE)
-    # header
-    header = get_header(TAB_FILE, tab_d)
-    
-    #chromosome format
-    chr_flag = get_chr_format(TAB_FILE, header, tab_d)
-    blocks = make_blocks(TAB_FILE, BLOCK_SIZE)
-    
 def determine_delimeter(f):
     '''
     deterimine which delimeter is used in the file
@@ -132,11 +108,13 @@ def make_one_block(block_string, num_columns, block_size, delimeter):
     
     INPUTS
     block_string = block as a string with new line and tab characters
+    num_columns = number of columns in file
+    block_size = number of lines in a block
+    delimeter = file delimeter
     OUTPUTS
     one_block = one block as a list
     
     '''
-        
     block_separate_lines = block_string.split('\n')
     block_separate_lines.pop()
     one_block = [[] for i in range(num_columns)]
@@ -145,7 +123,6 @@ def make_one_block(block_string, num_columns, block_size, delimeter):
         curr_line = block_separate_lines[i].split(delimeter)
         for v in range(num_columns):
             one_block[v].append(curr_line[v])
-        #one_blockblock_rows[i]
     return one_block
 
 def make_all_blocks(f, block_size, num_columns):
@@ -168,40 +145,4 @@ def make_all_blocks(f, block_size, num_columns):
         all_blocks_list.append(curr_block)
     return all_blocks_list
 
-#def make_block(f, block_size, delimeter):
-#    '''
-#    splits a file into blocks
-#
-#    INPUTS
-#    f = path to input file
-#    block_size = number of lines per block
-#    OUTPUTS
-#    a list of all blocks. one block is a list of columns. (e.g. [[1,1,1,1,1],[100,200,300,400,500],['A', 'C', 'T', 'G', 'A'], ...)
-#
-#    '''
-#    # initialize variables
-#    all_blocks = []    
-#    header = None
-#    curr_block = []
-#    line_count_per_block = 0
-#    
-#    f_open = open(f, 'r')
-#    for line in f_open:
-#        # grab header
-#        if header == None: header = line.rstrip().split(delimeter)
-#        # add new block every 'block_size' lines
-#        else:
-#            if line_count_per_block < block_size:
-#                
-#                curr_block.append(line.rstrip().split(delimeter)
-#                line_count_per_block += 1
-#            else:
-#                all_blocks.append(curr_block.rstrip())
-#                curr_block = line
-#                line_count_per_block = 1
-#    all_blocks.append(curr_block.rstrip())
-#    f_open.close()
-#    return all_blocks
-            
-if __name__ == '__main__':
-    main()
+

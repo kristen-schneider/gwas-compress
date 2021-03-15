@@ -6,6 +6,7 @@ import decompress
 import deserialize
 import driver
 import unittest
+import math
 
 # Testing funnel format generation (where all incoming files can be split into the same format)
 class TestFunnelFormat(unittest.TestCase):
@@ -15,7 +16,9 @@ class TestFunnelFormat(unittest.TestCase):
     COMMA_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-comma.csv'
     SPACE_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-space.ssv'
     BLOCK_SIZE = 5
-
+    NUM_LINES_IN_FILE = 9 # not including header
+    BLOCK_STRING = '1\t11063\tT\tG\t4.213e-05\t4.799e-05\t-1.334e+00\t9.999e+00\t8.938e-01\ttrue\n1\t13259\tG\tA\t2.984e-05\t2.786e-04\t-1.047e+00\t1.448e+00\t4.699e-01\ttruei\n'
+    
     def test_determine_delimeter(self):
         self.assertEqual(funnel_format.determine_delimeter(self.TAB_FILE), '\t')
         self.assertEqual(funnel_format.determine_delimeter(self.COMMA_FILE), ',')
@@ -28,13 +31,21 @@ class TestFunnelFormat(unittest.TestCase):
     def test_get_chr_format(self):
         self.assertEqual(funnel_format.get_chr_format(self.TAB_FILE, self.HEADER, '\t'), 0) 
 
-    def test_make_blocks(self):
-        # testing that the make_blocks function returns proper number of blocks
-        self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE, self.BLOCK_SIZE)), 2)
-        self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE_75, self.BLOCK_SIZE)), 15)
-        # testing that the make_blocks function makes blocks with proper number of lines
-        self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE, self.BLOCK_SIZE)[0].split('\n')), self.BLOCK_SIZE)
-        self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE_75, self.BLOCK_SIZE)[0].split('\n')), self.BLOCK_SIZE)
+    def test_split_into_blocks(self):
+        self.assertEqual(len(funnel_format.split_into_blocks(self.TAB_FILE, self.BLOCK_SIZE)), math.ceil(self.NUM_LINES_IN_FILE/self.BLOCK_SIZE))  
+    def test_make_one_block(self):
+        self.assertEqual(len(funnel_format.make_one_block(self.BLOCK_STRING, len(self.HEADER), self.BLOCK_SIZE, '\t')), len(self.HEADER)) 
+    #def test_make_all_blocks(self):
+    #    assertEqual(1,1) 
+    
+
+    #def test_make_blocks(self):
+    #    # testing that the make_blocks function returns proper number of blocks
+    #    self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE, self.BLOCK_SIZE)), 2)
+    #    self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE_75, self.BLOCK_SIZE)), 15)
+    #    # testing that the make_blocks function makes blocks with proper number of lines
+    #    self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE, self.BLOCK_SIZE)[0].split('\n')), self.BLOCK_SIZE)
+    #    self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE_75, self.BLOCK_SIZE)[0].split('\n')), self.BLOCK_SIZE)
 
 
 
@@ -104,8 +115,8 @@ class TestDriver(unittest.TestCase):
     SPACE_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-space.ssv'
     BLOCK_SIZE = 10
 
-    def test_write_new_file(self):
-        self.assertEqual(driver.write_new_file(self.TAB_FILE, self.BLOCK_SIZE), 2)
+#    def test_write_new_file(self):
+#        self.assertEqual(driver.write_new_file(self.TAB_FILE, self.BLOCK_SIZE), 2)
     
 
     
