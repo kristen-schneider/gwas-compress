@@ -122,11 +122,13 @@ def split_into_blocks(f, block_size):
                 line_count = 1
     
     all_blocks.append(curr_block)
-        
+    
+    print(block_size, all_blocks)
+ 
     f_open.close()
     return all_blocks
 
-def make_one_block(block_string, delimeter):
+def make_one_block(block_string, num_columns, block_size, delimeter):
     '''
     takes a single block from split_into_blocks (one long string) and makes it a list of columns
     
@@ -136,10 +138,16 @@ def make_one_block(block_string, delimeter):
     one_block = one block as a list
     
     '''
+        
+    block_separate_lines = block_string.split('\n')
+    block_separate_lines.pop()
+    one_block = [[] for i in range(num_columns)]
+    
+    for i in range(block_size):
+        curr_row = block_rows[i]
+        
 
-
-
-def make_all_blocks(f, block_size):
+def make_all_blocks(f, block_size, num_columns):
     '''
     take a list of strings and makes each string a list of columns, where each column is a list of values
     
@@ -155,7 +163,7 @@ def make_all_blocks(f, block_size):
 
     all_blocks_list = []
     for b in all_blocks_string:
-        curr_block = make_one_block(b, delimeter)
+        curr_block = make_one_block(b, num_columns, block_size, delimeter)
         all_blocks_list.append(curr_block)
     return all_blocks_list
 

@@ -6,7 +6,8 @@ import deserialize
 
 
 IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-BLOCK_SIZE = 10
+BLOCK_SIZE = 3
+NUM_COLUMNS = 10
 
 def write_new_file(in_file, block_size):
     '''
@@ -20,8 +21,8 @@ def write_new_file(in_file, block_size):
     write to file
 
     '''
-    blocks = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE)
-    print(blocks)
+    blocks = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, NUM_COLUMNS)
+    #print(blocks)
 
     return 3
 
