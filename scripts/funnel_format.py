@@ -126,11 +126,38 @@ def split_into_blocks(f, block_size):
     f_open.close()
     return all_blocks
 
-def make_one_block(all_blocks, delimeter):
+def make_one_block(block_string, delimeter):
     '''
+    takes a single block from split_into_blocks (one long string) and makes it a list of columns
     
+    INPUTS
+    block_string = block as a string with new line and tab characters
+    OUTPUTS
+    one_block = one block as a list
     
     '''
+
+
+
+def make_all_blocks(f, block_size):
+    '''
+    take a list of strings and makes each string a list of columns, where each column is a list of values
+    
+    INPUTS
+    f = file path to input file 
+    block_size = number of lines in a block
+    OUTPUTS
+    all_blocks_list = [[[1,1,1,1,1],[100,200,300,400,500]...],[[2,2,2,2,2],[100,200,300,400,500]...]]]
+
+    '''
+    delimeter = determine_delimeter(f)
+    all_blocks_string = split_into_blocks(f, block_size)
+
+    all_blocks_list = []
+    for b in all_blocks_string:
+        curr_block = make_one_block(b, delimeter)
+        all_blocks_list.append(curr_block)
+    return all_blocks_list
 
 #def make_block(f, block_size, delimeter):
 #    '''

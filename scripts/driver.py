@@ -20,9 +20,8 @@ def write_new_file(in_file, block_size):
     write to file
 
     '''
-    delimeter = funnel_format.determine_delimeter(in_file)
-    blocks = funnel_format.split_into_blocks(in_file, 2)
-    print(len(blocks))
+    blocks = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE)
+    print(blocks)
 
     return 3
 
