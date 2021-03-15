@@ -1,4 +1,4 @@
-def deserialize_data(dc_bitstring, lengths_of_bitstrings, val_types_of_bitstrings, num_bytes):
+def deserialize_data(dc_bitstring, lengths_of_bitstrings, val_types_of_bitstrings, num_bytes_list):
     '''
     take decompressed bitstring (same as serilized bitstring) and deserializes it.
 
@@ -12,7 +12,7 @@ def deserialize_data(dc_bitstring, lengths_of_bitstrings, val_types_of_bitstring
     deserialized bitstring (same as original list)
     
     '''
-
+    print(dc_bitstring)
     ds_list = []
     
     offset = 0 
@@ -22,6 +22,7 @@ def deserialize_data(dc_bitstring, lengths_of_bitstrings, val_types_of_bitstring
         curr_len_bitstring = lengths_of_bitstrings[curr_i]
         curr_val_type = val_types_of_bitstrings[curr_i]
         curr_ds_bitstring = []
+        num_bytes = num_bytes_list[curr_i]
         
         for i in range(num_bytes):
             i += offset
@@ -33,8 +34,9 @@ def deserialize_data(dc_bitstring, lengths_of_bitstrings, val_types_of_bitstring
             # input values are strings 
             elif curr_val_type == 1:
                 curr_bytes = dc_bitstring[i]
+                print(curr_bytes)
                 curr_ds_value = chr(curr_bytes)
-        
+            
             # input values are floats--STILL WORKING ON
             elif curr_val_type == 2:
                 curr_bytes = 0
@@ -45,4 +47,5 @@ def deserialize_data(dc_bitstring, lengths_of_bitstrings, val_types_of_bitstring
         offset+=curr_len_bitstring
         ds_list.append(curr_ds_bitstring)
     return ds_list
+
 
