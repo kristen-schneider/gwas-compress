@@ -108,28 +108,29 @@ def split_into_blocks(f, block_size):
     header = None
     curr_block = ''
     line_count = 0
-    last_block = False
-       
  
     f_open = open(f, 'r')
     for line in f_open:
         if header == None: header = line
         else:   
             if line_count < block_size:
-                last_block = False
                 curr_block += line
                 line_count += 1
             else:
                 all_blocks.append(curr_block)
-                last_block = True
                 curr_block = line
-                line_count = 0
+                line_count = 1
     
-    if not last_block: all_blocks.append(curr_block)
+    all_blocks.append(curr_block)
         
     f_open.close()
     return all_blocks
 
+def make_one_block(all_blocks, delimeter):
+    '''
+    
+    
+    '''
 
 #def make_block(f, block_size, delimeter):
 #    '''
