@@ -15,11 +15,11 @@ class TestFileHeader(unittest.TestCase):
     TAB_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
     DATA = ['1','11063','T','G','4.213e-05','4.799e-05','-1.334e+00','9.999e+00','8.938e-01','true']
     BLOCK_SIZE = 5   
-    CRRCT_FILE_HEADER = [10, 5, 2, [], []]
+    CRRCT_FILE_HEADER = [10, 5, [], []]
     
 
     def test_make_file_header(self):
-        self.assertEqual(file_header.make_file_header(TAB_FILE, self.BLOCK_size), self.CRRCT_FILE_HEADER)
+        self.assertEqual(file_header.make_file_header(self.TAB_FILE, self.BLOCK_SIZE), self.CRRCT_FILE_HEADER)
     
 
 class TestFunnelFormat(unittest.TestCase):
@@ -110,13 +110,13 @@ class TestSerializationToDeserialization(unittest.TestCase):
 
 
 # Testing driver file which does all the workflow woohoo
-class TestDriver(unittest.TestCase):
-    HEADER = ['chr','pos','ref','alt','af_cases_EUR','af_controls_EUR','beta_EUR','se_EUR','pval_EUR','low_confidence_EUR']
-    TAB_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-    TAB_FILE_75 = '/Users/kristen/Desktop/compression_sandbox/toy_data/75-lines-tab.tsv'
-    COMMA_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-comma.csv'
-    SPACE_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-space.ssv'
-    BLOCK_SIZE = 10
+#class TestDriver(unittest.TestCase):
+#    HEADER = ['chr','pos','ref','alt','af_cases_EUR','af_controls_EUR','beta_EUR','se_EUR','pval_EUR','low_confidence_EUR']
+#    TAB_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+#    TAB_FILE_75 = '/Users/kristen/Desktop/compression_sandbox/toy_data/75-lines-tab.tsv'
+#    COMMA_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-comma.csv'
+#    SPACE_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-space.ssv'
+#    BLOCK_SIZE = 10
 
 #    def test_write_new_file(self):
 #        self.assertEqual(driver.write_new_file(self.TAB_FILE, self.BLOCK_SIZE), 2)
