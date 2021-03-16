@@ -38,6 +38,8 @@ def serialize_data(one_column, num_bytes_per_val):
         # serialize value according to its type
         try: #integers
             s_value = c.to_bytes(num_bytes_per_val, byteorder='big', signed = False)
+        
+        # TODO floats
         except AttributeError: #strings
             s_value = bytes(c, 'utf-8')
 

@@ -9,7 +9,8 @@ import unittest
 # Testing serialization --> compression --> decompression --> deserialization
 class TestSerializationToDeserialization(unittest.TestCase):
     
-    num_columns = 5
+    #num_columns = 5
+    block_size = 5
     mtime = 0   # for reproducibility we choose mtime = 0 for unittests
     int_type = 0
     str_type = 1
@@ -21,7 +22,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     I_s = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01'
     I_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffc````d\xc0B\x00\x00s \xa8\xa5\x19\x00\x00\x00'
     I_dc = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01'
-    I_ds = [['1','1','1','1','1']]
+    I_ds = [[1,1,1,1,1]]
     
     # float data
     F = [['1.2', '3.45', '67.8', '9.000', '0.12345']]
@@ -38,7 +39,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     IS_s = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01ACTGA'
     IS_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffc````d\xc0B8:\x87\xb8;\x02\x00\xca.\x1d\xe5\x1e\x00\x00\x00' 
     IS_dc =  b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01ACTGA'
-    IS_ds = [['1','1','1','1','1'], ['A', 'C', 'T', 'G', 'A']]
+    IS_ds = [[1,1,1,1,1], ['A', 'C', 'T', 'G', 'A']]
    
     #D = scientific notation...    
 
@@ -49,7 +50,12 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(basics.convert_to_type(self.I[0], int), [1,1,1,1,1])
         self.assertEqual(basics.convert_to_type(self.F[0], float), [1.2,3.45,67.8,9.000,0.12345])
         self.assertEqual(basics.convert_to_type(self.S[0], str), self.S[0])
-    
+        self.assertEqual(basics.get_bitstring_length_by_data_type(5, int, self.type_dict[int]), 25)
+        self.assertEqual(basics.get_bitstring_length_by_data_type(5, str, self.type_dict[str]), 5)
+        self.assertEqual(basics.get_bitstring_length_by_data_type(len(self.I[0]), basics.get_data_type(self.I[0][0]), self.type_dict[int]), len(self.I_s))
+        self.assertEqual(basics.get_bitstring_length_by_data_type(len(self.S[0]), basics.get_data_type(self.S[0][0]), self.type_dict[str]), len(self.S_s))
+          
+ 
     def test_serialize(self):
         self.assertEqual(serialize.serialize_list_columns(self.I, self.type_dict), self.I_s)
         self.assertEqual(serialize.serialize_list_columns(self.S, self.type_dict), self.S_s)
@@ -72,9 +78,10 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(decompress.decompress_data(self.IS_c), self.IS_dc)
         self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.IS, self.type_dict), self.mtime)), self.IS_dc)
          
-    #def test_deserialize(self):
-        # deserialize_data(dc_bitstring, val_type, num_bytes)
-        #self.assertEqual(deserialize.deserialize_data(self.I_dc, self.int_type, ), self.I_ds[0])
+    def test_deserialize(self):
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.I_dc, self.block_size, [int], self.type_dict), self.I_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.S_dc, self.block_size, [str], self.type_dict), self.S_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.IS_dc, self.block_size, [int, str], self.type_dict), self.IS_ds)
         #self.assertEqual(deserialize.deserialize_data(decompress.decompress_data(compress.compress_data(serialize.serialize_data(self.I[0], self.type_dict[int]), self.mtime)), self.int_type, self.type_dict[int]), self.I_ds[0])
         #self.assertEqual(deserialize.deserialize_data(self.S_dc, self.str_type, self.type_dict[str]), self.S_ds[0])
         #self.assertEqual(deserialize.deserialize_data(decompress.decompress_data(compress.compress_data(serialize.serialize_data(self.S, self.type_dict[str]), self.mtime)), self.str_type, self.type_dict[str]), self.S_ds[0])
