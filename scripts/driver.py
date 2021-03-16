@@ -25,10 +25,14 @@ def write_new_file(in_file, block_size):
 
     fileheader = file_header.make_file_header(IN_FILE, BLOCK_SIZE)
     fileheader_data_type = [0, 0]
-    #for i in fileheader:
+
     s_fileheader = serialize.serialize_data(fileheader, 5)
+    print(s_fileheader)
+    c_fileheader = compress.compress_data(s_fileheader, 0)
+    print(c_fileheader)
+    dc_fileheader = decompress.decompress_data(c_fileheader)
+    print(dc_fileheader)
     ds_fileheader = deserialize.deserialize_list_bitstrings(s_fileheader, 2, [25,25], [0,0], [5,5])
-    print(s_fileheader, ds_fileheader)
     
     blocks = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, NUM_COLUMNS)
     
