@@ -67,6 +67,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
  
     def test_serialize(self):
         self.assertEqual(serialize.serialize_data([1,1,1,1,1], self.type_dict[int]), self.I_s)
+        self.assertEqual(serialize.serialize_data(['A','C','T','G','A'], self.type_dict[str]), self.S_s) 
         self.assertEqual(serialize.serialize_list_columns(self.I, self.type_dict), self.I_s)
         self.assertEqual(serialize.serialize_list_columns(self.S, self.type_dict), self.S_s)
         self.assertEqual(serialize.serialize_list_columns(self.IS, self.type_dict), self.IS_s)
@@ -82,6 +83,8 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(decompress.decompress_data(self.IS_c), self.IS_dc)
          
     def test_deserialize(self):
+        self.assertEqual(deserialize.deserialize_data(self.I_dc, int, self.type_dict[int]), self.I_ds[0])
+        self.assertEqual(deserialize.deserialize_data(self.S_dc, str, self.type_dict[str]), self.S_ds[0])
         self.assertEqual(deserialize.deserialize_block_bitstring(self.I_dc, self.block_size, [int], self.type_dict), self.I_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(self.S_dc, self.block_size, [str], self.type_dict), self.S_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(self.IS_dc, self.block_size, [int, str], self.type_dict), self.IS_ds)
@@ -90,15 +93,38 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(basics.get_bitstring_length_by_data_type(len(self.I[0]), basics.get_data_type(self.I[0][0]), self.type_dict[int]), len(self.I_s))
         self.assertEqual(basics.get_bitstring_length_by_data_type(len(self.S[0]), basics.get_data_type(self.S[0][0]), self.type_dict[str]), len(self.S_s))
     
-    #def test_serialize_combination(self):
     def test_compress_combination(self):
         self.assertEqual(compress.compress_data(serialize.serialize_list_columns(self.I, self.type_dict), self.mtime), self.I_c)
         self.assertEqual(compress.compress_data(serialize.serialize_list_columns(self.S, self.type_dict), self.mtime), self.S_c)
         self.assertEqual(compress.compress_data(serialize.serialize_list_columns(self.IS, self.type_dict), self.mtime), self.IS_c) 
+    
+    def test_decompress_combinatoin(self):
         self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.I, self.type_dict), self.mtime)), self.I_dc)
         self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.S, self.type_dict), self.mtime)), self.S_dc)
         self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.IS, self.type_dict), self.mtime)), self.IS_dc)
         
+    def test_deserialize_combination(self):
+        self.assertEqual(deserialize.deserialize_block_bitstring(\
+                            decompress.decompress_data(\
+                                compress.compress_data(\
+                                    serialize.serialize_list_columns(self.I, self.type_dict), \
+                                self.mtime)), \
+                            self.block_size, [int], self.type_dict), \
+                        self.I_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(\
+                            decompress.decompress_data(\
+                                compress.compress_data(\
+                                    serialize.serialize_list_columns(self.S, self.type_dict), \
+                                self.mtime)), \
+                            self.block_size, [str], self.type_dict), \
+                        self.S_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(\
+                            decompress.decompress_data(\
+                                compress.compress_data(\
+                                    serialize.serialize_list_columns(self.IS, self.type_dict), \
+                                self.mtime)), \
+                            self.block_size, [int, str], self.type_dict), \
+                        self.IS_ds)
 
     
 if __name__ == '__main__':
