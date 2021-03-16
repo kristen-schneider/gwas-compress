@@ -25,7 +25,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     I_ds = [[1,1,1,1,1]]
     
     # float data
-    F = [['1.2', '3.45', '67.8', '9.000', '0.12345']]
+    F = [['1.2', '3.45', '-6.78e+00', '9.000e-05', '0.1234e+05']]
         
     # string data
     S = [['A', 'C', 'T', 'G', 'A']]
@@ -41,16 +41,20 @@ class TestSerializationToDeserialization(unittest.TestCase):
     IS_dc =  b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01ACTGA'
     IS_ds = [[1,1,1,1,1], ['A', 'C', 'T', 'G', 'A']]
    
-    #D = scientific notation...    
 
     def test_basics(self):
+        self.assertEqual(basics.get_data_type('1'), int)
+        self.assertEqual(basics.get_data_type('1.'), float)
+        self.assertEqual(basics.get_data_type('one'), str)
+        self.assertEqual(basics.get_data_type('true'), bool)
+        self.assertEqual(basics.get_data_type('false'), bool)
         self.assertEqual(basics.get_data_type(self.I[0][0]), int)
         self.assertEqual(basics.get_data_type(self.F[0][0]), float)
         self.assertEqual(basics.get_data_type(self.S[0][0]), str)
         self.assertEqual(basics.make_data_types_list(['1', 'A']), [int, str])
-        self.assertEqual(baiscs.make_data_types_list('1       11063   T       G       4.213e-05       4.799e-05       -1.334e+00      9.999e+00       8.938e-01       true']), [int, int, str, str, float, float, float, float, float, bool])
+        self.assertEqual(basics.make_data_types_list(['1', '11063', 'T', 'G', '4.213e-05', '4.799e-05', '-1.334e+00', '9.999e+00', '8.938e-01', 'true']), [int, int, str, str, float, float, float, float, float, bool])
         self.assertEqual(basics.convert_to_type(self.I[0], int), [1,1,1,1,1])
-        self.assertEqual(basics.convert_to_type(self.F[0], float), [1.2,3.45,67.8,9.000,0.12345])
+        self.assertEqual(basics.convert_to_type(self.F[0], float), [1.2, 3.45, -6.78e+00, 9.000e-05, 0.1234e+05])
         self.assertEqual(basics.convert_to_type(self.S[0], str), self.S[0])
         self.assertEqual(basics.get_bitstring_length_by_data_type(5, int, self.type_dict[int]), 25)
         self.assertEqual(basics.get_bitstring_length_by_data_type(5, str, self.type_dict[str]), 5)
