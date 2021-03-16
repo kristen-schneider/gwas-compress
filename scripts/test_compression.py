@@ -38,6 +38,8 @@ class TestFunnelFormat(unittest.TestCase):
     def test_make_all_blocks(self):
         self.assertEqual(len(funnel_format.make_all_blocks(self.TAB_FILE, self.BLOCK_SIZE, len(self.HEADER))), 2)
     
+    
+
 
     #def test_make_blocks(self):
     #    # testing that the make_blocks function returns proper number of blocks
