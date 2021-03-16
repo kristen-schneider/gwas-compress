@@ -1,4 +1,20 @@
-import sys
+def serialize_list_columns(block_list, num_bytes_list):
+    '''
+    takes input block (list of columns) and serializes each column. returns one long bitstring.    
+
+    INPUTS
+    block_list = one block in list of lists data structure (e.g. [[1,1,1...]['A', 'G', 'C', ...]...[...]])
+    num_bytes_list = list of number of bytes to use for each column
+    OUTPUTS
+    serialized_block_bitstring = one bitstring with all column serialization concatenated together
+    
+    '''
+    serialized_block_bitstring = b''
+
+    for column in range(len(block_list)):
+        s_column = serialize_data(block_list[column], num_bytes_list[column])
+        serialized_block_bitstring += s_column
+    return serialized_block_bitstring
 
 def serialize_data(one_column, num_bytes_per_val):
     '''

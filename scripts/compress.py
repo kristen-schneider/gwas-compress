@@ -14,4 +14,3 @@ def compress_data(s_bitstring, time):
 
     c_bitstring = gzip.compress(s_bitstring, mtime=time) 
     return c_bitstring
-
