@@ -41,7 +41,11 @@ def deserialize_data(dc_bitstring, data_type, num_bytes):
             curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
         
         # TODO floats
-        # TODO bools        
+    
+        # input values are bools        
+        elif data_type == bool:
+            curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
+            curr_ds_value = bool.from_bytes(curr_bytes, byteorder='big', signed=False)
         
         elif data_type == float:
             curr_bytes = 0
