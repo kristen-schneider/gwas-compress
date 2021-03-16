@@ -1,4 +1,6 @@
-def serialize_list_columns(block_list, num_bytes_list):
+import basics
+
+def serialize_list_columns(block_list, num_bytes_dict):
     '''
     takes input block (list of columns) and serializes each column. returns one long bitstring.    
 
@@ -11,9 +13,14 @@ def serialize_list_columns(block_list, num_bytes_list):
     '''
     serialized_block_bitstring = b''
 
+    print(block_list)
     for column in range(len(block_list)):
-        s_column = serialize_data(block_list[column], num_bytes_list[column])
+        data_type = basics.get_data_type(block_list[column][0])
+        num_bytes = num_bytes_dict[data_type]
+        correct_type_column = basics.convert_to_type(block_list[column], data_type)        
+        s_column = serialize_data(correct_type_column, num_bytes)
         serialized_block_bitstring += s_column
+    
     return serialized_block_bitstring
 
 def serialize_data(one_column, num_bytes_per_val):
@@ -39,4 +46,3 @@ def serialize_data(one_column, num_bytes_per_val):
         s_bitstring += s_value
     
     return s_bitstring
-
