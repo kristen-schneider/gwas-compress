@@ -26,7 +26,10 @@ class TestSerializationToDeserialization(unittest.TestCase):
     
     # float data
     F = [['1.2', '3.45', '-6.78e+00', '9.000e-05', '0.1234e+05']]
-        
+
+    # bool data
+    B = [['true', 'false', 'false', 'true', 'false']]
+ 
     # string data
     S = [['A', 'C', 'T', 'G', 'A']]
     S_s = b'ACTGA'
@@ -45,6 +48,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     def test_basics(self):
         self.assertEqual(basics.get_data_type('1'), int)
         self.assertEqual(basics.get_data_type('1.'), float)
+        self.assertEqual(basics.get_data_type('1.2e+05'), float)
         self.assertEqual(basics.get_data_type('one'), str)
         self.assertEqual(basics.get_data_type('true'), bool)
         self.assertEqual(basics.get_data_type('false'), bool)
@@ -52,7 +56,8 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(basics.get_data_type(self.F[0][0]), float)
         self.assertEqual(basics.get_data_type(self.S[0][0]), str)
         self.assertEqual(basics.make_data_types_list(['1', 'A']), [int, str])
-        self.assertEqual(basics.make_data_types_list(['1', '11063', 'T', 'G', '4.213e-05', '4.799e-05', '-1.334e+00', '9.999e+00', '8.938e-01', 'true']), [int, int, str, str, float, float, float, float, float, bool])
+        self.assertEqual(basics.make_data_types_list(['1', '11063', 'T', 'G', '4.213e-05', '4.799e-05', '-1.334e+00', '9.999e+00', '8.938e-01', 'true']),\
+                                                     [int, int, str, str, float, float, float, float, float, bool])
         self.assertEqual(basics.convert_to_type(self.I[0], int), [1,1,1,1,1])
         self.assertEqual(basics.convert_to_type(self.F[0], float), [1.2, 3.45, -6.78e+00, 9.000e-05, 0.1234e+05])
         self.assertEqual(basics.convert_to_type(self.S[0], str), self.S[0])
