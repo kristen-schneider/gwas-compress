@@ -13,7 +13,6 @@ def serialize_list_columns(block_list, num_bytes_dict):
     '''
     serialized_block_bitstring = b''
 
-    print(block_list)
     for column in range(len(block_list)):
         data_type = basics.get_data_type(block_list[column][0])
         num_bytes = num_bytes_dict[data_type]
