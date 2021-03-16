@@ -15,7 +15,7 @@ class TestFileHeader(unittest.TestCase):
     TAB_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
     DATA = ['1','11063','T','G','4.213e-05','4.799e-05','-1.334e+00','9.999e+00','8.938e-01','true']
     BLOCK_SIZE = 5   
-    CRRCT_FILE_HEADER = [10, 5, [], []]
+    CRRCT_FILE_HEADER = [10, 5]#, [], []]
     
 
     def test_make_file_header(self):

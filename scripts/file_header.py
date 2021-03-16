@@ -25,8 +25,8 @@ def make_file_header(in_file, block_size):
  
     info_header.append(len(file_header))
     info_header.append(block_size)
-    info_header.append(get_data_types(file_data))
-    info_header.append(bytes_sizes)
+    #info_header.append(get_data_types(file_data))
+    #info_header.append(bytes_sizes)
    
     return info_header 
     
