@@ -39,18 +39,6 @@ class TestFunnelFormat(unittest.TestCase):
         self.assertEqual(len(funnel_format.make_all_blocks(self.TAB_FILE, self.BLOCK_SIZE, len(self.HEADER))), 2)
     
     
-
-
-    #def test_make_blocks(self):
-    #    # testing that the make_blocks function returns proper number of blocks
-    #    self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE, self.BLOCK_SIZE)), 2)
-    #    self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE_75, self.BLOCK_SIZE)), 15)
-    #    # testing that the make_blocks function makes blocks with proper number of lines
-    #    self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE, self.BLOCK_SIZE)[0].split('\n')), self.BLOCK_SIZE)
-    #    self.assertEqual(len(funnel_format.make_blocks(self.TAB_FILE_75, self.BLOCK_SIZE)[0].split('\n')), self.BLOCK_SIZE)
-
-
-
 # Testing serialization --> compression --> decompression --> deserialization
 class TestSerializationToDeserialization(unittest.TestCase):
     
