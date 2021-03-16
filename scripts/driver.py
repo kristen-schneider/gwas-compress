@@ -1,4 +1,5 @@
 import funnel_format
+import file_header
 import serialize
 import compress
 import decompress
@@ -22,8 +23,10 @@ def write_new_file(in_file, block_size):
 
     '''
     blocks = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, NUM_COLUMNS)
-    #for b in blocks: print(b)
-
+    for b in blocks: print(b)
+    
+    fileheader = file_header.make_file_header(IN_FILE)
+    
     return 3
 
 
