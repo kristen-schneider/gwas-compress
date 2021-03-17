@@ -1,37 +1,3 @@
-def determine_delimeter(f):
-    '''
-    deterimine which delimeter is used in the file
-    
-    INPUTS
-    f: path to input file
-    OUTPUS
-    returns delimeter used in file
-    '''
-    with open(f, 'r') as f_open:
-        header = f_open.readline()
-        if len(header.split('\t')) > 1: delimeter = '\t'
-        elif len(header.split(' ')) > 1: delimeter = ' '
-        elif len(header.split(',')) > 1: delimeter = ','
-    
-    f_open.close()
-    return delimeter
-
-def get_header(f, delimeter):
-    '''
-    stores a list which is the header of the file, so that we know what columns are included and need be stored
-    
-    INPUTS
-    f = path to uncompressed input file
-    OUTPUTS
-    header = list of the first row of the file
-
-    '''
-    with open(f, 'r') as f_open:
-        header = f_open.readline().rstrip().split(delimeter)
-    
-    f_open.close()
-    return header
-
 def get_chr_format(f, header, delimeter):
     '''
     looking to see how the first column (chr) is formatted

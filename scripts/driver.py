@@ -23,7 +23,7 @@ def write_new_file(in_file, block_size):
 
     '''
 
-    fileheader = file_header.get_column_names(IN_FILE)
+    file_info = file_header.get_file_data(IN_FILE)
 
     #s_fileheader = serialize.serialize_data(fileheader, 5)
     #print(s_fileheader)

@@ -1,4 +1,6 @@
+import basics
 import funnel_format
+
 
 def get_file_data(in_file):
     '''
@@ -23,17 +25,19 @@ def get_file_data(in_file):
         delimeter = get_delimeter(column_names_str)
         column_types_str = f_open.readline()
     f_open.close() 
-     
+
     column_names_list = get_column_names(column_names_str, delimeter)
     column_types_list = get_column_types(column_types_str, delimeter)
+    #print(column_names_list)
+    #print(column_types_list)
     num_columns = get_num_columns(column_names_list, column_types_list)
-    
+   
     file_info.append(delimeter)
     file_info.append(column_names_list)
     file_info.append(column_types_list)
     file_info.append(num_columns)
 
-    return column_info 
+    return file_info 
 
 def get_delimeter(row):
     '''
@@ -59,7 +63,7 @@ def get_column_names(row, delimeter):
     gets the header names of each column
     
     INPUTS 
-    row = first line of the original gwas file
+    row = first line of the original gwas file, string
     delimeter = file delimeter
 
     OUTPUT
@@ -67,7 +71,7 @@ def get_column_names(row, delimeter):
 
     ''' 
 
-    column_names = column_names_str.rstrip.split(delimeter)
+    column_names = row.rstrip().split(delimeter)
     return column_names
     
 def get_column_types(row, delimeter):
@@ -103,4 +107,3 @@ def get_num_columns(column_names_list, column_types_list):
     else: return -1
 
     return num_columns
-
