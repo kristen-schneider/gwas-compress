@@ -23,8 +23,9 @@ def write_new_file(in_file, block_size):
 
     '''
 
+    # [delimeter, [col_names], [col_types], num_cols]
     file_info = file_header.get_file_data(IN_FILE)
-
+    print(file_info)
     #s_fileheader = serialize.serialize_data(fileheader, 5)
     #print(s_fileheader)
     #c_fileheader = compress.compress_data(s_fileheader, 0)
