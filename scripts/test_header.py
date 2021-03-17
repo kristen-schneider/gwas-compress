@@ -32,7 +32,10 @@ class TestFileHeader(unittest.TestCase):
     COL_NAMES = ['chr','pos','ref','alt','af_cases_EUR','af_controls_EUR','beta_EUR','se_EUR','pval_EUR','low_confidence_EUR']
     COL_TYPES = [int, int, str, str, float, float, float, float, float, bool]
     NUM_COLS = 10
-    FILE_INFO = [TAB_DELIMETER, COL_NAMES, COL_TYPES, len(COL_NAMES)] 
+    
+    TAB_INFO = [TAB_DELIMETER, COL_NAMES, COL_TYPES, len(COL_NAMES)] 
+    COMMA_INFO = [COMMA_DELIMETER, COL_NAMES, COL_TYPES, len(COL_NAMES)] 
+    SPACE_INFO = [SPACE_DELIMETER, COL_NAMES, COL_TYPES, len(COL_NAMES)] 
    
     def test_get_delimeter(self):
         self.assertEqual(file_header.get_delimeter(self.TAB_ROW1), self.TAB_DELIMETER)    
@@ -53,6 +56,12 @@ class TestFileHeader(unittest.TestCase):
         self.assertEqual(file_header.get_num_columns(self.COL_NAMES, self.COL_TYPES), len(self.COL_NAMES))
         self.assertEqual(file_header.get_num_columns(self.COL_NAMES, self.COL_TYPES), self.NUM_COLS)
         
-    
+    def test_get_file_data(self):
+        self.assertEqual(file_header.get_file_data(self.TAB_FILE), self.TAB_INFO)
+        self.assertEqual(file_header.get_file_data(self.COMMA_FILE), self.COMMA_INFO)
+        self.assertEqual(file_header.get_file_data(self.SPACE_FILE), self.SPACE_INFO)
+            
+
+
 if __name__ == '__main__':
     unittest.main()
