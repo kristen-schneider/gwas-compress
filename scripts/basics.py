@@ -100,8 +100,8 @@ def get_bitstring_length_by_data_type(num_elements, data_type, num_bytes):
 
     '''
     if data_type == int: bitstring_length = num_elements*num_bytes
+    elif data_type == float: bitstring_length = num_elements*num_bytes
     elif data_type == bool: bitstring_length = num_elements*num_bytes
-    elif data_type == float: bitstring_length = 0 # TODO floats
     elif data_type == str: bitstring_length = num_elements 
     else: bitstring_length = -1 
     return bitstring_length

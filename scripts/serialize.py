@@ -1,4 +1,5 @@
 import basics
+import struct
 
 def serialize_list_columns(block_list, num_bytes_dict):
     '''
@@ -46,7 +47,7 @@ def serialize_data(column_list, num_bytes_per_val, data_type):
         # TODO floats
         elif data_type == float: 
             try:
-                s_value = None
+                s_value = struct.pack(">d", c)
             except AttributeError: return -1
         # strings  
         elif data_type == str:
@@ -58,3 +59,4 @@ def serialize_data(column_list, num_bytes_per_val, data_type):
         s_bitstring += s_value
     
     return s_bitstring
+

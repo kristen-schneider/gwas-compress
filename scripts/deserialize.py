@@ -1,4 +1,5 @@
 import basics
+import struct
 
 def deserialize_block_bitstring(dc_bitstring, block_size, list_data_types, dict_data_types):
     '''
@@ -25,22 +26,25 @@ def deserialize_block_bitstring(dc_bitstring, block_size, list_data_types, dict_
         column_dc_bitstring = dc_bitstring[start:start+column_length]
         start += column_length
         # deserialize a single bitstring at a time
-        column_ds_bitstring = deserialize_data(column_dc_bitstring, column_data_type, column_bytes)
+        column_ds_bitstring = deserialize_data(column_dc_bitstring, block_size, column_data_type, column_bytes)
         ds_bitstring_final.append(column_ds_bitstring)
 
     return ds_bitstring_final
         
 
-def deserialize_data(dc_bitstring, data_type, num_bytes):
+def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
     curr_ds_bitstring = []
      
-    for i in range(num_bytes):
+    for i in range(block_size):
         # input values are integers
         if data_type == int:
             curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
             curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
         
         # TODO floats
+        elif data_type == float:
+            curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
+            curr_ds_value = struct.unpack('>d', curr_bytes)[0]          
     
         # input values are bools        
         elif data_type == bool:
