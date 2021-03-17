@@ -59,8 +59,8 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
         elif data_type == str:
             curr_bytes = dc_bitstring[i]
             curr_ds_value = chr(curr_bytes)
-
         curr_ds_bitstring.append(curr_ds_value)
     
     return curr_ds_bitstring 
+
 

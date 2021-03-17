@@ -44,7 +44,7 @@ def serialize_data(column_list, num_bytes_per_val, data_type):
             try:
                 s_value = c.to_bytes(num_bytes_per_val, byteorder='big', signed = False)
             except AttributeError: return -1
-        # TODO floats
+        # floats
         elif data_type == float: 
             try:
                 s_value = struct.pack(">d", c)

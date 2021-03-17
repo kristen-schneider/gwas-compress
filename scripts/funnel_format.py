@@ -1,3 +1,5 @@
+import file_header
+
 def get_chr_format(f, header, delimeter):
     '''
     looking to see how the first column (chr) is formatted
@@ -91,7 +93,7 @@ def make_one_block(block_string, num_columns, block_size, delimeter):
             one_block[v].append(curr_line[v])
     return one_block
 
-def make_all_blocks(f, block_size, num_columns):
+def make_all_blocks(f, block_size, num_columns, delimeter):
     '''
     take a list of strings and makes each string a list of columns, where each column is a list of values
     
@@ -102,7 +104,6 @@ def make_all_blocks(f, block_size, num_columns):
     all_blocks_list = [[[1,1,1,1,1],[100,200,300,400,500]...],[[2,2,2,2,2],[100,200,300,400,500]...]]]
 
     '''
-    delimeter = determine_delimeter(f)
     all_blocks_string = split_into_blocks(f, block_size)
 
     all_blocks_list = []

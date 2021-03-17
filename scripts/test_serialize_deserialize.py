@@ -110,6 +110,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(deserialize.deserialize_data(self.B_dc, self.block_size, bool, self.type_dict[bool]), self.B_ds[0])
         self.assertEqual(deserialize.deserialize_data(self.S_dc, self.block_size, str, self.type_dict[str]), self.S_ds[0])
         self.assertEqual(deserialize.deserialize_block_bitstring(self.I_dc, self.block_size, [int], self.type_dict), self.I_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.F_dc, self.block_size, [float], self.type_dict), self.F_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(self.B_dc, self.block_size, [bool], self.type_dict), self.B_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(self.S_dc, self.block_size, [str], self.type_dict), self.S_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(self.IS_dc, self.block_size, [int, str], self.type_dict), self.IS_ds)
