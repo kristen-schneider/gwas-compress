@@ -9,7 +9,7 @@ import deserialize
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/kristen-out.tsv'
-BLOCK_SIZE = 17
+BLOCK_SIZE = 100
 BYTE_SIZES = {int: 5, float: 8, bool: 5, str: 5}
 
 def header_and_compress(in_file, block_size):
@@ -64,7 +64,6 @@ def header_and_compress(in_file, block_size):
         #print(ds_block) 
     #blocks = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, NUM_COLUMNS)
     
-#    end_points = get_end_points(compressed_block_sizes)
 
     #print(all_compressed_data, '\n')        
     if len(block_size_last) < 2: block_size_last.append(block_size)
@@ -73,13 +72,8 @@ def header_and_compress(in_file, block_size):
     endpoints_compresseddata.append(block_size_last)
     return endpoints_compresseddata
 
-#def get_end_points(compressed_block_sizes):
-#    c_block_end_pos = [(end) for end in compressed_block_sizes]
-#    print(c_block_end_pos)
-#    return c_block_end_pos
 
-
-def write_compressed(in_file, block_size):
+def write_compressed_file(in_file, block_size):
     w_file = open(OUT_FILE, 'wb')
     #o_file.truncate(0)
     #file_header = [delimeter, [col_names], [col_types], num_cols, [end_pos], [block_sizes]]
@@ -134,40 +128,8 @@ def read_compressed_file(out_file, header):
         print(ds_bitstring)
 
         curr_start = curr_end
-    
 
-        
-    
 
-#def read_decompress_deseralize(in_file, block_size):
-
-    # file_info = [delimeter, [col_names], [col_types], num_cols]
-#    file_info = file_header.get_file_data(IN_FILE)
-#    delimeter = file_info[0]
-#    col_names = file_info[1]
-#    col_types = file_info[2]
-#    num_columns = file_info[3]
-#
-#    endpos_compresseddata = header_and_compress(in_file, block_size)
-#    end_positions = endpos_compresseddata[0]
-#    compressed_blocks = endpos_compresseddata[1]
-#    block_size_last = endpos_compresseddata[2]
-#    curr_start = 0
-#
-#    for block_i in range(len(end_positions)):
-#        if block_i < len(end_positions)-1: curr_block_size = block_size_last[0]
-#        else: curr_block_size = block_size_last[1]
-#        curr_end = curr_start + end_positions[block_i]
-#        
-#        curr_bitstring = compressed_blocks[curr_start:curr_end]
-#        #print(curr_bitstring)
-#        dc_bitstring = decompress.decompress_data(curr_bitstring)
-#        ds_bitstring = deserialize.deserialize_block_bitstring(dc_bitstring, curr_block_size, col_types, BYTE_SIZES) 
-#        print(ds_bitstring)
-#
-#        curr_start = curr_end
- 
-
-header=write_compressed(IN_FILE, BLOCK_SIZE)
+header=write_compressed_file(IN_FILE, BLOCK_SIZE)
 read_compressed_file(OUT_FILE, header)
 #read_decompress_deseralize(IN_FILE, BLOCK_SIZE)

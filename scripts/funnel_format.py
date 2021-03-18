@@ -73,7 +73,7 @@ def split_into_blocks(f, block_size):
 def make_one_block(block_string, num_columns, block_size, delimeter):
     '''
     takes a single block from split_into_blocks (one long string) and makes it a list of columns
-    
+   
     INPUTS
     block_string = block as a string with new line and tab characters
     num_columns = number of columns in file
