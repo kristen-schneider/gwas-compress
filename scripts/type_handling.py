@@ -47,7 +47,7 @@ def get_column_types(row, data_type_code_book):
         data_types_list.append(data_type)
     return data_types_list
         
-def convert_to_type(column_data, data_type, data_type_code_book):
+def convert_to_type(column_data, data_type):
     '''
     converts a list of values in a column of some data types into a list values in some column of new data_types
     
@@ -83,12 +83,12 @@ def convert_to_type(column_data, data_type, data_type_code_book):
                 
     return correct_type_column
 
-def get_bitstring_length_by_data_type(num_rows_in_block, data_type, num_bytes):
+def get_bitstring_length_by_data_type(block_size, data_type, num_bytes):
     '''
     returns the the lengths of a bitstring of given data type, bytes, and original number of elements
     
     INPUTS
-    num_elements = original number of elements represented by this bitstring. also can be block size. (e.g. [1,1,1,1,1] = 5)
+    block_size = number of rows present in a block
     data_type = type of data to be represented in the bitstring (e.g. [1,1,1,1,1] = int
     num_bytes = number of bytes we are using to be represented in this bitstring
 
@@ -96,9 +96,9 @@ def get_bitstring_length_by_data_type(num_rows_in_block, data_type, num_bytes):
     len_bitsring = this will return the length of a bitstring that should represent one column only
 
     '''
-    if data_type == 1: bitstring_length = num_rows_in_block*num_bytes
-    elif data_type == 2: bitstring_length = num_rows_in_block*num_bytes
-    elif data_type == 3: bitstring_length = num_rows_in_block 
+    if data_type == 1: bitstring_length = block_size*num_bytes
+    elif data_type == 2: bitstring_length = block_size*num_bytes
+    elif data_type == 3: bitstring_length = block_size 
     else:
         print('data is not of type int, float, or string')
         bitstring_length = -1 

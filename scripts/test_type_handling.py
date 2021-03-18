@@ -5,7 +5,7 @@ import numpy as np
 
 
 # DEFINED (should be same for all files)
-bytes_type_code_book = {1: 5, 2: 8, 3: 5}
+type_to_bytes_code_book = {1: 5, 2: 8, 3: 5}
 data_type_code_book = {int: 1, float: 2, str: 3}
 
 
@@ -35,19 +35,19 @@ class TestTypeHandling(unittest.TestCase):
                                                         [1, 1, 3, 3, 2, 2, 2, 2, 2, 3])
         
     def test_convert_to_type(self):
-        self.assertEqual(type_handling.convert_to_type(self.I, 1, data_type_code_book), \
+        self.assertEqual(type_handling.convert_to_type(self.I, 1), \
                                                     [1, 1, 1, 1, 1])
-        self.assertEqual(type_handling.convert_to_type(self.F, 2, data_type_code_book), \
+        self.assertEqual(type_handling.convert_to_type(self.F, 2), \
                                                     [4.213e-05, 4.799e-05, -1.334e+00, 9.999e+00, 8.938e-01])
-        self.assertEqual(type_handling.convert_to_type(self.F_NA, 2, data_type_code_book), \
+        self.assertEqual(type_handling.convert_to_type(self.F_NA, 2), \
                                                     [4.213e-05, 4.799e-05, np.nan, np.nan, 8.938e-01])
-        self.assertEqual(type_handling.convert_to_type(self.S, 3, data_type_code_book), \
+        self.assertEqual(type_handling.convert_to_type(self.S, 3), \
                                                     ['A', 'C', 'T', 'G', 'A'])
         
     def test_get_bitstring_length_by_data_type(self):
-        self.assertEqual(type_handling.get_bitstring_length_by_data_type(self.num_rows_in_block, 1, bytes_type_code_book[1]), 25)
-        self.assertEqual(type_handling.get_bitstring_length_by_data_type(self.num_rows_in_block, 2, bytes_type_code_book[2]), 40)
-        self.assertEqual(type_handling.get_bitstring_length_by_data_type(self.num_rows_in_block, 3, bytes_type_code_book[3]), 5)
+        self.assertEqual(type_handling.get_bitstring_length_by_data_type(self.num_rows_in_block, 1, type_to_bytes_code_book[1]), 25)
+        self.assertEqual(type_handling.get_bitstring_length_by_data_type(self.num_rows_in_block, 2, type_to_bytes_code_book[2]), 40)
+        self.assertEqual(type_handling.get_bitstring_length_by_data_type(self.num_rows_in_block, 3, type_to_bytes_code_book[3]), 5)
 
 if __name__ == '__main__':
     unittest.main()

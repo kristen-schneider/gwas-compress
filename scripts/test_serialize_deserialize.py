@@ -1,10 +1,15 @@
 # imports
 import unittest
-import type_handling
 import serialize
 import compress
 import decompress
 import deserialize
+
+# DEFINED (should be same for all files)
+type_to_bytes_code_book = {1: 5, 2: 8, 3: 5}
+
+#data_type_code_book = {int: 1, float: 2, str: 3}
+
 
 # Testing serialization --> compression --> decompression --> deserialization
 class TestSerializationToDeserialization(unittest.TestCase):
@@ -15,8 +20,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     int_type = 0
     str_type = 1
     float_type = 2
-    data_types = [int, int, str, str, float, float, float, float, float, bool]
-    type_dict = {int: 5, float: 8, bool: 5, str: 5}
+    column_data_types = []
     
     # integer data
     I = [['1','1','1','1','1']]
@@ -60,24 +64,26 @@ class TestSerializationToDeserialization(unittest.TestCase):
     bug_dc = b'\x00\x00\x00\x00\x01\x00\x00\x00x\x15CA\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01'
     bug_ds = [[1], [30741], ['C'], ['A'], [-1.00], [-1.00], [-1.00], [-1.00], [-1.00], [True]]   
 
-    def test_bug(self):
-        self.assertEqual(serialize.serialize_list_columns(self.bug, self.type_dict), self.bug_s)
-        self.assertEqual(compress.compress_data(self.bug_s, self.mtime), self.bug_c)
-        self.assertEqual(decompress.decompress_data(self.bug_c), self.bug_dc) 
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.bug_dc, 1, self.data_types, self.type_dict), self.bug_ds)
+    # def test_bug(self):
+    #     self.assertEqual(serialize.serialize_list_columns(self.bug, type_to_bytes_code_book), self.bug_s)
+    #     self.assertEqual(compress.compress_data(self.bug_s, self.mtime), self.bug_c)
+    #     self.assertEqual(decompress.decompress_data(self.bug_c), self.bug_dc) 
+    #     self.assertEqual(deserialize.deserialize_block_bitstring(self.bug_dc, 1, self.data_types, type_to_bytes_code_book), self.bug_ds)
 
     def test_serialize(self):
-        self.assertEqual(serialize.serialize_data([1,1,1,1,1], self.type_dict[int], int), self.I_s)
-        self.assertEqual(serialize.serialize_data([1.2, 3.45, -6.78e+00, 9.000e-05, 0.1234e+05], self.type_dict[float], float), self.F_s)
-        self.assertEqual(serialize.serialize_data([True,False,False,True,False], self.type_dict[bool], bool), self.B_s)
-        self.assertEqual(serialize.serialize_data(['A','C','T','G','A'], self.type_dict[str], str), self.S_s) 
-        self.assertEqual(serialize.serialize_list_columns(self.I, self.type_dict), self.I_s)
-        self.assertEqual(serialize.serialize_list_columns(self.F, self.type_dict), self.F_s)
-        self.assertEqual(serialize.serialize_list_columns(self.B, self.type_dict), self.B_s)
-        self.assertEqual(serialize.serialize_list_columns(self.S, self.type_dict), self.S_s)
-        self.assertEqual(serialize.serialize_list_columns(self.IS, self.type_dict), self.IS_s)
+        # serialize_data(column_list, num_bytes_per_val, data_type)
+        self.assertEqual(serialize.serialize_data([1,1,1,1,1], type_to_bytes_code_book[1], 1), self.I_s)
+        self.assertEqual(serialize.serialize_data([1.2, 3.45, -6.78e+00, 9.000e-05, 0.1234e+05], type_to_bytes_code_book[2], 2), self.F_s)
+        self.assertEqual(serialize.serialize_data(['A','C','T','G','A'], type_to_bytes_code_book[3], 3), self.S_s) 
+        
+        # serialize_list_columns(block_list, column_data_types, type_to_bytes_code_book)
+        self.assertEqual(serialize.serialize_list_columns(self.I, [1], type_to_bytes_code_book), self.I_s)
+        self.assertEqual(serialize.serialize_list_columns(self.F, [2], type_to_bytes_code_book), self.F_s)
+        self.assertEqual(serialize.serialize_list_columns(self.S, [3], type_to_bytes_code_book), self.S_s)
+        self.assertEqual(serialize.serialize_list_columns(self.IS, [1,3], type_to_bytes_code_book), self.IS_s)
  
     def test_compress(self):        
+        # compress_data(s_bitstring, time)
         self.assertEqual(compress.compress_data(self.I_s, self.mtime), self.I_c)
         self.assertEqual(compress.compress_data(self.F_s, self.mtime), self.F_c)
         self.assertEqual(compress.compress_data(self.B_s, self.mtime), self.B_c)
@@ -85,6 +91,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(compress.compress_data(self.IS_s, self.mtime), self.IS_c)
 
     def test_decompress(self):
+        # decompress_data(c_bitstring)
         self.assertEqual(decompress.decompress_data(self.I_c), self.I_dc)
         self.assertEqual(decompress.decompress_data(self.F_c), self.F_dc)
         self.assertEqual(decompress.decompress_data(self.B_c), self.B_dc)
@@ -92,84 +99,54 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(decompress.decompress_data(self.IS_c), self.IS_dc)
          
     def test_deserialize(self):
-        self.assertEqual(deserialize.deserialize_data(self.I_dc, self.block_size, int, self.type_dict[int]), self.I_ds[0])
-        self.assertEqual(deserialize.deserialize_data(self.F_dc, self.block_size, float, self.type_dict[float]), self.F_ds[0])
-        self.assertEqual(deserialize.deserialize_data(self.B_dc, self.block_size, bool, self.type_dict[bool]), self.B_ds[0])
-        self.assertEqual(deserialize.deserialize_data(self.S_dc, self.block_size, str, self.type_dict[str]), self.S_ds[0])
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.I_dc, self.block_size, [int], self.type_dict), self.I_ds)
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.F_dc, self.block_size, [float], self.type_dict), self.F_ds)
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.B_dc, self.block_size, [bool], self.type_dict), self.B_ds)
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.S_dc, self.block_size, [str], self.type_dict), self.S_ds)
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.IS_dc, self.block_size, [int, str], self.type_dict), self.IS_ds)
+        # deserialize_data(dc_bitstring, block_size, data_type, num_bytes)
+        self.assertEqual(deserialize.deserialize_data(self.I_dc, self.block_size, 1, type_to_bytes_code_book[1]), self.I_ds[0])
+        self.assertEqual(deserialize.deserialize_data(self.F_dc, self.block_size, 2, type_to_bytes_code_book[2]), self.F_ds[0])
+        self.assertEqual(deserialize.deserialize_data(self.S_dc, self.block_size, 3, type_to_bytes_code_book[3]), self.S_ds[0])
+        
+        # deserialize_block_bitstring(dc_bitstring, block_size, column_data_types, type_to_bytes_code_book)
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.I_dc, self.block_size, [1], type_to_bytes_code_book), self.I_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.F_dc, self.block_size, [2], type_to_bytes_code_book), self.F_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.S_dc, self.block_size, [3], type_to_bytes_code_book), self.S_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.IS_dc, self.block_size, [1, 3], type_to_bytes_code_book), self.IS_ds)
 
-    def test_type_handling_combination(self):    
-        self.assertEqual(type_handling.get_bitstring_length_by_data_type(\
-                                    len(self.I[0]), \
-                                    type_handling.get_data_type(self.I[0][0]), \
-                                    self.type_dict[int]), \
-                        len(self.I_s))
-        self.assertEqual(type_handling.get_bitstring_length_by_data_type(\
-                                    len(self.F[0]), \
-                                    type_handling.get_data_type(self.F[0][0]), \
-                                    self.type_dict[float]), \
-                        len(self.F_s))
-        self.assertEqual(type_handling.get_bitstring_length_by_data_type(\
-                                    len(self.B[0]), \
-                                    type_handling.get_data_type(self.B[0][0]), \
-                                    self.type_dict[bool]), \
-                        len(self.B_s))
-        self.assertEqual(type_handling.get_bitstring_length_by_data_type(\
-                                    len(self.S[0]), \
-                                    type_handling.get_data_type(self.S[0][0]), \
-                                    self.type_dict[str]), \
-                        len(self.S_s))
-    
     def test_compress_combination(self):
         self.assertEqual(compress.compress_data(\
-                            serialize.serialize_list_columns(self.I, self.type_dict), \
+                            serialize.serialize_list_columns(self.I, [1], type_to_bytes_code_book), \
                         self.mtime), \
                     self.I_c)
         self.assertEqual(compress.compress_data(\
-                            serialize.serialize_list_columns(self.F, self.type_dict), \
+                            serialize.serialize_list_columns(self.F, [2], type_to_bytes_code_book), \
                         self.mtime), \
                     self.F_c)
         self.assertEqual(compress.compress_data(\
-                            serialize.serialize_list_columns(self.B, self.type_dict), \
-                        self.mtime), \
-                    self.B_c)
-        self.assertEqual(compress.compress_data(\
-                            serialize.serialize_list_columns(self.S, self.type_dict), \
+                            serialize.serialize_list_columns(self.S, [3], type_to_bytes_code_book), \
                         self.mtime), \
                     self.S_c)
         self.assertEqual(compress.compress_data(\
-                            serialize.serialize_list_columns(self.IS, self.type_dict), \
+                            serialize.serialize_list_columns(self.IS, [1, 3], type_to_bytes_code_book), \
                         self.mtime), \
                     self.IS_c) 
     
     def test_decompress_combinatoin(self):
         self.assertEqual(decompress.decompress_data(\
                             compress.compress_data(\
-                                serialize.serialize_list_columns(self.I, self.type_dict), \
+                                serialize.serialize_list_columns(self.I, [1], type_to_bytes_code_book), \
                             self.mtime)), \
                         self.I_dc)
         self.assertEqual(decompress.decompress_data(\
                             compress.compress_data(\
-                                serialize.serialize_list_columns(self.F, self.type_dict), \
+                                serialize.serialize_list_columns(self.F, [2], type_to_bytes_code_book), \
                             self.mtime)), \
                         self.F_dc)
         self.assertEqual(decompress.decompress_data(\
                             compress.compress_data(\
-                                serialize.serialize_list_columns(self.B, self.type_dict), \
-                            self.mtime)), \
-                        self.B_dc)
-        self.assertEqual(decompress.decompress_data(\
-                            compress.compress_data(\
-                                serialize.serialize_list_columns(self.S, self.type_dict), \
+                                serialize.serialize_list_columns(self.S, [3], type_to_bytes_code_book), \
                             self.mtime)), \
                         self.S_dc)
         self.assertEqual(decompress.decompress_data(\
                             compress.compress_data(\
-                                serialize.serialize_list_columns(self.IS, self.type_dict), \
+                                serialize.serialize_list_columns(self.IS, [1, 3], type_to_bytes_code_book), \
                             self.mtime)), \
                         self.IS_dc)
         
@@ -177,37 +154,30 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(deserialize.deserialize_block_bitstring(\
                             decompress.decompress_data(\
                                 compress.compress_data(\
-                                    serialize.serialize_list_columns(self.I, self.type_dict), \
+                                    serialize.serialize_list_columns(self.I, [1], type_to_bytes_code_book), \
                                 self.mtime)), \
-                            self.block_size, [int], self.type_dict), \
+                            self.block_size, [1], type_to_bytes_code_book), \
                         self.I_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(\
                             decompress.decompress_data(\
                                 compress.compress_data(\
-                                    serialize.serialize_list_columns(self.F, self.type_dict), \
+                                    serialize.serialize_list_columns(self.F, [2], type_to_bytes_code_book), \
                                 self.mtime)), \
-                            self.block_size, [float], self.type_dict), \
+                            self.block_size, [2], type_to_bytes_code_book), \
                         self.F_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(\
                             decompress.decompress_data(\
                                 compress.compress_data(\
-                                    serialize.serialize_list_columns(self.B, self.type_dict), \
+                                    serialize.serialize_list_columns(self.S, [3], type_to_bytes_code_book), \
                                 self.mtime)), \
-                            self.block_size, [bool], self.type_dict), \
-                        self.B_ds)
-        self.assertEqual(deserialize.deserialize_block_bitstring(\
-                            decompress.decompress_data(\
-                                compress.compress_data(\
-                                    serialize.serialize_list_columns(self.S, self.type_dict), \
-                                self.mtime)), \
-                            self.block_size, [str], self.type_dict), \
+                            self.block_size, [3], type_to_bytes_code_book), \
                         self.S_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(\
                             decompress.decompress_data(\
                                 compress.compress_data(\
-                                    serialize.serialize_list_columns(self.IS, self.type_dict), \
+                                    serialize.serialize_list_columns(self.IS, [1, 3], type_to_bytes_code_book), \
                                 self.mtime)), \
-                            self.block_size, [int, str], self.type_dict), \
+                            self.block_size, [1, 3], type_to_bytes_code_book), \
                         self.IS_ds)
 
     
