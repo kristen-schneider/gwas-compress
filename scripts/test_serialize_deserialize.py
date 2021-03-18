@@ -15,6 +15,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     int_type = 0
     str_type = 1
     float_type = 2
+    data_types = [int, int, str, str, float, float, float, float, float, bool]
     type_dict = {int: 5, float: 8, bool: 5, str: 5}
     
     # integer data
@@ -51,7 +52,20 @@ class TestSerializationToDeserialization(unittest.TestCase):
     IS_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffc````d\xc0B8:\x87\xb8;\x02\x00\xca.\x1d\xe5\x1e\x00\x00\x00' 
     IS_dc =  b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01ACTGA'
     IS_ds = [[1,1,1,1,1], ['A', 'C', 'T', 'G', 'A']]
-   
+
+    # \n bug data (one instance of this bug)
+    bug = [['1'], ['30741'], ['C'], ['A'], ['-1.00'], ['-1.00'], ['-1.00'], ['-1.00'], ['-1.00'], ['true']]
+    bug_s = b'\x00\x00\x00\x00\x01\x00\x00\x00x\x15CA\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01'
+    bug_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffc````\x04\xe2\nQg\xc7\xfd\x1f\x18\xc0\x80\x10\r\x02\x8c\x00\xe0\x05uk9\x00\x00\x00'
+    bug_dc = b'\x00\x00\x00\x00\x01\x00\x00\x00x\x15CA\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01'
+    bug_ds = [[1], [30741], ['C'], ['A'], [-1.00], [-1.00], [-1.00], [-1.00], [-1.00], [True]]   
+
+    def test_bug(self):
+        self.assertEqual(serialize.serialize_list_columns(self.bug, self.type_dict), self.bug_s)
+        self.assertEqual(compress.compress_data(self.bug_s, self.mtime), self.bug_c)
+        self.assertEqual(decompress.decompress_data(self.bug_c), self.bug_dc) 
+        self.assertEqual(deserialize.deserialize_block_bitstring(self.bug_dc, 1, self.data_types, self.type_dict), self.bug_ds)
+
 
     def test_basics(self):
         self.assertEqual(basics.get_data_type('1'), int)
