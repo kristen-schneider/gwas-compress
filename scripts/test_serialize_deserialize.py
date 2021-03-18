@@ -4,6 +4,7 @@ import serialize
 import compress
 import decompress
 import deserialize
+import numpy as np
 
 # DEFINED (should be same for all files)
 type_to_bytes_code_book = {1: 5, 2: 8, 3: 5}
@@ -35,14 +36,14 @@ class TestSerializationToDeserialization(unittest.TestCase):
     F_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff\xb3\xffl\x0c\x06\x0e\xdc3A`\xd6\x01i\xb9\x1d\x81\xaf[\xe5\xed\xc5\xa7\x9f\xb1\xfc\x7f\x8d\xdf\xe1\x84\x14\x03\x08\x00\x00\xb4\xd3\xa4b(\x00\x00\x00'
     F_dc = b'?\xf3333333@\x0b\x99\x99\x99\x99\x99\x9a\xc0\x1b\x1e\xb8Q\xeb\x85\x1f?\x17\x97\xcc9\xff\xd6\x0f@\xc8\x1a\x00\x00\x00\x00\x00'
     F_ds = [[1.2, 3.45, -6.78e+00, 9.000e-05, 0.1234e+05]]
-
-    # bool data
-    B = [['true', 'false', 'false', 'true', 'false']]
-    B_s = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
-    B_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffc````d@\x01\x10.\x00\xb4^I\xbd\x19\x00\x00\x00'
-    B_dc = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01\x00\x00\x00\x00\x00'
-    B_ds = [[True, False, False, True, False]]
-
+    
+    # float data with NA values
+    NA = [['1.2', '3.45', 'NA', 'NA', '0.1234e+05']]
+    NA_s = b''
+    NA_c = b''
+    NA_dc = b''
+    NA_ds = [[1.2, 3.45, np.nan, np.nan, 0.1234e+05]]
+    
     # string data
     S = [['A', 'C', 'T', 'G', 'A']]
     S_s = b'ACTGA'
@@ -86,7 +87,6 @@ class TestSerializationToDeserialization(unittest.TestCase):
         # compress_data(s_bitstring, time)
         self.assertEqual(compress.compress_data(self.I_s, self.mtime), self.I_c)
         self.assertEqual(compress.compress_data(self.F_s, self.mtime), self.F_c)
-        self.assertEqual(compress.compress_data(self.B_s, self.mtime), self.B_c)
         self.assertEqual(compress.compress_data(self.S_s, self.mtime), self.S_c)
         self.assertEqual(compress.compress_data(self.IS_s, self.mtime), self.IS_c)
 
@@ -94,7 +94,6 @@ class TestSerializationToDeserialization(unittest.TestCase):
         # decompress_data(c_bitstring)
         self.assertEqual(decompress.decompress_data(self.I_c), self.I_dc)
         self.assertEqual(decompress.decompress_data(self.F_c), self.F_dc)
-        self.assertEqual(decompress.decompress_data(self.B_c), self.B_dc)
         self.assertEqual(decompress.decompress_data(self.S_c), self.S_dc)
         self.assertEqual(decompress.decompress_data(self.IS_c), self.IS_dc)
          
