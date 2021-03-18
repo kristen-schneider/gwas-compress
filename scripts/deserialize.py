@@ -1,4 +1,4 @@
-import basics
+import type_handling
 import struct
 
 def deserialize_block_bitstring(dc_bitstring, block_size, list_data_types, dict_data_types):
@@ -22,7 +22,7 @@ def deserialize_block_bitstring(dc_bitstring, block_size, list_data_types, dict_
     for c in range(num_columns):
         column_data_type = list_data_types[c]
         column_bytes = dict_data_types[column_data_type] 
-        column_length = basics.get_bitstring_length_by_data_type(block_size, column_data_type, column_bytes)
+        column_length = type_handling.get_bitstring_length_by_data_type(block_size, column_data_type, column_bytes)
         column_dc_bitstring = dc_bitstring[start:start+column_length]
         start += column_length
         # deserialize a single bitstring at a time

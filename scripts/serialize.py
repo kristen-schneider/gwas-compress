@@ -1,4 +1,4 @@
-import basics
+import type_handling
 import struct
 
 def serialize_list_columns(block_list, num_bytes_dict):
@@ -15,9 +15,9 @@ def serialize_list_columns(block_list, num_bytes_dict):
     serialized_block_bitstring = b''
 
     for column in range(len(block_list)):
-        data_type = basics.get_data_type(block_list[column][0])
+        data_type = type_handling.get_data_type(block_list[column][0])
         num_bytes = num_bytes_dict[data_type]
-        correct_type_column = basics.convert_to_type(block_list[column], data_type)        
+        correct_type_column = type_handling.convert_to_type(block_list[column], data_type)        
         s_column = serialize_data(correct_type_column, num_bytes, data_type)
         serialized_block_bitstring += s_column
     

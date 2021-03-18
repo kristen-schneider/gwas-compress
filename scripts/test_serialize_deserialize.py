@@ -1,10 +1,10 @@
 # imports
-import basics
+import unittest
+import type_handling
 import serialize
 import compress
 import decompress
 import deserialize
-import unittest
 
 # Testing serialization --> compression --> decompression --> deserialization
 class TestSerializationToDeserialization(unittest.TestCase):
@@ -66,33 +66,6 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(decompress.decompress_data(self.bug_c), self.bug_dc) 
         self.assertEqual(deserialize.deserialize_block_bitstring(self.bug_dc, 1, self.data_types, self.type_dict), self.bug_ds)
 
-
-    def test_basics(self):
-        self.assertEqual(basics.get_data_type('1'), int)
-        self.assertEqual(basics.get_data_type('1.'), float)
-        self.assertEqual(basics.get_data_type('1.2e+05'), float)
-        self.assertEqual(basics.get_data_type('true'), bool)
-        self.assertEqual(basics.get_data_type('True'), bool)
-        self.assertEqual(basics.get_data_type('false'), bool)
-        self.assertEqual(basics.get_data_type('False'), bool)
-        self.assertEqual(basics.get_data_type('one'), str)
-        self.assertEqual(basics.get_data_type(self.I[0][0]), int)
-        self.assertEqual(basics.get_data_type(self.F[0][0]), float)
-        self.assertEqual(basics.get_data_type(self.B[0][0]), bool)
-        self.assertEqual(basics.get_data_type(self.S[0][0]), str)
-        self.assertEqual(basics.make_data_types_list(['1', 'A']), [int, str])
-        self.assertEqual(basics.make_data_types_list(['1', '11063', 'T', 'G', '4.213e-05', '4.799e-05', '-1.334e+00', '9.999e+00', '8.938e-01', 'true']),\
-                                                     [int, int, str, str, float, float, float, float, float, bool])
-        self.assertEqual(basics.convert_to_type(self.I[0], int), [1,1,1,1,1])
-        self.assertEqual(basics.convert_to_type(self.F[0], float), [1.2, 3.45, -6.78e+00, 9.000e-05, 0.1234e+05])
-        self.assertEqual(basics.convert_to_type(self.B[0], bool), [True,False,False,True,False])
-        self.assertEqual(basics.convert_to_type(self.S[0], str), self.S[0])
-        self.assertEqual(basics.get_bitstring_length_by_data_type(5, int, self.type_dict[int]), 25)
-        self.assertEqual(basics.get_bitstring_length_by_data_type(5, float, self.type_dict[float]), 40)
-        self.assertEqual(basics.get_bitstring_length_by_data_type(5, bool, self.type_dict[bool]), 25)
-        self.assertEqual(basics.get_bitstring_length_by_data_type(5, str, self.type_dict[str]), 5)
-          
- 
     def test_serialize(self):
         self.assertEqual(serialize.serialize_data([1,1,1,1,1], self.type_dict[int], int), self.I_s)
         self.assertEqual(serialize.serialize_data([1.2, 3.45, -6.78e+00, 9.000e-05, 0.1234e+05], self.type_dict[float], float), self.F_s)
@@ -129,25 +102,76 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(deserialize.deserialize_block_bitstring(self.S_dc, self.block_size, [str], self.type_dict), self.S_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(self.IS_dc, self.block_size, [int, str], self.type_dict), self.IS_ds)
 
-    def test_basics_combination(self):    
-        self.assertEqual(basics.get_bitstring_length_by_data_type(len(self.I[0]), basics.get_data_type(self.I[0][0]), self.type_dict[int]), len(self.I_s))
-        self.assertEqual(basics.get_bitstring_length_by_data_type(len(self.F[0]), basics.get_data_type(self.F[0][0]), self.type_dict[float]), len(self.F_s))
-        self.assertEqual(basics.get_bitstring_length_by_data_type(len(self.B[0]), basics.get_data_type(self.B[0][0]), self.type_dict[bool]), len(self.B_s))
-        self.assertEqual(basics.get_bitstring_length_by_data_type(len(self.S[0]), basics.get_data_type(self.S[0][0]), self.type_dict[str]), len(self.S_s))
+    def test_type_handling_combination(self):    
+        self.assertEqual(type_handling.get_bitstring_length_by_data_type(\
+                                    len(self.I[0]), \
+                                    type_handling.get_data_type(self.I[0][0]), \
+                                    self.type_dict[int]), \
+                        len(self.I_s))
+        self.assertEqual(type_handling.get_bitstring_length_by_data_type(\
+                                    len(self.F[0]), \
+                                    type_handling.get_data_type(self.F[0][0]), \
+                                    self.type_dict[float]), \
+                        len(self.F_s))
+        self.assertEqual(type_handling.get_bitstring_length_by_data_type(\
+                                    len(self.B[0]), \
+                                    type_handling.get_data_type(self.B[0][0]), \
+                                    self.type_dict[bool]), \
+                        len(self.B_s))
+        self.assertEqual(type_handling.get_bitstring_length_by_data_type(\
+                                    len(self.S[0]), \
+                                    type_handling.get_data_type(self.S[0][0]), \
+                                    self.type_dict[str]), \
+                        len(self.S_s))
     
     def test_compress_combination(self):
-        self.assertEqual(compress.compress_data(serialize.serialize_list_columns(self.I, self.type_dict), self.mtime), self.I_c)
-        self.assertEqual(compress.compress_data(serialize.serialize_list_columns(self.F, self.type_dict), self.mtime), self.F_c)
-        self.assertEqual(compress.compress_data(serialize.serialize_list_columns(self.B, self.type_dict), self.mtime), self.B_c)
-        self.assertEqual(compress.compress_data(serialize.serialize_list_columns(self.S, self.type_dict), self.mtime), self.S_c)
-        self.assertEqual(compress.compress_data(serialize.serialize_list_columns(self.IS, self.type_dict), self.mtime), self.IS_c) 
+        self.assertEqual(compress.compress_data(\
+                            serialize.serialize_list_columns(self.I, self.type_dict), \
+                        self.mtime), \
+                    self.I_c)
+        self.assertEqual(compress.compress_data(\
+                            serialize.serialize_list_columns(self.F, self.type_dict), \
+                        self.mtime), \
+                    self.F_c)
+        self.assertEqual(compress.compress_data(\
+                            serialize.serialize_list_columns(self.B, self.type_dict), \
+                        self.mtime), \
+                    self.B_c)
+        self.assertEqual(compress.compress_data(\
+                            serialize.serialize_list_columns(self.S, self.type_dict), \
+                        self.mtime), \
+                    self.S_c)
+        self.assertEqual(compress.compress_data(\
+                            serialize.serialize_list_columns(self.IS, self.type_dict), \
+                        self.mtime), \
+                    self.IS_c) 
     
     def test_decompress_combinatoin(self):
-        self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.I, self.type_dict), self.mtime)), self.I_dc)
-        self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.F, self.type_dict), self.mtime)), self.F_dc)
-        self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.B, self.type_dict), self.mtime)), self.B_dc)
-        self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.S, self.type_dict), self.mtime)), self.S_dc)
-        self.assertEqual(decompress.decompress_data(compress.compress_data(serialize.serialize_list_columns(self.IS, self.type_dict), self.mtime)), self.IS_dc)
+        self.assertEqual(decompress.decompress_data(\
+                            compress.compress_data(\
+                                serialize.serialize_list_columns(self.I, self.type_dict), \
+                            self.mtime)), \
+                        self.I_dc)
+        self.assertEqual(decompress.decompress_data(\
+                            compress.compress_data(\
+                                serialize.serialize_list_columns(self.F, self.type_dict), \
+                            self.mtime)), \
+                        self.F_dc)
+        self.assertEqual(decompress.decompress_data(\
+                            compress.compress_data(\
+                                serialize.serialize_list_columns(self.B, self.type_dict), \
+                            self.mtime)), \
+                        self.B_dc)
+        self.assertEqual(decompress.decompress_data(\
+                            compress.compress_data(\
+                                serialize.serialize_list_columns(self.S, self.type_dict), \
+                            self.mtime)), \
+                        self.S_dc)
+        self.assertEqual(decompress.decompress_data(\
+                            compress.compress_data(\
+                                serialize.serialize_list_columns(self.IS, self.type_dict), \
+                            self.mtime)), \
+                        self.IS_dc)
         
     def test_deserialize_combination(self):
         self.assertEqual(deserialize.deserialize_block_bitstring(\

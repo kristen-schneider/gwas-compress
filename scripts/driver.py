@@ -10,6 +10,7 @@ import deserialize
 IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/kristen-out.tsv'
 BLOCK_SIZE = 100
+DATA_TYPE_CODE_BOOOK = {int: 1, float: 2, str: 3}
 BYTE_SIZES = {int: 5, float: 8, bool: 5, str: 5}
 
 def header_and_compress(in_file, block_size):

@@ -1,4 +1,4 @@
-import basics
+import type_handling
 
 
 def get_file_data(in_file):
@@ -86,7 +86,7 @@ def get_column_types(row, delimeter):
 
     '''
     
-    data_types = basics.make_data_types_list(row.rstrip().split(delimeter))
+    data_types = type_handling.get_column_types(row.rstrip().split(delimeter))
     return data_types
 
 def get_num_columns(column_names_list, column_types_list):
