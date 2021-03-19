@@ -1,5 +1,5 @@
 import funnel_format
-import file_header
+import header
 import serialize
 import compress
 import decompress
@@ -10,10 +10,39 @@ import deserialize
 IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/kristen-out.tsv'
 BLOCK_SIZE = 100
-DATA_TYPE_CODE_BOOOK = {int: 1, float: 2, str: 3}
+DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 BYTE_SIZES = {int: 5, float: 8, bool: 5, str: 5}
 
-def header_and_compress(in_file, block_size):
+def write_compressed_file(in_file, block_size):
+    w_file = open(OUT_FILE, 'wb')
+    #o_file.truncate(0)
+    #header = [delimeter, [col_names], [col_types], num_cols, [end_pos], [block_sizes]]
+    #header_start = []
+
+    # file_info = [delimeter, [col_names], [col_types], num_cols]
+    header_start = header.get_file_data(IN_FILE, DATA_TYPE_CODE_BOOK)
+    
+    magic_number = header_start[0]
+    version = header_start[1]
+    delimeter = header_start[2]
+    col_names = header_start[3]
+    col_types = header_start[4]
+    num_columns = header_start[5]
+        
+    endpos_compresseddata = compress_and_serialize(in_file, block_size)
+    end_positions = endpos_compresseddata[0]
+    compressed_blocks = endpos_compresseddata[1]
+    block_size_last = endpos_compresseddata[2]
+
+    print("WRITTEN:\n")
+    print(compressed_blocks)
+
+    #header_start = [delimeter, col_names, col_types, num_columns, end_positions, block_size_last]
+    w_file.write(compressed_blocks)
+    w_file.close()
+    return header_start
+
+def compress_and_serialize(in_file, block_size):
     '''
     takes a file, converts to funnel format, serializes and compresses each block, write to out_file 
     
@@ -28,11 +57,14 @@ def header_and_compress(in_file, block_size):
     endpoints_compresseddata = []
     
     # file_info = [delimeter, [col_names], [col_types], num_cols]
-    file_info = file_header.get_file_data(IN_FILE)
-    delimeter = file_info[0]
-    col_names = file_info[1]
-    col_types = file_info[2]
-    num_columns = file_info[3]
+    header_start = header.get_file_data(IN_FILE, DATA_TYPE_CODE_BOOK)
+    
+    magic_number = header_start[0]
+    version = header_start[1]
+    delimeter = header_start[2]
+    col_names = header_start[3]
+    col_types = header_start[4]
+    num_columns = header_start[5]
 
     funnel_format_data = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, num_columns, delimeter)
     #for ff in funnel_format_data: print(ff)
@@ -72,33 +104,6 @@ def header_and_compress(in_file, block_size):
     endpoints_compresseddata.append(all_compressed_data)
     endpoints_compresseddata.append(block_size_last)
     return endpoints_compresseddata
-
-
-def write_compressed_file(in_file, block_size):
-    w_file = open(OUT_FILE, 'wb')
-    #o_file.truncate(0)
-    #file_header = [delimeter, [col_names], [col_types], num_cols, [end_pos], [block_sizes]]
-    header = []
-
-    # file_info = [delimeter, [col_names], [col_types], num_cols]
-    file_info = file_header.get_file_data(IN_FILE)
-    delimeter = file_info[0]
-    col_names = file_info[1]
-    col_types = file_info[2]
-    num_columns = file_info[3]
-        
-    endpos_compresseddata = header_and_compress(in_file, block_size)
-    end_positions = endpos_compresseddata[0]
-    compressed_blocks = endpos_compresseddata[1]
-    block_size_last = endpos_compresseddata[2]
-
-    print("WRITTEN:\n")
-    print(compressed_blocks)
-
-    header = [delimeter, col_names, col_types, num_columns, end_positions, block_size_last]
-    w_file.write(compressed_blocks)
-    w_file.close()
-    return header
 
 def read_compressed_file(out_file, header):
     #print(header)

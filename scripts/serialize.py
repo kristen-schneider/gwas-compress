@@ -49,24 +49,32 @@ def serialize_data(column_list, num_bytes, data_type):
     s_value = None 
     
     for c in column_list:
-        # serialize value according to its type
         
-        # integers
-        if data_type == 1:
-            try:
-                s_value = c.to_bytes(num_bytes, byteorder='big', signed = False)
-            except AttributeError: return -1
-        # floats
-        elif data_type == 2: 
-            try:
-                s_value = struct.pack(">d", c)
-            except AttributeError: return -1
-        # strings  
-        elif data_type == 3:
-            try:
-                s_value = bytes(c, 'utf-8')
-            except AttributeError: return -1
+        # list (should be used for header where we have some list and some non-list data)
+        if type(c) == list:  
+            
+            
+            serialize_data(c, num_bytes, data_type)
+            
+        # serialize value according to its type
+        else:
+            # integers
+            if data_type == 1:
+                try:
+                    s_value = c.to_bytes(num_bytes, byteorder='big', signed = False)
+                except AttributeError: return -1
+            # floats
+            elif data_type == 2: 
+                try:
+                    s_value = struct.pack(">d", c)
+                except AttributeError: return -1
+            # strings  
+            elif data_type == 3:
+                try:
+                    s_value = bytes(c, 'utf-8')
 
+                except AttributeError: return -1
+        
         # add serialized value to serialized bitstring
         if s_value != None: s_bitstring += s_value
         else: print('value is of bad type, cannot serialize')

@@ -1,42 +1,49 @@
 import type_handling
 
 
-def get_file_data(in_file):
+def get_file_data(in_file, data_type_code_book):
     '''
-    gets columns names, types, and number from the input file
+    retrieves some basic header information that should be stored in header up to this point. 
+        (delimiter, columns names, column types, and column number from the input file)
     
     INPUT
     in_file = path to intput file (original gwas file)
     
     OUTPUT
-    file_info = list of information from file [delimeter, col_names, col_types, number_cols (e.g. ['\t', [chr, pos, ref, alt, ...], [int, int, str, str, ...], 10]
+    header_start = list of information to be included in header (so far). still need to add info about block locations and size of blocks
 
     ''' 
    
-    file_info = []
+    header_start = []
+    
+    # to be included in header
+    magic_number = 1
+    version_number = 1
     delimeter = None
     column_names_list = None
     column_types_list = None
-    num_columns = 0
+    num_columns = None
    
+    # grab first two rows which will inform our data types, names, lengthts, etc.
     with open(in_file, 'r') as f_open:
         column_names_str = f_open.readline()
-        delimeter = get_delimeter(column_names_str)
         column_types_str = f_open.readline()
     f_open.close() 
 
+    # assign 
+    delimeter = get_delimeter(column_names_str)
     column_names_list = get_column_names(column_names_str, delimeter)
-    column_types_list = get_column_types(column_types_str, delimeter)
-    #print(column_names_list)
-    #print(column_types_list)
+    column_types_list = type_handling.get_column_types(column_types_str.rstrip().split(delimeter), data_type_code_book)
     num_columns = get_num_columns(column_names_list, column_types_list)
    
-    file_info.append(delimeter)
-    file_info.append(column_names_list)
-    file_info.append(column_types_list)
-    file_info.append(num_columns)
+    header_start.append(magic_number)
+    header_start.append(version_number)
+    header_start.append(delimeter)
+    header_start.append(column_names_list)
+    header_start.append(column_types_list)
+    header_start.append(num_columns)
 
-    return file_info 
+    return header_start 
 
 def get_delimeter(row):
     '''
@@ -73,22 +80,6 @@ def get_column_names(row, delimeter):
     column_names = row.rstrip().split(delimeter)
     return column_names
     
-def get_column_types(row, delimeter):
-    '''
-    gets the data types of each column
-    
-    INPUT 
-    row = second line of the original gwas file
-    delimeter = file delimeter
-
-    OUTPUT
-    data_types = list of all types of data (in order) for each column    
-
-    '''
-    
-    data_types = type_handling.get_column_types(row.rstrip().split(delimeter))
-    return data_types
-
 def get_num_columns(column_names_list, column_types_list):
     '''
     checks that names and types are same length to return number of columns in a file
