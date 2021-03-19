@@ -52,8 +52,6 @@ def serialize_data(column_list, num_bytes, data_type):
         
         # list (should be used for header where we have some list and some non-list data)
         if type(c) == list:  
-            
-            
             serialize_data(c, num_bytes, data_type)
             
         # serialize value according to its type

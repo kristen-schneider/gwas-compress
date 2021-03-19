@@ -17,12 +17,11 @@ def get_file_data(in_file, data_type_code_book):
     header_start = []
     
     # to be included in header
-    magic_number = 1
-    version_number = 1
-    delimeter = None
+    magic_number_version_number = [1,1]
+    delimeter = [None]
     column_names_list = None
     column_types_list = None
-    num_columns = None
+    num_columns = [None]
    
     # grab first two rows which will inform our data types, names, lengthts, etc.
     with open(in_file, 'r') as f_open:
@@ -36,12 +35,11 @@ def get_file_data(in_file, data_type_code_book):
     column_types_list = type_handling.get_column_types(column_types_str.rstrip().split(delimeter), data_type_code_book)
     num_columns = get_num_columns(column_names_list, column_types_list)
    
-    header_start.append(magic_number)
-    header_start.append(version_number)
-    header_start.append(delimeter)
+    header_start.append(magic_number_version_number)
+    header_start.append([delimeter])
     header_start.append(column_names_list)
     header_start.append(column_types_list)
-    header_start.append(num_columns)
+    header_start.append([num_columns])
 
     return header_start 
 
