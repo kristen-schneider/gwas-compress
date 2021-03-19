@@ -22,7 +22,7 @@ def deserialize_block_bitstring(dc_bitstring, block_size, column_data_types, typ
     for c in range(num_columns):
         column_data_type = column_data_types[c]
         column_bytes = type_to_bytes_code_book[column_data_type] 
-    
+
         column_length = type_handling.get_bitstring_length_by_data_type(block_size, column_data_type, column_bytes)
         column_dc_bitstring = dc_bitstring[start:start+column_length]
         

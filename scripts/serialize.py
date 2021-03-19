@@ -80,3 +80,5 @@ def serialize_data(column_list, num_bytes, data_type):
         else: print('value is of bad type, cannot serialize')
     return s_bitstring
 
+#header = [[1, 1], ['\t'], ['chr', 'pos', 'ref', 'alt'], [1, 1, 3, 3], [4]]
+#print(serialize_list_columns(header, [1, 3, 3, 1, 1], {1: 5, 2: 8, 3: 5}))

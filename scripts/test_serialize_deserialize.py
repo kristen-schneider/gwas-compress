@@ -58,6 +58,14 @@ class TestSerializationToDeserialization(unittest.TestCase):
     IS_dc =  b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01ACTGA'
     IS_ds = [[1,1,1,1,1], ['A', 'C', 'T', 'G', 'A']]
 
+    # header-like data
+    # i think i am goign to decompress this a little different. just use decompress_data and go one header list at a time
+    HEADER = [[1, 1], ['\t'], ['chr', 'pos', 'ref', 'alt'], [1, 1, 3, 3], [4]]
+    HEADER_s = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\tchrposrefalt\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x03\x00\x00\x00\x00\x03\x00\x00\x00\x00\x04'
+    HEADER_c = b"\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffc````d\x00\x11\x9c\xc9\x19E\x05\xf9\xc5E\xa9i\x899%\x0cpa\x10\xc1\x0c'X\x00\x96\xa7\xc7\x860\x00\x00\x00"
+    HEADER_dc = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\tchrposrefalt\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x03\x00\x00\x00\x00\x03\x00\x00\x00\x00\x04'
+    HEADER_ds = [[1, 1], ['\t'], ['chr', 'pos', 'ref', 'alt'], [1, 1, 3, 3], [4]]
+
     # \n bug data (one instance of this bug)
     bug = [['1'], ['30741'], ['C'], ['A'], ['-1.00'], ['-1.00'], ['-1.00'], ['-1.00'], ['-1.00'], ['true']]
     bug_s = b'\x00\x00\x00\x00\x01\x00\x00\x00x\x15CA\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01'
@@ -84,6 +92,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(serialize.serialize_list_columns(self.NA, [2], type_to_bytes_code_book), self.NA_s)
         self.assertEqual(serialize.serialize_list_columns(self.S, [3], type_to_bytes_code_book), self.S_s)
         self.assertEqual(serialize.serialize_list_columns(self.IS, [1,3], type_to_bytes_code_book), self.IS_s)
+        #self.assertEqual(serialize.serialize_list_columns(self.HEADER, [1,3], type_to_bytes_code_book), self.HEADER_s)
  
     def test_compress(self):        
         # compress_data(s_bitstring, time)
@@ -112,6 +121,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(deserialize.deserialize_block_bitstring(self.F_dc, self.block_size, [2], type_to_bytes_code_book), self.F_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(self.S_dc, self.block_size, [3], type_to_bytes_code_book), self.S_ds)
         self.assertEqual(deserialize.deserialize_block_bitstring(self.IS_dc, self.block_size, [1, 3], type_to_bytes_code_book), self.IS_ds)
+
 
     def test_compress_combination(self):
         self.assertEqual(compress.compress_data(\
