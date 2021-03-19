@@ -17,15 +17,14 @@ HEADER_TYPES = {}
 
 def main(in_file, block_size):
     '''
-    starts beginning of file header
+    compresses and writes data and returns full header    
 
     INPUT
     in_file = input path to orginial gwas file
     block_size = size that we want each block to be (except last)
     
     OUTPUT
-    header_start = header for file *so far*
-    [magic_number, version_number, delimeter, [col_names], [col_types], num_cols, [end_pos], [block_sizes]]
+    full_header = list of all header data    
 
     '''
 
@@ -39,30 +38,30 @@ def main(in_file, block_size):
     col_types = header_start[4]
     num_columns = header_start[5]
     
-    print(header_start)    
-    
     # getting funnel format
     funnel_format = get_funnel_format(in_file, block_size, header_start)
     
-    print(funnel_format)
-
     # compressing/writing data    
     # getting end of header
-    
     header_end = compress_and_serialize(funnel_format, block_size, header_start)
-    #end_positions = get_end_positions(header_end[0])
-    #block_sizes_two = endpos_compresseddata[1]
-        
+    
     full_header = header_start + header_end
     return full_header
-    #print(full_header)    
-    #read_compressed_file(OUT_FILE, full_header)
 
 def get_funnel_format(in_file, block_size, header_start):
-    header_end = []
-    end_points = []
-    block_sizes = []
+    '''
+    converts a file into funnel format
     
+    INPUT
+    in_file = path to original gwas file
+    block_size = desired size for all blocks
+    header_start = some beginning pieces of header to use for funnel format converstion (e.g. num columns, delimeter)    
+
+    OUTPUT
+    funnel_format_data = data in funnel_format        
+
+    '''
+
     magic_number = header_start[0]
     version = header_start[1]
     delimeter = header_start[2]
@@ -75,14 +74,16 @@ def get_funnel_format(in_file, block_size, header_start):
 
 def compress_and_serialize(funnel_format_data, block_size, header_start):
     '''
-    takes a file, converts to funnel format, serializes and compresses each block, write to out_file 
+    takes funnel format data, serializes and compresses each block, write to out_file 
+    returns info which will be added to header (e.g. length of blocks, block sizes, etc.)
     
     INPUTS
-    in_file: path to input file
-    block_size = number of lines in each block  
+    funnel_format_data = data in funnel format
+    block_size = number of lines in each block
+    header_start = some peices of header which will be used to serialize and compress  
     
     OUTPUTS
-    write to file
+    header_end = end parts of header which complete header info
 
     '''
     num_blocks = len(funnel_format_data)
@@ -110,10 +111,7 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
         c_block = compress.compress_data(s_block, 0)
 
         # after serialization and compression, print block
-        #print(s_block)
-        #print(c_block)
         w_file.write(c_block)
-        #all_compressed_data+=c_block
 
         compressed_block_lengths.append(len(c_block))
     
@@ -129,6 +127,14 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
 
 def get_end_positions(block_lengths):
     '''
+    converts lengths of blocks to end positions
+    
+    INPUT
+    block_lengths = list of all lengths of compressed blocks
+
+    OUTPUT
+    end_positions = list of all end positions of compressed blocks
+
     '''
     end = 0
     end_positions = []
@@ -139,6 +145,18 @@ def get_end_positions(block_lengths):
 
 
 def read_compressed_file(out_file, full_header):
+    '''
+    reads compressed file and decompresses
+    
+    INPUT
+    out_file = path to compressed file
+    full_header = full header!
+       
+    OUTPUT
+    nothing for now...
+
+    '''
+    
     #print(header)
     print(type(full_header), full_header)
     magic_number = full_header[0]
@@ -149,8 +167,6 @@ def read_compressed_file(out_file, full_header):
     num_columns = full_header[5]
     end_positions = full_header[6]
     block_sizes = full_header[7]
-    
-    print(block_sizes)
     
     with open(out_file, 'rb') as r_file:
         compressed_data = r_file.read()
@@ -163,7 +179,6 @@ def read_compressed_file(out_file, full_header):
         curr_end = curr_start + end_positions[block_i]
 
         curr_bitstring = compressed_data[curr_start:curr_end]
-        #print(curr_bitstring)
         dc_bitstring = decompress.decompress_data(curr_bitstring)
         ds_bitstring = deserialize.deserialize_block_bitstring(dc_bitstring, curr_block_size, col_types, BYTE_SIZES)
         print(ds_bitstring)
