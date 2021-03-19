@@ -42,7 +42,11 @@ def main(in_file, block_size):
     
     # compressing/writing data    
     # getting end of header
+
     header_end = compress_and_serialize(funnel_format, block_size, header_start)
+    #comp_end = compress_and_serialize(funnel_format, block_size, header_start)
+    #compressed_data = comp_end[0]
+    #header_end = comp_end[1]
     
     full_header = header_start + header_end
     return full_header
@@ -85,6 +89,8 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
 
     '''
     num_blocks = len(funnel_format_data)
+
+    comp_data = b''
     header_end = []    
 
     w_file = open(OUT_FILE, 'wb')
@@ -107,7 +113,7 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
 
         s_block = serialize.serialize_list_columns(curr_block, data_types, BYTE_SIZES)
         c_block = compress.compress_data(s_block, 0)
-
+        comp_data += c_block
         # after serialization and compression, print block
         w_file.write(c_block)
 
@@ -118,7 +124,8 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
     # if all blocks are same length, add last block size length
     if len(block_sizes_two) < 2: block_sizes_two.append(block_size)
     
-    header_end.append(compressed_block_lengths)
+    end_positions = get_end_positions(compressed_block_lengths)
+    header_end.append(end_positions)
     header_end.append(block_sizes_two)
     return header_end
 
@@ -180,64 +187,64 @@ def read_compressed_file(out_file, full_header):
 
         curr_start = curr_end
 
-def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
-    header_types = []
-    for h in full_header:
-        h_type = type(h[0])
-        header_types.append(DATA_TYPE_CODE_BOOK[h_type])
-    return header_types
-
-def compress_header(full_header, header_types):
-    '''
-    '''
-    num_columns = full_header[4][0]
-    #header_types = [1, 3, 3, 1, 1, 1, 1]
-    #header_sizes = [2, 1, num_columms, num_columns, 1, num_columns, 2]
-    len_compressed_headers = []
-    c_header = b''
-    print(full_header)
-    
-    for h in range(len(full_header)):
-        #serialize_data([1,1,1,1,1], type_to_bytes_code_book[1], 1)
-        s_header = serialize.serialize_data(full_header[h], BYTE_SIZES[header_types[h]], header_types[h])
-        curr_c_header = compress.compress_data(s_header, 0)
-        c_header += curr_c_header
-        len_compressed_headers.append(len(curr_c_header))
-    return [c_header, len_compressed_headers, num_columns]
-
-def decompress_header(c_header_info, header_types):
-    full_dc_header = []    
-
-    c_header = c_header_info[0]
-    len_c_headers = c_header_info[1]
-    num_columns = c_header_info[2]
-    header_sizes = [2, 1, num_columns, num_columns, 1, num_columns, 2]
-    #header_types = [1, 3, 3, 1, 1, 1, 1]
- 
-    start = 0
-    for l in range(len(len_c_headers)):
-        curr_len_c_header = len_c_headers[l]
-        curr_num_cols_c_header = header_sizes[l]
-        curr_data_type_c_header = header_types[l]
-        curr_num_bytes_c_header = BYTE_SIZES[curr_data_type_c_header]
-        # decompress
-        ds_header = decompress.decompress_data(c_header[start:start+curr_len_c_header])
-        start += curr_len_c_header
-        
-        # deserialize
-        #deserialize_data(dc_bitstring, block_size, data_type, num_bytes)  
-        dc_header = deserialize.deserialize_data(ds_header, curr_num_cols_c_header, curr_data_type_c_header, curr_num_bytes_c_header)
-        full_dc_header.append(dc_header)
-       
-    return full_dc_header
+#def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
+#    header_types = []
+#    for h in full_header:
+#        h_type = type(h[0])
+#        header_types.append(DATA_TYPE_CODE_BOOK[h_type])
+#    return header_types
+#
+#def compress_header(full_header, header_types):
+#    '''
+#    '''
+#    num_columns = full_header[4][0]
+#    #header_types = [1, 3, 3, 1, 1, 1, 1]
+#    #header_sizes = [2, 1, num_columms, num_columns, 1, num_columns, 2]
+#    len_compressed_headers = []
+#    c_header = b''
+#    print(full_header)
+#    
+#    for h in range(len(full_header)):
+#        #serialize_data([1,1,1,1,1], type_to_bytes_code_book[1], 1)
+#        s_header = serialize.serialize_data(full_header[h], BYTE_SIZES[header_types[h]], header_types[h])
+#        curr_c_header = compress.compress_data(s_header, 0)
+#        c_header += curr_c_header
+#        len_compressed_headers.append(len(curr_c_header))
+#    return [c_header, len_compressed_headers, num_columns]
+#
+#def decompress_header(c_header_info, header_types):
+#    full_dc_header = []    
+#
+#    c_header = c_header_info[0]
+#    len_c_headers = c_header_info[1]
+#    num_columns = c_header_info[2]
+#    header_sizes = [2, 1, num_columns, num_columns, 1, num_columns, 2]
+#    #header_types = [1, 3, 3, 1, 1, 1, 1]
+# 
+#    start = 0
+#    for l in range(len(len_c_headers)):
+#        curr_len_c_header = len_c_headers[l]
+#        curr_num_cols_c_header = header_sizes[l]
+#        curr_data_type_c_header = header_types[l]
+#        curr_num_bytes_c_header = BYTE_SIZES[curr_data_type_c_header]
+#        # decompress
+#        ds_header = decompress.decompress_data(c_header[start:start+curr_len_c_header])
+#        start += curr_len_c_header
+#        
+#        # deserialize
+#        #deserialize_data(dc_bitstring, block_size, data_type, num_bytes)  
+#        dc_header = deserialize.deserialize_data(ds_header, curr_num_cols_c_header, curr_data_type_c_header, curr_num_bytes_c_header)
+#        full_dc_header.append(dc_header)
+#       
+#    return full_dc_header
 
 #blengths = [100, 210, 175, 19]
 #print(blengths, get_end_positions(blengths))
 
 full_header = main(IN_FILE, BLOCK_SIZE)
-header_types = get_header_types(full_header, DATA_TYPE_CODE_BOOK)
-c_full_header = compress_header(full_header, header_types)
-dc_full_header = decompress_header(c_full_header, header_types)
+header_types = header.get_header_types(full_header, DATA_TYPE_CODE_BOOK)
+c_full_header = header.compress_header(full_header, header_types)
+dc_full_header = header.decompress_header(c_full_header, header_types)
 read_compressed_file(OUT_FILE, full_header)
 
 
