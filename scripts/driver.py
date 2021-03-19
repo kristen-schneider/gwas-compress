@@ -48,17 +48,15 @@ def main(in_file, block_size):
 
     # compressing/writing data    
     # getting end of header
-    header_end = compress_and_serialize(in_file, block_size, header_start)
-    end_points = header_end[0]
-    block_sizes = header_end[1]
     
     header_end = compress_and_serialize(funnel_format, block_size, header_start)
-    end_positions = get_end_positions(header_end[0])
-    block_sizes_two = endpos_compresseddata[1]
+    #end_positions = get_end_positions(header_end[0])
+    #block_sizes_two = endpos_compresseddata[1]
         
     full_header = header_start + header_end
-    print(full_header)    
-    read_compressed(OUT_FILE, full_header)
+    return full_header
+    #print(full_header)    
+    #read_compressed_file(OUT_FILE, full_header)
 
 def get_funnel_format(in_file, block_size, header_start):
     header_end = []
@@ -88,13 +86,13 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
 
     '''
     num_blocks = len(funnel_format_data)
-    
+    header_end = []    
+
     w_file = open(OUT_FILE, 'wb')
     w_file.truncate(0)
     
     compressed_block_lengths = []
     block_sizes_two = []   # first element = reg block size (equal to input block size), second element for size  of last block
-    #all_compressed_data = b""
     
     data_types = header_start[4]
 
@@ -108,7 +106,6 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
         # this should only be triggered for first block and last block. 
         if block_size not in block_sizes_two: block_sizes_two.append(block_size)        
 
-        print(curr_block, data_types, BYTE_SIZES)
         s_block = serialize.serialize_list_columns(curr_block, data_types, BYTE_SIZES)
         c_block = compress.compress_data(s_block, 0)
 
@@ -123,7 +120,7 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
     w_file.close()    
 
     # if all blocks are same length, add last block size length
-    if len(block_size_last) < 2: block_sizes_two.append(block_size)
+    if len(block_sizes_two) < 2: block_sizes_two.append(block_size)
     
     header_end.append(compressed_block_lengths)
     header_end.append(block_sizes_two)
@@ -141,22 +138,24 @@ def get_end_positions(block_lengths):
     return end_positions            
 
 
-def read_compressed_file(out_file, header):
+def read_compressed_file(out_file, full_header):
     #print(header)
-    delimeter = header[0]
-    col_names = header[1]
-    col_types = header[2]
-    num_cols = header[3]
-    end_positions = header[4]
-    block_sizes = header[5]
-
+    print(type(full_header), full_header)
+    magic_number = full_header[0]
+    version = full_header[1]
+    delimeter = full_header[2]
+    col_names = full_header[3]
+    col_types = full_header[4]
+    num_columns = full_header[5]
+    end_positions = full_header[6]
+    block_sizes = full_header[7]
+    
+    print(block_sizes)
+    
     with open(out_file, 'rb') as r_file:
         compressed_data = r_file.read()
     r_file.close
  
-    print("\nREAD:\n")
-    print(compressed_data)
-     
     curr_start = 0
     for block_i in range(len(end_positions)):
         if block_i < len(end_positions)-1: curr_block_size = block_sizes[0]
@@ -175,8 +174,8 @@ def read_compressed_file(out_file, header):
 #blengths = [100, 210, 175, 19]
 #print(blengths, get_end_positions(blengths))
 
-header_start = main(IN_FILE, BLOCK_SIZE)
-read_compressed_file(OUT_FILE, header)
+full_header = main(IN_FILE, BLOCK_SIZE)
+read_compressed_file(OUT_FILE, full_header)
 
 
 ##read_decompress_deseralize(IN_FILE, BLOCK_SIZE)
