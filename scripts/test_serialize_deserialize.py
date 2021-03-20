@@ -50,7 +50,9 @@ class TestSerializationToDeserialization(unittest.TestCase):
     S_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffst\x0eqw\x04\x00\x9f_F\xff\x05\x00\x00\x00'
     S_dc = b'ACTGA'
     S_ds = [['A', 'C', 'T', 'G', 'A']]
-    
+
+    s_bug = [['chr','pos','ref','alt','af_cases_EUR','af_controls_EUR','beta_EUR','se_EUR','pval_EUR','low_confidence_EUR']]
+        
     # integer and string data
     IS = [['1','1','1','1','1'], ['A', 'C', 'T', 'G', 'A']]
     IS_s = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01ACTGA'
@@ -178,6 +180,13 @@ class TestSerializationToDeserialization(unittest.TestCase):
                                 self.mtime)), \
                             self.block_size, [2], type_to_bytes_code_book), \
                         self.F_ds)
+        self.assertEqual(deserialize.deserialize_block_bitstring(\
+                            decompress.decompress_data(\
+                                compress.compress_data(\
+                                    serialize.serialize_list_columns(self.s_bug, [3], type_to_bytes_code_book), \
+                                self.mtime)), \
+                            self.block_size, [3], type_to_bytes_code_book), \
+                        self.s_bug)
         self.assertEqual(deserialize.deserialize_block_bitstring(\
                             decompress.decompress_data(\
                                 compress.compress_data(\

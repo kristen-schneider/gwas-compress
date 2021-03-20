@@ -125,9 +125,12 @@ def compress_header(full_header, header_types):
     print(full_header)
 
     for h in range(len(full_header)):
+        print(full_header[h])
         #serialize_data([1,1,1,1,1], type_to_bytes_code_book[1], 1)
         s_header = serialize.serialize_data(full_header[h], BYTE_SIZES[header_types[h]], header_types[h])
+        print(s_header)
         curr_c_header = compress.compress_data(s_header, 0)
+        print(curr_c_header)
         c_header += curr_c_header
         len_compressed_headers.append(len(curr_c_header))
     return [c_header, len_compressed_headers, num_columns]
