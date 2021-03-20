@@ -1,7 +1,7 @@
 import type_handling
 import struct
 
-def deserialize_block_bitstring(dc_bitstring, block_size, column_data_types, type_to_bytes_code_book):
+def deserialize_block(dc_bitstring, block_size, column_data_types, type_to_bytes_code_book):
     '''
     take decompressed bitstring for a full block and break it into columns of decompressed bitstrings. call deserialize_data on each individual decompressed bitstring.
 
