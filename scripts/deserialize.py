@@ -62,7 +62,7 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
         elif data_type == 2:
             curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
             curr_ds_value = struct.unpack('>d', curr_bytes)[0]          
-    
+
         # input values are strings 
         elif data_type == 3:
             curr_bytes = dc_bitstring[i]
