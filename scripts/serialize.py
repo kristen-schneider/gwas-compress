@@ -66,7 +66,7 @@ def serialize_data(data, data_type, num_bytes):
     # floats
     elif data_type == 2:
         try:
-            s_value = struct.pack(">f", data)
+            s_value = struct.pack(">d", data)
         except AttributeError:
             return -1
     # strings
@@ -79,16 +79,16 @@ def serialize_data(data, data_type, num_bytes):
 
 
 
-i = 4
-ia=[4,4,4,4]
-s = "A"
-sa = ["A", "A", "A", "A"]
-f = 1.32e+00
-
-b = [[4,4,4,4], ["A", "A", "A", "A"]]
-print(serialize_data(i, 1, 5))
-print(serialize_list(ia, 1, 5))
-print(serialize_block(b, [1,3], {1: 5, 2: 8, 3: 5}))
+# i = 4
+# ia=[4,4,4,4]
+# s = "A"
+# sa = ["A", "A", "A", "A"]
+# f = 1.32e+00
+#
+# b = [[4,4,4,4], ["A", "A", "A", "A"]]
+# print(serialize_data(i, 1, 5))
+# print(serialize_list(ia, 1, 5))
+# print(serialize_block(b, [1,3], {1: 5, 2: 8, 3: 5}))
 
 #header = [[1, 1], ['\t'], ['chr', 'pos', 'ref', 'alt'], [1, 1, 3, 3], [4]]
 #print(serialize_list_columns(header, [1, 3, 3, 1, 1], {1: 5, 2: 8, 3: 5}))
