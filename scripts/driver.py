@@ -6,6 +6,7 @@ import compress
 import decompress
 import deserialize
 
+# testing git with pycharm
 
 IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
