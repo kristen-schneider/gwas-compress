@@ -1,5 +1,5 @@
 # imports
-import header
+import header_compress_decompress
 import unittest
 
 # Testing funnel format generation (where all incoming files can be split into the same format)
@@ -33,23 +33,23 @@ class TestFileHeader(unittest.TestCase):
     SPACE_HEADER = [[MAGIC_NUMBER, VERSION], [SPACE_DELIMETER], COL_NAMES, COL_TYPES, [len(COL_NAMES)]] 
    
     def test_get_delimeter(self):
-        self.assertEqual(header.get_delimeter(self.TAB_ROW1), self.TAB_DELIMETER)    
-        self.assertEqual(header.get_delimeter(self.COMMA_ROW1), self.COMMA_DELIMETER)    
-        self.assertEqual(header.get_delimeter(self.SPACE_ROW1), self.SPACE_DELIMETER)    
+        self.assertEqual(header_compress_decompress.get_delimeter(self.TAB_ROW1), self.TAB_DELIMETER)
+        self.assertEqual(header_compress_decompress.get_delimeter(self.COMMA_ROW1), self.COMMA_DELIMETER)
+        self.assertEqual(header_compress_decompress.get_delimeter(self.SPACE_ROW1), self.SPACE_DELIMETER)
 
     def test_get_column_names(self):
-        self.assertEqual(header.get_column_names(self.TAB_ROW1, self.TAB_DELIMETER), self.COL_NAMES)
-        self.assertEqual(header.get_column_names(self.COMMA_ROW1, self.COMMA_DELIMETER), self.COL_NAMES)
-        self.assertEqual(header.get_column_names(self.SPACE_ROW1, self.SPACE_DELIMETER), self.COL_NAMES)
+        self.assertEqual(header_compress_decompress.get_column_names(self.TAB_ROW1, self.TAB_DELIMETER), self.COL_NAMES)
+        self.assertEqual(header_compress_decompress.get_column_names(self.COMMA_ROW1, self.COMMA_DELIMETER), self.COL_NAMES)
+        self.assertEqual(header_compress_decompress.get_column_names(self.SPACE_ROW1, self.SPACE_DELIMETER), self.COL_NAMES)
     
     def test_get_num_columns(self):
-        self.assertEqual(header.get_num_columns(self.COL_NAMES, self.COL_TYPES), len(self.COL_NAMES))
-        self.assertEqual(header.get_num_columns(self.COL_NAMES, self.COL_TYPES), self.NUM_COLS)
+        self.assertEqual(header_compress_decompress.get_num_columns(self.COL_NAMES, self.COL_TYPES), len(self.COL_NAMES))
+        self.assertEqual(header_compress_decompress.get_num_columns(self.COL_NAMES, self.COL_TYPES), self.NUM_COLS)
         
     def test_get_file_data(self):
-        self.assertEqual(header.get_file_data(self.TAB_FILE, self.DATA_TYPE_CODE_BOOK), self.TAB_HEADER)
-        self.assertEqual(header.get_file_data(self.COMMA_FILE, self.DATA_TYPE_CODE_BOOK), self.COMMA_HEADER)
-        self.assertEqual(header.get_file_data(self.SPACE_FILE, self.DATA_TYPE_CODE_BOOK), self.SPACE_HEADER)
+        self.assertEqual(header_compress_decompress.get_file_data(self.TAB_FILE, self.DATA_TYPE_CODE_BOOK), self.TAB_HEADER)
+        self.assertEqual(header_compress_decompress.get_file_data(self.COMMA_FILE, self.DATA_TYPE_CODE_BOOK), self.COMMA_HEADER)
+        self.assertEqual(header_compress_decompress.get_file_data(self.SPACE_FILE, self.DATA_TYPE_CODE_BOOK), self.SPACE_HEADER)
             
 
 

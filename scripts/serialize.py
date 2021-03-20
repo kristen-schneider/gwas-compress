@@ -4,7 +4,7 @@ import struct
 #bytes_type_code_book = {1: 5, 2: 8, 3: 5}
 #data_type_code_book = {int: 1, float: 2, str: 3}
 
-def serialize_list_columns(block_list, column_data_types, type_to_bytes_code_book):
+def serialize_block(block, column_data_types, type_to_bytes_code_book):
     '''
     takes input block (list of columns) and serializes each column. returns one long bitstring.    
 
@@ -21,19 +21,19 @@ def serialize_list_columns(block_list, column_data_types, type_to_bytes_code_boo
     num_columns = len(column_data_types)
 
     for column in range(num_columns):
-        curr_column = block_list[column]
+        curr_column = block[column]
         data_type = column_data_types[column]
         num_bytes = type_to_bytes_code_book[data_type]
         
         # convert column to proper type
         correct_type_column = type_handling.convert_to_type(curr_column, data_type)        
         
-        s_column = serialize_data(correct_type_column, num_bytes, data_type)
+        s_column = serialize_list(correct_type_column, data_type, num_bytes)
         serialized_block_bitstring += s_column
     
     return serialized_block_bitstring
 
-def serialize_data(column_list, num_bytes, data_type):
+def serialize_list(in_list, data_type, num_bytes):
     '''
     INPUT
     one_column = list type, represents one column (e.g. [1,1,1,1,1])
@@ -43,40 +43,52 @@ def serialize_data(column_list, num_bytes, data_type):
     OUTPUT
     s_bitstring = serialized bitstring (bytes object) of list from input
     
-    ''' 
-    
+    '''
     s_bitstring = b''
-    s_value = None 
-    
-    for c in column_list:
-        
-        # list (should be used for header where we have some list and some non-list data)
-        if type(c) == list:  
-            serialize_data(c, num_bytes, data_type)
-            
-        # serialize value according to its type
-        else:
-            # integers
-            if data_type == 1:
-                try:
-                    s_value = c.to_bytes(num_bytes, byteorder='big', signed = False)
-                except AttributeError: return -1
-            # floats
-            elif data_type == 2: 
-                try:
-                    s_value = struct.pack(">d", c)
-                except AttributeError: return -1
-            # strings  
-            elif data_type == 3:
-                try:
-                    s_value = bytes(c, 'utf-8')
 
-                except AttributeError: return -1
+    for i in in_list:
+        s_value = serialize_data(i, data_type, num_bytes)
         
         # add serialized value to serialized bitstring
         if s_value != None: s_bitstring += s_value
         else: print('value is of bad type, cannot serialize')
     return s_bitstring
+
+def serialize_data(data, data_type, num_bytes):
+
+    # integers
+    s_value = None
+    if data_type == 1:
+        try:
+            s_value = data.to_bytes(num_bytes, byteorder='big', signed=False)
+        except AttributeError:
+            return -1
+    # floats
+    elif data_type == 2:
+        try:
+            s_value = struct.pack(">f", data)
+        except AttributeError:
+            return -1
+    # strings
+    elif data_type == 3:
+        try:
+            s_value = bytes(data, 'utf-8')
+        except AttributeError:
+            return -1
+    return s_value
+
+
+
+i = 4
+ia=[4,4,4,4]
+s = "A"
+sa = ["A", "A", "A", "A"]
+f = 1.32e+00
+
+b = [[4,4,4,4], ["A", "A", "A", "A"]]
+print(serialize_data(i, 1, 5))
+print(serialize_list(ia, 1, 5))
+print(serialize_block(b, [1,3], {1: 5, 2: 8, 3: 5}))
 
 #header = [[1, 1], ['\t'], ['chr', 'pos', 'ref', 'alt'], [1, 1, 3, 3], [4]]
 #print(serialize_list_columns(header, [1, 3, 3, 1, 1], {1: 5, 2: 8, 3: 5}))

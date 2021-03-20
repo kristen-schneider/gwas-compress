@@ -1,4 +1,4 @@
-import header
+import header_compress_decompress
 
 def get_chr_format(f, header, delimeter):
     '''

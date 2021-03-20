@@ -1,6 +1,6 @@
 import funnel_format
 import type_handling
-import header
+import header_compress_decompress
 import serialize
 import compress
 import decompress
@@ -30,7 +30,7 @@ def main(in_file, block_size):
     '''
 
     # getting start of header
-    header_start = header.get_file_data(in_file, DATA_TYPE_CODE_BOOK)
+    header_start = header_compress_decompress.get_file_data(in_file, DATA_TYPE_CODE_BOOK)
     
     magic_number_version = header_start[0]
     delimeter = header_start[1]
@@ -243,9 +243,9 @@ def read_compressed_file(out_file, full_header):
 #print(blengths, get_end_positions(blengths))
 
 full_header = main(IN_FILE, BLOCK_SIZE)
-header_types = header.get_header_types(full_header, DATA_TYPE_CODE_BOOK)
-c_full_header = header.compress_header(full_header, header_types)
-dc_full_header = header.decompress_header(c_full_header, header_types)
+header_types = header_compress_decompress.get_header_types(full_header, DATA_TYPE_CODE_BOOK)
+c_full_header = header_compress_decompress.compress_header(full_header, header_types)
+dc_full_header = header_compress_decompress.decompress_header(c_full_header, header_types)
 read_compressed_file(OUT_FILE, full_header)
 
 
