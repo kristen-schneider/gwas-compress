@@ -94,6 +94,7 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
 
     '''
     num_blocks = len(funnel_format_data)
+    col_types = header_start[4]
 
     comp_data = b''
     header_end = []    
@@ -116,9 +117,12 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
         # this should only be triggered for first block and last block. 
         if block_size not in block_sizes_two: block_sizes_two.append(block_size)        
 
-        #curr_block_column_info = block_header.()
         s_block = serialize.serialize_block(curr_block, data_types, BYTE_SIZES)
-        print(s_block)
+        curr_block_header = block_header.get_block_header(s_block, block_size, col_types, BYTE_SIZES)
+        print(curr_block_header)
+        s_block_header = serialize.serialize_list(curr_block_header, 1, BYTE_SIZES[1])
+        c_block_header = compress.compress_data(s_block_header, 0)
+        print(len(c_block_header))
         c_block = compress.compress_data(s_block, 0)
         comp_data += c_block
         # after serialization and compression, print block
