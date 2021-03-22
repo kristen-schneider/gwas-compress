@@ -11,7 +11,7 @@ import deserialize
 # testing git with pycharm
 
 IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-data.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/75-lines-tab.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 BLOCK_SIZE = 3
@@ -34,7 +34,6 @@ def main(in_file, block_size):
 
     # getting start of header
     header_start = header_generate.get_header_data(in_file, DATA_TYPE_CODE_BOOK)
-    print(header_start)
     magic_number_version = header_start[0]
     delimeter = header_start[1]
     col_names = header_start[2]
@@ -53,6 +52,7 @@ def main(in_file, block_size):
     #header_end = comp_end[1]
     
     full_header = header_start + header_end
+    print(full_header)
     return full_header
 
 def get_funnel_format(in_file, block_size, header_start):
@@ -99,7 +99,7 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
     comp_data = b''
     header_end = []    
 
-    w_file = open(OUT_FILE+str(BLOCK_SIZE)+'-kristen-out.tsv', 'wb')
+    w_file = open(OUT_FILE+'-kristen-'+str(BLOCK_SIZE)+'-out.tsv', 'wb')
     w_file.truncate(0)
     
     compressed_block_lengths = []
@@ -118,11 +118,11 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
         if block_size not in block_sizes_two: block_sizes_two.append(block_size)        
 
         s_block = serialize.serialize_block(curr_block, data_types, BYTE_SIZES)
-        curr_block_header = block_header.get_block_header(s_block, block_size, col_types, BYTE_SIZES)
-        print(curr_block_header)
-        s_block_header = serialize.serialize_list(curr_block_header, 1, BYTE_SIZES[1])
-        c_block_header = compress.compress_data(s_block_header, 0)
-        print(len(c_block_header))
+        # curr_block_header = block_header.get_block_header(s_block, block_size, col_types, BYTE_SIZES)
+        # print(curr_block_header)
+        # s_block_header = serialize.serialize_list(curr_block_header, 1, BYTE_SIZES[1])
+        # c_block_header = compress.compress_data(s_block_header, 0)
+        # print(len(c_block_header))
         c_block = compress.compress_data(s_block, 0)
         comp_data += c_block
         # after serialization and compression, print block
@@ -184,7 +184,7 @@ def read_compressed_file(out_file, full_header):
     end_positions = full_header[6]
     block_sizes = full_header[7]
     
-    with open(out_file+str(BLOCK_SIZE)+'-kristen-out.tsv', 'rb') as r_file:
+    with open(out_file+'-kristen-'+str(BLOCK_SIZE)+'-out.tsv', 'rb') as r_file:
         compressed_data = r_file.read()
     r_file.close
     curr_start = 0
@@ -261,6 +261,6 @@ full_header = main(IN_FILE, BLOCK_SIZE)
 # dc_full_header = header_compress_decompress.decompress_header(c_full_header, header_types)
 
 out = read_compressed_file(OUT_FILE, full_header)
-for o in out : print(o)
+# for o in out : print(o)
 
 ##read_decompress_deseralize(IN_FILE, BLOCK_SIZE)

@@ -69,13 +69,6 @@ class TestSerializationToDeserialization(unittest.TestCase):
     HEADER_dc = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\tchrposrefalt\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x03\x00\x00\x00\x00\x03\x00\x00\x00\x00\x04'
     HEADER_ds = [[1, 1], ['\t'], ['chr', 'pos', 'ref', 'alt'], [1, 1, 3, 3], [4]]
 
-    # \n bug data (one instance of this bug)
-    bug = [['1'], ['30741'], ['C'], ['A'], ['-1.00'], ['-1.00'], ['-1.00'], ['-1.00'], ['-1.00'], ['true']]
-    bug_s = b'\x00\x00\x00\x00\x01\x00\x00\x00x\x15CA\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01'
-    bug_c = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xffc````\x04\xe2\nQg\xc7\xfd\x1f\x18\xc0\x80\x10\r\x02\x8c\x00\xe0\x05uk9\x00\x00\x00'
-    bug_dc = b'\x00\x00\x00\x00\x01\x00\x00\x00x\x15CA\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\xbf\xf0\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x01'
-    bug_ds = [[1], [30741], ['C'], ['A'], [-1.00], [-1.00], [-1.00], [-1.00], [-1.00], [True]]
-
     # def test_bug(self):
     #     self.assertEqual(serialize.serialize_list_columns(self.bug, type_to_bytes_code_book), self.bug_s)
     #     self.assertEqual(compress.compress_data(self.bug_s, self.mtime), self.bug_c)
@@ -124,10 +117,10 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(deserialize.deserialize_data(self.S_dc, self.block_size, 3, type_to_bytes_code_book[3]), self.S_ds[0])
 
         # deserialize_block_bitstring(dc_bitstring, block_size, column_data_types, type_to_bytes_code_book)
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.I_dc, self.block_size, [1], type_to_bytes_code_book), self.I_ds)
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.F_dc, self.block_size, [2], type_to_bytes_code_book), self.F_ds)
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.S_dc, self.block_size, [3], type_to_bytes_code_book), self.S_ds)
-        self.assertEqual(deserialize.deserialize_block_bitstring(self.IS_dc, self.block_size, [1, 3], type_to_bytes_code_book), self.IS_ds)
+        self.assertEqual(deserialize.deserialize_block(self.I_dc, self.block_size, [1], type_to_bytes_code_book), self.I_ds)
+        self.assertEqual(deserialize.deserialize_block(self.F_dc, self.block_size, [2], type_to_bytes_code_book), self.F_ds)
+        self.assertEqual(deserialize.deserialize_block(self.S_dc, self.block_size, [3], type_to_bytes_code_book), self.S_ds)
+        self.assertEqual(deserialize.deserialize_block(self.IS_dc, self.block_size, [1, 3], type_to_bytes_code_book), self.IS_ds)
 
 
 if __name__ == '__main__':

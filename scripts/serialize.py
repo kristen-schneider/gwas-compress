@@ -51,11 +51,22 @@ def serialize_list(in_list, data_type, num_bytes):
     
     '''
     s_bitstring = b''
+    s_value = None
     for i in in_list:
         s_value = serialize_data(i, data_type, num_bytes)
-        
-        # add serialized value to serialized bitstring
-        if s_value != None: s_bitstring += s_value
+
+        # is we have more than one string "AAA"
+
+        if s_value != None:
+            # special exception for strings:
+            if data_type != 3:
+                s_bitstring += s_value
+            elif data_type == 3:
+                if len(s_value) > 1:
+                    s_bitstring += b'\0'+s_value+b'\0'
+                else:
+                    s_bitstring += s_value
+            else: print('value is of bad type, cannot serialize')
         else: print('value is of bad type, cannot serialize')
     return s_bitstring
 
@@ -82,18 +93,16 @@ def serialize_data(data, data_type, num_bytes):
             return -1
     return s_value
 
+import deserialize
 
-
-# i = 4
-# ia=[4,4,4,4]
-# s = "A"
-# sa = ["A", "A", "A", "A"]
-# f = 1.32e+00
+# string data
+S = ['A', 'C', 'TTT', 'G', 'A']
+S_s = b'ACTTTGA'
+S_c = b''
+S_dc = b''
+S_ds = ['A', 'C', 'TTT', 'G', 'A']
 #
-# b = [[4,4,4,4], ["A", "A", "A", "A"]]
-# print(serialize_data(i, 1, 5))
-# print(serialize_list(ia, 1, 5))
-# print(serialize_block(b, [1,3], {1: 5, 2: 8, 3: 5}))
+# new_s = serialize_list(S, 3, 5)
+# print(new_s)
+# print(deserialize.deserialize_data(new_s, 5, 3, 5))
 
-#header = [[1, 1], ['\t'], ['chr', 'pos', 'ref', 'alt'], [1, 1, 3, 3], [4]]
-#print(serialize_list_columns(header, [1, 3, 3, 1, 1], {1: 5, 2: 8, 3: 5}))

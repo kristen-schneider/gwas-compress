@@ -46,31 +46,59 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
     num_bytes = number of bytes that is associated with this data type
     
     OUTPUT
-    curr_ds_bitstring = derserialized data for one column (e.g. [1,1,1,1,1]
+    ds_bitstring = derserialized data for one column (e.g. [1,1,1,1,1]
 
     '''
-    curr_ds_bitstring = []
-    curr_ds_value = None 
+    ds_bitstring = []
+    curr_ds_value = None
+    INDEL = False
     
-    for i in range(block_size):
+    #for i in range(block_size):
+    loop = len(dc_bitstring)
+    i = 0
+    while i < loop:
         # input values are integers
         if data_type == 1:
             curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
             curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
-        
+            i += 1
+
         # input values are floats
         elif data_type == 2:
             curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
-            curr_ds_value = struct.unpack('>d', curr_bytes)[0]          
+            curr_ds_value = struct.unpack('>d', curr_bytes)[0]
+            i += 1
 
         # input values are strings 
         elif data_type == 3:
             curr_bytes = dc_bitstring[i]
-            curr_ds_value = chr(curr_bytes)
-            
-        if curr_ds_value != None: curr_ds_bitstring.append(curr_ds_value)
-        else: print('value is of bad type, cannot deserialize')
-    
-    return curr_ds_bitstring 
+
+            # treat as INDEL
+            if curr_bytes == 0:
+                INDEL = True
+                INDEL_bitstring = ''
+                i += 1 # skip flag byte and move to INDEL
+                while INDEL:
+                    curr_bytes = dc_bitstring[i]
+                    if curr_bytes != 0:
+                        curr_ds_value = chr(curr_bytes)
+                        INDEL_bitstring += curr_ds_value
+                        # if curr_ds_value != None:
+                        #     ds_bitstring.append(curr_ds_value)
+                        # else:
+                        #     print('value is of bad type, cannot deserialize')
+                    else:
+                        ds_bitstring.append(INDEL_bitstring)
+                        INDEL = False
+                    i += 1
+            # treat normally (reg SNP)
+            else:
+                curr_ds_value = chr(curr_bytes)
+                if curr_ds_value != None:
+                    ds_bitstring.append(curr_ds_value)
+                else:
+                    print('value is of bad type, cannot deserialize')
+                i += 1
+    return ds_bitstring
 
 
