@@ -1,40 +1,4 @@
 import header_compress_decompress
-
-def get_chr_format(f, header, delimeter):
-    '''
-    looking to see how the first column (chr) is formatted
-         
-    INPUTS
-    f = path to uncompressed input file
-    OUTPUTS
-    1 if chr is in front of the chromosomee number/character
-    0 if only the chromosome number/character is present
-    None otherwise
-   
-    '''    
-
-    chr_flag = None
-    with open(f, 'r') as f_open:
-        # reads one line for header and one to get to data
-        h = f_open.readline()
-        first_data = f_open.readline().rstrip().split(delimeter)
-        try: 
-            chr_index = header.index('chr')
-            chr_format = first_data[chr_index]
-            if 'chr' in chr_format or 'chrm' in chr_format: chr_flag = 1
-            else: chr_flag = 0
-        except ValueError:
-            try:
-                chr_index = header.index('chrm')
-                chr_format = first_data[chr_index]
-                if 'chr' in chr_format or 'chrm' in chr_format: chr_flag = 1
-                else: chr_flag = 0
-            except ValueError:
-                chr_flag = None
-                print('VAL_ERROR: cannot find chromosome column to determine format of entries')
-    
-    f_open.close()        
-    return chr_flag
  
 def split_into_blocks(f, block_size):
     '''
@@ -112,4 +76,44 @@ def make_all_blocks(f, block_size, num_columns, delimeter):
         all_blocks_list.append(curr_block)
     return all_blocks_list
 
+
+def get_chr_format(f, header, delimeter):
+    '''
+    looking to see how the first column (chr) is formatted
+
+    INPUTS
+    f = path to uncompressed input file
+    OUTPUTS
+    1 if chr is in front of the chromosomee number/character
+    0 if only the chromosome number/character is present
+    None otherwise
+
+    '''
+
+    chr_flag = None
+    with open(f, 'r') as f_open:
+        # reads one line for header and one to get to data
+        h = f_open.readline()
+        first_data = f_open.readline().rstrip().split(delimeter)
+        try:
+            chr_index = header.index('chr')
+            chr_format = first_data[chr_index]
+            if 'chr' in chr_format or 'chrm' in chr_format:
+                chr_flag = 1
+            else:
+                chr_flag = 0
+        except ValueError:
+            try:
+                chr_index = header.index('chrm')
+                chr_format = first_data[chr_index]
+                if 'chr' in chr_format or 'chrm' in chr_format:
+                    chr_flag = 1
+                else:
+                    chr_flag = 0
+            except ValueError:
+                chr_flag = None
+                print('VAL_ERROR: cannot find chromosome column to determine format of entries')
+
+    f_open.close()
+    return chr_flag
 

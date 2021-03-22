@@ -10,7 +10,7 @@ def main():
 def get_data_dict():
     file_size_dict = {}
     for f in os.listdir(IN_PATH):
-        if '.tsv.gz' in f or '10000' in f:
+        if '10-lines-tab.' in f or 'kristen' in f:
             file_size_dict[f] = os.path.getsize(IN_PATH+f)
     return file_size_dict
 

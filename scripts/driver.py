@@ -1,5 +1,6 @@
 import funnel_format
 import type_handling
+import header_generate
 import header_compress_decompress
 import serialize
 import compress
@@ -8,10 +9,11 @@ import deserialize
 
 # testing git with pycharm
 
-IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
-OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/kristen-out.tsv'
-BLOCK_SIZE = 5
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-data.tsv'
+IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
+OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
+BLOCK_SIZE = 1500
 
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 BYTE_SIZES = {1: 5, 2: 8, 3: 5}
@@ -30,8 +32,8 @@ def main(in_file, block_size):
     '''
 
     # getting start of header
-    header_start = header_compress_decompress.get_file_data(in_file, DATA_TYPE_CODE_BOOK)
-    
+    header_start = header_generate.get_header_data(in_file, DATA_TYPE_CODE_BOOK)
+    print(header_start)
     magic_number_version = header_start[0]
     delimeter = header_start[1]
     col_names = header_start[2]
@@ -66,11 +68,12 @@ def get_funnel_format(in_file, block_size, header_start):
 
     '''
 
-    magic_number_version = header_start[0]
-    delimeter = header_start[1][0]
-    col_names = header_start[2]
-    col_types = header_start[3]
-    num_columns = header_start[4][0]
+    magic_number = header_start[0]
+    version = header_start[1]
+    delimeter = header_start[2]
+    col_names = header_start[3]
+    col_types = header_start[4]
+    num_columns = header_start[5]
 
     funnel_format_data = funnel_format.make_all_blocks(in_file, block_size, num_columns, delimeter)
     return funnel_format_data
@@ -94,13 +97,13 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
     comp_data = b''
     header_end = []    
 
-    w_file = open(OUT_FILE, 'wb')
+    w_file = open(OUT_FILE+str(BLOCK_SIZE)+'-kristen-out.tsv', 'wb')
     w_file.truncate(0)
     
     compressed_block_lengths = []
     block_sizes_two = []   # first element = reg block size (equal to input block size), second element for size  of last block
     
-    data_types = header_start[3]
+    data_types = header_start[4]
 
     # for each block
         # serialize and compress
@@ -112,7 +115,7 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
         # this should only be triggered for first block and last block. 
         if block_size not in block_sizes_two: block_sizes_two.append(block_size)        
 
-        s_block = serialize.serialize_list_columns(curr_block, data_types, BYTE_SIZES)
+        s_block = serialize.serialize_block(curr_block, data_types, BYTE_SIZES)
         c_block = compress.compress_data(s_block, 0)
         comp_data += c_block
         # after serialization and compression, print block
@@ -162,31 +165,34 @@ def read_compressed_file(out_file, full_header):
     nothing for now...
 
     '''
+    ds_full_data = []
     
     #print(header)
-    magic_number_version = full_header[0]
-    delimeter = full_header[1][0]
-    col_names = full_header[2]
-    col_types = full_header[3]
-    num_columns = full_header[4][0]
-    end_positions = full_header[5]
-    block_sizes = full_header[6]
+    magic_number = full_header[0]
+    version = full_header[1]
+    delimeter = full_header[2]
+    col_names = full_header[3]
+    col_types = full_header[4]
+    num_columns = full_header[5]
+    end_positions = full_header[6]
+    block_sizes = full_header[7]
     
-    with open(out_file, 'rb') as r_file:
+    with open(out_file+str(BLOCK_SIZE)+'-kristen-out.tsv', 'rb') as r_file:
         compressed_data = r_file.read()
     r_file.close
- 
     curr_start = 0
     for block_i in range(len(end_positions)):
         if block_i < len(end_positions)-1: curr_block_size = block_sizes[0]
         else: curr_block_size = block_sizes[1]
-        curr_end = curr_start + end_positions[block_i]
+        curr_end = end_positions[block_i]
 
         curr_bitstring = compressed_data[curr_start:curr_end]
         dc_bitstring = decompress.decompress_data(curr_bitstring)
-        ds_bitstring = deserialize.deserialize_block_bitstring(dc_bitstring, curr_block_size, col_types, BYTE_SIZES)
-
+        ds_bitstring = deserialize.deserialize_block(dc_bitstring, curr_block_size, col_types, BYTE_SIZES)
         curr_start = curr_end
+
+        ds_full_data.append(ds_bitstring)
+    return ds_full_data
 
 #def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
 #    header_types = []
@@ -243,10 +249,11 @@ def read_compressed_file(out_file, full_header):
 #print(blengths, get_end_positions(blengths))
 
 full_header = main(IN_FILE, BLOCK_SIZE)
-header_types = header_compress_decompress.get_header_types(full_header, DATA_TYPE_CODE_BOOK)
-c_full_header = header_compress_decompress.compress_header(full_header, header_types)
-dc_full_header = header_compress_decompress.decompress_header(c_full_header, header_types)
-read_compressed_file(OUT_FILE, full_header)
+# header_types = header_compress_decompress.get_header_types(full_header, DATA_TYPE_CODE_BOOK)
+# c_full_header = header_compress_decompress.compress_header(full_header, header_types)
+# dc_full_header = header_compress_decompress.decompress_header(c_full_header, header_types)
 
+out = read_compressed_file(OUT_FILE, full_header)
+# for o in out : print(o)
 
 ##read_decompress_deseralize(IN_FILE, BLOCK_SIZE)
