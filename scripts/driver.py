@@ -2,6 +2,7 @@ import funnel_format
 import type_handling
 import header_generate
 import header_compress_decompress
+import block_header
 import serialize
 import compress
 import decompress
@@ -9,11 +10,11 @@ import deserialize
 
 # testing git with pycharm
 
-#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-data.tsv'
-IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
-BLOCK_SIZE = 1500
+BLOCK_SIZE = 3
 
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 BYTE_SIZES = {1: 5, 2: 8, 3: 5}
@@ -115,7 +116,9 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
         # this should only be triggered for first block and last block. 
         if block_size not in block_sizes_two: block_sizes_two.append(block_size)        
 
+        #curr_block_column_info = block_header.()
         s_block = serialize.serialize_block(curr_block, data_types, BYTE_SIZES)
+        print(s_block)
         c_block = compress.compress_data(s_block, 0)
         comp_data += c_block
         # after serialization and compression, print block
@@ -254,6 +257,6 @@ full_header = main(IN_FILE, BLOCK_SIZE)
 # dc_full_header = header_compress_decompress.decompress_header(c_full_header, header_types)
 
 out = read_compressed_file(OUT_FILE, full_header)
-# for o in out : print(o)
+for o in out : print(o)
 
 ##read_decompress_deseralize(IN_FILE, BLOCK_SIZE)
