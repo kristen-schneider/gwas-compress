@@ -117,10 +117,10 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(deserialize.deserialize_data(self.S_dc, self.block_size, 3, type_to_bytes_code_book[3]), self.S_ds[0])
 
         # deserialize_block_bitstring(dc_bitstring, block_size, column_data_types, type_to_bytes_code_book)
-        self.assertEqual(deserialize.deserialize_block(self.I_dc, self.block_size, [1], type_to_bytes_code_book), self.I_ds)
-        self.assertEqual(deserialize.deserialize_block(self.F_dc, self.block_size, [2], type_to_bytes_code_book), self.F_ds)
-        self.assertEqual(deserialize.deserialize_block(self.S_dc, self.block_size, [3], type_to_bytes_code_book), self.S_ds)
-        self.assertEqual(deserialize.deserialize_block(self.IS_dc, self.block_size, [1, 3], type_to_bytes_code_book), self.IS_ds)
+        self.assertEqual(deserialize.deserialize_block(self.I_dc, self.block_size, [1], type_to_bytes_code_book, ), self.I_ds)
+        self.assertEqual(deserialize.deserialize_block(self.F_dc, self.block_size, [2], type_to_bytes_code_book, ), self.F_ds)
+        self.assertEqual(deserialize.deserialize_block(self.S_dc, self.block_size, [3], type_to_bytes_code_book, ), self.S_ds)
+        self.assertEqual(deserialize.deserialize_block(self.IS_dc, self.block_size, [1, 3], type_to_bytes_code_book ), self.IS_ds)
 
 
 if __name__ == '__main__':

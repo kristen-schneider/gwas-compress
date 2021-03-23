@@ -112,20 +112,25 @@ def compress_and_serialize(funnel_format_data, block_size, header_start):
         # serialize and compress
         # store size of compressed data
     for b in range(num_blocks):
+        # current full block (e.g. 10 columns of data)
         curr_block = funnel_format_data[b]
-        block_size = len(funnel_format_data[b][0])
-        
-        # this should only be triggered for first block and last block. 
-        if block_size not in block_sizes_two: block_sizes_two.append(block_size)        
 
+        # fill in block size for header
+        block_size = len(funnel_format_data[b][0])
+        # this should only be triggered for first block and last block. 
+        if block_size not in block_sizes_two:
+            block_sizes_two.append(block_size)
+
+        # serialized block
         s_block = serialize.serialize_block(curr_block, data_types, BYTE_SIZES)
+
         curr_block_header = block_header.get_block_header(s_block, block_size, col_types, BYTE_SIZES)
         s_block_header = serialize.serialize_list(curr_block_header, 1, BYTE_SIZES[1])
         c_block_header = compress.compress_data(s_block_header, 0)
-        # c_block_header = compress.compress_data(curr_block_header, 0)
+
+        # compress block
         c_block = compress.compress_data(s_block, 0)
         # comp_data += c_block
-        # after serialization and compression, print block
         w_file.write(c_block_header)
         w_file.write(c_block)
 

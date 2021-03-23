@@ -17,14 +17,13 @@ def serialize_block(block, column_data_types, type_to_bytes_code_book):
     serialized_block_bitstring = one bitstring with all column serialization concatenated together
     
     '''
+
     serialized_block_bitstring = b''
     num_columns = len(column_data_types)
 
     for column in range(num_columns):
 
-
         curr_column = block[column]
-        #print('data: ', curr_column)
         data_type = column_data_types[column]
         num_bytes = type_to_bytes_code_book[data_type]
         
@@ -34,9 +33,8 @@ def serialize_block(block, column_data_types, type_to_bytes_code_book):
         s_column = serialize_list(correct_type_column, data_type, num_bytes)
 
         serialized_block_bitstring += s_column
-        #print('column: ', s_column)
-        #print('block-update: ', serialized_block_bitstring)
-    #print('block: ', serialized_block_bitstring)
+        print(len(serialized_block_bitstring))
+
     return serialized_block_bitstring
 
 def serialize_list(in_list, data_type, num_bytes):
@@ -93,16 +91,19 @@ def serialize_data(data, data_type, num_bytes):
             return -1
     return s_value
 
-import deserialize
+# def serialized_column_lengths():
 
-# string data
-S = ['A', 'C', 'TTT', 'G', 'A']
-S_s = b'ACTTTGA'
-S_c = b''
-S_dc = b''
-S_ds = ['A', 'C', 'TTT', 'G', 'A']
-#
-# new_s = serialize_list(S, 3, 5)
-# print(new_s)
-# print(deserialize.deserialize_data(new_s, 5, 3, 5))
+
+# import deserialize
+
+# # string data
+# S = ['A', 'C', 'TTT', 'G', 'A']
+# S_s = b'ACTTTGA'
+# S_c = b''
+# S_dc = b''
+# S_ds = ['A', 'C', 'TTT', 'G', 'A']
+# #
+# # new_s = serialize_list(S, 3, 5)
+# # print(new_s)
+# # print(deserialize.deserialize_data(new_s, 5, 3, 5))
 

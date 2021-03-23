@@ -64,51 +64,8 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
     elif data_type == 2:
         ds_bitstring = deserialize_float(dc_bitstring, block_size, num_bytes)
     elif data_type == 3:
-        ds_bitstring = deserialize_string(dc_bitstring, block_size, num_bytes)
+        ds_bitstring = deserialize_string(dc_bitstring)
 
-
-        #     curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
-        #     curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
-        #     ds_bitstring.append(curr_ds_value)
-        #     i += num_bytes
-        #
-        # # input values are floats
-        # elif data_type == 2:
-        #     curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
-        #     curr_ds_value = struct.unpack('>d', curr_bytes)[0]
-        #     ds_bitstring.append(curr_ds_value)
-        #     i += num_bytes
-        #
-        # # input values are strings
-        # elif data_type == 3:
-        #     curr_bytes = dc_bitstring[i]
-        #
-        #     # treat as INDEL
-        #     if curr_bytes == 0:
-        #         INDEL = True
-        #         INDEL_bitstring = ''
-        #         i += 1 # skip flag byte and move to INDEL
-        #         while INDEL:
-        #             curr_bytes = dc_bitstring[i]
-        #             if curr_bytes != 0:
-        #                 curr_ds_value = chr(curr_bytes)
-        #                 INDEL_bitstring += curr_ds_value
-        #                 # if curr_ds_value != None:
-        #                 #     ds_bitstring.append(curr_ds_value)
-        #                 # else:
-        #                 #     print('value is of bad type, cannot deserialize')
-        #             else:
-        #                 ds_bitstring.append(INDEL_bitstring)
-        #                 INDEL = False
-        #             i += 1
-        #     # treat normally (reg SNP)
-        #     else:
-        #         curr_ds_value = chr(curr_bytes)
-        #         if curr_ds_value != None:
-        #             ds_bitstring.append(curr_ds_value)
-        #         else:
-        #             print('value is of bad type, cannot deserialize')
-        #         i += 1
     return ds_bitstring
 
 
@@ -128,7 +85,7 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
         ds_bitstring.append(curr_ds_value)
     return ds_bitstring
 
-def deserialize_string(dc_bitstring, block_size, num_bytes):
+def deserialize_string(dc_bitstring):
     ds_bitstring = []
     loop = len(dc_bitstring)
     i = 0
@@ -144,10 +101,6 @@ def deserialize_string(dc_bitstring, block_size, num_bytes):
                 if curr_bytes != 0:
                     curr_ds_value = chr(curr_bytes)
                     INDEL_bitstring += curr_ds_value
-                    # if curr_ds_value != None:
-                    #     ds_bitstring.append(curr_ds_value)
-                    # else:
-                    #     print('value is of bad type, cannot deserialize')
                 else:
                     ds_bitstring.append(INDEL_bitstring)
                     INDEL = False
@@ -162,15 +115,15 @@ def deserialize_string(dc_bitstring, block_size, num_bytes):
             i += 1
     return ds_bitstring
 
-
-a = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01'
-dsa = deserialize_data(a, 5, 1, 5)
-print(dsa)
-b = b'?\xf3333333@\x0b\x99\x99\x99\x99\x99\x9a\xc0\x1b\x1e\xb8Q\xeb\x85\x1f?\x17\x97\xcc9\xff\xd6\x0f@\xc8\x1a\x00\x00\x00\x00\x00'
-dsb = deserialize_data(b, 5, 2, 8)
-print(dsb)
-c = b'AC\x00TTT\x00GA'
-dsc = deserialize_data(c, 5, 3, 5)
-print(dsc)
+#
+# a = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01'
+# dsa = deserialize_data(a, 5, 1, 5)
+# print(dsa)
+# b = b'?\xf3333333@\x0b\x99\x99\x99\x99\x99\x9a\xc0\x1b\x1e\xb8Q\xeb\x85\x1f?\x17\x97\xcc9\xff\xd6\x0f@\xc8\x1a\x00\x00\x00\x00\x00'
+# dsb = deserialize_data(b, 5, 2, 8)
+# print(dsb)
+# c = b'AC\x00TTT\x00GA'
+# dsc = deserialize_data(c, 5, 3, 5)
+# print(dsc)
 
 
