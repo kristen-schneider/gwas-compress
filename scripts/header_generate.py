@@ -41,6 +41,7 @@ def get_header_data(in_file, data_type_code_book):
     column_names_list = get_column_names(column_names_str, delimeter)
     column_types_list = type_handling.get_column_types(column_types_str.rstrip().split(delimeter), data_type_code_book)
     num_columns = get_num_columns(column_names_list, column_types_list)
+    gzip_header = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff'
 
     header_start.append(magic_number)
     header_start.append(version_number)
@@ -48,6 +49,7 @@ def get_header_data(in_file, data_type_code_book):
     header_start.append(column_names_list)
     header_start.append(column_types_list)
     header_start.append(num_columns)
+    header_start.append(gzip_header)
 
     return header_start
 
