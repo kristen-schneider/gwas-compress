@@ -112,6 +112,15 @@ def get_num_columns(column_names_list, column_types_list):
 
     return num_columns
 
+def get_block_end_positions(block_lengths):
+    block_end_positions = []
+    start = 0
+    for bl in block_lengths:
+        block_end_positions.append(start+bl)
+        start += bl
+
+    return block_end_positions
+
 
 ### FOR HEADER COMPRESSION AND DECOMPRESSION ###
 def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
@@ -120,7 +129,6 @@ def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
         h_type = type(h[0])
         header_types.append(DATA_TYPE_CODE_BOOK[h_type])
     return header_types
-
 
 def compress_header(full_header, header_types):
     '''
@@ -166,4 +174,3 @@ def decompress_header(c_header_info, header_types):
         full_dc_header.append(dc_header)
 
     return full_dc_header
-

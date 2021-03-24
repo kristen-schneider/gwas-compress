@@ -1,6 +1,7 @@
 # IMPORTS
 import header_generate
 import funnel_format
+import type_handling
 import serialize
 import compress
 
@@ -28,7 +29,6 @@ def main():
     # 10,
     # b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff']
     header_start = header_generate.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK)
-    print(header_start)
     magic_number = header_start[0]
     version = header_start[1]
     delimiter = header_start[2]
@@ -43,41 +43,75 @@ def main():
     # -----> a column is a list of string values: col1 = ['1','1','1','1','1']
     funnel_format_data = funnel_format_data = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, number_columns, delimiter)
 
-    serialize_and_compress_funnel_format(funnel_format_data, column_types, gzip_header)
+    header_end = serialize_and_compress_funnel_format(funnel_format_data, column_types)
+
+    full_header = header_start+header_end
+    #for h in full_header: print(h)
 
 
-def serialize_and_compress_funnel_format(ff, column_types, gzip_header):
+def serialize_and_compress_funnel_format(ff, column_types):
     header_end = []             # will contain the following:
-    block_end_positions = []    # end positions for each block
     block_header_lengths = []   # lengths of compressed block headers
+    block_end_positions = []
     block_sizes = []            # should be two elements. one for normal block size. one for last block.
 
     # prepare output file
     w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'wb')
     w_file.truncate(0)
 
+    block_lengths = []
     # go through data, and compress each column
     for block_i in range(len(ff)):
-        num_blocks = len(ff)
+        num_columns_in_block = len(ff[block_i])
 
         curr_block = ff[block_i]
-        s_c_block = b''
-        block_lengths = []
-        block_column_lengths = []
+        curr_block_length = 0
 
+        block_column_lengths = []
         for column_i in range(len(curr_block)):
+            compressed_block = b''
+
+            # get column info
             curr_column = curr_block[column_i]
             column_type = column_types[column_i]
+            typed_column = type_handling.convert_to_type(curr_column, column_type)
             column_bytes = DATA_TYPE_BYTE_SIZES[column_type]
 
-            s_column = serialize.serialize_list(curr_column, column_type, column_bytes)
-            #s_c_column = compress.compress_data(s_column, 0)
+            # serialize and compress a column
+            s_column = serialize.serialize_list(typed_column, column_type, column_bytes)
+            s_c_column = compress.compress_data(s_column, 0)[10:] # remove the gzip header bit from the compressed data
+            compressed_block += s_c_column
 
-            #block_column_lengths.append(len(c))
+            # add length of this column to lengths of columns in this block
+            curr_comressed_column_length = len(s_c_column)
+            block_column_lengths.append(curr_comressed_column_length)
+
+            curr_block_length+=curr_comressed_column_length
+
+        block_lengths.append(curr_block_length)
 
 
-        block_lengths.append(len(s_c_block))
+        # this should only be triggered for first block and last block.
+        if num_columns_in_block not in block_sizes:
+            block_sizes.append(num_columns_in_block)
 
+        # write the compressed block header and compressed block to the file
+        s_block_header = serialize.serialize_list(block_column_lengths, 1, DATA_TYPE_BYTE_SIZES[1])
+        s_c_block_header = compress.compress_data(s_block_header, 0)
+        compressed_length_curr_block_header = len(s_c_block_header)
+        block_header_lengths.append(compressed_length_curr_block_header)
+
+        w_file.write(s_c_block_header)
+        w_file.write(compressed_block)
+
+    block_end_positions = header_generate.get_block_end_positions(block_lengths)
+
+    header_end.append(block_header_lengths)
+    header_end.append(block_end_positions)
+    header_end.append(block_sizes)
+
+    w_file.close()
+    return header_end
 #def get_end_positions(block_lengths):
 
 
