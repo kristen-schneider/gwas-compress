@@ -118,7 +118,7 @@ def get_block_end_positions(block_lengths, block_header_lengths):
     for bl in range(len(block_lengths)):
         fulL_block = block_lengths[bl]+block_header_lengths[bl]
         block_end_positions.append(start+fulL_block)
-        start += start+fulL_block
+        start += fulL_block
 
     return block_end_positions
 

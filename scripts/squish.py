@@ -8,12 +8,12 @@ import compress
 # PARATMETERS
 # 1. input file
 IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-    #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/75-lines-tab.tsv'
+IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/15.tsv'
     #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 # 2. output file
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # 3. block size
-BLOCK_SIZE = 5
+BLOCK_SIZE = 20
 # 4. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
@@ -41,7 +41,7 @@ def main():
     # list of blocks [[block1][block2]...[blockn]]
     # --> a block is a list of columns: block1 = [[col1], [co2]...[colm]]
     # -----> a column is a list of string values: col1 = ['1','1','1','1','1']
-    funnel_format_data = funnel_format_data = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, number_columns, delimiter)
+    funnel_format_data = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, number_columns, delimiter)
 
     header_end = serialize_and_compress_funnel_format(funnel_format_data, column_types)
 
@@ -49,7 +49,6 @@ def main():
     # w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
     # w_file.write(full_header)
     # w_file.close()
-    #for h in full_header: print(h)
     print(full_header)
     return full_header
 
@@ -83,7 +82,6 @@ def serialize_and_compress_funnel_format(ff, column_types):
             column_bytes = DATA_TYPE_BYTE_SIZES[column_type]
 
             # serialize and compress a column
-            print(typed_column)
             s_column = serialize.serialize_list(typed_column, column_type, column_bytes)
             s_c_column = compress.compress_data(s_column, 0)[10:] # remove the gzip header bit from the compressed data
             compressed_block += s_c_column
@@ -92,7 +90,6 @@ def serialize_and_compress_funnel_format(ff, column_types):
             curr_comressed_column_length = len(s_c_column)
             block_column_lengths.append(curr_comressed_column_length)
 
-            #curr_block_length+=curr_comressed_column_length
 
         block_lengths.append(len(compressed_block))
 
@@ -102,15 +99,14 @@ def serialize_and_compress_funnel_format(ff, column_types):
             block_sizes.append(num_rows_in_block)
 
         # write the compressed block header and compressed block to the file
-        print(block_column_lengths)
         s_block_header = serialize.serialize_list(block_column_lengths, 1, DATA_TYPE_BYTE_SIZES[1])
         s_c_block_header = compress.compress_data(s_block_header, 0)[10:]
         compressed_length_curr_block_header = len(s_c_block_header)
         block_header_lengths.append(compressed_length_curr_block_header)
 
-        # print(len(s_c_block_header), s_c_block_header)
+        # print('header', len(s_c_block_header), s_c_block_header)
         w_file.write(s_c_block_header)
-        # print(len(compressed_block), compressed_block)
+        # print('data', len(compressed_block), compressed_block)
         w_file.write(compressed_block)
 
     block_end_positions = header_generate.get_block_end_positions(block_lengths, block_header_lengths)
