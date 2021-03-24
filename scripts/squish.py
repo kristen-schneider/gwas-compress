@@ -46,7 +46,12 @@ def main():
     header_end = serialize_and_compress_funnel_format(funnel_format_data, column_types)
 
     full_header = header_start+header_end
+    # w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
+    # w_file.write(full_header)
+    # w_file.close()
     #for h in full_header: print(h)
+    print(full_header)
+    return full_header
 
 
 def serialize_and_compress_funnel_format(ff, column_types):
@@ -56,7 +61,7 @@ def serialize_and_compress_funnel_format(ff, column_types):
     block_sizes = []            # should be two elements. one for normal block size. one for last block.
 
     # prepare output file
-    w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'wb')
+    w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
     w_file.truncate(0)
 
     block_lengths = []
@@ -103,6 +108,7 @@ def serialize_and_compress_funnel_format(ff, column_types):
 
         w_file.write(s_c_block_header)
         w_file.write(compressed_block)
+        print(compressed_block)
 
     block_end_positions = header_generate.get_block_end_positions(block_lengths)
 
@@ -112,12 +118,6 @@ def serialize_and_compress_funnel_format(ff, column_types):
 
     w_file.close()
     return header_end
-#def get_end_positions(block_lengths):
-
-
-
-
-
 
 
 if __name__ == '__main__':
