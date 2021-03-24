@@ -72,14 +72,14 @@ def read_compressed_file(compressed_file, full_header, block_number, column_numb
         # current block data
         curr_block_data_start = curr_block_header_end
         # for each compressed column in this block we need to add the gzip header separately
-        for row in range(len(ds_dc_curr_block_header)):
-            curr_block_data_end = curr_block_data_start+ds_dc_curr_block_header[row]
+        for column in range(len(ds_dc_curr_block_header)):
+            curr_block_data_end = curr_block_data_start+ds_dc_curr_block_header[column]
             curr_block_data = gzip_header+all_compressed_data[curr_block_data_start:curr_block_data_end]
             curr_block_data_start = curr_block_data_end
 
             dc_curr_block_data = decompress.decompress_data(curr_block_data)
 
-            col_type = col_types[row]
+            col_type = col_types[column]
             ds_dc_curr_block_data = deserialize.deserialize_data(
                 dc_curr_block_data, curr_block_num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type])
             ds_dc_curr_block.append(ds_dc_curr_block_data)
