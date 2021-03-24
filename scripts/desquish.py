@@ -7,7 +7,7 @@ import deserialize
 # 1. output file
 COMPRESSED_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # 2. block size
-BLOCK_SIZE = 20
+BLOCK_SIZE = 200000
 # 3. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
@@ -15,7 +15,10 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
 
 # HEADER SHOULD BE WRITTEN IN FILE EVENTUALLY
 full_header = \
-    [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR', 'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10, b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [37, 34, 37, 24], [698, 1419, 2379, 2561], [20, 1]]
+    [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR',
+                  'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10,
+     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [57, 57, 57, 57, 57],
+     [4278533, 8483073, 12606031, 16755247, 20915119], [200000, 199999]]
 
 
 def main():
