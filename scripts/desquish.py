@@ -7,7 +7,7 @@ import deserialize
 # 1. output file
 COMPRESSED_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # 2. block size
-BLOCK_SIZE = 200000
+BLOCK_SIZE = 3
 # 3. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
@@ -17,15 +17,15 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
 full_header = \
     [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR',
                   'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10,
-     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [57, 57, 57, 57, 57],
-     [4278533, 8483073, 12606031, 16755247, 20915119], [200000, 199999]]
+     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [29, 26, 33], [292, 528, 782], [3, 3]]
 
 
 def main():
     block_number = 0
     column_number = 0
 
-    read_compressed_file(COMPRESSED_FILE, full_header, block_number, column_number)
+    #read_compressed_file(COMPRESSED_FILE, full_header, block_number, column_number)
+    read_header(COMPRESSED_FILE)
 
 def read_compressed_file(compressed_file, full_header, block_number, column_number):
     ds_full_data = []
@@ -40,6 +40,8 @@ def read_compressed_file(compressed_file, full_header, block_number, column_numb
     block_header_lengths = full_header[7]
     end_positions = full_header[8]
     block_sizes = full_header[9]
+
+
 
     with open(compressed_file+'kristen-'+str(BLOCK_SIZE)+'-out.tsv', 'rb') as r_file:
         all_compressed_data = r_file.read()
@@ -87,6 +89,19 @@ def read_compressed_file(compressed_file, full_header, block_number, column_numb
         curr_block_header_start = end_positions[block_i]
     for b in ds_full_data: print(b)
     return ds_full_data
+
+def read_header(compressed_file):
+    with open(compressed_file+'kristen-'+str(BLOCK_SIZE)+'-out.tsv', 'rb') as r_file:
+        all_compressed_data = r_file.read()
+    r_file.close()
+    print(all_compressed_data)
+
+
+    with open(compressed_file+'kristen-'+str(BLOCK_SIZE)+'-out.tsv', 'rb') as rbackwards_file:
+        data = rbackwards_file.read()
+        reversed_compressed = reversed(data)
+    rbackwards_file.close()
+    print(reversed_compressed)
 
 if __name__ == '__main__':
     main()

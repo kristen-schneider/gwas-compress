@@ -8,12 +8,12 @@ import compress
 # PARATMETERS
 # 1. input file
 IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/15.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/15.tsv'
     #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 # 2. output file
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # 3. block size
-BLOCK_SIZE = 200000
+BLOCK_SIZE = 3
 # 4. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
@@ -115,7 +115,6 @@ def serialize_and_compress_funnel_format(ff, column_types):
     header_end.append(block_header_lengths)
     header_end.append(block_end_positions)
     header_end.append(block_sizes)
-
 
     w_file.close()
     return header_end
