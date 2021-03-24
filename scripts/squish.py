@@ -67,14 +67,14 @@ def serialize_and_compress_funnel_format(ff, column_types):
     block_lengths = []
     # go through data, and compress each column
     for block_i in range(len(ff)):
-        num_columns_in_block = len(ff[block_i])
+        num_rows_in_block = len(ff[block_i][0])
 
         curr_block = ff[block_i]
         curr_block_length = 0
+        compressed_block = b''
 
         block_column_lengths = []
         for column_i in range(len(curr_block)):
-            compressed_block = b''
 
             # get column info
             curr_column = curr_block[column_i]
@@ -83,6 +83,7 @@ def serialize_and_compress_funnel_format(ff, column_types):
             column_bytes = DATA_TYPE_BYTE_SIZES[column_type]
 
             # serialize and compress a column
+            print(typed_column)
             s_column = serialize.serialize_list(typed_column, column_type, column_bytes)
             s_c_column = compress.compress_data(s_column, 0)[10:] # remove the gzip header bit from the compressed data
             compressed_block += s_c_column
@@ -91,30 +92,34 @@ def serialize_and_compress_funnel_format(ff, column_types):
             curr_comressed_column_length = len(s_c_column)
             block_column_lengths.append(curr_comressed_column_length)
 
-            curr_block_length+=curr_comressed_column_length
+            #curr_block_length+=curr_comressed_column_length
 
-        block_lengths.append(curr_block_length)
+        block_lengths.append(len(compressed_block))
 
 
         # this should only be triggered for first block and last block.
-        if num_columns_in_block not in block_sizes:
-            block_sizes.append(num_columns_in_block)
+        if num_rows_in_block not in block_sizes:
+            block_sizes.append(num_rows_in_block)
 
         # write the compressed block header and compressed block to the file
+        print(block_column_lengths)
         s_block_header = serialize.serialize_list(block_column_lengths, 1, DATA_TYPE_BYTE_SIZES[1])
-        s_c_block_header = compress.compress_data(s_block_header, 0)
+        s_c_block_header = compress.compress_data(s_block_header, 0)[10:]
         compressed_length_curr_block_header = len(s_c_block_header)
         block_header_lengths.append(compressed_length_curr_block_header)
 
+        # print(len(s_c_block_header), s_c_block_header)
         w_file.write(s_c_block_header)
+        # print(len(compressed_block), compressed_block)
         w_file.write(compressed_block)
-        print(compressed_block)
 
-    block_end_positions = header_generate.get_block_end_positions(block_lengths)
+    block_end_positions = header_generate.get_block_end_positions(block_lengths, block_header_lengths)
+    if len(block_sizes) < 2: block_sizes.append(num_rows_in_block)
 
     header_end.append(block_header_lengths)
     header_end.append(block_end_positions)
     header_end.append(block_sizes)
+
 
     w_file.close()
     return header_end
