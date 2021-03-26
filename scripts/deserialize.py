@@ -61,6 +61,14 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
     #     # input values are integers
     if data_type == 1:
         ds_bitstring = deserialize_int(dc_bitstring, block_size, num_bytes)
+        # for chromosome X,Y values
+        if ds_bitstring[0] == 'XY':
+            ds_bitstring_ints = ds_bitstring[1]
+            xy_start = ds_bitstring[2]*num_bytes
+            xy_segment = dc_bitstring[xy_start:]
+            ds_bitstring_chrmXY = deserialize_string(xy_segment)
+            ds_bitstring = ds_bitstring_ints + ds_bitstring_chrmXY
+
     elif data_type == 2:
         ds_bitstring = deserialize_float(dc_bitstring, block_size, num_bytes)
     elif data_type == 3:
@@ -73,6 +81,8 @@ def deserialize_int(dc_bitstring, block_size, num_bytes):
     ds_bitstring = []
     for i in range(block_size):
         curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
+        if b'X' in curr_bytes or b'Y' in curr_bytes:
+            return ['XY', ds_bitstring, i]
         curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
         ds_bitstring.append(curr_ds_value)
     return ds_bitstring

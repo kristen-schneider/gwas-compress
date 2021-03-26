@@ -10,7 +10,7 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
 full_header = \
     [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR',
                   'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10,
-     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [40, 80, 120], [303, 553, 814], [3, 3]]
+     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [40, 80, 120, 160, 199], [303, 553, 814, 1117, 1311], [3, 1]]
 
 
 def main():
@@ -20,7 +20,7 @@ def main():
     compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
     print(compressed_block_info)
     print(decompress_single_block(compressed_block_info))
-    print(decompress_single_column(compressed_block_info, column_to_decompress))
+    #print(decompress_single_column(compressed_block_info, column_to_decompress))
 
 
 def query_block(compressed_file, query_block_i):
