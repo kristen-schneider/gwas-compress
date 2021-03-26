@@ -17,7 +17,7 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
 full_header = \
     [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR',
                   'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10,
-     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [29, 26, 33], [292, 528, 782], [3, 3]]
+     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [29, 55, 88], [292, 528, 782], [3, 3]]
 
 
 def main():
@@ -37,7 +37,7 @@ def read_compressed_file(compressed_file, full_header, block_number, column_numb
     col_types = full_header[4]
     num_columns = full_header[5]
     gzip_header = full_header[6]
-    block_header_lengths = full_header[7]
+    block_header_end_positions = full_header[7]
     end_positions = full_header[8]
     block_sizes = full_header[9]
 
@@ -60,7 +60,7 @@ def read_compressed_file(compressed_file, full_header, block_number, column_numb
             curr_block_num_rows = block_sizes[1]
 
         # current block header
-        curr_block_header_length = block_header_lengths[block_i]
+        curr_block_header_length = block_header_end_positions[block_i]
         curr_block_header_end = curr_block_header_start+curr_block_header_length
         curr_block_header = gzip_header + all_compressed_data[curr_block_header_start:curr_block_header_end]
 

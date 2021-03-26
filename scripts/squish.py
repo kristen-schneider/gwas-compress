@@ -54,8 +54,9 @@ def main():
 
 
 def serialize_and_compress_funnel_format(ff, column_types):
-    header_end = []             # will contain the following:
-    block_header_lengths = []   # lengths of compressed block headers
+    header_end = [] # last half of header
+    #block_header_lengths = []   # lengths of compressed block headers
+    block_header_end_positions = [] # end  positions of compressed blocks
     block_end_positions = []
     block_sizes = []            # should be two elements. one for normal block size. one for last block.
 
@@ -63,16 +64,17 @@ def serialize_and_compress_funnel_format(ff, column_types):
     w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
     w_file.truncate(0)
 
-    block_lengths = []
+    header_end_value = 0
+    block_end_value = 0
     # go through data, and compress each column
     for block_i in range(len(ff)):
         num_rows_in_block = len(ff[block_i][0])
 
         curr_block = ff[block_i]
-        curr_block_length = 0
         compressed_block = b''
 
-        block_column_lengths = []
+        block_column_ends = []
+        curr_compressed_column_end = 0
         for column_i in range(len(curr_block)):
 
             # get column info
@@ -87,32 +89,41 @@ def serialize_and_compress_funnel_format(ff, column_types):
             compressed_block += s_c_column
 
             # add length of this column to lengths of columns in this block
-            curr_comressed_column_length = len(s_c_column)
-            block_column_lengths.append(curr_comressed_column_length)
-
-
-        block_lengths.append(len(compressed_block))
-
+            curr_compressed_column_end +=len(s_c_column)
+            block_column_ends.append(curr_compressed_column_end)
+            # header_end_value += curr_compressed_column_length
+            # block_end_value += curr_compressed_column_length
 
         # this should only be triggered for first block and last block.
         if num_rows_in_block not in block_sizes:
             block_sizes.append(num_rows_in_block)
 
         # write the compressed block header and compressed block to the file
-        s_block_header = serialize.serialize_list(block_column_lengths, 1, DATA_TYPE_BYTE_SIZES[1])
+        s_block_header = serialize.serialize_list(block_column_ends, 1, DATA_TYPE_BYTE_SIZES[1])
         s_c_block_header = compress.compress_data(s_block_header, 0)[10:]
-        compressed_length_curr_block_header = len(s_c_block_header)
-        block_header_lengths.append(compressed_length_curr_block_header)
+
+        header_length = len(s_c_block_header)
+        header_end_value += header_length
+        block_header_end_positions.append(header_end_value)
+
+        # block_lengths.append(len(compressed_block))
+        block_length = len(compressed_block)
+        block_end_value += (header_length+block_length)
+        block_end_positions.append(block_end_value)
+
+        print(header_length, block_length)
+        #compressed_length_curr_block_header = len(s_c_block_header)
+            #block_header_lengths.append(compressed_length_curr_block_header)
 
         # print('header', len(s_c_block_header), s_c_block_header)
         w_file.write(s_c_block_header)
         # print('data', len(compressed_block), compressed_block)
         w_file.write(compressed_block)
 
-    block_end_positions = header_generate.get_block_end_positions(block_lengths, block_header_lengths)
+        #block_end_positions = header_generate.get_block_end_positions(block_lengths, block_header_lengths)
     if len(block_sizes) < 2: block_sizes.append(num_rows_in_block)
 
-    header_end.append(block_header_lengths)
+    header_end.append(block_header_end_positions)
     header_end.append(block_end_positions)
     header_end.append(block_sizes)
 

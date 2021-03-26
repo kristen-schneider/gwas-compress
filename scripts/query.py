@@ -10,15 +10,17 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
 full_header = \
     [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR',
                   'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10,
-     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [29, 26, 33], [292, 528, 782], [3, 3]]
+     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [40, 80, 120], [303, 553, 814], [3, 3]]
 
 
 def main():
     num_rows_in_block = 3#int(input("Enter number of rows to be in each block: "))
     block_to_decompress = 0#int(input("Enter block to decompress: "))
     column_to_decompress = 0#int(input("Enter column to decompress: "))
-    compressed_block = query_block(COMPRESSED_FILE, block_to_decompress)
-    print(decompress_single_block(compressed_block))
+    compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
+    print(compressed_block_info)
+    print(decompress_single_block(compressed_block_info))
+    #print(decompress_single_column(compressed_block_info))
 
 
 def query_block(compressed_file, query_block_i):
@@ -32,7 +34,7 @@ def query_block(compressed_file, query_block_i):
     col_types = full_header[4]
     num_columns = full_header[5]
     gzip_header = full_header[6]
-    block_header_lengths = full_header[7]
+    block_header_ends = full_header[7]
     end_positions = full_header[8]
     block_sizes = full_header[9]
 
@@ -55,8 +57,8 @@ def query_block(compressed_file, query_block_i):
             print("Invalid query option.")
     else:
         query_block_header_start = 0
-    query_block_header_length = block_header_lengths[query_block_i]
-    query_block_header_end = query_block_header_start + query_block_header_length
+
+    query_block_header_end = block_header_ends[query_block_i]
     query_block_header = gzip_header + all_compressed_data[query_block_header_start:query_block_header_end]
     # get decompressed, deserialized block header
     dc_curr_block_header = decompress.decompress_data(query_block_header)
@@ -75,7 +77,7 @@ def decompress_single_block(compressed_block):
     col_types = full_header[4]
     num_columns = full_header[5]
     gzip_header = full_header[6]
-    block_header_lengths = full_header[7]
+    block_header_ends = full_header[7]
     end_positions = full_header[8]
     block_sizes = full_header[9]
 
@@ -109,25 +111,27 @@ def decompress_single_column(compressed_block, query_column_i):
     col_types = full_header[4]
     num_columns = full_header[5]
     gzip_header = full_header[6]
-    block_header_lengths = full_header[7]
+    block_header_ends = full_header[7]
     end_positions = full_header[8]
     block_sizes = full_header[9]
 
-    compressed_block_header = compressed_block[0]
+    dc_ds_block_header = compressed_block[0]
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]
+
+
 
     # get correct block header
     ds_dc_column = []
     if query_column_i != 0:
         try:
-            compressed_column_start = end_positions[query_column_i - 1]
+            compressed_column_start = dc_ds_block_header[query_column_i - 1]
         except IndexError:
             print("Invalid query option.")
     else:
-        compressed_column_start = 0
+        dc_ds_block_header = 0
 
-    compressed_column_end = compressed_column_start + compressed_block_header[query_column_i]
+    compressed_column_end = compressed_column_start + dc_ds_block_header[query_column_i]
     compressed_column = gzip_header + compressed_block_data[compressed_column_start:compressed_column_end]
 
 
