@@ -111,13 +111,12 @@ def serialize_and_compress_funnel_format(ff, column_types):
         block_end_value += (header_length+block_length)
         block_end_positions.append(block_end_value)
 
-        print(header_length, block_length)
         #compressed_length_curr_block_header = len(s_c_block_header)
             #block_header_lengths.append(compressed_length_curr_block_header)
 
-        # print('header', len(s_c_block_header), s_c_block_header)
+        print('header', len(s_c_block_header), s_c_block_header)
         w_file.write(s_c_block_header)
-        # print('data', len(compressed_block), compressed_block)
+        print('data', len(compressed_block), compressed_block)
         w_file.write(compressed_block)
 
         #block_end_positions = header_generate.get_block_end_positions(block_lengths, block_header_lengths)

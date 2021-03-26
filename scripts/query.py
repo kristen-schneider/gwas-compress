@@ -91,7 +91,7 @@ def decompress_single_block(compressed_block):
     # for each compressed column in this block we need to add the gzip header separately
     column_start = 0
     for column in range(num_columns):
-        column_end = column_start + compressed_block_header[column]
+        column_end = compressed_block_header[column]
         column_data = gzip_header + compressed_block_data[column_start:column_end]
         dc_column_data = decompress.decompress_data(column_data)
         col_type = col_types[column]
