@@ -36,7 +36,7 @@ def deserialize_block(dc_bitstring, block_size, column_data_types, type_to_bytes
     return ds_bitstring_final
         
 
-def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
+def deserialize_data(dc_bitstring, block_size, data_type, num_bytes, col_i):
     '''
     deserializes data for one column
     
@@ -60,7 +60,7 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
     # while i < loop:
     #     # input values are integers
     if data_type == 1:
-        ds_bitstring = deserialize_int(dc_bitstring, block_size, num_bytes)
+        ds_bitstring = deserialize_int(dc_bitstring, block_size, num_bytes, col_i)
         # for chromosome X,Y values
         if ds_bitstring[0] == 'XY':
             ds_bitstring_ints = ds_bitstring[1]
@@ -79,11 +79,11 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
     return ds_bitstring
 
 
-def deserialize_int(dc_bitstring, block_size, num_bytes):
+def deserialize_int(dc_bitstring, block_size, num_bytes, col_i):
     ds_bitstring = []
     for i in range(block_size):
         curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
-        if b'X' in curr_bytes or b'Y' in curr_bytes:
+        if col_i == 0 and (b'X' in curr_bytes or b'Y' in curr_bytes):
             return ['XY', ds_bitstring, i]
         curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
         ds_bitstring.append(curr_ds_value)
@@ -127,7 +127,13 @@ def deserialize_string(dc_bitstring):
             i += 1
     return ds_bitstring
 
-#
+
+# chrm1 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01X'
+# chrm2 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01Y'
+# chrm2 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01XXX'
+# h = b'\x00\x00\x00\x00\x12\x00\x00\x00\x00m\x00\x00\x00\x00\x8b\x00\x00\x00\x00\xa9\x00\x00\x00\x01)\x00\x00\x00\x01\xc5\x00\x00\x00\x02X\x00\x00\x00\x02\xf3\x00\x00\x00\x03\x8e\x00\x00\x00\x03\xb9'
+# dh=deserialize_data(h, 10, 1, 5, )
+# print(dh)
 # a = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01'
 # dsa = deserialize_data(a, 5, 1, 5)
 # print(dsa)

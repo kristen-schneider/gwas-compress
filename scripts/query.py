@@ -10,18 +10,18 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 full_header = \
     [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR',
                   'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10,
-     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [43, 908, 1823, 2972], [865, 1780, 2929, 3925], [25, 24]]
+     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [40, 386, 762], [346, 722, 1022], [5, 3]]
 
 
 def main():
 
-    num_rows_in_block = 25#int(input("Enter number of rows to be in each block: "))
-    block_to_decompress = 3#int(input("Enter block to decompress: "))
+    num_rows_in_block = 5#int(input("Enter number of rows to be in each block: "))
+    block_to_decompress = 1#int(input("Enter block to decompress: "))
     column_to_decompress = 9#int(input("Enter column to decompress: "))
     compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
     # print(compressed_block_info)
     print(decompress_single_block(compressed_block_info))
-    #print(decompress_single_column(compressed_block_info, column_to_decompress))
+    print(decompress_single_column(compressed_block_info, column_to_decompress))
 
 
 def query_block(compressed_file, query_block_i):
@@ -59,12 +59,16 @@ def query_block(compressed_file, query_block_i):
     else:
         query_block_header_start = 0
 
+    # to signify that we need not worry about X and Y in data
+    chrm = False
     query_block_header_end = block_header_ends[query_block_i]
     query_block_header = gzip_header + all_compressed_data[query_block_header_start:query_block_header_end]
     # get decompressed, deserialized block header
     dc_curr_block_header = decompress.decompress_data(query_block_header)
+    print(dc_curr_block_header)
     ds_dc_curr_block_header = deserialize.deserialize_data(
-        dc_curr_block_header, num_columns, 1, DATA_TYPE_BYTE_SIZES[1])
+        dc_curr_block_header, num_columns, 1, DATA_TYPE_BYTE_SIZES[1], None)
+    print(ds_dc_curr_block_header)
 
     x = 'debug'
     return [ds_dc_curr_block_header, all_compressed_data[query_block_header_end:end_positions[query_block_i]], query_block_num_rows]
@@ -92,12 +96,14 @@ def decompress_single_block(compressed_block):
     # for each compressed column in this block we need to add the gzip header separately
     column_start = 0
     for column in range(num_columns):
+        if column == 0: chrm = True
+        else: chrm = False
         column_end = compressed_block_header[column]
         column_data = gzip_header + compressed_block_data[column_start:column_end]
         dc_column_data = decompress.decompress_data(column_data)
         col_type = col_types[column]
         ds_dc_column_data = deserialize.deserialize_data(
-            dc_column_data, num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type])
+            dc_column_data, num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type], column)
         ds_dc_query_block.append(ds_dc_column_data)
         column_start = column_end
 
@@ -134,7 +140,7 @@ def decompress_single_column(compressed_block, query_column_i):
     compressed_column_end = dc_ds_block_header[query_column_i]
     compressed_column = gzip_header + compressed_block_data[compressed_column_start:compressed_column_end]
     dc_column_data = decompress.decompress_data(compressed_column)
-    ds_ds_column_data = deserialize.deserialize_data(dc_column_data, num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type])
+    ds_ds_column_data = deserialize.deserialize_data(dc_column_data, num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type], query_column_i)
     return ds_ds_column_data
 
 if __name__ == "__main__":

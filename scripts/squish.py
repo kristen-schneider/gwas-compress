@@ -14,7 +14,7 @@ IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 # 2. output file
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # 3. block size
-BLOCK_SIZE = 25
+BLOCK_SIZE = 5
 # 4. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
@@ -105,7 +105,7 @@ def serialize_and_compress_funnel_format(ff, column_types):
             block_sizes.append(num_rows_in_block)
 
         # write the compressed block header and compressed block to the file
-        print(block_column_ends)
+        # print(block_column_ends)
         s_block_header = serialize.serialize_list(block_column_ends, 1, DATA_TYPE_BYTE_SIZES[1])
         s_c_block_header = compress.compress_data(s_block_header, 0)[10:]
 
