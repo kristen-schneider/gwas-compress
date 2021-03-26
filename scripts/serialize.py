@@ -99,6 +99,10 @@ def serialize_data(data, data_type, num_bytes):
         except AttributeError:
             print('cannot convert ' + str(data), ' to str')
             return -1
+
+    # bytes (used for header, gzip_header
+    elif data_type == 4:
+        s_value = data
     return s_value
 
 # def serialized_column_lengths():

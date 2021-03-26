@@ -4,21 +4,22 @@ import deserialize
 # 1. output file
 COMPRESSED_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # 2. bytes for each data type
-DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
-DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
+DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 full_header = \
     [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR',
                   'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10,
-     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [40, 369, 657, 1012], [329, 617, 973, 1167], [4, 1]]
+     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [43, 908, 1823, 2972], [865, 1780, 2929, 3925], [25, 24]]
 
 
 def main():
-    num_rows_in_block = 4#int(input("Enter number of rows to be in each block: "))
+
+    num_rows_in_block = 25#int(input("Enter number of rows to be in each block: "))
     block_to_decompress = 3#int(input("Enter block to decompress: "))
-    column_to_decompress = 0#int(input("Enter column to decompress: "))
+    column_to_decompress = 9#int(input("Enter column to decompress: "))
     compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
-    print(compressed_block_info)
+    # print(compressed_block_info)
     print(decompress_single_block(compressed_block_info))
     #print(decompress_single_column(compressed_block_info, column_to_decompress))
 
@@ -65,7 +66,7 @@ def query_block(compressed_file, query_block_i):
     ds_dc_curr_block_header = deserialize.deserialize_data(
         dc_curr_block_header, num_columns, 1, DATA_TYPE_BYTE_SIZES[1])
 
-
+    x = 'debug'
     return [ds_dc_curr_block_header, all_compressed_data[query_block_header_end:end_positions[query_block_i]], query_block_num_rows]
 
 def decompress_single_block(compressed_block):

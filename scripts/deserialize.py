@@ -73,6 +73,8 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes):
         ds_bitstring = deserialize_float(dc_bitstring, block_size, num_bytes)
     elif data_type == 3:
         ds_bitstring = deserialize_string(dc_bitstring)
+    elif data_type == 4:
+        ds_bitstring = dc_bitstring
 
     return ds_bitstring
 

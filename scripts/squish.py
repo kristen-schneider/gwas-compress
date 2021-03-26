@@ -4,6 +4,7 @@ import funnel_format
 import type_handling
 import serialize
 import compress
+import header_compress_decompress
 
 # PARATMETERS
 # 1. input file
@@ -13,10 +14,10 @@ IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 # 2. output file
 OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # 3. block size
-BLOCK_SIZE = 4
+BLOCK_SIZE = 25
 # 4. bytes for each data type
-DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
-DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5}
+DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 def main():
     # header_start
@@ -46,11 +47,15 @@ def main():
     header_end = serialize_and_compress_funnel_format(funnel_format_data, column_types)
 
     full_header = header_start+header_end
-    # w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
-    # w_file.write(full_header)
-    # w_file.close()
+
     print(full_header)
-    return full_header
+
+    # w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
+    # full_header_types = header_compress_decompress.get_header_types(full_header, DATA_TYPE_CODE_BOOK)
+    # c_s_full_header = header_compress_decompress.compress_header(full_header, full_header_types)[1]
+    # w_file.write(c_s_full_header)
+    # w_file.close()
+    #return full_header
 
 
 def serialize_and_compress_funnel_format(ff, column_types):
@@ -100,6 +105,7 @@ def serialize_and_compress_funnel_format(ff, column_types):
             block_sizes.append(num_rows_in_block)
 
         # write the compressed block header and compressed block to the file
+        print(block_column_ends)
         s_block_header = serialize.serialize_list(block_column_ends, 1, DATA_TYPE_BYTE_SIZES[1])
         s_c_block_header = compress.compress_data(s_block_header, 0)[10:]
 
