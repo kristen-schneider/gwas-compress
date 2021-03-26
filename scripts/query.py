@@ -20,7 +20,7 @@ def main():
     compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
     print(compressed_block_info)
     print(decompress_single_block(compressed_block_info))
-    #print(decompress_single_column(compressed_block_info))
+    print(decompress_single_column(compressed_block_info, column_to_decompress))
 
 
 def query_block(compressed_file, query_block_i):
@@ -118,6 +118,7 @@ def decompress_single_column(compressed_block, query_column_i):
     dc_ds_block_header = compressed_block[0]
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]
+    col_type = col_types[query_column_i]
 
 
 
@@ -129,14 +130,13 @@ def decompress_single_column(compressed_block, query_column_i):
         except IndexError:
             print("Invalid query option.")
     else:
-        dc_ds_block_header = 0
+        compressed_column_start = 0
 
-    compressed_column_end = compressed_column_start + dc_ds_block_header[query_column_i]
+    compressed_column_end = dc_ds_block_header[query_column_i]
     compressed_column = gzip_header + compressed_block_data[compressed_column_start:compressed_column_end]
-
-
-
-
+    dc_column_data = decompress.decompress_data(compressed_column)
+    ds_ds_column_data = deserialize.deserialize_data(dc_column_data, num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type])
+    return ds_ds_column_data
 
 if __name__ == "__main__":
     main()
