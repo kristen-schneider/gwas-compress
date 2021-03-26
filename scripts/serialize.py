@@ -76,18 +76,28 @@ def serialize_data(data, data_type, num_bytes):
         try:
             s_value = data.to_bytes(num_bytes, byteorder='big', signed=False)
         except AttributeError:
-            return -1
+            # for chromosome X,Y values
+            if 'X' in data or 'Y' in data:
+                try:
+                    s_value = bytes(data, 'utf-8')
+                except AttributeError:
+                    return -1
+            else:
+                print('cannot convert '+str(data), ' to int')
+                return -1
     # floats
     elif data_type == 2:
         try:
             s_value = struct.pack(">d", data)
         except AttributeError:
+            print('cannot convert ' + str(data), ' to float')
             return -1
     # strings
     elif data_type == 3:
         try:
             s_value = bytes(data, 'utf-8')
         except AttributeError:
+            print('cannot convert ' + str(data), ' to str')
             return -1
     return s_value
 
@@ -96,14 +106,6 @@ def serialize_data(data, data_type, num_bytes):
 
 # import deserialize
 
-# # string data
-# S = ['A', 'C', 'TTT', 'G', 'A']
-# S_s = b'ACTTTGA'
-# S_c = b''
-# S_dc = b''
-# S_ds = ['A', 'C', 'TTT', 'G', 'A']
-# #
-# # new_s = serialize_list(S, 3, 5)
-# # print(new_s)
-# # print(deserialize.deserialize_data(new_s, 5, 3, 5))
-
+chrom_data = [1, 1, 1, 1, 'X', 'X', 'X', 'X']
+serialized_chrm_data = serialize_list(chrom_data, 1, 5)
+print(serialized_chrm_data)
