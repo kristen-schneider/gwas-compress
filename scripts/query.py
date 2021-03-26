@@ -15,7 +15,7 @@ full_header = \
 
 def main():
     num_rows_in_block = 4#int(input("Enter number of rows to be in each block: "))
-    block_to_decompress = 2#int(input("Enter block to decompress: "))
+    block_to_decompress = 3#int(input("Enter block to decompress: "))
     column_to_decompress = 0#int(input("Enter column to decompress: "))
     compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
     print(compressed_block_info)
@@ -44,7 +44,7 @@ def query_block(compressed_file, query_block_i):
     else:
         query_block_num_rows = block_sizes[1]
 
-    with open(compressed_file + 'kristen-' + str(query_block_num_rows) + '-out.tsv', 'rb') as r_file:
+    with open(compressed_file + 'kristen-' + str(block_sizes[0]) + '-out.tsv', 'rb') as r_file:
         all_compressed_data = r_file.read()
     r_file.close()
 
