@@ -67,7 +67,12 @@ def convert_to_type(column_data, data_type):
             # try to convert to integer.
             try: correct_type_column.append(int(c))
             except ValueError:
-                print('cannot convert to integer: ', c) 
+                # for chromosome X,Y values
+                try:
+                    if 'X' in c or 'Y' in c:
+                        correct_type_column.append(str(c))
+                    else: print('cannot convert to integer: ', c)
+                except ValueError: print('cannot convert to integer: ', c)
         elif data_type == 2:
             # try to convert to float, if cannot, return numpy's nan mask
             try: correct_type_column.append(float(c))

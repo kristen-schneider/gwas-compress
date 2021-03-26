@@ -120,8 +120,6 @@ def decompress_single_column(compressed_block, query_column_i):
     num_rows = compressed_block[2]
     col_type = col_types[query_column_i]
 
-
-
     # get correct block header
     ds_dc_column = []
     if query_column_i != 0:
