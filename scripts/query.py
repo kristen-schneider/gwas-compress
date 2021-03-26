@@ -10,13 +10,14 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 full_header = \
     [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR',
                   'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10,
-     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [40, 386, 762], [346, 722, 1022], [5, 3]]
+     b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [43, 1045, 2195, 3526, 4700], [1002, 2151, 3483, 4658, 5594],
+     [30, 19]]
 
 
 def main():
 
-    num_rows_in_block = 5#int(input("Enter number of rows to be in each block: "))
-    block_to_decompress = 1#int(input("Enter block to decompress: "))
+    num_rows_in_block = 30#int(input("Enter number of rows to be in each block: "))
+    block_to_decompress = 3#int(input("Enter block to decompress: "))
     column_to_decompress = 9#int(input("Enter column to decompress: "))
     compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
     # print(compressed_block_info)
