@@ -1,7 +1,8 @@
 import matplotlib.pyplot as plt
 import os
 
-IN_PATH = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
+COMPRESSED_PATH = '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
+ORIGINAL_PATH = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/'
 
 def main():
     data = get_data_dict()
@@ -9,9 +10,12 @@ def main():
 
 def get_data_dict():
     file_size_dict = {}
-    for f in os.listdir(IN_PATH):
-        if '10-lines-tab.' in f or 'kristen' in f:
-            file_size_dict[f] = os.path.getsize(IN_PATH+f)
+    for c_f in os.listdir(COMPRESSED_PATH):
+        if 'kristen' in c_f:
+            file_size_dict[c_f] = os.path.getsize(COMPRESSED_PATH+c_f)
+    for o_f in os.listdir(ORIGINAL_PATH):
+        if 'big' in o_f:    
+            file_size_dict[o_f] = os.path.getsize(ORIGINAL_PATH+o_f)
     return file_size_dict
 
 def plot_data(data):    
@@ -30,7 +34,7 @@ def plot_data(data):
     plt.xticks(pos,x, rotation=70)
     plt.xlabel('file name')
     plt.ylabel('file size (bytes)')
-    plt.savefig('/Users/kristen/Desktop/compression_sandbox/toy_data/plot.png')      
+    plt.savefig('/scratch/Users/krsc0813/gwas-compress/sizes.png')      
 
 
 if __name__ == '__main__':
