@@ -76,7 +76,7 @@ def get_full_header(compressed_file, block_size):
             num_bytes_to_read = HEADER_SIZES[1]
 
             header_data = compressed_file.read(num_bytes_to_read)
-            ds_header_data = deserialize
+            ds_header_data = deserialize.deserialize_data()
 
 
             x = 2
