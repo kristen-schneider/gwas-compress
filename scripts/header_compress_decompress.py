@@ -70,7 +70,7 @@ def get_header_ends_and_serialize(full_header, header_types):
 
     return header_num_elements, header_ends, serialized_full_header
 
-def decompress_header(header_types, header_ends, header_data):
+def decompress_header(header_types, header_num_elements, header_ends, header_data):
     full_dc_header = []
 
     #dc_full_header = decompress.decompress_data(c_full_header)
@@ -78,9 +78,12 @@ def decompress_header(header_types, header_ends, header_data):
     # deserialize header by piece
     curr_h_start = 0
     for h in range(len(header_types)):
+        curr_h_type = header_types[h]
+        curr_h_num_elements = header_num_elements[h]
         curr_h_end = header_ends[h]
         curr_h = header_data[curr_h_start:curr_h_end]
-        deserialize.deserialize_data(curr_h)
+
+        deserialize.deserialize_data(curr_h, curr_h_num_elements, curr_h_type, DATA_TYPE_BYTE_SIZES[curr_h_type], h)
         curr_h_start = curr_h_end
 
     return full_dc_header

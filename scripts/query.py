@@ -53,18 +53,24 @@ def get_full_header(compressed_file, block_size):
 
     HEADER_TOOLS = []
     HEADER_TYPES = None
+    HEADER_NUM_ELEMENTS = None
     HEADER_ENDS = None
     HEADER_DATA = None
 
     total_bytes_read = 0
     while not STOP_HEADER:
         # get 3 sizes first (2 bytes each)
-        if len(HEADER_TOOLS) < 3:
+        if len(HEADER_TOOLS) < 4:
             num_bytes_to_read = 2
 
             header_types_size = compressed_file.read(num_bytes_to_read)
             ds_header_types_size = deserialize.deserialize_int(header_types_size, 1, 2, 0)[0]
             HEADER_TOOLS.append(ds_header_types_size)
+            total_bytes_read += num_bytes_to_read
+
+            header_elements_size = compressed_file.read(num_bytes_to_read)
+            ds_header_elements_size = deserialize.deserialize_int(header_elements_size, 1, 2, 0)[0]
+            HEADER_TOOLS.append(ds_header_elements_size)
             total_bytes_read += num_bytes_to_read
 
             header_ends_size = compressed_file.read(num_bytes_to_read)
@@ -86,10 +92,16 @@ def get_full_header(compressed_file, block_size):
             HEADER_TYPES = ds_header_types
             total_bytes_read += num_bytes_to_read
 
+        elif HEADER_NUM_ELEMENTS == None:
+            num_bytes_to_read = HEADER_TOOLS[1]
 
+            header_elements = compressed_file.read(num_bytes_to_read)
+            ds_header_elements = deserialize.deserialize_int(header_elements, 10, 5, 0)
+            HEADER_NUM_ELEMENTS = ds_header_elements
+            total_bytes_read += num_bytes_to_read
 
         elif HEADER_ENDS == None:
-            num_bytes_to_read = HEADER_TOOLS[1]
+            num_bytes_to_read = HEADER_TOOLS[2]
 
             header_ends = compressed_file.read(num_bytes_to_read)
             ds_header_ends = deserialize.deserialize_int(header_ends, 10, 5, 0)
@@ -98,8 +110,10 @@ def get_full_header(compressed_file, block_size):
 
 
         elif HEADER_DATA == None:
-            num_bytes_to_read = HEADER_TOOLS[2]
-            ds_header_data = header_compress_decompress.decompress_header()
+            num_bytes_to_read = HEADER_TOOLS[3]
+            header_data = compressed_file.read(num_bytes_to_read)
+            ds_header_data = header_compress_decompress.decompress_header(
+                HEADER_TYPES, HEADER_NUM_ELEMENTS, HEADER_ENDS, header_data)
             HEADER_DATA = ds_header_data
             total_bytes_read += num_bytes_to_read
             #STOP_HEADER = True
