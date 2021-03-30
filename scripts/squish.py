@@ -32,33 +32,38 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 def main():
 
     full_header = get_full_header()
+    serilized_header_tools = header_compress_decompress.full_header_tools(full_header)
 
-    header_types = header_compress_decompress.get_header_types(full_header, DATA_TYPE_CODE_BOOK)
-    compressed_header_info = header_compress_decompress.compress_header(full_header, header_types)
+    serialized_header_types = serilized_header_tools[0]
+    serialized_header_ends = serilized_header_tools[1]
+    serialized_header_data = serilized_header_tools[2]
 
-    compressed_header_ends = compressed_header_info[0]
-    s_compressed_header_ends = serialize.serialize_list(compressed_header_ends, 1, DATA_TYPE_BYTE_SIZES[1])
+    size_types = len(serialized_header_types)
+    bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
+    size_ends = len(serialized_header_ends)
+    bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
+    size_data = len(serialized_header_data)
+    bytes_size_data = size_data.to_bytes(2, byteorder='big', signed=False)
 
-    compressed_header_data = compressed_header_info[1]
-
-    header_ends_bytes = serialize.serialize_data(len(s_compressed_header_ends), 1, 2)
-    header_length_bytes = serialize.serialize_data(len(compressed_header_data), 1, 2)
-
-
+    # writing header
     with open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'rb') as compressed_file:
         all_content = compressed_file.read()
     compressed_file.close()
 
     compressed_with_header = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'wb')
-    # write how many bytes are needed to store ends and data (CONSTANT FIRST 4 BYTES)
-    compressed_with_header.write(header_ends_bytes)
-    compressed_with_header.write(header_length_bytes)
+    # write how many bytes are needed to store types, ends, and data (CONSTANT FIRST 4 BYTES)
+    compressed_with_header.write(bytes_size_types)
+    compressed_with_header.write(bytes_size_ends)
+    compressed_with_header.write(bytes_size_data)
 
-    # write header ends and header
-    compressed_with_header.write(s_compressed_header_ends)
-    compressed_with_header.write(compressed_header_data)
+    # write header types and header ends (serilized)
+    compressed_with_header.write(serialized_header_types)
+    compressed_with_header.write(serialized_header_ends)
 
-    # write data
+    # write header (serialized)
+    compressed_with_header.write(serialized_header_data)
+
+    # write contents of file (all compressed blocks)
     compressed_with_header.write(all_content)
 
 
