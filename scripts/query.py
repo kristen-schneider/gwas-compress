@@ -20,8 +20,8 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 def main():
     num_rows_in_block = BLOCK_SIZE#int(input("Enter number of rows to be in each block: "))
-    block_to_decompress = 0#int(input("Enter block to decompress: "))
-    column_to_decompress = 9#int(input("Enter column to decompress: "))
+    block_to_decompress = 1#int(input("Enter block to decompress: "))
+    column_to_decompress = 3#int(input("Enter column to decompress: "))
 
     full_header_info = get_full_header(COMPRESSED_FILE, BLOCK_SIZE)
     full_header_bytes = full_header_info[0]
@@ -29,24 +29,24 @@ def main():
 
 
 
-    compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
+    compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress, full_header, full_header_bytes)
     # print(compressed_block_info)
 
-    # print('decompressing single block...')
-    # single_block_START = datetime.now()
-    # dc_single_block = decompress_single_block(compressed_block_info)
-    # #print(dc_single_block)
-    # single_block_END = datetime.now()
-    # single_block_TIME = single_block_END - single_block_START
-    # print(str(single_block_TIME) + ' for decompressing single block to compute...\n')
-    #
-    # print('decompressing single column...')
-    # single_column_START = datetime.now()
-    # dc_single_column = decompress_single_column(compressed_block_info, column_to_decompress)
-    # # print(dc_single_column)
-    # single_column_END = datetime.now()
-    # single_column_TIME = single_column_END - single_column_START
-    # print(str(single_column_TIME) + ' for decompressing single column to compute...\n')
+    print('decompressing single block...')
+    single_block_START = datetime.now()
+    dc_single_block = decompress_single_block(compressed_block_info, full_header)
+    # print(dc_single_block)
+    single_block_END = datetime.now()
+    single_block_TIME = single_block_END - single_block_START
+    print(str(single_block_TIME) + ' for decompressing single block to compute...\n')
+
+    print('decompressing single column...')
+    single_column_START = datetime.now()
+    dc_single_column = decompress_single_column(compressed_block_info, column_to_decompress, full_header)
+    print(dc_single_column)
+    single_column_END = datetime.now()
+    single_column_TIME = single_column_END - single_column_START
+    print(str(single_column_TIME) + ' for decompressing single column to compute...\n')
 
 def get_full_header(compressed_file, block_size):
     compressed_file = open(compressed_file + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'rb')
@@ -126,7 +126,7 @@ def get_full_header(compressed_file, block_size):
     return total_bytes_read, HEADER_DATA
 
 
-def query_block(compressed_file, query_block_i, full_header):
+def query_block(compressed_file, query_block_i, full_header, full_header_bytes):
     # get full header somehow. later.
 
     # header info
@@ -151,6 +151,10 @@ def query_block(compressed_file, query_block_i, full_header):
         all_compressed_data = r_file.read()
     r_file.close()
 
+    header_compressed_data = all_compressed_data[0:full_header_bytes]
+    content_compressed_data = all_compressed_data[full_header_bytes:]
+
+
     # get correct block header
     ds_dc_curr_block = []
     if query_block_i != 0:
@@ -164,16 +168,16 @@ def query_block(compressed_file, query_block_i, full_header):
     # to signify that we need not worry about X and Y in data
     chrm = False
     query_block_header_end = block_header_ends[query_block_i]
-    query_block_header = gzip_header + all_compressed_data[query_block_header_start:query_block_header_end]
+    query_block_header = gzip_header + content_compressed_data[query_block_header_start:query_block_header_end]
     # get decompressed, deserialized block header
     dc_curr_block_header = decompress.decompress_data(query_block_header)
-    print(dc_curr_block_header)
+    # print(dc_curr_block_header)
     ds_dc_curr_block_header = deserialize.deserialize_data(
         dc_curr_block_header, num_columns, 1, DATA_TYPE_BYTE_SIZES[1], None)
-    print(ds_dc_curr_block_header)
+    # print(ds_dc_curr_block_header)
 
     x = 'debug'
-    return [ds_dc_curr_block_header, all_compressed_data[query_block_header_end:end_positions[query_block_i]], query_block_num_rows]
+    return [ds_dc_curr_block_header, content_compressed_data[query_block_header_end:end_positions[query_block_i]], query_block_num_rows]
 
 def decompress_single_block(compressed_block, full_header):
     # header info

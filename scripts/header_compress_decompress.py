@@ -12,7 +12,7 @@ def full_header_tools(full_header):
     # get header types and serialize
     header_types = get_header_types(full_header, DATA_TYPE_CODE_BOOK)
     serialized_header_types = serialize.serialize_list(header_types, DATA_TYPE_CODE_BOOK[int], DATA_TYPE_BYTE_SIZES[DATA_TYPE_CODE_BOOK[int]])
-    print(header_types, serialized_header_types)
+    # print(header_types, serialized_header_types)
 
     # get header ends and serialize
     header_ends_data = get_header_ends_and_serialize(full_header, header_types)
@@ -20,15 +20,15 @@ def full_header_tools(full_header):
     # get number of elements in each header item
     header_num_elements = header_ends_data[0]
     serialized_header_num_elements = serialize.serialize_list(header_num_elements, DATA_TYPE_CODE_BOOK[int], DATA_TYPE_BYTE_SIZES[DATA_TYPE_CODE_BOOK[int]])
-    print(header_num_elements, serialized_header_num_elements)
+    # print(header_num_elements, serialized_header_num_elements)
 
     header_ends = header_ends_data[1]
     serialized_header_ends = serialize.serialize_list(header_ends, DATA_TYPE_CODE_BOOK[int], DATA_TYPE_BYTE_SIZES[DATA_TYPE_CODE_BOOK[int]])
-    print(header_ends, serialized_header_ends)
+    # print(header_ends, serialized_header_ends)
 
     # get header data (already serialized)
     serialized_header_data = header_ends_data[2]
-    print(serialized_header_data)
+    # print(serialized_header_data)
 
 
     return [serialized_header_types, serialized_header_num_elements, serialized_header_ends,
