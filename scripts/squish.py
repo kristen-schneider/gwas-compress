@@ -10,9 +10,9 @@ import header_compress_decompress
 
 # PARATMETERS
 # 1. input file
-#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/15.tsv'
-IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 # FIJI
 #IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/test.tsv'
 #IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/big_test.tsv'
@@ -33,11 +33,33 @@ def main():
 
     full_header = get_full_header()
 
+    header_types = header_compress_decompress.get_header_types(full_header, DATA_TYPE_CODE_BOOK)
+    compressed_header_info = header_compress_decompress.compress_header(full_header, header_types)
+
+    compressed_header_ends = compressed_header_info[0]
+    s_compressed_header_ends = serialize.serialize_list(compressed_header_ends, 1, DATA_TYPE_BYTE_SIZES[1])
+
+    compressed_header_data = compressed_header_info[1]
+
+    header_ends_bytes = serialize.serialize_data(len(s_compressed_header_ends), 1, 2)
+    header_length_bytes = serialize.serialize_data(len(compressed_header_data), 1, 2)
+
 
     with open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'rb') as compressed_file:
         all_content = compressed_file.read()
     compressed_file.close()
 
+    compressed_with_header = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'wb')
+    # write how many bytes are needed to store ends and data (CONSTANT FIRST 4 BYTES)
+    compressed_with_header.write(header_ends_bytes)
+    compressed_with_header.write(header_length_bytes)
+
+    # write header ends and header
+    compressed_with_header.write(s_compressed_header_ends)
+    compressed_with_header.write(compressed_header_data)
+
+    # write data
+    compressed_with_header.write(all_content)
 
 
 def get_full_header():

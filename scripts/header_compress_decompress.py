@@ -50,7 +50,7 @@ def compress_header(full_header, header_types):
 
     return [header_info_sizes, c_full_header]
 
-def decompress_header(header_info, header_types):
+def decompress_header(header_info):
     full_dc_header = []
 
     header_info_ends = header_info[0]
@@ -81,12 +81,12 @@ def decompress_header(header_info, header_types):
         # full_dc_header.append(dc_header)
 
     return full_dc_header
-
+#
 #
 # header = [1, 1, '\t', ['chr', 'position', 'other'], [1,1,3], 3]
 # header_types = get_header_types(header, DATA_TYPE_CODE_BOOK)
 # c_full_header = compress_header(header, header_types)
 # # for h in c_full_header:
 # #     print(h)
-# dc_full_header = decompress_header(c_full_header, header_types)
+# dc_full_header = decompress_header(c_full_header)
 # print(dc_full_header)

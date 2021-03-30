@@ -8,19 +8,25 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 
-full_header = [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR', 'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10, b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [57, 2148765, 4290908, 6406763, 8508534, 10496717, 12643750, 14723260, 16805127, 18896080], [2148707, 4290849, 6406704, 8508475, 10496659, 12643692, 14723202, 16805069, 18896022, 20977667], [100000, 99999]]
+#full_header = [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR', 'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10, b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [57, 2148765, 4290908, 6406763, 8508534, 10496717, 12643750, 14723260, 16805127, 18896080], [2148707, 4290849, 6406704, 8508475, 10496659, 12643692, 14723202, 16805069, 18896022, 20977667], [100000, 99999]]
 
 
 def main():
-    num_rows_in_block = 500000#int(input("Enter number of rows to be in each block: "))
+    num_rows_in_block = 3#int(input("Enter number of rows to be in each block: "))
     block_to_decompress = 0#int(input("Enter block to decompress: "))
     column_to_decompress = 9#int(input("Enter column to decompress: "))
+
+    full_header = get_full_header()
+
+
     compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
     # print(compressed_block_info)
     decompress_single_block(compressed_block_info)
     print('single block good')
     print(decompress_single_column(compressed_block_info, column_to_decompress))
     print('single column good')
+
+get_full_header()
 
 def query_block(compressed_file, query_block_i):
     # get full header somehow. later.
