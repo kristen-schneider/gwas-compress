@@ -40,15 +40,15 @@ def compress_header(full_header, header_types):
             s_current_h = serialize.serialize_list(current_h, header_types[h], DATA_TYPE_BYTE_SIZES[header_types[h]])
         else:
             s_current_h = serialize.serialize_data(current_h, header_types[h], DATA_TYPE_BYTE_SIZES[header_types[h]])
+        print(h_end)
         h_end += len(s_current_h)
         header_info_sizes.append(h_end)
         # c_current_h = compress.compress_data(s_current_h, 0)
         # len_compressed_h.append(len(c_current_h))
 
         s_full_header += s_current_h
-        c_full_header = compress.compress_data(s_full_header, 0)
 
-    return [header_info_sizes, c_full_header]
+    return [header_info_sizes, s_full_header]
 
 def decompress_header(header_info):
     full_dc_header = []
