@@ -23,13 +23,15 @@ def main():
     block_to_decompress = 0#int(input("Enter block to decompress: "))
     column_to_decompress = 9#int(input("Enter column to decompress: "))
 
-    full_header = get_full_header(COMPRESSED_FILE, BLOCK_SIZE)
+    full_header_info = get_full_header(COMPRESSED_FILE, BLOCK_SIZE)
+    full_header_bytes = full_header_info[0]
+    full_header = full_header_info[1]
 
-    #
-    #
-    # compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
-    # # print(compressed_block_info)
-    #
+
+
+    compressed_block_info = query_block(COMPRESSED_FILE, block_to_decompress)
+    # print(compressed_block_info)
+
     # print('decompressing single block...')
     # single_block_START = datetime.now()
     # dc_single_block = decompress_single_block(compressed_block_info)
@@ -121,6 +123,7 @@ def get_full_header(compressed_file, block_size):
         else: STOP_HEADER = True
         # if header_ends_size == b'': STOP_HEADER = True
     compressed_file.close()
+    return total_bytes_read, HEADER_DATA
 
 
 def query_block(compressed_file, query_block_i, full_header):
