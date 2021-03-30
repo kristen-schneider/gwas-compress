@@ -16,8 +16,8 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 def main():
     num_rows_in_block = BLOCK_SIZE#int(input("Enter number of rows to be in each block: "))
-    block_to_decompress = 6#int(input("Enter block to decompress: "))
-    column_to_decompress = 9#int(input("Enter column to decompress: "))
+    block_to_decompress = 0#int(input("Enter block to decompress: "))
+    column_to_decompress = 1#int(input("Enter column to decompress: "))
 
     full_header_info = get_full_header(COMPRESSED_FILE, BLOCK_SIZE)
     full_header_bytes = full_header_info[0]
@@ -31,7 +31,7 @@ def main():
     print('decompressing single block...')
     single_block_START = datetime.now()
     dc_single_block = decompress_single_block(compressed_block_info, full_header)
-    # print(dc_single_block)
+    print(dc_single_block)
     single_block_END = datetime.now()
     single_block_TIME = single_block_END - single_block_START
     print(str(single_block_TIME) + ' for decompressing single block to compute...\n')

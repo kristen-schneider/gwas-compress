@@ -4,14 +4,16 @@ from datetime import datetime
 import header_generate
 import funnel_format
 import type_handling
+import multiprocessing
+from multiprocessing.pool import Pool
 import serialize
 import compress
 import header_compress_decompress
 
 # PARATMETERS
 # 1. input file
-#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/15.tsv'
+IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/data.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 # FIJI
 #IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/test.tsv'
@@ -31,7 +33,10 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 def main():
 
-    full_header = get_full_header()
+    compressed_info = get_full_header()
+    full_header = compressed_info[0]
+    compressed_content = compressed_info[1]
+
     serialized_header_tools = header_compress_decompress.full_header_tools(full_header)
 
     serialized_header_types = serialized_header_tools[0]
@@ -48,10 +53,11 @@ def main():
     size_data = len(serialized_header_data)
     bytes_size_data = size_data.to_bytes(2, byteorder='big', signed=False)
 
-    # writing header
-    with open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'rb') as compressed_file:
-        all_content = compressed_file.read()
-    compressed_file.close()
+    # writing data
+
+    # with open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'rb') as compressed_file:
+    #     all_content = compressed_file.read()
+    # compressed_file.close()
 
     compressed_with_header = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'wb')
     # write how many bytes are needed to store types, ends, and data (CONSTANT FIRST 4 BYTES)
@@ -69,7 +75,7 @@ def main():
     compressed_with_header.write(serialized_header_data)
 
     # write contents of file (all compressed blocks)
-    compressed_with_header.write(all_content)
+    compressed_with_header.write(compressed_content)
 
 
 def get_full_header():
@@ -110,7 +116,9 @@ def get_full_header():
 
     print('compressing data...')
     header_end_START = datetime.now()
-    header_end = serialize_and_compress_funnel_format(funnel_format_data, column_types)
+    serialize_compress_data = serialize_and_compress_funnel_format(funnel_format_data, column_types)
+    header_end = serialize_compress_data[0]
+    compressed_content = serialize_compress_data[1]
     header_end_END = datetime.now()
     header_end_TIME = header_end_END - header_end_START
     print(str(header_end_TIME) + ' for full compression to complete...\n')
@@ -125,19 +133,20 @@ def get_full_header():
     # c_s_full_header = header_compress_decompress.compress_header(full_header, full_header_types)[1]
     # w_file.write(c_s_full_header)
     # w_file.close()
-    return full_header
+    return full_header, compressed_content
 
 
 def serialize_and_compress_funnel_format(ff, column_types):
     header_end = [] # last half of header
-    #block_header_lengths = []   # lengths of compressed block headers
+    compressed_content = b''
+
     block_header_end_positions = [] # end  positions of compressed blocks
     block_end_positions = []
     block_sizes = []            # should be two elements. one for normal block size. one for last block.
 
-    # prepare output file
-    w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
-    w_file.truncate(0)
+    # # prepare output file
+    # w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
+    # w_file.truncate(0)
 
     header_end_value = 0
     block_end_value = 0
@@ -191,15 +200,16 @@ def serialize_and_compress_funnel_format(ff, column_types):
         block_end_value += (header_length+block_length)
         block_end_positions.append(block_end_value)
 
-
-        # print('header', len(s_c_block_header), s_c_block_header)
-        w_file.write(s_c_block_header)
-        # print('data', len(compressed_block), compressed_block)
-        w_file.write(compressed_block)
+        compressed_content += s_c_block_header
+        compressed_content += compressed_block
+        # # print('header', len(s_c_block_header), s_c_block_header)
+        # w_file.write(s_c_block_header)
+        # # print('data', len(compressed_block), compressed_block)
+        # w_file.write(compressed_block)
 
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
-        print(str(block_i_TIME) + ' for block ' + str(block_i) + ' to compress and write...\n')
+        print(str(block_i_TIME) + ' for block ' + str(block_i) + ' to compress...\n')
 
         #block_end_positions = header_generate.get_block_end_positions(block_lengths, block_header_lengths)
     if len(block_sizes) < 2: block_sizes.append(num_rows_in_block)
@@ -208,8 +218,8 @@ def serialize_and_compress_funnel_format(ff, column_types):
     header_end.append(block_end_positions)
     header_end.append(block_sizes)
 
-    w_file.close()
-    return header_end
+    # w_file.close()
+    return header_end, compressed_content
 
 
 if __name__ == '__main__':
