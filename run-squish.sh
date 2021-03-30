@@ -16,25 +16,29 @@ source ~/.bashrc
 conda init bash
 conda activate py39
 conda install -c anaconda numpy 
+conda install -c anaconda matplotlib
 
 python3 --version
 
 
 
-for i in {100000..200000..10000}
-do
+time_outputs='/scratch/Users/krsc0813/gwas-compress/time_outputs.tsv'
 
+for block_size in {100000..200000..10000}
+do
+    # start clock
     start_time=`date +%s`
-    #time_elapsed=$(echo "$start_time + $end_time" | bc)
-    #echo $time_elapsed
-    #echo "$end - $start"
-    #echo "hello world"
-    #runtime=$( echo "$end - $start" | bc -l )
     
-    echo $i
-    python3 /scratch/Users/krsc0813/gwas-compress/scripts/squish.py $i
+    # run script
+    echo $block_size
+    python3 /scratch/Users/krsc0813/gwas-compress/scripts/squish.py $block_size
+    
+    # stop clock, print to file for plotting
     end_time=`date +%s`
-    let time_elapsed=$start_time-$end_time
+    let time_elapsed=$end_time-$start_time
     echo $time_elapsed
+    
+    echo -e $block_size "\t" $time_elapsed >> $time_outputs
+    #python3 /scratch/Users/krsc0813/gwas-compress/scripts/plot_time
 done
 

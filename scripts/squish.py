@@ -1,4 +1,5 @@
 # IMPORTS
+import sys
 import header_generate
 import funnel_format
 import type_handling
@@ -8,13 +9,20 @@ import header_compress_decompress
 
 # PARATMETERS
 # 1. input file
-IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/15.tsv'
     #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
+# FIJI
+#IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/test.tsv'
+IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/big_test.tsv'
+#IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/full-gwas-data/prescriptions-thiamine-both_sexes_copy.tsv'
 # 2. output file
-OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
+#OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
+# FIJI
+OUT_FILE = '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
 # 3. block size
-BLOCK_SIZE = 30
+BLOCK_SIZE = int(sys.argv[1])
+#BLOCK_SIZE = 100000
 # 4. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
@@ -43,10 +51,13 @@ def main():
     # --> a block is a list of columns: block1 = [[col1], [co2]...[colm]]
     # -----> a column is a list of string values: col1 = ['1','1','1','1','1']
     funnel_format_data = funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, number_columns, delimiter)
+    print('funnel format complete')    
 
     header_end = serialize_and_compress_funnel_format(funnel_format_data, column_types)
+    print('header end/serialize and compress funnel complete')
 
     full_header = header_start+header_end
+    print('full header complete')
 
     print(full_header)
 
