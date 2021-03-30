@@ -19,4 +19,6 @@ conda install -c anaconda numpy
 
 python3 --version
 
-python3 /scratch/Users/krsc0813/gwas-compress/scripts/query.py
+block_size = 3
+
+python3 /scratch/Users/krsc0813/gwas-compress/scripts/query.py $block_size

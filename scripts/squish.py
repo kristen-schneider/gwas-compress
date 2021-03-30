@@ -12,18 +12,18 @@ import header_compress_decompress
 
 # PARATMETERS
 # 1. input file
-IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/data.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 # FIJI
 #IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/test.tsv'
-#IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/big_test.tsv'
+IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/big_test.tsv'
 #IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/full-gwas-data/prescriptions-thiamine-both_sexes_copy.tsv'
 
 # 2. output file
-OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
+#OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # FIJI
-#OUT_FILE = '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
+OUT_FILE = '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
 # 3. block size
 BLOCK_SIZE = int(sys.argv[1])
 #BLOCK_SIZE = 100000
@@ -144,16 +144,16 @@ def serialize_and_compress_funnel_format(ff, column_types):
     block_end_positions = []
     block_sizes = []            # should be two elements. one for normal block size. one for last block.
 
-    # # prepare output file
-    # w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
-    # w_file.truncate(0)
+    # prepare output file
+    #w_file = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'ab')
+    #w_file.truncate(0)
 
     header_end_value = 0
     block_end_value = 0
     block_length = 0
     # go through data, and compress each column
     for block_i in range(len(ff)):
-        print('block' + str(block_i))
+        print('block ' + str(block_i))
         block_i_START = datetime.now()
 
         num_rows_in_block = len(ff[block_i][0])

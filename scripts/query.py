@@ -1,3 +1,4 @@
+import sys
 from datetime import datetime
 import header_compress_decompress
 import decompress
@@ -8,7 +9,9 @@ COMPRESSED_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 #FIJI
 #COMPRESSED_FILE = '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
 # 2. block size
-BLOCK_SIZE = 3
+#BLOCK_SIZE = 3
+#FIJI
+BLOCK_SIZE = sys.argv[1]
 # 3. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}

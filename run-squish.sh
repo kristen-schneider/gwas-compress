@@ -20,8 +20,6 @@ conda install -c anaconda matplotlib
 
 python3 --version
 
-
-
 time_outputs='/scratch/Users/krsc0813/gwas-compress/time_outputs.tsv'
 
 for block_size in {100000..200000..10000}
