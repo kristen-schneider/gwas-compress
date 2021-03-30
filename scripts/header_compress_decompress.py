@@ -16,16 +16,22 @@ def full_header_tools(full_header):
 
     # get header ends and serialize
     header_ends_data = get_header_ends_and_serialize(full_header, header_types)
-    header_ends = header_ends_data[0]
+
+    # get number of elements in each header item
+    header_num_elements = header_ends_data[0]
+    serialized_header_num_elements = serialize.serialize_list(header_num_elements, DATA_TYPE_CODE_BOOK[int], DATA_TYPE_BYTE_SIZES[DATA_TYPE_CODE_BOOK[int]])
+    print(header_num_elements, serialized_header_num_elements)
+
+    header_ends = header_ends_data[1]
     serialized_header_ends = serialize.serialize_list(header_ends, DATA_TYPE_CODE_BOOK[int], DATA_TYPE_BYTE_SIZES[DATA_TYPE_CODE_BOOK[int]])
     print(header_ends, serialized_header_ends)
 
     # get header data (already serialized)
-    serialized_header_data = header_ends_data[1]
+    serialized_header_data = header_ends_data[2]
     print(serialized_header_data)
 
 
-    return [serialized_header_types, serialized_header_ends,
+    return [serialized_header_types, serialized_header_num_elements, serialized_header_ends,
             serialized_header_data]
 
 def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
@@ -40,12 +46,17 @@ def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
     return header_types
 
 def get_header_ends_and_serialize(full_header, header_types):
+    header_num_elements = []
     header_ends = []
     serialized_full_header = b''
 
     h_end = 0
     for h in range(len(full_header)):
         current_h = full_header[h]  # one element of header
+
+        try: length_curr_h = len(current_h)
+        except TypeError: length_curr_h = 1
+        header_num_elements.append(length_curr_h)
 
         # serialize a list and a single value differently
         if type(current_h) == list:
@@ -57,37 +68,20 @@ def get_header_ends_and_serialize(full_header, header_types):
 
         serialized_full_header += s_current_h
 
-    return header_ends, serialized_full_header
+    return header_num_elements, header_ends, serialized_full_header
 
-def decompress_header(header_info):
+def decompress_header(header_types, header_ends, header_data):
     full_dc_header = []
 
-    header_info_ends = header_info[0]
-    c_full_header = header_info[1]
-    num_cols = len(header_info_ends)
+    #dc_full_header = decompress.decompress_data(c_full_header)
 
-    dc_full_header = decompress.decompress_data(c_full_header)
-
-    # deserialize header by peice
+    # deserialize header by piece
     curr_h_start = 0
-    for h in range(num_cols):
-        curr_h_end = header_info_ends[h]
-        dc_curr_h = c_full_header[curr_h_start:curr_h_end]
+    for h in range(len(header_types)):
+        curr_h_end = header_ends[h]
+        curr_h = header_data[curr_h_start:curr_h_end]
+        deserialize.deserialize_data(curr_h)
         curr_h_start = curr_h_end
-
-        ss_curr_h = deserialize.deserialize_data(dc_curr_h)
-
-        # curr_num_cols_c_header = header_info_sizes[l]
-        # curr_data_type_c_header = header_types[l]
-        # curr_num_bytes_c_header = DATA_TYPE_BYTE_SIZES[curr_data_type_c_header]
-        # # decompress
-        # ds_header = decompress.decompress_data(c_header[start:start+curr_len_c_header])
-        # start += curr_len_c_header
-        #
-        # # deserialize
-        # #deserialize_data(dc_bitstring, block_size, data_type, num_bytes)
-        # dc_header = deserialize.deserialize_data(ds_header, curr_num_cols_c_header, curr_data_type_c_header, curr_num_bytes_c_header)
-        # full_dc_header.append(dc_header)
 
     return full_dc_header
 

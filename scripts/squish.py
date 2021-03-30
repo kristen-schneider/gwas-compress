@@ -32,11 +32,12 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 def main():
 
     full_header = get_full_header()
-    serilized_header_tools = header_compress_decompress.full_header_tools(full_header)
+    serialized_header_tools = header_compress_decompress.full_header_tools(full_header)
 
-    serialized_header_types = serilized_header_tools[0]
-    serialized_header_ends = serilized_header_tools[1]
-    serialized_header_data = serilized_header_tools[2]
+    serialized_header_types = serialized_header_tools[1]
+    serialized_header_num_elements = serialized_header_tools[1]
+    serialized_header_ends = serialized_header_tools[2]
+    serialized_header_data = serialized_header_tools[3]
 
     size_types = len(serialized_header_types)
     bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
