@@ -10,8 +10,8 @@ import header_compress_decompress
 
 # PARATMETERS
 # 1. input file
-IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
-#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/15.tsv'
+#IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
+IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/15.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 # FIJI
 #IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/test.tsv'

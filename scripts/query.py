@@ -14,14 +14,10 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 
-
-#full_header = [1, 1, '\t', ['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR', 'low_confidence_EUR'], [1, 1, 3, 3, 2, 2, 2, 2, 2, 3], 10, b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff', [57, 2148765, 4290908, 6406763, 8508534, 10496717, 12643750, 14723260, 16805127, 18896080], [2148707, 4290849, 6406704, 8508475, 10496659, 12643692, 14723202, 16805069, 18896022, 20977667], [100000, 99999]]
-
-
 def main():
     num_rows_in_block = BLOCK_SIZE#int(input("Enter number of rows to be in each block: "))
-    block_to_decompress = 1#int(input("Enter block to decompress: "))
-    column_to_decompress = 3#int(input("Enter column to decompress: "))
+    block_to_decompress = 6#int(input("Enter block to decompress: "))
+    column_to_decompress = 9#int(input("Enter column to decompress: "))
 
     full_header_info = get_full_header(COMPRESSED_FILE, BLOCK_SIZE)
     full_header_bytes = full_header_info[0]
@@ -151,7 +147,6 @@ def query_block(compressed_file, query_block_i, full_header, full_header_bytes):
         all_compressed_data = r_file.read()
     r_file.close()
 
-    header_compressed_data = all_compressed_data[0:full_header_bytes]
     content_compressed_data = all_compressed_data[full_header_bytes:]
 
 
