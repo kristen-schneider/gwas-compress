@@ -162,7 +162,7 @@ def serialize_and_compress_funnel_format(ff, column_types):
         curr_block = ff[block_i]
 
         parallel_compression = parallelization.compress_in_parallel(
-            column_types, header_end, block_header_end, block_end, curr_block)
+            column_types, header_end, block_end, curr_block)
         header_end = parallel_compression[0]
         block_header_end = header_end[0][-1]
         block_end = header_end[1][-1]

@@ -17,7 +17,7 @@ def main():
 
     print(arr_outputs)
 
-def compress_in_parallel(column_types, header_end, block_header_end, block_end, block):
+def compress_in_parallel(column_types, header_end, block_end, block):
     compressed_block_header = b''
     compressed_block = b''
     compressed_block_final = b''
