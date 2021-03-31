@@ -10,7 +10,11 @@ import serialize
 import compress
 import header_compress_decompress
 
+
 # PARATMETERS
+IN_FILE = sys.argv[1]
+OUT_FILE = sys.argv[2]
+BLOCK_SIZE = sys.argv[3]
 # 1. input file
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/data.tsv'
