@@ -240,6 +240,5 @@ def serialize_and_compress_funnel_format(ff, column_types):
     # w_file.close()
     return header_end, compressed_content
 
-
 if __name__ == '__main__':
     main()
