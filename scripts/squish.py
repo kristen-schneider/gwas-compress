@@ -167,7 +167,7 @@ def serialize_and_compress_funnel_format(ff, column_types):
         block_header_end = header_end[0][-1]
         block_end = header_end[1][-1]
         compressed_block = parallel_compression[1]
-        compressed_block+=compressed_block
+        compressed_content+=compressed_block
 
         print('block ' + str(block_i))
         block_i_START = datetime.now()

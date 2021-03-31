@@ -20,6 +20,7 @@ def main():
 def compress_in_parallel(column_types, header_end, block_header_end, block_end, block):
     compressed_block_header = b''
     compressed_block = b''
+    compressed_block_final = b''
 
     HEADER_block_header_ends = header_end[0]
     HEADER_block_ends = header_end[1]
@@ -64,12 +65,12 @@ def compress_in_parallel(column_types, header_end, block_header_end, block_end, 
     block_end += (block_header_length + block_length)
     HEADER_block_ends.append(block_end)
 
-    compressed_block += compressed_block_header
-    compressed_block += compressed_block
+    compressed_block_final += compressed_block_header
+    compressed_block_final += compressed_block
 
     header_end = [HEADER_block_header_ends, HEADER_block_ends, HEADER_block_num_rows]
 
-    return header_end, compressed_block
+    return header_end, compressed_block_final
 
 
 

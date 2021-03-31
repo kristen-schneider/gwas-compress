@@ -150,6 +150,7 @@ def query_block(compressed_file, query_block_i, full_header, full_header_bytes):
         all_compressed_data = r_file.read()
     r_file.close()
 
+    header_data = all_compressed_data[0:full_header_bytes]
     content_compressed_data = all_compressed_data[full_header_bytes:]
 
 
