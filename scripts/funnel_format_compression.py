@@ -1,5 +1,4 @@
-import multiprocessing
-from multiprocessing.pool import Pool
+from datetime import datetime
 import type_handling
 import serialize
 import compress
@@ -7,9 +6,52 @@ import compress
 # 4. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
+COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
+
+def compress_all_blocks(compression_method, header_first_half, ff):
+    magic_number = header_first_half[0]
+    version = header_first_half[1]
+    delimiter = header_first_half[2]
+    column_labels = header_first_half[3]
+    column_types = header_first_half[4]
+    number_columns = header_first_half[5]
+    gzip_header = header_first_half[6]
+
+    full_header_end = [[] for i in range(3)]  # last half of header
+    compressed_content = b''
+
+    block_end = 0
+    # go through data, and compress each column
+    for block_i in range(len(ff)):
+        # start timer for block
+        print('block ' + str(block_i))
+        block_i_START = datetime.now()
+
+        # current block from funnel format
+        curr_block = ff[block_i]
+
+        # returns full_header_end and final compressed block
+        block_compression_info = compress_block(compression_method,
+                                                column_types, full_header_end, block_end, curr_block)
+
+        full_header_end = block_compression_info[0]
+        compressed_block = block_compression_info[1]
+        compressed_content += compressed_block
+
+        block_end = full_header_end[1][-1]
+
+        block_i_END = datetime.now()
+        block_i_TIME = block_i_END - block_i_START
+        print(str(block_i_TIME) + ' for block ' + str(block_i) + ' to compress...\n')
+
+    block_sizes = full_header_end[2]
+    num_rows_last_block = len(ff[-1][0])
+    if len(block_sizes) < 2: block_sizes.append(num_rows_last_block)
+
+    return full_header_end, compressed_content
 
 
-def compress_block(column_types, header_end, block_end, block):
+def compress_block(compression_method, column_types, header_end, block_end, block):
     compressed_block_header = b''
     compressed_block = b''
     compressed_block_final = b''
@@ -37,7 +79,7 @@ def compress_block(column_types, header_end, block_end, block):
 
         # serialize and compress a column
         s_column = serialize.serialize_list(typed_column, column_type, column_bytes)
-        s_c_column = compress.compress_data(s_column, 0)[10:]  # remove the gzip header bit from the compressed data
+        s_c_column = compress.compress_data(compression_method, s_column, 0)[10:]  # remove the gzip header bit from the compressed data
         compressed_block += s_c_column
 
         # add length of this column to lengths of columns in this block
@@ -46,7 +88,7 @@ def compress_block(column_types, header_end, block_end, block):
 
     # write the compressed block header and compressed block to the file
     s_block_header = serialize.serialize_list(block_col_ends, DATA_TYPE_CODE_BOOK[type(block_col_ends[0])], DATA_TYPE_BYTE_SIZES[1])
-    compressed_block_header = compress.compress_data(s_block_header, 0)[10:]
+    compressed_block_header = compress.compress_data(compression_method, s_block_header, 0)[10:]
 
     block_header_length = len(compressed_block_header)
     block_header_end = (block_header_length + block_end)
