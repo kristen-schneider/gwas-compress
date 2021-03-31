@@ -56,7 +56,7 @@ def compress_in_parallel(column_types, header_end, block_header_end, block_end, 
     compressed_block_header = compress.compress_data(s_block_header, 0)[10:]
 
     block_header_length = len(compressed_block_header)
-    block_header_end += (block_header_length + block_end)
+    block_header_end = (block_header_length + block_end)
     HEADER_block_header_ends.append(block_header_end)
 
     block_length = len(compressed_block)
