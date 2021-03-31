@@ -69,7 +69,6 @@ def serialize_list(in_list, data_type, num_bytes):
     return s_bitstring
 
 def serialize_data(data, data_type, num_bytes):
-
     # integers
     s_value = None
     if data_type == 1:

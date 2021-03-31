@@ -8,16 +8,8 @@ import compress
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
-#EXAMPLE
-def main():
-    arr_inputs=[1,2,3]
 
-    with Pool(3) as p:
-        arr_outputs = p.map(add_to_five, arr_inputs)
-
-    print(arr_outputs)
-
-def compress_in_parallel(column_types, header_end, block_end, block):
+def compress_block(column_types, header_end, block_end, block):
     compressed_block_header = b''
     compressed_block = b''
     compressed_block_final = b''
@@ -71,14 +63,5 @@ def compress_in_parallel(column_types, header_end, block_end, block):
     header_end = [HEADER_block_header_ends, HEADER_block_ends, HEADER_block_num_rows]
 
     return header_end, compressed_block_final
-
-
-
-def add_to_five(x):
-      return x+5
-
-if __name__ == '__main__':
-    main()
-
 
 
