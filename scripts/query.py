@@ -1,6 +1,6 @@
 import sys
 from datetime import datetime
-import header_compress_decompress
+import header_decompress
 import decompress
 import deserialize
 
@@ -113,7 +113,7 @@ def get_full_header(compressed_file, block_size):
         elif HEADER_DATA == None:
             num_bytes_to_read = HEADER_TOOLS[3]
             header_data = compressed_file.read(num_bytes_to_read)
-            ds_header_data = header_compress_decompress.decompress_header(
+            ds_header_data = header_decompress.decompress_header(
                 HEADER_TYPES, HEADER_NUM_ELEMENTS, HEADER_ENDS, header_data)
             HEADER_DATA = ds_header_data
             total_bytes_read += num_bytes_to_read

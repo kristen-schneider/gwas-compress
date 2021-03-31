@@ -1,4 +1,4 @@
-import header_compress_decompress
+import header_compress
  
 def split_into_blocks(f, block_size):
     '''

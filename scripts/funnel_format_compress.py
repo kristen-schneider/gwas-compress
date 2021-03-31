@@ -17,7 +17,7 @@ def compress_all_blocks(compression_method, header_first_half, ff):
     number_columns = header_first_half[5]
     gzip_header = header_first_half[6]
 
-    full_header_end = [[] for i in range(3)]  # last half of header
+    header_second_half = [[] for i in range(3)]  # last half of header
     compressed_content = b''
 
     block_end = 0
@@ -32,23 +32,23 @@ def compress_all_blocks(compression_method, header_first_half, ff):
 
         # returns full_header_end and final compressed block
         block_compression_info = compress_block(compression_method,
-                                                column_types, full_header_end, block_end, curr_block)
+                                                column_types, header_second_half, block_end, curr_block)
 
-        full_header_end = block_compression_info[0]
+        header_second_half = block_compression_info[0]
         compressed_block = block_compression_info[1]
         compressed_content += compressed_block
 
-        block_end = full_header_end[1][-1]
+        block_end = header_second_half[1][-1]
 
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
         print(str(block_i_TIME) + ' for block ' + str(block_i) + ' to compress...\n')
 
-    block_sizes = full_header_end[2]
+    block_sizes = header_second_half[2]
     num_rows_last_block = len(ff[-1][0])
     if len(block_sizes) < 2: block_sizes.append(num_rows_last_block)
 
-    return full_header_end, compressed_content
+    return header_second_half, compressed_content
 
 
 def compress_block(compression_method, column_types, header_end, block_end, block):
