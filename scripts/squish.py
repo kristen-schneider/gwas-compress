@@ -6,6 +6,7 @@ import funnel_format
 import type_handling
 import multiprocessing
 from multiprocessing.pool import Pool
+import parallelization
 import serialize
 import compress
 import header_compress_decompress
@@ -14,22 +15,22 @@ import header_compress_decompress
 # PARATMETERS
 IN_FILE = sys.argv[1]
 OUT_FILE = sys.argv[2]
-BLOCK_SIZE = sys.argv[3]
+BLOCK_SIZE = int(sys.argv[3])
 # 1. input file
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/10-lines-tab.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/data.tsv'
 #IN_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/copy-10-lines-tab.tsv'
 # FIJI
 #IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/test.tsv'
-IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/big_test.tsv'
+#IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/big_test.tsv'
 #IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/full-gwas-data/prescriptions-thiamine-both_sexes_copy.tsv'
 
 # 2. output file
 #OUT_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
 # FIJI
-OUT_FILE = '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
+#OUT_FILE = '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
 # 3. block size
-BLOCK_SIZE = int(sys.argv[1])
+#BLOCK_SIZE = int(sys.argv[1])
 #BLOCK_SIZE = 100000
 # 4. bytes for each data type
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
@@ -157,10 +158,21 @@ def serialize_and_compress_funnel_format(ff, column_types):
     block_length = 0
     # go through data, and compress each column
     for block_i in range(len(ff)):
+
+        # curr_block = ff[block_i]
+
+        # parallel_compression = parallelization.compress_in_parallel(header_end, curr_block)
+        # header_end = parallel_compression[0]
+        # compressed_block_header = parallel_compression[1]
+        # compressed_block = parallel_compression[2]
+
         print('block ' + str(block_i))
         block_i_START = datetime.now()
 
         num_rows_in_block = len(ff[block_i][0])
+        # this should only be triggered for first block and last block.
+        if num_rows_in_block not in block_sizes:
+            block_sizes.append(num_rows_in_block)
 
         curr_block = ff[block_i]
         compressed_block = b''
@@ -185,9 +197,7 @@ def serialize_and_compress_funnel_format(ff, column_types):
             block_column_ends.append(curr_compressed_column_end)
 
 
-        # this should only be triggered for first block and last block.
-        if num_rows_in_block not in block_sizes:
-            block_sizes.append(num_rows_in_block)
+
 
         # write the compressed block header and compressed block to the file
         s_block_header = serialize.serialize_list(block_column_ends, 1, DATA_TYPE_BYTE_SIZES[1])
