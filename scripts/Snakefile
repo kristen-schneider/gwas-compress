@@ -1,0 +1,56 @@
+input_file = ''
+out_dir = ''
+block_size = 3
+
+DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
+COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
+
+rule all:
+    input:
+        input_file
+
+QUALITY
+rule quality_mean:
+   input:
+       base_dir + 'analyses/quality/' + region + '/metric_files/metric_files.done'
+   output:
+       base_dir + '/analyses/quality/' + region + '/mean_per_gene/mean_per_gene.done'
+    shell:
+        'python ' + base_dir + '/scripts/utils/aggregate_by_gene.py' \
+        ' --input_path "' + quality_metric_files + '/*.txt" ' \
+        ' --op mean ' \
+        ' --out_dir ' + base_dir + '/analyses/quality/' + region + '/mean_per_gene/ '
+        ' && touch ' + base_dir + '/analyses/quality/' + region + '/mean_per_gene/mean_per_gene.done'
+
+
+#rule all:
+#    input:
+#        base_dir + '/analyses/quality/' + region + '/mean_per_gene/mean_per_gene.done',
+#        base_dir + '/analyses/quality/' + region + '/mean_per_tech_combo/mean_per_tech_combo.done',
+#        base_dir + '/analyses/strandbias/' + region + '/mean_per_gene/mean_per_gene.done',
+#        base_dir + '/analyses/strandbias/' + region + '/mean_per_tech_combo/mean_per_tech_combo.done',
+
+# QUALITY
+#rule quality_mean:
+#    input:
+#        base_dir + 'analyses/quality/' + region + '/metric_files/metric_files.done'
+#    output:
+#        base_dir + '/analyses/quality/' + region + '/mean_per_gene/mean_per_gene.done'
+#    shell:
+#        'python ' + base_dir + '/scripts/utils/aggregate_by_gene.py' \
+#        ' --input_path "' + quality_metric_files + '/*.txt" ' \
+#        ' --op mean ' \
+#        ' --out_dir ' + base_dir + '/analyses/quality/' + region + '/mean_per_gene/ '
+#        ' && touch ' + base_dir + '/analyses/quality/' + region + '/mean_per_gene/mean_per_gene.done'
+
+#rule quality_mean_per_tech_combo:
+#    input:
+#        base_dir + '/analyses/quality/' + region + '/mean_per_gene/mean_per_gene.done'
+#    output:
+#        base_dir + '/analyses/quality/' + region + '/mean_per_tech_combo/mean_per_tech_combo.done'
+#    shell:
+#        'python ' + base_dir + '/scripts/utils/aggregate_genes.py' \
+#        ' --input_path "' + base_dir + '/analyses/quality/' + region + '/mean_per_gene/*.txt"' \
+#        ' --out_dir ' + base_dir + '/analyses/quality/' + region + '/mean_per_tech_combo/'
+#        ' && touch ' + base_dir + '/analyses/quality/' + region + '/mean_per_tech_combo/mean_per_tech_combo.done'
