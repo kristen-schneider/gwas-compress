@@ -8,7 +8,7 @@ import funnel_format_compress
 import header_compress
 
 
-# PARATMETERS
+# PARAMETERS
 IN_FILE = sys.argv[1]
 OUT_FILE = sys.argv[2]
 BLOCK_SIZE = int(sys.argv[3])
@@ -77,7 +77,7 @@ def main():
     compress_header_START = datetime.now()
     ### work ###
     full_header = header_first_half+header_second_half
-
+    print(full_header)
     # header types, number of elements in each header
     serialized_header_tools = header_compress.full_header_tools(full_header)
     serialized_header_types = serialized_header_tools[0]

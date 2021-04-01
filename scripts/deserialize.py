@@ -36,7 +36,7 @@ def deserialize_block(dc_bitstring, block_size, column_data_types, type_to_bytes
     return ds_bitstring_final
         
 
-def deserialize_data(dc_bitstring, block_size, data_type, num_bytes, col_i):
+def deserialize_data(dc_bitstring, block_size, data_type, num_bytes, chrm):
     '''
     deserializes data for one column
     
@@ -51,16 +51,9 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes, col_i):
 
     '''
     ds_bitstring = []
-    curr_ds_value = None
-    INDEL = False
     
-    # #for i in range(block_size):
-    # loop = len(dc_bitstring)
-    # i = 0
-    # while i < loop:
-    #     # input values are integers
     if data_type == 1:
-        ds_bitstring = deserialize_int(dc_bitstring, block_size, num_bytes, col_i)
+        ds_bitstring = deserialize_int(dc_bitstring, block_size, num_bytes, chrm)
         # for chromosome X,Y values
         if ds_bitstring[0] == 'XY':
             ds_bitstring_ints = ds_bitstring[1]
@@ -79,11 +72,11 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes, col_i):
     return ds_bitstring
 
 
-def deserialize_int(dc_bitstring, block_size, num_bytes, col_i):
+def deserialize_int(dc_bitstring, block_size, num_bytes, chrm):
     ds_bitstring = []
     for i in range(block_size):
         curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
-        if col_i == 0 and (b'X' in curr_bytes or b'Y' in curr_bytes):
+        if chrm and (b'X' in curr_bytes or b'Y' in curr_bytes):
             return ['XY', ds_bitstring, i]
         curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
         ds_bitstring.append(curr_ds_value)
@@ -127,7 +120,7 @@ def deserialize_string(dc_bitstring):
             i += 1
     return ds_bitstring
 
-
+#
 # chrm1 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01X'
 # chrm2 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01Y'
 # chrm2 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01XXX'
