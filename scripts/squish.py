@@ -83,7 +83,7 @@ def main():
     full_header = header_first_half+header_second_half
     print(full_header)
     # header types, number of elements in each header
-    serialized_header_tools = header_compress.full_header_tools(full_header)
+    serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES, full_header)
     serialized_header_types = serialized_header_tools[0]
     serialized_header_num_elements = serialized_header_tools[1]
     serialized_header_ends = serialized_header_tools[2]

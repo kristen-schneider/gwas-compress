@@ -2,9 +2,9 @@
 import decompress
 import deserialize
 
-
-DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
+#
+# DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+# DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 def get_full_header(compressed_file, BLOCK_SIZE):
     compressed_file = open(compressed_file + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'rb')
@@ -84,7 +84,7 @@ def get_full_header(compressed_file, BLOCK_SIZE):
     return total_bytes_read, HEADER_DATA
 
 
-def decompress_header(header_types, header_num_elements, header_ends, header_data):
+def decompress_header(data_type_byte_sizes, header_types, header_num_elements, header_ends, header_data):
     full_ds_header = []
 
     #dc_full_header = decompress.decompress_data(c_full_header)
@@ -97,7 +97,7 @@ def decompress_header(header_types, header_num_elements, header_ends, header_dat
         curr_h_end = header_ends[h]
         curr_h = header_data[curr_h_start:curr_h_end]
 
-        ds_curr_h = deserialize.deserialize_data(curr_h, curr_h_num_elements, curr_h_type, DATA_TYPE_BYTE_SIZES[curr_h_type], h)
+        ds_curr_h = deserialize.deserialize_data(curr_h, curr_h_num_elements, curr_h_type, data_type_byte_sizes[curr_h_type], h)
         if len(ds_curr_h) == 1: full_ds_header.append(ds_curr_h[0])
         else: full_ds_header.append(ds_curr_h)
         curr_h_start = curr_h_end
