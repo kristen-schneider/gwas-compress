@@ -20,7 +20,14 @@ conda install -c anaconda matplotlib
 
 python3 --version
 
+in_file='/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/big_test.tsv'
+out_file='/scratch/Users/krsc0813/gwas-compress/data/compressed/'
+compression_method='zlib'
+
 time_outputs='/scratch/Users/krsc0813/gwas-compress/time_outputs.tsv'
+
+
+
 
 for block_size in {100000..200000..10000}
 do
@@ -29,7 +36,7 @@ do
     
     # run script
     echo $block_size
-    python3 /scratch/Users/krsc0813/gwas-compress/scripts/squish.py $block_size
+    python3 /scratch/Users/krsc0813/gwas-compress/scripts/squish.py $in_file $out_file $block_size $compression_method
     
     # stop clock, print to file for plotting
     end_time=`date +%s`
