@@ -4,16 +4,17 @@ import header_decompress
 import query_decompress
 
 # PARAMETERS
-COMPRESSED_FILE = sys.argv[1]
+OUT_DIR = sys.argv[1]
 BLOCK_SIZE = int(sys.argv[2])
 COMPRESSION_METHOD = sys.argv[3]
+BLOCK_TO_DECOMPRESS = int(sys.argv[4])
+COLUMN_TO_DECOMPRESS = int(sys.argv[5])
+OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE) + '.tsv'
 
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
-BLOCK_TO_DECOMPRESS = 2#int(input("Enter block to decompress: "))
-COLUMN_TO_DECOMPRESS = 1#int(input("Enter column to decompress: "))
 
 # COMPRESSED_FILE
 #COMPRESSED_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
@@ -25,14 +26,15 @@ COLUMN_TO_DECOMPRESS = 1#int(input("Enter column to decompress: "))
 
 def main():
 
-    full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE, BLOCK_SIZE)
+    full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, OUT_FILE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]
 
     print('getting compressed block...')
     compressed_block_START = datetime.now()
     ### work ###
-    compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD, COMPRESSED_FILE, BLOCK_TO_DECOMPRESS, full_header, full_header_bytes, BLOCK_SIZE, DATA_TYPE_BYTE_SIZES)
+    compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD, OUT_DIR,
+                                                         BLOCK_TO_DECOMPRESS, full_header, full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE)
     ############
     compressed_bloc_END = datetime.now()
     compressed_bloc_TIME = compressed_bloc_END - compressed_block_START

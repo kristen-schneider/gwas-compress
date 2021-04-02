@@ -6,8 +6,8 @@ import deserialize
 # DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
-def get_full_header(data_type_byte_sizes, compressed_file, BLOCK_SIZE):
-    compressed_file = open(compressed_file + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'rb')
+def get_full_header(data_type_byte_sizes, OUT_FILE):
+    compressed_file = open(OUT_FILE, 'rb')
     #content = compressed_file.read()
     STOP_HEADER = False
 

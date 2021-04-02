@@ -14,9 +14,10 @@ COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
 # PARAMETERS
 IN_FILE = sys.argv[1]
-OUT_FILE = sys.argv[2]
+OUT_DIR = sys.argv[2]
 BLOCK_SIZE = int(sys.argv[3])
 COMPRESSION_METHOD = sys.argv[4]
+OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE) + '.tsv'
 
 
 
@@ -107,7 +108,7 @@ def main():
     print('writing header...')
     write_header_START = datetime.now()
     ### work ###
-    compressed_with_header = open(OUT_FILE + 'kristen-' + str(BLOCK_SIZE) + '-out.tsv', 'wb')
+    compressed_with_header = open(OUT_FILE, 'wb')
     # write how many bytes are needed to store types, ends, and data (CONSTANT FIRST 4 BYTES)
     compressed_with_header.write(bytes_size_types)
     compressed_with_header.write(bytes_size_num_elements)

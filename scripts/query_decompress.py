@@ -4,7 +4,7 @@ import deserialize
 # COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
 def query_block(compression_method_code_book, comppression_method,
-                compressed_file, query_block_i, full_header, full_header_bytes, block_size, DATA_TYPE_BYTE_SIZES):
+                compressed_file, query_block_i, full_header, full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE):
     # header info
     magic_number = full_header[0]
     version = full_header[1]
@@ -23,7 +23,7 @@ def query_block(compression_method_code_book, comppression_method,
     else:
         query_block_num_rows = block_sizes[1]
 
-    with open(compressed_file + 'kristen-' + str(block_size) + '-out.tsv', 'rb') as r_file:
+    with open(OUT_FILE, 'rb') as r_file:
         all_compressed_data = r_file.read()
     r_file.close()
 
@@ -90,7 +90,8 @@ def decompress_single_block(compression_method_code_book, compression_method, co
 
     return ds_dc_query_block
 
-def decompress_single_column(compression_method_code_book, compression_method, compressed_block, query_column_i, full_header, DATA_TYPE_BYTE_SIZES):
+def decompress_single_column(compression_method_code_book, compression_method, compressed_block, query_column_i,
+                             full_header, DATA_TYPE_BYTE_SIZES):
     # header info
     magic_number = full_header[0]
     version = full_header[1]
