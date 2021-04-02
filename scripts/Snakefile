@@ -1,21 +1,26 @@
-# LOCAL
-base_dir = '/Users/kristen/Desktop/compression_sandbox/'
-scripts_dir = base_dir + 'scripts/'
-input_file = base_dir + 'toy_data_in/10-lines-tab.tsv'
-out_dir = base_dir + 'toy_data_out/'
-block_size = str(3)
-
-# # FIJI
-# base_dir = '/scratch/Users/krsc0813/gwas-compress/'
-# scripts_dir = base_dir + 'scripts/'
-# input_file = base_dir + 'data/test-gwas-data/test.tsv'
-# out_dir = base_dir + 'data/compressed/'
-# block_size = 3
-
-# CONSTANTS
+# CONSTANT PARAMETERS
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
+
+# VARIABLE PARAMETERS (user chosen)
+block_size = str(3)
+compression_method = 'gzip'
+
+# local
+base_dir = '/Users/kristen/Desktop/compression_sandbox/'
+scripts_dir = base_dir + 'scripts/'
+input_file = base_dir + 'toy_data_in/10-lines-tab.tsv'
+
+out_dir = base_dir + 'toy_data_out/'
+
+# # fiji
+# base_dir = '/scratch/Users/krsc0813/gwas-compress/'
+# scripts_dir = base_dir + 'scripts/'
+# input_file = base_dir + 'data/test-gwas-data/test.tsv'
+
+# out_dir = base_dir + 'data/compressed/'
+
 
 rule all:
     input:

@@ -1,5 +1,3 @@
-import header_compress
- 
 def split_into_blocks(f, block_size):
     '''
     takes a file and splits into blocks. each block is just a long string of lines separated by newline character.

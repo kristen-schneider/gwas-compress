@@ -1,8 +1,6 @@
 import gzip
 import zlib
 
-COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
-
 def compress_data(compression_method, s_bitstring, time):
     '''
     compress a serialized bitstring using specified compression method

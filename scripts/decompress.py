@@ -1,8 +1,6 @@
 import gzip
 import zlib
 
-COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
-
 def decompress_data(compression_method, c_bitstring):
     '''
     decompress a compressed bitstring using specified compression method

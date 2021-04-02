@@ -7,15 +7,18 @@ import generate_funnel_format
 import funnel_format_compress
 import header_compress
 
+# CONSTANTS
+DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
+COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
 # PARAMETERS
 IN_FILE = sys.argv[1]
 OUT_FILE = sys.argv[2]
 BLOCK_SIZE = int(sys.argv[3])
+COMPRESSION_METHOD = sys.argv[4]
 
-DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
+
 
 # IN FILE
 #'/Users/kristen/Desktop/compression_sandbox/toy_data/
@@ -63,7 +66,8 @@ def main():
     print('compressing data...')
     compress_data_START = datetime.now()
     ### work ###
-    serialize_compress_data = funnel_format_compress.compress_all_blocks(COMPRESSION_METHOD_CODE_BOOK['gzip'],
+    serialize_compress_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
+                                                                         COMPRESSION_METHOD_CODE_BOOK[COMPRESSION_METHOD],
                                                                          header_first_half, funnel_format_data)
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]
