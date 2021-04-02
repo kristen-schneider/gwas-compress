@@ -6,6 +6,7 @@ import query_decompress
 # PARAMETERS
 COMPRESSED_FILE = sys.argv[1]
 BLOCK_SIZE = int(sys.argv[2])
+COMPRESSION_METHOD = sys.argv[3]
 
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
@@ -24,14 +25,14 @@ COLUMN_TO_DECOMPRESS = 1#int(input("Enter column to decompress: "))
 
 def main():
 
-    full_header_info = header_decompress.get_full_header(COMPRESSED_FILE, BLOCK_SIZE)
+    full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE, BLOCK_SIZE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]
 
     print('getting compressed block...')
     compressed_block_START = datetime.now()
     ### work ###
-    compressed_block_info = query_decompress.query_block(COMPRESSED_FILE, BLOCK_TO_DECOMPRESS, full_header, full_header_bytes, BLOCK_SIZE, DATA_TYPE_BYTE_SIZES)
+    compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD, COMPRESSED_FILE, BLOCK_TO_DECOMPRESS, full_header, full_header_bytes, BLOCK_SIZE, DATA_TYPE_BYTE_SIZES)
     ############
     compressed_bloc_END = datetime.now()
     compressed_bloc_TIME = compressed_bloc_END - compressed_block_START
@@ -41,6 +42,7 @@ def main():
     single_block_START = datetime.now()
     ### work ###
     dc_single_block = query_decompress.decompress_single_block(
+        COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD,
         compressed_block_info, full_header, DATA_TYPE_BYTE_SIZES)
     ############
     print(dc_single_block)
@@ -52,6 +54,7 @@ def main():
     single_column_START = datetime.now()
     ### work ###
     dc_single_column = query_decompress.decompress_single_column(
+        COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD,
         compressed_block_info, COLUMN_TO_DECOMPRESS, full_header, DATA_TYPE_BYTE_SIZES)
     ############
     print(dc_single_column)
