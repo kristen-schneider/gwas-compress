@@ -35,5 +35,6 @@ rule squish:
         'python3 ' + scripts_dir + 'squish.py' \
         + ' ' + input_file \
         + ' ' + out_dir \
-        + ' ' + block_size +
-        ' && touch ' + out_dir + '10-lines-tab.done'
+        + ' ' + block_size \
+        + ' ' + compression_method
+        + ' && touch ' + out_dir + '10-lines-tab.done'

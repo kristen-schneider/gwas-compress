@@ -1,7 +1,7 @@
 import type_handling
 import deserialize
 
-def get_block_header(s_block, block_size, column_types, type_to_bytes_code_book):
+def get_block_header(block_size, column_types, type_to_bytes_code_book):
     '''
     returns the end positions of each column in a serialized block
     '''

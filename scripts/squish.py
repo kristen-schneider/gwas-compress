@@ -17,8 +17,7 @@ IN_FILE = sys.argv[1]
 OUT_DIR = sys.argv[2]
 BLOCK_SIZE = int(sys.argv[3])
 COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[sys.argv[4]]
-OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE) + '.tsv'
-
+OUT_FILE = OUT_DIR + 'kristen-' + str(sys.argv[4]) + '-' + str(BLOCK_SIZE) + '.tsv'
 
 
 # IN FILE
