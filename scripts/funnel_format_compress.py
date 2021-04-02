@@ -79,7 +79,9 @@ def compress_block(data_type_code_book, data_type_byte_sizes, compression_method
 
         # serialize and compress a column
         s_column = serialize.serialize_list(typed_column, column_type, column_bytes)
-        s_c_column = compress.compress_data(compression_method, s_column, 0)[10:]  # remove the gzip header bit from the compressed data
+        compressed_column_info = compress.compress_data(compression_method, s_column, 0)
+        compression_header_size = compressed_column_info[1]
+        s_c_column = compressed_column_info[0][compression_header_size:]  # remove the gzip header bit from the compressed data
         compressed_block += s_c_column
 
         # add length of this column to lengths of columns in this block
@@ -88,6 +90,7 @@ def compress_block(data_type_code_book, data_type_byte_sizes, compression_method
 
     # write the compressed block header and compressed block to the file
     s_block_header = serialize.serialize_list(block_col_ends, data_type_code_book[type(block_col_ends[0])], data_type_byte_sizes[1])
+
     compressed_block_header = compress.compress_data(compression_method, s_block_header, 0)[10:]
 
     block_header_length = len(compressed_block_header)
