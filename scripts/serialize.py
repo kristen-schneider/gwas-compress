@@ -107,10 +107,10 @@ def serialize_data(data, data_type, num_bytes):
 # def serialized_column_lengths():
 
 
-import deserialize
-
-chrom_data = [1, 1, 1, 1, 'X', 'X', 'X', 'X']
-serialized_chrm_data = serialize_list(chrom_data, 1, 5)
-print(serialized_chrm_data)
-deserialized_chrm_data = deserialize.deserialize_data(serialized_chrm_data, 8, 1, 5, 0)
-print(deserialized_chrm_data)
+# import deserialize
+#
+# chrom_data = [1, 1, 1, 1, 'X', 'X', 'X', 'X']
+# serialized_chrm_data = serialize_list(chrom_data, 1, 5)
+# print(serialized_chrm_data)
+# deserialized_chrm_data = deserialize.deserialize_data(serialized_chrm_data, 8, 1, 5, True)
+# print(deserialized_chrm_data)

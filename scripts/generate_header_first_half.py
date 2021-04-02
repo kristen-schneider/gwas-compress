@@ -5,7 +5,7 @@ import decompress
 import deserialize
 
 # DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
-BYTE_SIZES = {1: 5, 2: 8, 3: 5}
+# BYTE_SIZES = {1: 5, 2: 8, 3: 5}
 
 def get_header_data(in_file, data_type_code_book):
     '''
@@ -131,7 +131,7 @@ def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
         header_types.append(DATA_TYPE_CODE_BOOK[h_type])
     return header_types
 
-def compress_header(full_header, header_types):
+def compress_header(data_type_byte_sizes, full_header, header_types):
     '''
     '''
     num_columns = full_header[4][0]
@@ -142,14 +142,14 @@ def compress_header(full_header, header_types):
 
     for h in range(len(full_header)):
         # serialize_data([1,1,1,1,1], type_to_bytes_code_book[1], 1)
-        s_header = serialize.serialize_data(full_header[h], BYTE_SIZES[header_types[h]], header_types[h])
+        s_header = serialize.serialize_data(full_header[h], data_type_byte_sizes[header_types[h]], header_types[h])
         curr_c_header = compress.compress_data(s_header, 0)
         c_header += curr_c_header
         len_compressed_headers.append(len(curr_c_header))
     return [c_header, len_compressed_headers, num_columns]
 
 
-def decompress_header(c_header_info, header_types):
+def decompress_header(data_type_byte_sizes, c_header_info, header_types):
     full_dc_header = []
 
     c_header = c_header_info[0]
@@ -163,7 +163,8 @@ def decompress_header(c_header_info, header_types):
         curr_len_c_header = len_c_headers[l]
         curr_num_cols_c_header = header_sizes[l]
         curr_data_type_c_header = header_types[l]
-        curr_num_bytes_c_header = BYTE_SIZES[curr_data_type_c_header]
+        curr_num_bytes_c_header = data_type_byte_sizes[curr_data_type_c_header]
+        curr_num_bytes_c_header = data_type_byte_sizes[curr_data_type_c_header]
         # decompress
         ds_header = decompress.decompress_data(c_header[start:start + curr_len_c_header])
         start += curr_len_c_header
