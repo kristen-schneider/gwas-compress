@@ -91,7 +91,8 @@ def compress_block(data_type_code_book, data_type_byte_sizes, compression_method
     # write the compressed block header and compressed block to the file
     s_block_header = serialize.serialize_list(block_col_ends, data_type_code_book[type(block_col_ends[0])], data_type_byte_sizes[1])
 
-    compressed_block_header = compress.compress_data(compression_method, s_block_header, 0)[10:]
+    compressed_block_header_info = compress.compress_data(compression_method, s_block_header, 0)
+    compressed_block_header = compressed_block_header_info[0][compression_header_size:]
 
     block_header_length = len(compressed_block_header)
     block_header_end = (block_header_length + block_end)

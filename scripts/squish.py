@@ -16,7 +16,7 @@ COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 IN_FILE = sys.argv[1]
 OUT_DIR = sys.argv[2]
 BLOCK_SIZE = int(sys.argv[3])
-COMPRESSION_METHOD = sys.argv[4]
+COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[sys.argv[4]]
 OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE) + '.tsv'
 
 
@@ -36,7 +36,7 @@ def main():
     print('generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
-    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK)
+    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD)
     ############
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
@@ -68,7 +68,7 @@ def main():
     compress_data_START = datetime.now()
     ### work ###
     serialize_compress_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
-                                                                         COMPRESSION_METHOD_CODE_BOOK[COMPRESSION_METHOD],
+                                                                         COMPRESSION_METHOD,
                                                                          header_first_half, funnel_format_data)
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]

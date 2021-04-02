@@ -7,7 +7,7 @@ import deserialize
 # DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 # BYTE_SIZES = {1: 5, 2: 8, 3: 5}
 
-def get_header_data(in_file, data_type_code_book):
+def get_header_data(in_file, data_type_code_book, compression_method):
     '''
     retrieves some basic header information that should be stored in header up to this point.
         (delimiter, columns names, column types, and column number from the input file)
@@ -41,7 +41,7 @@ def get_header_data(in_file, data_type_code_book):
     column_names_list = get_column_names(column_names_str, delimeter)
     column_types_list = type_handling.get_column_types(column_types_str.rstrip().split(delimeter), data_type_code_book)
     num_columns = get_num_columns(column_names_list, column_types_list)
-    gzip_header = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff'
+    compression_method_header = get_compression_method_header(compression_method)
 
     header_start.append(magic_number)
     header_start.append(version_number)
@@ -49,7 +49,7 @@ def get_header_data(in_file, data_type_code_book):
     header_start.append(column_names_list)
     header_start.append(column_types_list)
     header_start.append(num_columns)
-    header_start.append(gzip_header)
+    header_start.append(compression_method_header)
 
     return header_start
 
@@ -122,6 +122,18 @@ def get_block_end_positions(block_lengths, block_header_lengths):
 
     return block_end_positions
 
+def get_compression_method_header(compression_method):
+    compression_method_header = b''
+
+    # switch statement seems more appropriate here
+    # GZIP
+    if compression_method == 1:
+        compression_method_header = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff'
+    # ZLIB
+    elif compression_method == 2:
+        compression_method_header = b''
+
+    return compression_method_header
 
 ### FOR HEADER COMPRESSION AND DECOMPRESSION ###
 def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
