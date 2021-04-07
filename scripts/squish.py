@@ -2,6 +2,7 @@
 import sys
 from datetime import datetime
 
+import arguments
 import generate_header_first_half
 import generate_funnel_format
 import funnel_format_compress
@@ -13,11 +14,19 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
 # PARAMETERS
-IN_FILE = sys.argv[1]
-OUT_DIR = sys.argv[2]
-BLOCK_SIZE = int(sys.argv[3])
-COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[sys.argv[4]]
-OUT_FILE = OUT_DIR + 'kristen-' + str(sys.argv[4]) + '-' + str(BLOCK_SIZE) + '.tsv'
+args = arguments.get_args()
+print(args.i)
+print(args.o)
+print(args.b)
+print(args.c)
+print(args.t)
+
+IN_FILE = args.i
+OUT_DIR = args.o
+BLOCK_SIZE = args.b
+COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[args.c]
+OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE) + '.tsv'
+MTIME = [args.t]
 
 
 # IN FILE
@@ -67,7 +76,7 @@ def main():
     compress_data_START = datetime.now()
     ### work ###
     serialize_compress_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
-                                                                         COMPRESSION_METHOD,
+                                                                         COMPRESSION_METHOD, MTIME,
                                                                          header_first_half, funnel_format_data)
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]

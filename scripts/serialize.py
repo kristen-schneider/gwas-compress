@@ -41,7 +41,7 @@ def serialize_list(in_list, data_type, num_bytes):
     '''
     INPUT
     one_column = list type, represents one column (e.g. [1,1,1,1,1])
-    num_bytes = number of bytes needed to store each value in the colum
+    num_bytes = number of bytes needed to store each value in the column
     data_type = data type of column (1, 2, 3)        
 
     OUTPUT

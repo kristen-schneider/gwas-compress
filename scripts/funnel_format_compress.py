@@ -8,7 +8,7 @@ import compress
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 # COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
-def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_method, header_first_half, ff):
+def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_method, mtime, header_first_half, ff):
     magic_number = header_first_half[0]
     version = header_first_half[1]
     delimiter = header_first_half[2]
@@ -31,7 +31,7 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_m
         curr_block = ff[block_i]
 
         # returns full_header_end and final compressed block
-        block_compression_info = compress_block(data_type_code_book, data_type_byte_sizes, compression_method,
+        block_compression_info = compress_block(data_type_code_book, data_type_byte_sizes, compression_method, mtime,
                                                 column_types, header_second_half, block_end, curr_block)
 
         header_second_half = block_compression_info[0]
@@ -51,7 +51,7 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_m
     return header_second_half, compressed_content
 
 
-def compress_block(data_type_code_book, data_type_byte_sizes, compression_method, column_types, header_end, block_end, block):
+def compress_block(data_type_code_book, data_type_byte_sizes, compression_method, mtime, column_types, header_end, block_end, block):
     compressed_block_header = b''
     compressed_block = b''
     compressed_block_final = b''
