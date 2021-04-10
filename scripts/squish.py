@@ -15,19 +15,14 @@ COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
 # PARAMETERS
 args = arguments.get_args()
-print(args.i)
-print(args.o)
-print(args.b)
-print(args.c)
-print(args.t)
 
 IN_FILE = args.i
 OUT_DIR = args.o
 BLOCK_SIZE = args.b
 COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[args.c]
 OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE) + '.tsv'
-MTIME = [args.t]
-
+MTIME = args.t
+if MTIME == None: MTIME = 0
 
 # IN FILE
 #'/Users/kristen/Desktop/compression_sandbox/toy_data/

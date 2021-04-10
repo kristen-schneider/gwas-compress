@@ -76,6 +76,7 @@ def compress_block(data_type_code_book, data_type_byte_sizes, compression_method
         column_type = column_types[column_i]
         typed_column = type_handling.convert_to_type(curr_column, column_type)
         column_bytes = data_type_byte_sizes[column_type]
+        column_compression_method = compression_method[column_i]
 
         # serialize and compress a column
         s_column = serialize.serialize_list(typed_column, column_type, column_bytes)

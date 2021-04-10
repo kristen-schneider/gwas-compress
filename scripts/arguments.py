@@ -18,6 +18,8 @@ def get_args():
                         type=int,
                         help='number of rows to be included in each block',
                         required=True)
+
+    # this argument might be fixed after parameter sweep
     parser.add_argument('--c',
                         dest='c',
                         type=str,
