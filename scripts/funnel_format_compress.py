@@ -8,7 +8,8 @@ import compress
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 # COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
-def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_method, header_first_half, ff):
+def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
+                        mtime, header_first_half, ff):
     magic_number = header_first_half[0]
     version = header_first_half[1]
     delimiter = header_first_half[2]
@@ -31,8 +32,8 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_m
         curr_block = ff[block_i]
 
         # returns full_header_end and final compressed block
-        block_compression_info = compress_block(data_type_code_book, data_type_byte_sizes, compression_method,
-                                                column_types, header_second_half, block_end, curr_block)
+        block_compression_info = compress_block(data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
+                                                mtime, column_types, header_second_half, block_end, curr_block)
 
         header_second_half = block_compression_info[0]
         compressed_block = block_compression_info[1]
@@ -51,7 +52,8 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_m
     return header_second_half, compressed_content
 
 
-def compress_block(data_type_code_book, data_type_byte_sizes, compression_method, column_types, header_end, block_end, block):
+def compress_block(data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
+                   mtime, column_types, header_end, block_end, block):
     compressed_block_header = b''
     compressed_block = b''
     compressed_block_final = b''
@@ -76,10 +78,11 @@ def compress_block(data_type_code_book, data_type_byte_sizes, compression_method
         column_type = column_types[column_i]
         typed_column = type_handling.convert_to_type(curr_column, column_type)
         column_bytes = data_type_byte_sizes[column_type]
+        column_compression_method = COMPRESSION_METHOD_CODE_BOOK[compression_method[column_i]]
 
         # serialize and compress a column
         s_column = serialize.serialize_list(typed_column, column_type, column_bytes)
-        compressed_column_info = compress.compress_data(compression_method, s_column, 0)
+        compressed_column_info = compress.compress_data(column_compression_method, s_column, 0)
         compression_header_size = compressed_column_info[1]
         s_c_column = compressed_column_info[0][compression_header_size:]  # remove the gzip header bit from the compressed data
         compressed_block += s_c_column
@@ -91,7 +94,7 @@ def compress_block(data_type_code_book, data_type_byte_sizes, compression_method
     # write the compressed block header and compressed block to the file
     s_block_header = serialize.serialize_list(block_col_ends, data_type_code_book[type(block_col_ends[0])], data_type_byte_sizes[1])
 
-    compressed_block_header_info = compress.compress_data(compression_method, s_block_header, 0)
+    compressed_block_header_info = compress.compress_data(COMPRESSION_METHOD_CODE_BOOK['gzip'], s_block_header, 0)
     compressed_block_header = compressed_block_header_info[0][compression_header_size:]
 
     block_header_length = len(compressed_block_header)

@@ -2,6 +2,7 @@
 import sys
 from datetime import datetime
 
+import arguments
 import generate_header_first_half
 import generate_funnel_format
 import funnel_format_compress
@@ -15,12 +16,16 @@ COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 print('hello world')
 print(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # PARAMETERS
-IN_FILE = sys.argv[1]
-OUT_DIR = sys.argv[2]
-BLOCK_SIZE = int(sys.argv[3])
-COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[sys.argv[4]]
-OUT_FILE = OUT_DIR + 'kristen-' + str(sys.argv[4]) + '-' + str(BLOCK_SIZE) + '.tsv'
+args = arguments.get_args()
 
+IN_FILE = args.i
+OUT_DIR = args.o
+BLOCK_SIZE = args.b
+#COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[args.c]
+COMPRESSION_METHOD = ['gzip', 'zlib', 'gzip', 'zlib', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip']
+OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
+MTIME = args.t
+if MTIME == None: MTIME = 0
 
 # IN FILE
 #'/Users/kristen/Desktop/compression_sandbox/toy_data/
@@ -37,7 +42,7 @@ def main():
     print('generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
-    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD)
+    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD_CODE_BOOK['gzip'])
     ############
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
@@ -69,7 +74,7 @@ def main():
     compress_data_START = datetime.now()
     ### work ###
     serialize_compress_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
-                                                                         COMPRESSION_METHOD,
+                                                                         COMPRESSION_METHOD, COMPRESSION_METHOD_CODE_BOOK, MTIME,
                                                                          header_first_half, funnel_format_data)
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]
