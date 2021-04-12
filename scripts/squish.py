@@ -14,7 +14,7 @@ DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
 print('hello world')
-print(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
+#print(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # PARAMETERS
 args = arguments.get_args()
 
@@ -22,7 +22,7 @@ IN_FILE = args.i
 OUT_DIR = args.o
 BLOCK_SIZE = args.b
 #COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[args.c]
-COMPRESSION_METHOD = ['gzip', 'zlib', 'gzip', 'zlib', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip']
+COMPRESSION_METHOD = ['gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip']
 OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
 MTIME = args.t
 if MTIME == None: MTIME = 0
