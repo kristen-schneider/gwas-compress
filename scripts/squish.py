@@ -13,7 +13,7 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
-print('hello world')
+print('starting script')
 #print(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # PARAMETERS
 args = arguments.get_args()
