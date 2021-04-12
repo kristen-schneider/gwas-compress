@@ -29,8 +29,8 @@ def get_args():
                         type=int,
                         help='mtime argument for the gzip compression method')
 
-
-    return parser.parse_args()
+    (options, args) = parser.parse_args()
+    return options
 
 def main():
     args = get_args()
