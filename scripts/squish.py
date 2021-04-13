@@ -23,7 +23,8 @@ OUT_DIR = args.o
 BLOCK_SIZE = args.b
 #COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[args.c]
 COMPRESSION_METHOD = ['gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip']
-OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
+COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
+DATA_FILE = OUT_DIR + 'plot-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.csv'
 MTIME = args.t
 if MTIME == None: MTIME = 0
 
@@ -78,6 +79,7 @@ def main():
                                                                          header_first_half, funnel_format_data)
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]
+    column_compression_timees = serialize_compress_data[2]
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START
@@ -114,7 +116,7 @@ def main():
     print('writing header...')
     write_header_START = datetime.now()
     ### work ###
-    compressed_with_header = open(OUT_FILE, 'wb')
+    compressed_with_header = open(COMPRESSED_FILE, 'wb')
     # write how many bytes are needed to store types, ends, and data (CONSTANT FIRST 4 BYTES)
     compressed_with_header.write(bytes_size_types)
     compressed_with_header.write(bytes_size_num_elements)

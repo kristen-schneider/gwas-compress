@@ -22,6 +22,7 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_m
     compressed_content = b''
 
     block_end = 0
+    all_column_compression_times = dict()
     # go through data, and compress each column
     for block_i in range(len(ff)):
         # start timer for block
@@ -32,8 +33,8 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_m
         curr_block = ff[block_i]
 
         # returns full_header_end and final compressed block
-        block_compression_info = compress_block(data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
-                                                mtime, column_types, header_second_half, block_end, curr_block)
+        block_compression_info = compress_block(all_column_compression_times, data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
+                                                mtime, column_labels, column_types, header_second_half, block_end, curr_block)
 
         header_second_half = block_compression_info[0]
         compressed_block = block_compression_info[1]
@@ -49,11 +50,11 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_m
     num_rows_last_block = len(ff[-1][0])
     if len(block_sizes) < 2: block_sizes.append(num_rows_last_block)
 
-    return header_second_half, compressed_content
+    return header_second_half, compressed_content, all_column_compression_times
 
 
-def compress_block(data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
-                   mtime, column_types, header_end, block_end, block):
+def compress_block(all_column_compression_times, data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
+                   mtime, column_labels, column_types, header_end, block_end, block):
     compressed_block_header = b''
     compressed_block = b''
     compressed_block_final = b''
@@ -72,6 +73,7 @@ def compress_block(data_type_code_book, data_type_byte_sizes, compression_method
     block_col_ends = []
     curr_compressed_col_end = 0
     for column_i in range(len(block)):
+        column_i_START = datetime.now()
 
         # get column info
         curr_column = block[column_i]
@@ -90,6 +92,14 @@ def compress_block(data_type_code_book, data_type_byte_sizes, compression_method
         # add length of this column to lengths of columns in this block
         curr_compressed_col_end += len(s_c_column)
         block_col_ends.append(curr_compressed_col_end)
+
+        column_i_END = datetime.now()
+        column_i_compression_time = column_i_END-column_i_START
+
+        try:
+            all_column_compression_times[column_labels[column_i]] += column_i_compression_time
+        except KeyError:
+            all_column_compression_times[column_labels[column_i]] = column_i_compression_time
 
     # write the compressed block header and compressed block to the file
     s_block_header = serialize.serialize_list(block_col_ends, data_type_code_book[type(block_col_ends[0])], data_type_byte_sizes[1])
