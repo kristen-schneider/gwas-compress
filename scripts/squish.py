@@ -79,7 +79,15 @@ def main():
                                                                          header_first_half, funnel_format_data)
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]
-    column_compression_timees = serialize_compress_data[2]
+    column_compression_times = serialize_compress_data[2]
+    df = open(DATA_FILE, 'w')
+    for cctime in column_compression_times:
+        df.write(cctime)
+        df.write(',')
+        df.write(str(column_compression_times[cctime]))
+        df.write(',\n')
+    df.close()
+
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START
