@@ -36,7 +36,7 @@ do
     
     # run script
     echo $block_size
-    python3 /scratch/Users/krsc0813/gwas-compress/scripts/squish.py $in_file $out_file $block_size
+    python3 /scratch/Users/krsc0813/gwas-compress/scripts/squish.py --i $in_file --o $out_file --b $block_size
     
     # stop clock, print to file for plotting
     end_time=`date +%s`
