@@ -3,24 +3,20 @@ import numpy as np
 
 def main():
     #dan()
-    kristen()
+    arr = [1] * 20000
+    kristen(arr)
 
-def kristen():
+def kristen(arr):
     # codecs list minus thee 4 codecs that generate an error
     codecs_list = ['BP32', 'copy', 'fastbinarypacking16', 'fastbinarypacking32', 'fastbinarypacking8', 'fastpfor128', 'fastpfor256', 'maskedvbyte', 'newpfor', 'optpfor', 'pfor', 'pfor2008', 'simdbinarypacking', 'simdfastpfor128', 'simdfastpfor256', 'simdgroupsimple', 'simdgroupsimple_ringbuf', 'simdnewpfor', 'simdoptpfor', 'simdpfor', 'simdsimplepfor', 'simple8b', 'simple8b_rle', 'simplepfor', 'streamvbyte', 'varint', 'varintg8iu', 'varintgb', 'vbyte']
+    # full codecs list
     #codecs_list = ['BP32', 'copy', 'fastbinarypacking16', 'fastbinarypacking32', 'fastbinarypacking8', 'fastpfor128', 'fastpfor256', 'maskedvbyte', 'newpfor', 'optpfor', 'pfor', 'pfor2008', 'simdbinarypacking', 'simdfastpfor128', 'simdfastpfor256', 'simdgroupsimple', 'simdgroupsimple_ringbuf', 'simdnewpfor', 'simdoptpfor', 'simdpfor', 'simdsimplepfor', 'simple16', 'simple8b', 'simple8b_rle', 'simple9', 'simple9_rle', 'simplepfor', 'streamvbyte', 'varint', 'varintg8iu', 'varintgb', 'vbyte', 'vsencoding']
-    #codecs_list = getCodecList()
-    
-    # in array
-    #arr = [1]*200#,1,1,1,1]
-    #arr_size = len(arr)
-    #np_arr = np.array(arr, dtype = np.uint32, order = 'C')
     
    
     # compression method
     for c in range(len(codecs_list)):
         # in array
-        arr = [1]*200#,1,1,1,1]
+        #arr = [1]*200#,1,1,1,1]
         arr_size = len(arr)
         np_arr = np.array(arr, dtype = np.uint32, order = 'C')
         
