@@ -8,8 +8,9 @@ import type_handling
 #[['1', '1', '1'], ['58396', '62745', '63668'], ['T', 'C', 'G'], ['C', 'G', 'A'], ['0.000e+00', 'NA', '0.000e+00'], ['2.409e-04', 'NA', '2.780e-05'], ['-1.007e+00', 'NA', '-1.287e+00'], ['1.437e+00', 'NA', '4.597e+00'], ['4.833e-01', 'NA', '7.795e-01'], ['true', 'NA', 'true']]
 
 
-IN_FILE = '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/test.tsv'
-BLOCK_SIZE = 3
+IN_FILE = '/home/krsc0813/projects/gwas-compress/data/hundred_thousand.tsv'
+OUT_FILE = '/home/krsc0813/projects/gwas-compress/plot_data/'
+BLOCK_SIZE = 20000
 NUM_COLS = 10
 DELIMITER = '\t'
 COL_TYPES = [1, 1, 3, 3, 2, 2, 2, 2, 2, 3]
@@ -23,9 +24,11 @@ def main():
             column_type = COL_TYPES[column_i]
             typed_column = type_handling.convert_to_type(curr_column, column_type)
 
-            print(typed_column)
 
-            if column_type == 1: pyfastpfor_test.kristen(typed_column)
+            if column_type == 1:
+                #print(column_i, typed_column)
+            
+                pyfastpfor_test.kristen(column_i, typed_column, OUT_FILE)
     #arr = [1] * 200
     #pyfastpfor_test.kristen(arr)
     
