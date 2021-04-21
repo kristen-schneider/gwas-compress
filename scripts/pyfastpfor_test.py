@@ -3,7 +3,7 @@ import numpy as np
 
 def main():
     #dan()
-    arr = [1] * 20000
+    #arr = [1] * 20000
     kristen(arr)
 
 def kristen(arr):
