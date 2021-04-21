@@ -137,9 +137,9 @@ for l in open(options.input_file):
     a = l.rstrip().split(delim)
     #a = l.rstrip().split()
     if len(a) == 2:
-        X.append(a[0])
+        X.append(a[1])
     #Y.append([a[1],a[2]])
-        Y.append(a[1])
+        Y.append(a[0])
     else:
         Y.append(a[0])
 
