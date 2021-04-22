@@ -153,6 +153,93 @@ class TestCodecs(unittest.TestCase):
         assert(np.all(long_c == long_a)) 
         assert(np.all(large_c == large_a))
 
+    def test_simdfastpfor128(self):
+        short_c = pyfastpfor_test_single.codecs_compression('simdfastpfor128', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('simdfastpfor128', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('simdfastpfor128', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
 
+    def test_fastpfor256(self):
+        short_c = pyfastpfor_test_single.codecs_compression('fastpfor256', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('fastpfor256', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('fastpfor256', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
+    
+    def test_simdgroupsimple(self):
+        short_c = pyfastpfor_test_single.codecs_compression('simdgroupsimple', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('simdgroupsimple', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('simdgroupsimple', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
+
+    def test_simdgroupsimple_ringbuf(self):
+        short_c = pyfastpfor_test_single.codecs_compression('simdgroupsimple_ringbuf', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('simdgroupsimple_ringbuf', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('simdgroupsimple_ringbuf', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
+       
+    def test_simdnewpfor(self):
+        short_c = pyfastpfor_test_single.codecs_compression('simdnewpfor', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('simdnewpfor', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('simdnewpfor', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
+    
+    def test_simdoptpfor(self):
+        short_c = pyfastpfor_test_single.codecs_compression('simdoptpfor', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('simdoptpfor', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('simdoptpfor', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
+    
+    def test_simdpfor(self):
+        short_c = pyfastpfor_test_single.codecs_compression('simdpfor', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('simdpfor', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('simdpfor', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
+
+    def test_simdsimplepfor(self):
+        short_c = pyfastpfor_test_single.codecs_compression('simdsimplepfor', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('simdsimplepfor', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('simdsimplepfor', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
+    
 if __name__ == '__main__':
     unittest.main()
