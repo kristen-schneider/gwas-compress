@@ -240,6 +240,16 @@ class TestCodecs(unittest.TestCase):
         assert(np.all(short_c == short_a))
         assert(np.all(long_c == long_a)) 
         assert(np.all(large_c == large_a))
-    
+   
+    def test_simple16(self):
+        short_c = pyfastpfor_test_single.codecs_compression('simple16', self.short_arr)
+        short_a = np.array(self.short_arr, dtype = np.uint32, order = 'C')
+        long_c = pyfastpfor_test_single.codecs_compression('simple16', self.long_arr)
+        long_a = np.array(self.long_arr, dtype = np.uint32, order = 'C')
+        large_c = pyfastpfor_test_single.codecs_compression('simple16', self.large_arr)
+        large_a = np.array(self.large_arr, dtype = np.uint32, order = 'C')
+        assert(np.all(short_c == short_a))
+        assert(np.all(long_c == long_a)) 
+        assert(np.all(large_c == large_a))
 if __name__ == '__main__':
     unittest.main()
