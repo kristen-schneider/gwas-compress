@@ -122,13 +122,69 @@ class TestCodecs(unittest.TestCase):
         pyfastpfor_test_single.codecs_compression('simdbinarypacking', self.large_arr, self.large_comp, self.large_decomp)
         assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def simdfastpfor128(self):
+        pyfastpfor_test_single.codecs_compression('simdfastpfor128', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simdfastpfor128', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simdfastpfor128', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simdfastpfor256(self):
+        pyfastpfor_test_single.codecs_compression('simdfastpfor256', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simdfastpfor256', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simdfastpfor256', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simdgroupsimple(self):
+        pyfastpfor_test_single.codecs_compression('simdgroupsimple', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simdgroupsimple', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simdgroupsimple', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simdgroupsimple_ringbuf(self):
+        pyfastpfor_test_single.codecs_compression('simdgroupsimple_ringbuf', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simdgroupsimple_ringbuf', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simdgroupsimple_ringbuf', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simdnewpfor(self):
+        pyfastpfor_test_single.codecs_compression('simdnewpfor', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simdnewpfor', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simdnewpfor', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simdoptpfor(self):
+        pyfastpfor_test_single.codecs_compression('simdoptpfor', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simdoptpfor', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simdoptpfor', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simdpfor(self):
+        pyfastpfor_test_single.codecs_compression('simdpfor', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simdpfor', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simdpfor', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simdsimplepfor(self):
+        pyfastpfor_test_single.codecs_compression('simdsimplepfor', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simdsimplepfor', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simdsimplepfor', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
 
 
