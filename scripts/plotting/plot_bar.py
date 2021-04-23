@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 
-i_file = '/home/krsc0813/projects/gwas-compress/plot_data/codecs_performance-0.tsv'
+i_file = '/home/krsc0813/projects/gwas-compress/plot_data/codecs_performance-1.tsv'
 
 def main():
     data = get_data(i_file)
