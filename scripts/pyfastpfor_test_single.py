@@ -3,7 +3,7 @@ import numpy as np
 
 def main():
     #dan()
-    codec = 'BP32'
+    codec = 'simple8b_rle'
     arr = [1]*128
     arr_size = len(arr)
     comp = np.zeros(arr_size+(16*10), dtype = np.uint32, order = 'C')
@@ -11,10 +11,10 @@ def main():
     r = codecs_compression(codec, arr, comp, decomp)
 
 def codecs_compression(codec, arr, comp, decomp):
+    print(codec) 
     # array to numpy array
     arr_size = len(arr)
     np_arr = np.array(arr, dtype = np.uint32, order = 'C')
-    
     # reserve space for compression and decompression
     #comp = np.zeros(arr_size+(16*10), dtype = np.uint32, order = 'C')
     #decomp = np.zeros(arr_size, dtype = np.uint32, order = 'C')
