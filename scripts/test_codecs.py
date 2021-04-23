@@ -186,6 +186,17 @@ class TestCodecs(unittest.TestCase):
         pyfastpfor_test_single.codecs_compression('simdsimplepfor', self.large_arr, self.large_comp, self.large_decomp)
         assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simple16(self):
+        pyfastpfor_test_single.codecs_compression('simple16', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simple16', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simple16', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
+
+
+
+
 
 
 if __name__ == '__main__':
