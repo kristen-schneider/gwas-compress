@@ -194,8 +194,53 @@ class TestCodecs(unittest.TestCase):
         pyfastpfor_test_single.codecs_compression('simple16', self.large_arr, self.large_comp, self.large_decomp)
         assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simple8b(self):
+        pyfastpfor_test_single.codecs_compression('simple8b', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simple8b', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simple8b', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simple8b_rle(self):
+        pyfastpfor_test_single.codecs_compression('simple8b_rle', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simple8b_rle', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simple8b_rle', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
+    def test_simple9(self):
+        pyfastpfor_test_single.codecs_compression('simple9', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simple9', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simple9', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
+
+    def test_simple9_rle(self):
+        pyfastpfor_test_single.codecs_compression('simple9_rle', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simple9_rle', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simple9_rle', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
+
+    def test_simplepfor(self):
+        pyfastpfor_test_single.codecs_compression('simplepfor', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('simplepfor', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('simplepfor', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
+
+    def test_streamvbyte(self):
+        pyfastpfor_test_single.codecs_compression('streamvbyte', self.short_arr, self.short_comp, self.short_decomp)
+        assert(np.all(np.array(self.short_arr, dtype = np.uint32, order = 'C') == self.short_decomp))
+        pyfastpfor_test_single.codecs_compression('streamvbyte', self.long_arr, self.long_comp, self.long_decomp)
+        assert(np.all(np.array(self.long_arr, dtype = np.uint32, order = 'C') == self.long_decomp))
+        pyfastpfor_test_single.codecs_compression('streamvbyte', self.large_arr, self.large_comp, self.large_decomp)
+        assert(np.all(np.array(self.large_arr, dtype = np.uint32, order = 'C') == self.large_decomp))
 
 
 
