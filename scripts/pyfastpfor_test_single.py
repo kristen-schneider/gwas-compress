@@ -3,27 +3,29 @@ import numpy as np
 
 def main():
     #dan()
-    codec = 'BP32'
+    codec = 'simple16'
     arr_size = 128*32
     arr = [1]*arr_size
-    buffer_size = 150*16
+    buffer_size = 15*16
     #arr = np.ones(arr_size, dtype = np.uint32, order = 'C')
     #comp = np.zeros(arr_size+(16*10), dtype = np.uint32, order = 'C')
     #decomp = np.zeros(arr_size, dtype = np.uint32, order = 'C')    
     #r = codecs_compression(codec, arr, comp, decomp)
-    kristen(codec, arr, arr_size, buffer_size)
-    #dan()
-    #dan2(codec, arr_size, buffer_size)
+    #kristen(codec, arr, arr_size, buffer_size)
+    dan()
+    #dan2(codec, arr, arr_size, buffer_size)
 
 def kristen(codec, arr, arr_size, buffer_size):
     np_arr = np.array(arr, dtype = np.uint32, order = 'C')
     comp = np.zeros(arr_size+buffer_size, dtype = np.uint32, order = 'C')
-    decomp = np.zeros(arr_size, dtype = np.uint32, order = 'C')
+    decomp = np.zeros(2*arr_size, dtype = np.uint32, order = 'C')
     codec_method = getCodec(codec)
     comp_size = codec_method.encodeArray(np_arr, arr_size, comp, len(comp))
     decomp_size = codec_method.decodeArray(comp, comp_size, decomp, arr_size)    
     print('codec: ', codec)
+    print('arr: ', np_arr)
     print('compression ratio: ', float(comp_size)/arr_size)
+    print('decomp arr: ', decomp)
     return decomp_size
 
 def codecs_compression(codec, arr, comp, decomp):
@@ -61,21 +63,24 @@ def codecs_compression(codec, arr, comp, decomp):
 def dan():
     arrSize = 128 * 32
     maxVal = 1000
+    inp = np.ones(arrSize, dtype = np.uint32, order = 'C')
     #inp = np.zeros(arrSize, dtype = np.uint32, order = 'C')
-    inp = np.array(np.random.randint(100, maxVal, arrSize), dtype = np.uint32, order = 'C')
-    print(inp)
-    inpCompDecomp = np.zeros(arrSize, dtype = np.uint32, order = 'C')
-
+    #inp = np.array(np.random.randint(100, maxVal, arrSize), dtype = np.uint32, order = 'C')
+    print('inp: ', len(inp), inp)
+    inpCompDecomp = np.zeros((32)+arrSize, dtype = np.uint32, order = 'C')
     inpComp = np.zeros(arrSize + (16*1000), dtype = np.uint32, order = 'C')
     
     codec = getCodec('simple16')
     
     compSize = codec.encodeArray(inp, arrSize, inpComp, len(inpComp))
+    print('inpComp: ', len(inpComp), inpComp)
      
     print('Compression ratio: %g' % (float(compSize)/arrSize))
-    
-    assert(arrSize == codec.decodeArray(inpComp, compSize, inpCompDecomp, arrSize))
-    assert(np.all(inpCompDecomp == inp))
+   
+    codec.decodeArray(inpComp, compSize, inpCompDecomp, arrSize) 
+    #assert(arrSize == codec.decodeArray(inpComp, compSize, inpCompDecomp, arrSize))
+    #assert(np.all(inpCompDecomp == inp))
+    print('inpCompDecomp: ', len(inpCompDecomp), inpCompDecomp)
 
 def dan2(inCodec, arr, arrSize, buffer_size):
     #arrSize = 128 * 32
@@ -85,7 +90,7 @@ def dan2(inCodec, arr, arrSize, buffer_size):
     #inp = np.array(np.random.randint(0,10,arrSize), dtype = np.uint32, order = 'C')
     inpCompDecomp = np.zeros(arrSize, dtype = np.uint32, order = 'C')
 
-    inpComp = np.zeros(arrSize + buffer_size, dtype = np.uint32, order = 'C')
+    inpComp = np.zeros(arrSize + buffer_size*10, dtype = np.uint32, order = 'C')
     
     codec = getCodec(inCodec)
     
