@@ -25,15 +25,19 @@ def kristen(codec, arr, arr_size, buffer_size, out_csv):
     #print('arr: ', np_arr)
     
     compression_ratio = float(comp_size)/arr_size
-    #with open(out_csv, 'w') as o:
-    #    writer = csv.writer(o, lineterminator='\n')
-        #writer.write
+    with open(out_csv, 'r') as r:
+        csv_reader = csv.reader(r)
+        row = next(csv_reader)
+        #r.append(compression_ratio)
+        print(row)
+        #csv_reader.writerow([compression_ratio])
         #row = next(writer)
         #print(row)
         #row.append()
         #if first_block
         #print('compression ratio: ', float(comp_size)/arr_size)
    
+    r.close()
     #print('decomp arr: ', decomp)
     return decomp_size
 
@@ -47,10 +51,12 @@ def csv_codec_column(codec_list, out_csv, num_blocks):
         csv_writer = csv.writer(o, lineterminator='\n')
         csv_writer.writerow(header)
     o.close()
+    # write codec list in first column
     with open(out_csv, 'a') as o:
         csv_writer = csv.writer(o, lineterminator='\n')
         for codec in codec_list:
             csv_writer.writerow([codec])
+    o.close()
 
 def generate_header(num_blocks):
     header = ['codec']
