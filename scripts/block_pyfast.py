@@ -9,9 +9,9 @@ import type_handling
 #[['1', '1', '1'], ['58396', '62745', '63668'], ['T', 'C', 'G'], ['C', 'G', 'A'], ['0.000e+00', 'NA', '0.000e+00'], ['2.409e-04', 'NA', '2.780e-05'], ['-1.007e+00', 'NA', '-1.287e+00'], ['1.437e+00', 'NA', '4.597e+00'], ['4.833e-01', 'NA', '7.795e-01'], ['true', 'NA', 'true']]
 
 
-IN_FILE = '/home/krsc0813/projects/gwas-compress/data/hundred_thousand.tsv'
+IN_FILE = '/home/krsc0813/projects/gwas-compress/data/ten.tsv'
 OUT_CSV = '/home/krsc0813/projects/gwas-compress/plot_data/test.csv'
-BLOCK_SIZE = 30000
+BLOCK_SIZE = 3
 NUM_COLS = 10
 DELIMITER = '\t'
 COL_TYPES = [1, 1, 3, 3, 2, 2, 2, 2, 2, 3]
@@ -21,11 +21,11 @@ def main():
     ff = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, NUM_COLS, DELIMITER)
     codec_dict = pyfastpfor_sandbox.codecs_compression_dict(len(ff))
     
-    #single_codec_compression(ff, 'vsencoding', codec_dict)
+    single_codec_compression(ff, 'vsencoding', codec_dict)
     
-    for codec in codec_list:
-        single_codec_compression(ff, codec, codec_dict)
-    for c in codec_dict: print(c, codec_dict[c])
+    #for codec in codec_list:
+    #    single_codec_compression(ff, codec, codec_dict)
+    #for c in codec_dict: print(c, codec_dict[c])
 
 def single_codec_compression(ff, codec, codec_dict):
     for block_i in range(len(ff)):

@@ -24,7 +24,7 @@ def kristen(codec, arr, arr_size, buffer_size, codec_dict, block_i):
     decomp_size = codec_method.decodeArray(comp, comp_size, decomp, arr_size)    
     #print('codec: ', codec)
     #print('arr: ', np_arr)
-    
+   
     compression_ratio = float(comp_size)/arr_size
     #print(codec, compression_ratio)
     try: codec_dict[codec][block_i] = compression_ratio
