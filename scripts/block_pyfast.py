@@ -11,7 +11,7 @@ import type_handling
 
 IN_FILE = '/home/krsc0813/projects/gwas-compress/data/ten.tsv'
 OUT_CSV = '/home/krsc0813/projects/gwas-compress/plot_data/test.csv'
-BLOCK_SIZE = 3
+BLOCK_SIZE = 4
 NUM_COLS = 10
 DELIMITER = '\t'
 COL_TYPES = [1, 1, 3, 3, 2, 2, 2, 2, 2, 3]
@@ -20,9 +20,13 @@ def main():
     codec_list = getCodecList()
     ff = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, NUM_COLS, DELIMITER)
     codec_dict = pyfastpfor_sandbox.codecs_compression_dict(len(ff))
-    single_codec_compression(ff, 'BP32', codec_dict)
+    
     single_codec_compression(ff, 'copy', codec_dict)
     
+    #for codec in codec_list:
+    #    single_codec_compression(ff, codec, codec_dict)
+    #for c in codec_dict: print(c, codec_dict[c])
+
 def single_codec_compression(ff, codec, codec_dict):
     for block_i in range(len(ff)):
         curr_block = ff[block_i]
@@ -39,7 +43,7 @@ def single_codec_compression(ff, codec, codec_dict):
                 decomp = pyfastpfor_sandbox.kristen(codec, typed_column, len(typed_column), 15*16, codec_dict, block_i)
                 #print('decomp: ', decomp)
                 
-    print(codec_dict)
+    #print(codec_dict)
     #arr = [1] * 200
     #pyfastpfor_test.kristen(arr)
     
