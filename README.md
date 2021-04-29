@@ -1,11 +1,11 @@
-## set up conda environment for pyfastpfor
-````bash
+# 1. Set up conda environment and install pyfastpfor
+````
 conda create --name pyfastpfor
 conda activate pyfastpfor
 pip install pyfastpfor
 conda install python=3.8
 ````
-### check if pyfastpfor installed correctly:
+###     check if pyfastpfor installed correctly:
 </p>python<br>
 </p>from pyfastpfor import *<br>
 </p>getCodecList()<br>
