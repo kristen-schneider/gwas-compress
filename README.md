@@ -1,4 +1,4 @@
-# 1. Set up conda environment and install pyfastpfor
+# 1. Set up conda environment and install [pyfastpfor](https://github.com/searchivarius/PyFastPFor)
 ````
 conda create --name pyfastpfor
 conda activate pyfastpfor
