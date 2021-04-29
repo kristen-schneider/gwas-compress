@@ -18,7 +18,7 @@ def kristen(codec, arr, arr_size, buffer_size, codec_dict, block_i):
     # prepare output file
     np_arr = np.array(arr, dtype = np.uint32, order = 'C')
     comp = np.zeros(arr_size+buffer_size, dtype = np.uint32, order = 'C')
-    decomp = np.zeros(32+arr_size, dtype = np.uint32, order = 'C')
+    decomp = np.zeros((32*2)+arr_size, dtype = np.uint32, order = 'C')
     codec_method = getCodec(codec)
     comp_size = codec_method.encodeArray(np_arr, arr_size, comp, len(comp))
     decomp_size = codec_method.decodeArray(comp, comp_size, decomp, arr_size)    
@@ -26,7 +26,7 @@ def kristen(codec, arr, arr_size, buffer_size, codec_dict, block_i):
     #print('arr: ', np_arr)
     
     compression_ratio = float(comp_size)/arr_size
-    print(codec, compression_ratio)
+    #print(codec, compression_ratio)
     try: codec_dict[codec][block_i] = compression_ratio
     except KeyError: print('cannot find codec ', codec)
     
