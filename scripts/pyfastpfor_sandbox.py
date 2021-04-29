@@ -10,10 +10,11 @@ def main():
     buffer_size = 15*16
     num_blocks = 1
     out_csv = '/home/krsc0813/projects/gwas-compress/scripts/TEST.csv'
-    csv_codec_column(getCodecList(), out_csv, num_blocks)
-    kristen(codec, arr, arr_size, buffer_size, out_csv)
+    
+    codec_dict = codecs_compression_dict(num_blocks)
+    kristen(codec, arr, arr_size, buffer_size, codec_dict, 0)
 
-def kristen(codec, arr, arr_size, buffer_size, out_csv):
+def kristen(codec, arr, arr_size, buffer_size, codec_dict, block_i):
     # prepare output file
     np_arr = np.array(arr, dtype = np.uint32, order = 'C')
     comp = np.zeros(arr_size+buffer_size, dtype = np.uint32, order = 'C')
@@ -25,44 +26,20 @@ def kristen(codec, arr, arr_size, buffer_size, out_csv):
     #print('arr: ', np_arr)
     
     compression_ratio = float(comp_size)/arr_size
-    with open(out_csv, 'r') as r:
-        csv_reader = csv.reader(r)
-        row = next(csv_reader)
-        #r.append(compression_ratio)
-        print(row)
-        #csv_reader.writerow([compression_ratio])
-        #row = next(writer)
-        #print(row)
-        #row.append()
-        #if first_block
-        #print('compression ratio: ', float(comp_size)/arr_size)
+    print(compression_ratio)
+    try: codec_dict[codec][block_i] = compression_ratio
+    except KeyError: print('cannot find codec ', codec)
+    
+    #print('compression ratio: ', float(comp_size)/arr_size)
    
-    r.close()
-    #print('decomp arr: ', decomp)
     return decomp_size
 
 
-def csv_codec_column(codec_list, out_csv, num_blocks):
-    # generate header
-    header = generate_header(num_blocks)
-    # write header
-    with open(out_csv, 'w') as o:
-        o.truncate(0)
-        csv_writer = csv.writer(o, lineterminator='\n')
-        csv_writer.writerow(header)
-    o.close()
-    # write codec list in first column
-    with open(out_csv, 'a') as o:
-        csv_writer = csv.writer(o, lineterminator='\n')
-        for codec in codec_list:
-            csv_writer.writerow([codec])
-    o.close()
-
-def generate_header(num_blocks):
-    header = ['codec']
-    for i in range(num_blocks):
-        header.append('block-'+str(i))
-    return header 
+def codecs_compression_dict(num_blocks):
+    codec_dict = dict()
+    for codec in getCodecList():
+        codec_dict[codec] = [0]*num_blocks
+    return codec_dict
 
 if __name__ == '__main__':
     main()
