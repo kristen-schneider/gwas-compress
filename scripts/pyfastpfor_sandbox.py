@@ -11,9 +11,9 @@ def main():
     #comp = np.zeros(arr_size+(16*10), dtype = np.uint32, order = 'C')
     #decomp = np.zeros(arr_size, dtype = np.uint32, order = 'C')    
     #r = codecs_compression(codec, arr, comp, decomp)
-    #kristen(codec, arr, arr_size, buffer_size)
-    dan(codec)
-    #dan2(codec, arr, arr_size, buffer_size)
+    kristen(codec, arr, arr_size, buffer_size)
+    #dan(codec)
+    dan2(codec)
 
 def kristen(codec, arr, arr_size, buffer_size):
     np_arr = np.array(arr, dtype = np.uint32, order = 'C')
@@ -22,10 +22,10 @@ def kristen(codec, arr, arr_size, buffer_size):
     codec_method = getCodec(codec)
     comp_size = codec_method.encodeArray(np_arr, arr_size, comp, len(comp))
     decomp_size = codec_method.decodeArray(comp, comp_size, decomp, arr_size)    
-    print('codec: ', codec)
-    print('arr: ', np_arr)
-    print('compression ratio: ', float(comp_size)/arr_size)
-    print('decomp arr: ', decomp)
+    #print('codec: ', codec)
+    #print('arr: ', np_arr)
+    #print('compression ratio: ', float(comp_size)/arr_size)
+    #print('decomp arr: ', decomp)
     return decomp_size
 
 def dan(curr_codec):
@@ -39,7 +39,7 @@ def dan(curr_codec):
     
     compSize = codec.encodeArray(inp, arrSize, inpComp, len(inpComp))
      
-    print('Compression ratio: %g' % (float(compSize)/arrSize))
+    #print('Compression ratio: %g' % (float(compSize)/arrSize))
    
     codec.decodeArray(inpComp, compSize, inpCompDecomp, arrSize) 
     #assert(arrSize == codec.decodeArray(inpComp, compSize, inpCompDecomp, arrSize))
@@ -61,7 +61,7 @@ def dan2(curr_codec):
     compSize = codec.encodeArray(inp, arrSize, inpComp, len(inpComp))
     #print('inpComp: ', len(inpComp), inpComp)
      
-    print('Compression ratio: %g' % (float(compSize)/arrSize))
+    #print('Compression ratio: %g' % (float(compSize)/arrSize))
    
     codec.decodeArray(inpComp, compSize, inpCompDecomp, arrSize) 
     #assert(arrSize == codec.decodeArray(inpComp, compSize, inpCompDecomp, arrSize))
