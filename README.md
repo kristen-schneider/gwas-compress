@@ -1,9 +1,9 @@
 ## set up conda environment for pyfastpfor
-````
-</p>conda create --name pyfastpfor<br>
-</p>conda activate pyfastpfor<br>
-</p>pip install pyfastpfor<br>
-</p>conda install python=3.8<br>
+````bash
+conda create --name pyfastpfor
+conda activate pyfastpfor
+pip install pyfastpfor
+conda install python=3.8
 ````
 ### check if pyfastpfor installed correctly:
 </p>python<br>
