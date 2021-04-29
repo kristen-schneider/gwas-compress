@@ -8,8 +8,9 @@ def main():
     arr_size = 128*32
     arr = [1]*arr_size
     buffer_size = 15*16
+    num_blocks = 1
     out_csv = '/home/krsc0813/projects/gwas-compress/scripts/TEST.csv'
-    csv_codec_column(getCodecList(), out_csv)
+    csv_codec_column(getCodecList(), out_csv, num_blocks)
     kristen(codec, arr, arr_size, buffer_size, out_csv)
 
 def kristen(codec, arr, arr_size, buffer_size, out_csv):
@@ -37,14 +38,25 @@ def kristen(codec, arr, arr_size, buffer_size, out_csv):
     return decomp_size
 
 
-def csv_codec_column(codec_list, out_csv):
+def csv_codec_column(codec_list, out_csv, num_blocks):
+    # generate header
+    header = generate_header(num_blocks)
+    # write header
     with open(out_csv, 'w') as o:
+        o.truncate(0)
+        csv_writer = csv.writer(o, lineterminator='\n')
+        csv_writer.writerow(header)
+    o.close()
+    with open(out_csv, 'a') as o:
         csv_writer = csv.writer(o, lineterminator='\n')
         for codec in codec_list:
-            
-            #print(row)
             csv_writer.writerow([codec])
 
+def generate_header(num_blocks):
+    header = ['codec']
+    for i in range(num_blocks):
+        header.append('block-'+str(i))
+    return header 
 
 if __name__ == '__main__':
     main()
