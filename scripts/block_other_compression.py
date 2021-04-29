@@ -1,6 +1,6 @@
-from pyfastpfor import *
-import pyfastpfor_sandbox
 import generate_funnel_format
+import generate_header_first_half
+import funnel_format_compress
 import type_handling
 
 # in data:
@@ -12,22 +12,23 @@ import type_handling
 IN_FILE = '/home/krsc0813/projects/gwas-compress/data/hundred_thousand.tsv'
 OUT_CSV = '/home/krsc0813/projects/gwas-compress/plot_data/test.csv'
 BLOCK_SIZE = 30000
+DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 NUM_COLS = 10
 DELIMITER = '\t'
 COL_TYPES = [1, 1, 3, 3, 2, 2, 2, 2, 2, 3]
 
 def main():
-    codec_list = getCodecList()
     ff = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, NUM_COLS, DELIMITER)
-    codec_dict = pyfastpfor_sandbox.codecs_compression_dict(len(ff))
     
-    #single_codec_compression(ff, 'vsencoding', codec_dict)
+    gzip_compression_ratio = other_compression(ff, 'gzip')
+    #zlib_compression_ration = 
     
-    for codec in codec_list:
-        single_codec_compression(ff, codec, codec_dict)
-    for c in codec_dict: print(c, codec_dict[c])
-
-def single_codec_compression(ff, codec, codec_dict):
+    
+def other_compression(ff, codec):
+    # header for compression/decompression with gzip and other methods
+    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK,
+                                    COMPRESSION_METHOD_CODE_BOOK[codec])
     for block_i in range(len(ff)):
         curr_block = ff[block_i]
         for column_i in range(len(curr_block)):
@@ -37,11 +38,6 @@ def single_codec_compression(ff, codec, codec_dict):
 
             # only try these codecs on integer compression
             if column_type == 1:
-                #print(column_i, typed_column)
-            
-                #print('og: ', typed_column)
-                decomp = pyfastpfor_sandbox.kristen(codec, typed_column, len(typed_column), 100*32, codec_dict, block_i)
-                #print('decomp: ', decomp)
                 
     #print(codec_dict)
     #arr = [1] * 200
