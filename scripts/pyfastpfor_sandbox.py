@@ -24,7 +24,7 @@ def kristen(codec, arr, arr_size, buffer_size):
     decomp_size = codec_method.decodeArray(comp, comp_size, decomp, arr_size)    
     #print('codec: ', codec)
     #print('arr: ', np_arr)
-    #print('compression ratio: ', float(comp_size)/arr_size)
+    print('compression ratio: ', float(comp_size)/arr_size)
     #print('decomp arr: ', decomp)
     return decomp_size
 

@@ -1,4 +1,4 @@
-import pyfastpfor_test
+import pyfastpfor_sandbox
 import generate_funnel_format
 import type_handling
 
@@ -10,7 +10,7 @@ import type_handling
 
 IN_FILE = '/home/krsc0813/projects/gwas-compress/data/hundred_thousand.tsv'
 OUT_FILE = '/home/krsc0813/projects/gwas-compress/plot_data/'
-BLOCK_SIZE = 20000
+BLOCK_SIZE = 10000
 NUM_COLS = 10
 DELIMITER = '\t'
 COL_TYPES = [1, 1, 3, 3, 2, 2, 2, 2, 2, 3]
@@ -28,7 +28,10 @@ def main():
             if column_type == 1:
                 #print(column_i, typed_column)
             
-                pyfastpfor_test.kristen(column_i, typed_column, OUT_FILE)
+                #print('og: ', typed_column)
+                decomp = pyfastpfor_sandbox.kristen('BP32', typed_column, len(typed_column), 15*16)
+                #print('decomp: ', decomp)
+                
     #arr = [1] * 200
     #pyfastpfor_test.kristen(arr)
     
