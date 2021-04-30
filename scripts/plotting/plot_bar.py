@@ -1,10 +1,13 @@
+import ../block_pyfast
 import matplotlib.pyplot as plt
+
 
 i_file = '/home/krsc0813/projects/gwas-compress/plot_data/codecs_performance-1.tsv'
 
 def main():
-    data = get_data(i_file)
-    plot_data(data)
+    print(get_dict_data())
+    #data = get_data(i_file)
+    #plot_data(data)
 
 def get_data(i_file):
     x = []
@@ -18,6 +21,9 @@ def get_data(i_file):
 
     return x, y        
 
+def get_dict_data():
+    return block_pyfast.get_compression_dict()
+    
 def plot_data(data):
     x = data[0]
     y = data[1]
