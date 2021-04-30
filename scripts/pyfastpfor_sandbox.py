@@ -7,7 +7,7 @@ def main():
     codec = 'simple8b_rle'
     arr_size = 128*32
     arr = [1]*arr_size
-    buffer_size = 15*16
+    buffer_size = 100*32
     num_blocks = 1
     out_csv = '/home/krsc0813/projects/gwas-compress/scripts/TEST.csv'
     
@@ -18,7 +18,7 @@ def kristen(codec, arr, arr_size, buffer_size, codec_dict, block_i):
     # prepare output file
     np_arr = np.array(arr, dtype = np.uint32, order = 'C')
     comp = np.zeros(arr_size+buffer_size, dtype = np.uint32, order = 'C')
-    decomp = np.zeros((32*2)+arr_size, dtype = np.uint32, order = 'C')
+    decomp = np.zeros(2*sfarr_size, dtype = np.uint32, order = 'C')
     codec_method = getCodec(codec)
     comp_size = codec_method.encodeArray(np_arr, arr_size, comp, len(comp))
     decomp_size = codec_method.decodeArray(comp, comp_size, decomp, arr_size)    

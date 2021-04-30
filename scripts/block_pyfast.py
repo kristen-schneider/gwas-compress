@@ -11,7 +11,7 @@ import type_handling
 
 IN_FILE = '/home/krsc0813/projects/gwas-compress/data/two_hundred_thousand.tsv'
 OUT_CSV = '/home/krsc0813/projects/gwas-compress/plot_data/two_hundred_thousand.csv'
-BLOCK_SIZE = 200000
+BLOCK_SIZE = 32*
 NUM_COLS = 10
 DELIMITER = '\t'
 COL_TYPES = [1, 1, 3, 3, 2, 2, 2, 2, 2, 3]
@@ -48,6 +48,7 @@ def get_compression_dict():
     
 def all_codec_compression(codec_list, ff, codec_dict):
     for codec in codec_list:
+        print(codec)
         single_codec_compression(ff, codec, codec_dict)
      
     #for c in codec_dict: print(c, codec_dict[c])
@@ -65,7 +66,7 @@ def single_codec_compression(ff, codec, codec_dict):
                 #print(column_i, typed_column)
             
                 #print('og: ', typed_column)
-                decomp = pyfastpfor_sandbox.kristen(codec, typed_column, len(typed_column), 100*32, codec_dict, block_i)
+                decomp = pyfastpfor_sandbox.kristen(codec, typed_column, len(typed_column), 140*32, codec_dict, block_i)
                 #print('decomp: ', decomp)
                 
     #print(codec_dict)
