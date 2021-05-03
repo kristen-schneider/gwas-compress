@@ -1,6 +1,9 @@
 from optparse import OptionParser
 
 def get_args():
+    '''
+    arguments specified by user to
+    '''
     parser = OptionParser()
 
     parser.add_option('--i',
