@@ -2,7 +2,8 @@
 import sys
 from datetime import datetime
 
-import arguments
+# import arguments
+import config_arguments
 import generate_header_first_half
 import generate_funnel_format
 import funnel_format_compress
@@ -16,11 +17,11 @@ COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 print('starting script')
 #print(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # PARAMETERS
-args = arguments.get_args()
+args = config_arguments.get_args_from_config()
 
-IN_FILE = args.i
-OUT_DIR = args.o
-BLOCK_SIZE = args.b
+IN_FILE = args['in_file']
+OUT_DIR = args['out_file']
+BLOCK_SIZE = args['block_size']
 #COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[args.c]
 COMPRESSION_METHOD = ['gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip']
 COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
