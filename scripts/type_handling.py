@@ -1,5 +1,4 @@
 import numpy as np
-
 def get_data_type(str_data, data_type_code_book):
     '''
     Retruns proper data type of incoming data. This is used only once for a the first row.

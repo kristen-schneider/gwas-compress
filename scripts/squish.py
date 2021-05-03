@@ -1,8 +1,7 @@
 # IMPORTS
-import sys
+# python imports
 from datetime import datetime
-
-# import arguments
+# kristen imports
 import config_arguments
 import generate_header_first_half
 import generate_funnel_format
@@ -14,28 +13,23 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
-print('starting script')
+#print('starting script')
 #print(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
 # PARAMETERS
 args = config_arguments.get_args_from_config()
+for a in args:print(args[a])
 
+# user specified arguments, included in config file
 IN_FILE = args['in_file']
-OUT_DIR = args['out_file']
-BLOCK_SIZE = args['block_size']
-#COMPRESSION_METHOD = COMPRESSION_METHOD_CODE_BOOK[args.c]
-COMPRESSION_METHOD = ['gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip', 'gzip']
+OUT_DIR = args['out_dir']
+BLOCK_SIZE = int(args['block_size'])
+COMPRESSION_METHOD = list(args['compression_method'].split(','))
+MTIME = int(args['time'])
+
+# output file made from combining user specified params
 COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
 DATA_FILE = OUT_DIR + 'plot-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.csv'
-MTIME = args.t
-if MTIME == None: MTIME = 0
 
-# IN FILE
-#'/Users/kristen/Desktop/compression_sandbox/toy_data/
-# FIJI: '/scratch/Users/krsc0813/gwas-compress/data/test-gwas-data/test.tsv'
-
-# OUT FILE
-# '/Users/kristen/Desktop/compression_sandbox/toy_data/'
-# FIJI: '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
 
 def main():
     # 1. GET FIRST HALF OF HEADER
