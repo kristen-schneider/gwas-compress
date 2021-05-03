@@ -10,28 +10,35 @@ import header_compress
 
 # CONSTANTS
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
+# DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
 
-#print('starting script')
-#print(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4])
-# PARAMETERS
-args = config_arguments.get_args_from_config()
-for a in args:print(args[a])
-
-# user specified arguments, included in config file
+# USER-SPECIFIED PARAMETERS
+args = config_arguments.get_args_from_config('LOCAL')
+# included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
 BLOCK_SIZE = int(args['block_size'])
 COMPRESSION_METHOD = list(args['compression_method'].split(','))
 MTIME = int(args['time'])
-
+DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
+                        2:int(args['float_byte_size']),
+                        3:int(args['string_byte_size']),
+                        4:args['bytes_byte_size']}
 # output file made from combining user specified params
 COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
 DATA_FILE = OUT_DIR + 'plot-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.csv'
 
 
 def main():
+    '''
+    1. gets beginning of header (magic number, version, delimiter, column labels, column types, num columns, gzip header)
+    2. generates funnel format (list of blocks)
+    3. compress data and get second half of header
+    4. compress full header
+    5. write compressed header
+    6. write compressed data
+    '''
     # 1. GET FIRST HALF OF HEADER
     ### Magic number, version number, delimiter, column labels, column types, number columns, gzip header
     ### [1,1,'\t',['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR', 'low_confidence_EUR'],[1, 1, 3, 3, 2, 2, 2, 2, 2, 3],10,b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff']
