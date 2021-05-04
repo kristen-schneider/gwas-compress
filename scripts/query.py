@@ -26,6 +26,7 @@ def main():
     ### work ###
     compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD, OUT_DIR,
                                                          BLOCK_TO_DECOMPRESS, full_header, full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE)
+    print(compressed_block_info)
     ############
     compressed_block_END = datetime.now()
     compressed_block_TIME = compressed_block_END - compressed_block_START

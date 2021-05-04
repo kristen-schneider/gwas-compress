@@ -45,7 +45,7 @@ def main():
     print('generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
-    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD_CODE_BOOK['gzip'])
+    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD_CODE_BOOK[COMPRESSION_METHOD[0]])
     ############
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
@@ -82,6 +82,7 @@ def main():
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]
     column_compression_times = serialize_compress_data[2]
+    print(compressed_data)
     df = open(DATA_FILE, 'w')
     for cctime in column_compression_times:
         df.write(cctime)
