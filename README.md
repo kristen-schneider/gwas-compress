@@ -24,7 +24,9 @@ args = config_arguments.get_args_from_config('LOCAL')
 ```
 
 
-# 2. Set up conda environment and install [pyfastpfor](https://github.com/searchivarius/PyFastPFor)
+# 2. To try pyfastpfor codecs. 
+
+### *Set up conda environment and install [pyfastpfor](https://github.com/searchivarius/PyFastPFor)*
 ````
 conda create --name pyfastpfor
 conda activate pyfastpfor
