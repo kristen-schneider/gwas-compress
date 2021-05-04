@@ -18,7 +18,7 @@ def kristen(codec, arr, arr_size, buffer_size, codec_dict, block_i):
     # prepare output file
     np_arr = np.array(arr, dtype = np.uint32, order = 'C')
     comp = np.zeros(arr_size+buffer_size, dtype = np.uint32, order = 'C')
-    decomp = np.zeros(2*sfarr_size, dtype = np.uint32, order = 'C')
+    decomp = np.zeros(2*arr_size, dtype = np.uint32, order = 'C')
     codec_method = getCodec(codec)
     comp_size = codec_method.encodeArray(np_arr, arr_size, comp, len(comp))
     decomp_size = codec_method.decodeArray(comp, comp_size, decomp, arr_size)    

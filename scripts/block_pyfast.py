@@ -11,7 +11,7 @@ import type_handling
 
 IN_FILE = '/home/krsc0813/projects/gwas-compress/data/two_hundred_thousand.tsv'
 OUT_CSV = '/home/krsc0813/projects/gwas-compress/plot_data/two_hundred_thousand.csv'
-BLOCK_SIZE = 32*
+BLOCK_SIZE = 32*6000
 NUM_COLS = 10
 DELIMITER = '\t'
 COL_TYPES = [1, 1, 3, 3, 2, 2, 2, 2, 2, 3]
