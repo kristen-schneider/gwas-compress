@@ -1,5 +1,6 @@
 import gzip
 import zlib
+import bz2
 
 def decompress_data(compression_method, c_bitstring):
     '''
@@ -14,12 +15,16 @@ def decompress_data(compression_method, c_bitstring):
 
     '''
     # switch statement seems more appropriate here
+    print(c_bitstring)
     # GZIP
     if compression_method == 1:
         c_bitstring = gzip_decompress(c_bitstring)
     # ZLIB
     elif compression_method == 2:
         c_bitstring = zlib_decompress(c_bitstring)
+    # BZ2
+    elif compression_method == 3:
+        c_bitstring = bz2_decompress(c_bitstring)
 
     return c_bitstring
 
@@ -52,4 +57,19 @@ def zlib_decompress(c_bitstring):
     '''
 
     dc_bitstring = zlib.decompress(c_bitstring)
+    return dc_bitstring
+
+def bz2_decompress(c_bitstring):
+    '''
+        uses python's bz2.decompress to decompressed a compressed, serialized bitstring
+
+        INPUT
+        c_bitstring = compressed bitstring (using python's bz2.compress)
+
+        OUTPUT
+        dc_bitstring = decompressed bitstring (original bitstring from serialize function)
+
+        '''
+
+    dc_bitstring = bz2.decompress(c_bitstring)
     return dc_bitstring

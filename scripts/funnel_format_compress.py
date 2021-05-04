@@ -3,11 +3,6 @@ import type_handling
 import serialize
 import compress
 
-# # 4. bytes for each data type
-# DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-# DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-# COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
-
 def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
                         mtime, header_first_half, ff):
     magic_number = header_first_half[0]
@@ -104,7 +99,7 @@ def compress_block(all_column_compression_times, data_type_code_book, data_type_
     # write the compressed block header and compressed block to the file
     s_block_header = serialize.serialize_list(block_col_ends, data_type_code_book[type(block_col_ends[0])], data_type_byte_sizes[1])
 
-    compressed_block_header_info = compress.compress_data(COMPRESSION_METHOD_CODE_BOOK['gzip'], s_block_header, 0)
+    compressed_block_header_info = compress.compress_data(COMPRESSION_METHOD_CODE_BOOK[compression_method[0]], s_block_header, 0)
     compressed_block_header = compressed_block_header_info[0][compression_header_size:]
 
     block_header_length = len(compressed_block_header)

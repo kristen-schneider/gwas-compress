@@ -13,16 +13,7 @@ OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE
 
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
-
-
-# COMPRESSED_FILE
-#COMPRESSED_FILE = '/Users/kristen/Desktop/compression_sandbox/toy_data/'
-#FIJI: '/scratch/Users/krsc0813/gwas-compress/data/compressed/'
-# BLOCK SIZE
-#BLOCK_SIZE = 3
-#FIJI
-# BLOCK_SIZE = int(sys.argv[1])
+COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
 
 def main():
 
@@ -35,10 +26,11 @@ def main():
     ### work ###
     compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD, OUT_DIR,
                                                          BLOCK_TO_DECOMPRESS, full_header, full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE)
+    print(compressed_block_info)
     ############
-    compressed_bloc_END = datetime.now()
-    compressed_bloc_TIME = compressed_bloc_END - compressed_block_START
-    print(str(compressed_bloc_TIME) + ' for grabbing a single block to decompress...\n')
+    compressed_block_END = datetime.now()
+    compressed_block_TIME = compressed_block_END - compressed_block_START
+    print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
 
     print('decompressing single block...')
     single_block_START = datetime.now()

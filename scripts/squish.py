@@ -11,7 +11,7 @@ import header_compress
 # CONSTANTS
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
+COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
 
 # USER-SPECIFIED PARAMETERS
 args = config_arguments.get_args_from_config('MENDEL')
@@ -45,7 +45,7 @@ def main():
     print('generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
-    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD_CODE_BOOK['gzip'])
+    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD_CODE_BOOK[COMPRESSION_METHOD[0]])
     ############
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
@@ -82,6 +82,7 @@ def main():
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]
     column_compression_times = serialize_compress_data[2]
+    print(compressed_data)
     df = open(DATA_FILE, 'w')
     for cctime in column_compression_times:
         df.write(cctime)
