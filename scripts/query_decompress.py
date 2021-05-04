@@ -1,8 +1,6 @@
 import decompress
 import deserialize
 
-# COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
-
 def query_block(compression_method_code_book, comppression_method,
                 compressed_file, query_block_i, full_header, full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE):
     # header info
@@ -17,6 +15,8 @@ def query_block(compression_method_code_book, comppression_method,
     end_positions = full_header[8]
     block_sizes = full_header[9]
 
+    print(num_columns, gzip_header, block_header_ends, end_positions, block_sizes)
+
     # getting proper number of rows (last block is weird)
     if query_block_i < len(end_positions) - 1:
         query_block_num_rows = block_sizes[0]
@@ -25,6 +25,7 @@ def query_block(compression_method_code_book, comppression_method,
 
     with open(OUT_FILE, 'rb') as r_file:
         all_compressed_data = r_file.read()
+    print(all_compressed_data)
     r_file.close()
 
     header_data = all_compressed_data[0:full_header_bytes]

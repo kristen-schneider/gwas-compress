@@ -74,6 +74,7 @@ def bz2_compress(s_bitstring):
 
     '''
 
-    c_bitstring = zlib.compress(s_bitstring)
+    c_bitstring = bz2.compress(s_bitstring)
+    print(c_bitstring)
     return c_bitstring
 

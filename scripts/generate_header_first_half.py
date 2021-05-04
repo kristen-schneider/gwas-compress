@@ -134,7 +134,6 @@ def get_compression_method_header(compression_method):
         compression_method_header = b''
     # BZ2
     elif compression_method == 3:
-        print('BZ2')
         compression_method_header = b'BZh9'
 
     return compression_method_header

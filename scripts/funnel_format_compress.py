@@ -3,11 +3,6 @@ import type_handling
 import serialize
 import compress
 
-# # 4. bytes for each data type
-# DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-# DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-# COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2}
-
 def compress_all_blocks(data_type_code_book, data_type_byte_sizes, compression_method, COMPRESSION_METHOD_CODE_BOOK,
                         mtime, header_first_half, ff):
     magic_number = header_first_half[0]
