@@ -2,6 +2,7 @@
 </p>Open config.ini file and fill out appropriate parameters under one of the optiones (local, fiji, mendel).<br>
 </p>In squish.py, pass the correct option on line 17.<br>
 ### CONFIG.INI (example)
+
 ```
 [LOCAL]
 in_file=/path/to/gwas.tsv
@@ -15,6 +16,7 @@ string_byte_size=5
 bytes_byte_size=None
 ```
 ### SQUISH.PY (example)
+
 ```
 # USER-SPECIFIED PARAMETERS
 args = config_arguments.get_args_from_config('LOCAL')
