@@ -45,7 +45,7 @@ def main():
     print('generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
-    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD_CODE_BOOK[COMPRESSION_METHOD[0]])
+    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK)
     ############
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
@@ -57,7 +57,7 @@ def main():
     column_labels = header_first_half[3]
     column_types = header_first_half[4]
     number_columns = header_first_half[5]
-    gzip_header = header_first_half[6]
+
 
     # 2. GET FUNNEL FORMAT
     ### list of blocks [[block1][block2]...[blockn]]

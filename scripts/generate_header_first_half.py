@@ -7,7 +7,7 @@ import deserialize
 # DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
 # BYTE_SIZES = {1: 5, 2: 8, 3: 5}
 
-def get_header_data(in_file, data_type_code_book, compression_method):
+def get_header_data(in_file, data_type_code_book):
     '''
     retrieves some basic header information that should be stored in header up to this point.
         (delimiter, columns names, column types, and column number from the input file)
@@ -41,7 +41,9 @@ def get_header_data(in_file, data_type_code_book, compression_method):
     column_names_list = get_column_names(column_names_str, delimeter)
     column_types_list = type_handling.get_column_types(column_types_str.rstrip().split(delimeter), data_type_code_book)
     num_columns = get_num_columns(column_names_list, column_types_list)
-    compression_method_header = get_compression_method_header(compression_method)
+    gzip_header = get_compression_method_header('gzip')
+    zlib_header = get_compression_method_header('zlib')
+    bz2_header = get_compression_method_header('bz2')
 
     header_start.append(magic_number)
     header_start.append(version_number)
@@ -49,7 +51,9 @@ def get_header_data(in_file, data_type_code_book, compression_method):
     header_start.append(column_names_list)
     header_start.append(column_types_list)
     header_start.append(num_columns)
-    header_start.append(compression_method_header)
+    header_start.append(gzip_header)
+    header_start.append(zlib_header)
+    header_start.append(bz2_header)
 
     return header_start
 
@@ -127,13 +131,13 @@ def get_compression_method_header(compression_method):
 
     # switch statement seems more appropriate here
     # GZIP
-    if compression_method == 1:
+    if compression_method == 'gzip':
         compression_method_header = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff'
     # ZLIB
-    elif compression_method == 2:
+    elif compression_method == 'zlib':
         compression_method_header = b''
     # BZ2
-    elif compression_method == 3:
+    elif compression_method == 'bz2':
         compression_method_header = b'BZh9'
 
     return compression_method_header

@@ -11,9 +11,11 @@ def query_block(compression_method_code_book, comppression_method,
     col_types = full_header[4]
     num_columns = full_header[5]
     gzip_header = full_header[6]
-    block_header_ends = full_header[7]
-    end_positions = full_header[8]
-    block_sizes = full_header[9]
+    zlib_header = full_header[7]
+    bz2_header = full_header[8]
+    block_header_ends = full_header[9]
+    end_positions = full_header[10]
+    block_sizes = full_header[11]
 
     print(num_columns, gzip_header, block_header_ends, end_positions, block_sizes)
 
@@ -64,9 +66,12 @@ def decompress_single_block(compression_method_code_book, compression_method, co
     col_types = full_header[4]
     num_columns = full_header[5]
     gzip_header = full_header[6]
-    block_header_ends = full_header[7]
-    end_positions = full_header[8]
-    block_sizes = full_header[9]
+    gzip_header = full_header[6]
+    zlib_header = full_header[7]
+    bz2_header = full_header[8]
+    block_header_ends = full_header[9]
+    end_positions = full_header[10]
+    block_sizes = full_header[11]
 
     compressed_block_header = compressed_block[0]
     compressed_block_data = compressed_block[1]
