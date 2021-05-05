@@ -1,19 +1,47 @@
+import config_arguments
 import sys
 from datetime import datetime
 import header_decompress
 import query_decompress
 
-# PARAMETERS
-OUT_DIR = sys.argv[1]
-BLOCK_SIZE = int(sys.argv[2])
-COMPRESSION_METHOD = sys.argv[3]
-BLOCK_TO_DECOMPRESS = int(sys.argv[4])
-COLUMN_TO_DECOMPRESS = int(sys.argv[5])
-OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE) + '.tsv'
-
+# CONSTANTS
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
+# DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
+
+# USER-SPECIFIED PARAMETERS
+args = config_arguments.get_args_from_config('LOCAL')
+# included in config file
+IN_FILE = args['in_file']
+OUT_DIR = args['out_dir']
+BLOCK_SIZE = int(args['block_size'])
+COMPRESSION_METHOD = list(args['compression_method'].split(','))
+BLOCK_TO_DECOMPRESS = int(args['block_to_decompress'])
+COLUMN_TO_DECOMPRESS = int(args['column_to_decompress'])
+DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
+                        2:int(args['float_byte_size']),
+                        3:int(args['string_byte_size']),
+                        4:args['bytes_byte_size']}
+
+# output file made from combining user specified params
+base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
+OUT_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
+
+
+# COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
+# DATA_FILE = OUT_DIR + 'plot-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.csv'
+
+# PARAMETERS
+# OUT_DIR = sys.argv[1]
+# BLOCK_SIZE = int(sys.argv[2])
+# COMPRESSION_METHOD = sys.argv[3]
+# BLOCK_TO_DECOMPRESS = int(sys.argv[4])
+# COLUMN_TO_DECOMPRESS = int(sys.argv[5])
+# OUT_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD) + '-' + str(BLOCK_SIZE) + '.tsv'
+#
+# DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+# DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
+# COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
 
 def main():
 
@@ -25,8 +53,9 @@ def main():
     print('getting compressed block...')
     compressed_block_START = datetime.now()
     ### work ###
-    compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD, OUT_DIR,
-                                                         BLOCK_TO_DECOMPRESS, full_header, full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE)
+    compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, BLOCK_TO_DECOMPRESS,
+                                                         full_header, full_header_bytes,
+                                                         DATA_TYPE_BYTE_SIZES, OUT_FILE)
     print(compressed_block_info)
     ############
     compressed_block_END = datetime.now()

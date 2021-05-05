@@ -25,9 +25,11 @@ DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
                         2:int(args['float_byte_size']),
                         3:int(args['string_byte_size']),
                         4:args['bytes_byte_size']}
+
 # output file made from combining user specified params
-COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
-DATA_FILE = OUT_DIR + 'plot-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.csv'
+base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
+COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
+DATA_FILE = OUT_DIR + 'plot-' + str(BLOCK_SIZE) + '.csv'
 
 
 def main():

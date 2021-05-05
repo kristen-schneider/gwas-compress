@@ -1,8 +1,11 @@
 import decompress
 import deserialize
 
-def query_block(compression_method_code_book, comppression_method,
-                compressed_file, query_block_i, full_header, full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE):
+def query_block(compression_method_code_book, query_block_i, full_header,
+                full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE):
+    '''
+    returns decompressed header, compressed block, and num rows in block
+    '''
     # header info
     magic_number = full_header[0]
     version = full_header[1]
@@ -17,9 +20,12 @@ def query_block(compression_method_code_book, comppression_method,
     end_positions = full_header[10]
     block_sizes = full_header[11]
 
+    # header is compressed with gzip
+    header_compression_type = 'gzip'
+
     print(num_columns, gzip_header, block_header_ends, end_positions, block_sizes)
 
-    # getting proper number of rows (last block is weird)
+    # getting proper number of rows (last block is often less than others)
     if query_block_i < len(end_positions) - 1:
         query_block_num_rows = block_sizes[0]
     else:
@@ -46,15 +52,17 @@ def query_block(compression_method_code_book, comppression_method,
     # to signify that we need not worry about X and Y in data
     query_block_header_end = block_header_ends[query_block_i]
     query_block_header = gzip_header + content_compressed_data[query_block_header_start:query_block_header_end]
-    # get decompressed, deserialized block header
-    dc_curr_block_header = decompress.decompress_data(compression_method_code_book[comppression_method], query_block_header)
+    # get decompressed, deserialized block header (compressed with gzip for now)
+    dc_curr_block_header = decompress.decompress_data(compression_method_code_book[header_compression_type], query_block_header)
     # print(dc_curr_block_header)
     ds_dc_curr_block_header = deserialize.deserialize_data(
         dc_curr_block_header, num_columns, 1, DATA_TYPE_BYTE_SIZES[1], None)
     # print(ds_dc_curr_block_header)
 
     x = 'debug'
-    return [ds_dc_curr_block_header, content_compressed_data[query_block_header_end:end_positions[query_block_i]], query_block_num_rows]
+    return [ds_dc_curr_block_header,
+            content_compressed_data[query_block_header_end:end_positions[query_block_i]],
+            query_block_num_rows]
 
 
 def decompress_single_block(compression_method_code_book, compression_method, compressed_block, full_header, DATA_TYPE_BYTE_SIZES):
