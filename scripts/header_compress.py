@@ -8,6 +8,7 @@ import compress
 
 def full_header_tools(data_type_code_book, data_type_byte_sizes, full_header):
     '''
+    works to serialize the header as well as any pertinent tools which will aide to reconstruct the header
 
     INPUT
     data_type_code_book: something like {int: 1, float: 2, str: 3, bytes:4}
@@ -15,11 +16,10 @@ def full_header_tools(data_type_code_book, data_type_byte_sizes, full_header):
     full_header: full header
 
     OUTPUT
-    [serialized_header_types: data types of all elements of header, serlialized
-     serialized_header_num_elements:
-     serialized_header_ends:
-     serialized_header_data: ]
-
+    [serialized_header_types: data types of all elements of header, serialized
+     serialized_header_num_elements: number of elements in each part of the header, serialized
+     serialized_header_ends: end locations of each serialized element, serialized
+     serialized_header_data: serialized header]
     '''
     # get header types and serialize
     header_types = get_header_types(full_header, data_type_code_book)
