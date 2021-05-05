@@ -29,6 +29,8 @@ def compress_data(compression_method, s_bitstring, time):
         c_bitstring = bz2_compress(s_bitstring)
         header = 4
 
+    print(s_bitstring,c_bitstring)
+
     return c_bitstring, header
 
 def gzip_compress(s_bitstring, time):
@@ -75,6 +77,5 @@ def bz2_compress(s_bitstring):
     '''
 
     c_bitstring = bz2.compress(s_bitstring)
-    print(c_bitstring)
     return c_bitstring
 

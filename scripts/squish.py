@@ -14,7 +14,7 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
 
 # USER-SPECIFIED PARAMETERS
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -82,7 +82,6 @@ def main():
     header_second_half = serialize_compress_data[0]
     compressed_data = serialize_compress_data[1]
     column_compression_times = serialize_compress_data[2]
-    print(compressed_data)
     df = open(DATA_FILE, 'w')
     for cctime in column_compression_times:
         df.write(cctime)
