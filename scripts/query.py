@@ -78,7 +78,7 @@ def main():
     single_column_START = datetime.now()
     ### work ###
     dc_single_column = query_decompress.decompress_single_column(
-        COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD,
+        COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD[COLUMN_TO_DECOMPRESS],
         compressed_block_info, COLUMN_TO_DECOMPRESS, full_header, DATA_TYPE_BYTE_SIZES)
     ############
     print(dc_single_column)

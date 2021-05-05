@@ -95,7 +95,7 @@ def decompress_single_block(compression_method_code_book, compression_method, co
         else: chrm = False
         column_end = compressed_block_header[column_i]
         column_data = gzip_header + compressed_block_data[column_start:column_end]
-        dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method], column_data)
+        dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method[column_i]], column_data)
         col_type = col_types[column_i]
         ds_dc_column_data = deserialize.deserialize_data(
             dc_column_data, num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type], chrm)
