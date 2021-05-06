@@ -125,7 +125,7 @@ def decompress_single_column(compression_method_code_book, compression_method, c
     num_rows = compressed_block[2]
     col_type = col_types[query_column_i]
     # get proper compression header for given column
-    compression_header = get_header_type(compression_method[query_column_i], full_header)
+    compression_header = get_header_type(compression_method, full_header)
 
     # get correct block header
     ds_dc_column = []
