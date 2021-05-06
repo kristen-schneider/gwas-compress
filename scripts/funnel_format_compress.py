@@ -58,6 +58,9 @@ def compress_block(all_column_compression_times, data_type_code_book, data_type_
     HEADER_block_ends = header_end[1]
     HEADER_block_num_rows = header_end[2]
 
+    block_header_compression_method = 'gzip'
+    block_header_compression_size = 10
+
     num_cols_in_block = len(block)
     num_rows_in_block = len(block[0])
     # this should only be triggered for first block and last block.
@@ -99,8 +102,8 @@ def compress_block(all_column_compression_times, data_type_code_book, data_type_
     # write the compressed block header and compressed block to the file
     s_block_header = serialize.serialize_list(block_col_ends, data_type_code_book[type(block_col_ends[0])], data_type_byte_sizes[1])
 
-    compressed_block_header_info = compress.compress_data(COMPRESSION_METHOD_CODE_BOOK[compression_method[0]], s_block_header, 0)
-    compressed_block_header = compressed_block_header_info[0][compression_method_header_size:]
+    compressed_block_header_info = compress.compress_data(COMPRESSION_METHOD_CODE_BOOK[block_header_compression_method], s_block_header, mtime)
+    compressed_block_header = compressed_block_header_info[0][block_header_compression_size:]
 
     block_header_length = len(compressed_block_header)
     block_header_end = (block_header_length + block_end)
