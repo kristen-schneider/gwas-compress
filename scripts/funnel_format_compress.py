@@ -80,8 +80,8 @@ def compress_block(all_column_compression_times, data_type_code_book, data_type_
         # serialize and compress a column
         s_column = serialize.serialize_list(typed_column, column_type, column_bytes)
         compressed_column_info = compress.compress_data(column_compression_method, s_column, 0)
-        compression_header_size = compressed_column_info[1]
-        s_c_column = compressed_column_info[0][compression_header_size:]  # remove the gzip header bit from the compressed data
+        compression_method_header_size = compressed_column_info[1]
+        s_c_column = compressed_column_info[0][compression_method_header_size:]  # remove the gzip header bit from the compressed data
         compressed_block += s_c_column
 
         # add length of this column to lengths of columns in this block
@@ -100,7 +100,7 @@ def compress_block(all_column_compression_times, data_type_code_book, data_type_
     s_block_header = serialize.serialize_list(block_col_ends, data_type_code_book[type(block_col_ends[0])], data_type_byte_sizes[1])
 
     compressed_block_header_info = compress.compress_data(COMPRESSION_METHOD_CODE_BOOK[compression_method[0]], s_block_header, 0)
-    compressed_block_header = compressed_block_header_info[0][compression_header_size:]
+    compressed_block_header = compressed_block_header_info[0][compression_method_header_size:]
 
     block_header_length = len(compressed_block_header)
     block_header_end = (block_header_length + block_end)

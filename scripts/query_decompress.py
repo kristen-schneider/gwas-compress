@@ -4,7 +4,7 @@ import deserialize
 def query_block(compression_method_code_book, query_block_i, full_header,
                 full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE):
     '''
-    returns decompressed header, compressed block, and num rows in block
+    returns decompressed block header, compressed block, and num rows in block
     '''
     # header info
     magic_number = full_header[0]
@@ -23,7 +23,6 @@ def query_block(compression_method_code_book, query_block_i, full_header,
     # header is compressed with gzip
     header_compression_type = 'gzip'
 
-    print(num_columns, gzip_header, block_header_ends, end_positions, block_sizes)
 
     # getting proper number of rows (last block is often less than others)
     if query_block_i < len(end_positions) - 1:
@@ -91,10 +90,13 @@ def decompress_single_block(compression_method_code_book, compression_method, co
     # for each compressed column in this block we need to add the gzip header separately
     column_start = 0
     for column_i in range(num_columns):
+        # get proper compression header for given column
+        compression_header = get_header_type(compression_method[column_i], full_header)
+
         if column_i == 0: chrm = True
         else: chrm = False
         column_end = compressed_block_header[column_i]
-        column_data = gzip_header + compressed_block_data[column_start:column_end]
+        column_data = compression_header + compressed_block_data[column_start:column_end]
         dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method[column_i]], column_data)
         col_type = col_types[column_i]
         ds_dc_column_data = deserialize.deserialize_data(
@@ -122,6 +124,8 @@ def decompress_single_column(compression_method_code_book, compression_method, c
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]
     col_type = col_types[query_column_i]
+    # get proper compression header for given column
+    compression_header = get_header_type(compression_method[query_column_i], full_header)
 
     # get correct block header
     ds_dc_column = []
@@ -134,8 +138,21 @@ def decompress_single_column(compression_method_code_book, compression_method, c
         compressed_column_start = 0
 
     compressed_column_end = dc_ds_block_header[query_column_i]
-    compressed_column = gzip_header + compressed_block_data[compressed_column_start:compressed_column_end]
+    compressed_column = compression_header + compressed_block_data[compressed_column_start:compressed_column_end]
     dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method], compressed_column)
     ds_ds_column_data = deserialize.deserialize_data(dc_column_data, num_rows, col_type,
                                                      DATA_TYPE_BYTE_SIZES[col_type], query_column_i)
     return ds_ds_column_data
+
+def get_header_type(column_compression_method, full_header):
+    '''
+    returns proper compression header
+    '''
+    if column_compression_method == 'gzip':
+        return full_header[6]
+    elif column_compression_method == 'zlib':
+        return full_header[7]
+    elif column_compression_method == 'bz2':
+        return full_header[8]
+    else:
+        return 0

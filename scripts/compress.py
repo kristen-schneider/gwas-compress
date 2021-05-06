@@ -19,19 +19,19 @@ def compress_data(compression_method, s_bitstring, time):
     # GZIP
     if compression_method == 1:
         c_bitstring = gzip_compress(s_bitstring, time)
-        header = 10
+        header_size = 10
     # ZLIB
     elif compression_method == 2:
         c_bitstring = zlib_compress(s_bitstring)
-        header = 0
+        header_size = 0
     # BZ2
     elif compression_method == 3:
         c_bitstring = bz2_compress(s_bitstring)
-        header = 4
+        header_size = 4
 
     print(s_bitstring,c_bitstring)
 
-    return c_bitstring, header
+    return c_bitstring, header_size
 
 def gzip_compress(s_bitstring, time):
     '''
