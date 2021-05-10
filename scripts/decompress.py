@@ -3,17 +3,16 @@ import zlib
 import bz2
 
 def decompress_data(compression_method, c_bitstring):
-    '''
+    """
     decompress a compressed bitstring using specified compression method
 
     INPUT
-    compression_method: e.g. gzip, zlib, etc...
-    c_bitstring = serialized bitstring from the serialize_data method in serialize.py
+        compression_method: e.g. gzip, zlib, etc...
+        c_bitstring = serialized bitstring from the serialize_data method in serialize.py
 
     OUTPUT
-    dc_bitstring = compressed bitstring
-
-    '''
+        dc_bitstring = compressed bitstring
+    """
     # switch statement seems more appropriate here
     print(c_bitstring)
     # GZIP
@@ -29,47 +28,44 @@ def decompress_data(compression_method, c_bitstring):
     return c_bitstring
 
 def gzip_decompress(c_bitstring):
-    '''
+    """
     uses python's gzip.decompress to decompressed a compressed, serialized bitstring
-    
+
     INPUT
-    c_bitstring = compressed bitstring (using python's gzip.compress)
-    
+        c_bitstring = compressed bitstring (using python's gzip.compress)
+
     OUTPUT
-    dc_bitstring = decompressed bitstring (original bitstring from serialize function)
-    
-    '''
+        dc_bitstring = decompressed bitstring (original bitstring from serialize function)
+    """
 
     dc_bitstring = gzip.decompress(c_bitstring)
     return dc_bitstring
 
 
 def zlib_decompress(c_bitstring):
-    '''
+    """
     uses python's zlib.decompress to decompressed a compressed, serialized bitstring
 
     INPUT
-    c_bitstring = compressed bitstring (using python's gzip.compress)
+        c_bitstring = compressed bitstring (using python's gzip.compress)
 
     OUTPUT
-    dc_bitstring = decompressed bitstring (original bitstring from serialize function)
-
-    '''
+        dc_bitstring = decompressed bitstring (original bitstring from serialize function)
+    """
 
     dc_bitstring = zlib.decompress(c_bitstring)
     return dc_bitstring
 
 def bz2_decompress(c_bitstring):
-    '''
-        uses python's bz2.decompress to decompressed a compressed, serialized bitstring
+    """
+    uses python's bz2.decompress to decompressed a compressed, serialized bitstring
 
-        INPUT
+    INPUT
         c_bitstring = compressed bitstring (using python's bz2.compress)
 
-        OUTPUT
+    OUTPUT
         dc_bitstring = decompressed bitstring (original bitstring from serialize function)
-
-        '''
+    """
 
     dc_bitstring = bz2.decompress(c_bitstring)
     return dc_bitstring

@@ -2,19 +2,18 @@ import type_handling
 import struct
 
 def deserialize_block(dc_bitstring, block_size, column_data_types, type_to_bytes_code_book, column_lengths):
-    '''
+    """
     take decompressed bitstring for a full block and break it into columns of decompressed bitstrings. call deserialize_data on each individual decompressed bitstring.
 
     INPUT
-    dc_bitstring = decompressed bitstring for one block 
-    block_size = number of rows in a block
-    column_data_types = list of data types in block (e.g. [1, 3]
-    type_to_bytes_code_book = dictionary of data types and their byte sizes (e.g. {1: 5, 2: 8, 3: 5})    
+        dc_bitstring = decompressed bitstring for one block
+        block_size = number of rows in a block
+        column_data_types = list of data types in block (e.g. [1, 3]
+        type_to_bytes_code_book = dictionary of data types and their byte sizes (e.g. {1: 5, 2: 8, 3: 5})
 
     OUTPUT
-    list_of_ds_bitstrings: list of deserialized bitstrings
-
-    '''
+        list_of_ds_bitstrings: list of deserialized bitstrings
+    """
     ds_bitstring_final = []
     num_columns = len(column_data_types)
 
@@ -37,19 +36,18 @@ def deserialize_block(dc_bitstring, block_size, column_data_types, type_to_bytes
         
 
 def deserialize_data(dc_bitstring, block_size, data_type, num_bytes, chrm):
-    '''
+    """
     deserializes data for one column
-    
-    INPUT
-    dc_bitstring = decompressed bitstring for one column
-    block_size = number of rows in a block (size of output column)
-    data_type = type of data in this column (1,2,3)
-    num_bytes = number of bytes that is associated with this data type
-    
-    OUTPUT
-    ds_bitstring = derserialized data for one column (e.g. [1,1,1,1,1]
 
-    '''
+    INPUT
+        dc_bitstring = decompressed bitstring for one column
+        block_size = number of rows in a block (size of output column)
+        data_type = type of data in this column (1,2,3)
+        num_bytes = number of bytes that is associated with this data type
+
+    OUTPUT
+        ds_bitstring = derserialized data for one column (e.g. [1,1,1,1,1]
+    """
     ds_bitstring = []
     
     if data_type == 1:
@@ -119,22 +117,3 @@ def deserialize_string(dc_bitstring):
                 print('value is of bad type, cannot deserialize')
             i += 1
     return ds_bitstring
-
-#
-# chrm1 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01X'
-# chrm2 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01Y'
-# chrm2 = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01XXX'
-# h = b'\x00\x00\x00\x00\x12\x00\x00\x00\x00m\x00\x00\x00\x00\x8b\x00\x00\x00\x00\xa9\x00\x00\x00\x01)\x00\x00\x00\x01\xc5\x00\x00\x00\x02X\x00\x00\x00\x02\xf3\x00\x00\x00\x03\x8e\x00\x00\x00\x03\xb9'
-# dh=deserialize_data(h, 10, 1, 5, )
-# print(dh)
-# a = b'\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01\x00\x00\x00\x00\x01'
-# dsa = deserialize_data(a, 5, 1, 5)
-# print(dsa)
-# b = b'?\xf3333333@\x0b\x99\x99\x99\x99\x99\x9a\xc0\x1b\x1e\xb8Q\xeb\x85\x1f?\x17\x97\xcc9\xff\xd6\x0f@\xc8\x1a\x00\x00\x00\x00\x00'
-# dsb = deserialize_data(b, 5, 2, 8)
-# print(dsb)
-# c = b'AC\x00TTT\x00GA'
-# dsc = deserialize_data(c, 5, 3, 5)
-# print(dsc)
-
-

@@ -78,12 +78,12 @@ def main():
     print('compressing data...')
     compress_data_START = datetime.now()
     ### work ###
-    serialize_compress_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
+    serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
                                                                          COMPRESSION_METHOD, COMPRESSION_METHOD_CODE_BOOK, MTIME,
                                                                          header_first_half, funnel_format_data)
-    header_second_half = serialize_compress_data[0]
-    compressed_data = serialize_compress_data[1]
-    column_compression_times = serialize_compress_data[2]
+    header_second_half = serialized_compressed_data[0]
+    compressed_data = serialized_compressed_data[1]
+    column_compression_times = serialized_compressed_data[2]
     df = open(DATA_FILE, 'w')
     for cctime in column_compression_times:
         df.write(cctime)

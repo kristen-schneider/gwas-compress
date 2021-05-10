@@ -6,11 +6,11 @@ def get_header_first_half(in_file, data_type_code_book):
         (delimiter, columns names, column types, and column number from the input file)
 
     INPUT
-    in_file = path to input file (original gwas file)
+        in_file = path to input file (original gwas file)
 
     OUTPUT
-    header_first_half = list of information to be included in header.
-    << end of header will add information about block locations and size of blocks. >>
+        header_first_half = list of information to be included in header.
+        << end of header will add information about block locations and size of blocks. >>
     """
 
     # final header data
@@ -58,6 +58,14 @@ def get_first_two_rows(in_file):
     returns strings of the first two rows in the file,
     which contain the data that will help construct
     the first half of the header
+
+    INPUT
+        in_file: input gwas file
+
+    OUTPUT
+        string representations of first two lines in gwas file
+        row1_string: header line of gwas file
+        row2_string: first line of data in gwas file
     """
     with open(in_file, 'r') as f_open:
         row1_string = f_open.readline()
@@ -72,9 +80,9 @@ def get_delimiter(row):
     determine which delimiter is used in the file
 
     INPUT
-    f: path to input file
+        f: path to input file
     OUTPUT
-    returns delimiter used in file
+        delimiter: delimiter used in file
     """
 
     if len(row.split('\t')) > 1: delimiter = '\t'
@@ -91,11 +99,11 @@ def get_column_names(row, delimiter):
     gets the header names of each column
 
     INPUT
-    row = first line of the original gwas file, string
-    delimiter = file delimiter
+        row = first line of the original gwas file, string
+        delimiter = file delimiter
 
     OUTPUT
-    column_names = list of all column header names (e.g. [chr, pos, ref, alt, ...])
+        column_names = list of all column header names (e.g. [chr, pos, ref, alt, ...])
     """
     column_names = row.rstrip().split(delimiter)
     return column_names
@@ -106,11 +114,11 @@ def get_num_columns(column_names_list, column_types_list):
     checks that names and types are same length to return number of columns in a file
 
     INPUT
-    column_names_list = list of header names for columns
-    column_types_list = list of data types for columns
+        column_names_list = list of header names for columns
+        column_types_list = list of data types for columns
 
     OUTPUT
-    num_columns = number of columns
+        num_columns = number of columns
     """
     if (len(column_names_list) == len(column_types_list)):
         num_columns = len(column_names_list)
@@ -125,7 +133,10 @@ def get_compression_method_header(compression_method):
     returns header for different methods of existing compression
 
     INPUT
-    string of compression method (e.g. 'gzip')
+        string of compression method (e.g. 'gzip')
+
+    OUTPUT
+        bitstring of given compression method header (common to all compressed data)
     """
     compression_method_header = b''
 

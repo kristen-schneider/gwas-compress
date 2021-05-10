@@ -7,14 +7,14 @@ import deserialize
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 def get_full_header(data_type_byte_sizes, OUT_FILE):
-    '''
+    """
     opens out file and returns full header
 
     INPUT
 
     OUTPUT
 
-    '''
+    """
     compressed_file = open(OUT_FILE, 'rb')
     #content = compressed_file.read()
     STOP_HEADER = False
@@ -121,11 +121,3 @@ def decompress_header(data_type_byte_sizes, header_types, header_num_elements, h
 
 
     return full_ds_header
-
-
-# header = [1, 1, '\t', ['chr', 'position', 'other'], [1.00,12.12,3e+05], 3]
-# full_header_tools(header)
-# for h in c_full_header:
-#     print(h)
-# dc_full_header = decompress_header(c_full_header)
-# print(dc_full_header)
