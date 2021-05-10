@@ -1,14 +1,14 @@
 def split_into_blocks(f, block_size):
-    '''
+    """
     takes a file and splits into blocks. each block is just a long string of lines separated by newline character.
 
-    INPUTS
+    INPUT
     f = path to input file
     block_size = number of lines to go into a block
-    OUTPUTS
-    blocks = list of strings [block1, block2, ..., blockn]
 
-    '''
+    OUTPUT
+    blocks = list of strings [block1, block2, ..., blockn]
+    """
     # initialize 
     all_blocks = []    
     header = None
@@ -32,19 +32,20 @@ def split_into_blocks(f, block_size):
     f_open.close()
     return all_blocks
 
-def make_one_block(block_string, num_columns, block_size, delimeter):
-    '''
+def make_one_block(block_string, num_columns, delimeter):
+    """
     takes a single block from split_into_blocks (one long string) and makes it a list of columns
-   
-    INPUTS
+
+    INPUT
     block_string = block as a string with new line and tab characters
     num_columns = number of columns in file
     block_size = number of lines in a block
     delimeter = file delimeter
-    OUTPUTS
+
+    OUTPUT
     one_block = one block as a list
-    
-    '''
+    """
+
     block_separate_lines = block_string.split('\n')
     block_separate_lines.pop()
     one_block = [[] for i in range(num_columns)]
@@ -56,27 +57,27 @@ def make_one_block(block_string, num_columns, block_size, delimeter):
     return one_block
 
 def make_all_blocks(f, block_size, num_columns, delimeter):
-    '''
+    """
     take a list of strings and makes each string a list of columns, where each column is a list of values
-    
+
     INPUTS
-    f = file path to input file 
+    f = file path to input file
     block_size = number of lines in a block
     OUTPUTS
     all_blocks_list = [[[1,1,1,1,1],[100,200,300,400,500]...],[[2,2,2,2,2],[100,200,300,400,500]...]]]
 
-    '''
+    """
     all_blocks_string = split_into_blocks(f, block_size)
 
     all_blocks_list = []
     for b in all_blocks_string:
-        curr_block = make_one_block(b, num_columns, block_size, delimeter)
+        curr_block = make_one_block(b, num_columns, delimeter)
         all_blocks_list.append(curr_block)
     return all_blocks_list
 
 
 def get_chr_format(f, header, delimeter):
-    '''
+    """
     looking to see how the first column (chr) is formatted
 
     INPUTS
@@ -86,7 +87,7 @@ def get_chr_format(f, header, delimeter):
     0 if only the chromosome number/character is present
     None otherwise
 
-    '''
+    """
 
     chr_flag = None
     with open(f, 'r') as f_open:

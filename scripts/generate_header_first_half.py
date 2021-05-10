@@ -1,104 +1,108 @@
 import type_handling
-import serialize
-import compress
-import decompress
-import deserialize
 
-# DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3}
-# BYTE_SIZES = {1: 5, 2: 8, 3: 5}
-
-def get_header_data(in_file, data_type_code_book):
-    '''
+def get_header_first_half(in_file, data_type_code_book):
+    """
     retrieves some basic header information that should be stored in header up to this point.
         (delimiter, columns names, column types, and column number from the input file)
 
     INPUT
-    in_file = path to intput file (original gwas file)
+    in_file = path to input file (original gwas file)
 
     OUTPUT
-    header_start = list of information to be included in header (so far). still need to add info about block locations and size of blocks
+    header_first_half = list of information to be included in header.
+    << end of header will add information about block locations and size of blocks. >>
+    """
 
-    '''
-
-    header_start = []
+    # final header data
+    header_first_half = []
 
     # to be included in header
     magic_number = 1
     version_number = 1
-    delimeter = None
+    delimiter = None
     column_names_list = None
     column_types_list = None
     num_columns = None
+    gzip_header = None
+    zlib_header = None
+    bz2_header = None
 
-    # grab first two rows which will inform our data types, names, lengthts, etc.
-    with open(in_file, 'r') as f_open:
-        column_names_str = f_open.readline()
-        column_types_str = f_open.readline()
-    f_open.close()
+    # get first two rows which will inform our header data
+    row1_row2 = get_first_two_rows(in_file)
+    row1_string = row1_row2[0]
+    row2_string = row1_row2[1]
 
-    # assign
-    delimeter = get_delimeter(column_names_str)
-    column_names_list = get_column_names(column_names_str, delimeter)
-    column_types_list = type_handling.get_column_types(column_types_str.rstrip().split(delimeter), data_type_code_book)
+    # assign proper data to the pieces of the header
+    delimiter = get_delimiter(row1_string)
+    column_names_list = get_column_names(row1_string, delimiter)
+    column_types_list = type_handling.get_column_types(row2_string.rstrip().split(delimiter), data_type_code_book)
     num_columns = get_num_columns(column_names_list, column_types_list)
     gzip_header = get_compression_method_header('gzip')
     zlib_header = get_compression_method_header('zlib')
     bz2_header = get_compression_method_header('bz2')
 
-    header_start.append(magic_number)
-    header_start.append(version_number)
-    header_start.append(delimeter)
-    header_start.append(column_names_list)
-    header_start.append(column_types_list)
-    header_start.append(num_columns)
-    header_start.append(gzip_header)
-    header_start.append(zlib_header)
-    header_start.append(bz2_header)
+    header_first_half.append(magic_number)
+    header_first_half.append(version_number)
+    header_first_half.append(delimiter)
+    header_first_half.append(column_names_list)
+    header_first_half.append(column_types_list)
+    header_first_half.append(num_columns)
+    header_first_half.append(gzip_header)
+    header_first_half.append(zlib_header)
+    header_first_half.append(bz2_header)
 
-    return header_start
+    return header_first_half
+
+def get_first_two_rows(in_file):
+    """
+    returns strings of the first two rows in the file,
+    which contain the data that will help construct
+    the first half of the header
+    """
+    with open(in_file, 'r') as f_open:
+        row1_string = f_open.readline()
+        row2_string = f_open.readline()
+    f_open.close()
+
+    return [row1_string, row2_string]
 
 
-def get_delimeter(row):
-    '''
-    deterimine which delimeter is used in the file
+def get_delimiter(row):
+    """
+    determine which delimiter is used in the file
 
     INPUT
     f: path to input file
     OUTPUT
-    returns delimeter used in file
-    '''
+    returns delimiter used in file
+    """
 
-    if len(row.split('\t')) > 1:
-        delimeter = '\t'
-    elif len(row.split(' ')) > 1:
-        delimeter = ' '
-    elif len(row.split(',')) > 1:
-        delimeter = ','
+    if len(row.split('\t')) > 1: delimiter = '\t'
+    elif len(row.split(' ')) > 1: delimiter = ' '
+    elif len(row.split(',')) > 1: delimiter = ','
     else:
+        print('could not split on delimiter to return a list greater than length 1.')
         return -1
+    return delimiter
 
-    return delimeter
 
-
-def get_column_names(row, delimeter):
-    '''
+def get_column_names(row, delimiter):
+    """
     gets the header names of each column
 
     INPUT
     row = first line of the original gwas file, string
-    delimeter = file delimeter
+    delimiter = file delimiter
 
     OUTPUT
     column_names = list of all column header names (e.g. [chr, pos, ref, alt, ...])
-
-    '''
-
-    column_names = row.rstrip().split(delimeter)
+    """
+    column_names = row.rstrip().split(delimiter)
     return column_names
 
 
 def get_num_columns(column_names_list, column_types_list):
-    '''
+    """
     checks that names and types are same length to return number of columns in a file
 
     INPUT
@@ -107,29 +111,24 @@ def get_num_columns(column_names_list, column_types_list):
 
     OUTPUT
     num_columns = number of columns
-
-    '''
+    """
     if (len(column_names_list) == len(column_types_list)):
         num_columns = len(column_names_list)
     else:
+        print('row 1 and row 2 have different lengths, exiting.')
         return -1
 
     return num_columns
 
-def get_block_end_positions(block_lengths, block_header_lengths):
-    block_end_positions = []
-    start = 0
-    for bl in range(len(block_lengths)):
-        fulL_block = block_lengths[bl]+block_header_lengths[bl]
-        block_end_positions.append(start+fulL_block)
-        start += fulL_block
-
-    return block_end_positions
-
 def get_compression_method_header(compression_method):
+    """
+    returns header for different methods of existing compression
+
+    INPUT
+    string of compression method (e.g. 'gzip')
+    """
     compression_method_header = b''
 
-    # switch statement seems more appropriate here
     # GZIP
     if compression_method == 'gzip':
         compression_method_header = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff'
@@ -142,56 +141,3 @@ def get_compression_method_header(compression_method):
 
     return compression_method_header
 
-### FOR HEADER COMPRESSION AND DECOMPRESSION ###
-def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
-    header_types = []
-    for h in full_header:
-        h_type = type(h[0])
-        header_types.append(DATA_TYPE_CODE_BOOK[h_type])
-    return header_types
-
-def compress_header(data_type_byte_sizes, full_header, header_types):
-    '''
-    '''
-    num_columns = full_header[4][0]
-    # header_types = [1, 3, 3, 1, 1, 1, 1]
-    # header_sizes = [2, 1, num_columms, num_columns, 1, num_columns, 2]
-    len_compressed_headers = []
-    c_header = b''
-
-    for h in range(len(full_header)):
-        # serialize_data([1,1,1,1,1], type_to_bytes_code_book[1], 1)
-        s_header = serialize.serialize_data(full_header[h], data_type_byte_sizes[header_types[h]], header_types[h])
-        curr_c_header = compress.compress_data(s_header, 0)
-        c_header += curr_c_header
-        len_compressed_headers.append(len(curr_c_header))
-    return [c_header, len_compressed_headers, num_columns]
-
-
-def decompress_header(data_type_byte_sizes, c_header_info, header_types):
-    full_dc_header = []
-
-    c_header = c_header_info[0]
-    len_c_headers = c_header_info[1]
-    num_columns = c_header_info[2]
-    header_sizes = [2, 1, num_columns, num_columns, 1, num_columns, 2]
-    # header_types = [1, 3, 3, 1, 1, 1, 1]
-
-    start = 0
-    for l in range(len(len_c_headers)):
-        curr_len_c_header = len_c_headers[l]
-        curr_num_cols_c_header = header_sizes[l]
-        curr_data_type_c_header = header_types[l]
-        curr_num_bytes_c_header = data_type_byte_sizes[curr_data_type_c_header]
-        curr_num_bytes_c_header = data_type_byte_sizes[curr_data_type_c_header]
-        # decompress
-        ds_header = decompress.decompress_data(c_header[start:start + curr_len_c_header])
-        start += curr_len_c_header
-
-        # deserialize
-        # deserialize_data(dc_bitstring, block_size, data_type, num_bytes)
-        dc_header = deserialize.deserialize_data(ds_header, curr_num_cols_c_header, curr_data_type_c_header,
-                                                 curr_num_bytes_c_header)
-        full_dc_header.append(dc_header)
-
-    return full_dc_header

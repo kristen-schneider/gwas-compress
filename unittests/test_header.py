@@ -33,9 +33,9 @@ class TestFileHeader(unittest.TestCase):
     SPACE_HEADER = [[MAGIC_NUMBER, VERSION], [SPACE_DELIMETER], COL_NAMES, COL_TYPES, [len(COL_NAMES)]] 
    
     def test_get_delimeter(self):
-        self.assertEqual(header_compress.get_delimeter(self.TAB_ROW1), self.TAB_DELIMETER)
-        self.assertEqual(header_compress.get_delimeter(self.COMMA_ROW1), self.COMMA_DELIMETER)
-        self.assertEqual(header_compress.get_delimeter(self.SPACE_ROW1), self.SPACE_DELIMETER)
+        self.assertEqual(header_compress.get_delimiter(self.TAB_ROW1), self.TAB_DELIMETER)
+        self.assertEqual(header_compress.get_delimiter(self.COMMA_ROW1), self.COMMA_DELIMETER)
+        self.assertEqual(header_compress.get_delimiter(self.SPACE_ROW1), self.SPACE_DELIMETER)
 
     def test_get_column_names(self):
         self.assertEqual(header_compress.get_column_names(self.TAB_ROW1, self.TAB_DELIMETER), self.COL_NAMES)
