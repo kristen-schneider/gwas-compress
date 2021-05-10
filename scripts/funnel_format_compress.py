@@ -62,7 +62,7 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes,
         block_end += len_curr_block
         block_header_ends.append(block_header_end)
         block_ends.append(block_end)
-        compressed_content += compressed_block_bitstring
+        compressed_content += (compressed_block_header+compressed_block_bitstring)
 
         # # returns full_header_end and final compressed block
         # block_compression_info = old_compress_single_block(all_column_compression_times, data_type_code_book,

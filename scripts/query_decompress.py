@@ -52,7 +52,8 @@ def query_block(compression_method_code_book, query_block_i, full_header,
     query_block_header_end = block_header_ends[query_block_i]
     query_block_header = gzip_header + content_compressed_data[query_block_header_start:query_block_header_end]
     # get decompressed, deserialized block header (compressed with gzip for now)
-    dc_curr_block_header = decompress.decompress_data(compression_method_code_book[header_compression_type], query_block_header)
+    dc_curr_block_header = decompress.decompress_data(compression_method_code_book[header_compression_type],
+                                                      query_block_header)
     # print(dc_curr_block_header)
     ds_dc_curr_block_header = deserialize.deserialize_data(
         dc_curr_block_header, num_columns, 1, DATA_TYPE_BYTE_SIZES[1], None)
