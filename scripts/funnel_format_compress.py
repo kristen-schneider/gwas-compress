@@ -44,7 +44,7 @@ def compress_all_blocks(data_type_code_book, data_type_byte_sizes,
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):
         # start timer for block
-        print('block ' + str(block_i))
+        # print('block ' + str(block_i))
         block_i_START = datetime.now()
 
         # current block from funnel format

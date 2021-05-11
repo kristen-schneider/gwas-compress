@@ -32,7 +32,7 @@ def query_block(compression_method_code_book, query_block_i, full_header,
 
     with open(OUT_FILE, 'rb') as r_file:
         all_compressed_data = r_file.read()
-    print(all_compressed_data)
+    # print(all_compressed_data)
     r_file.close()
 
     header_data = all_compressed_data[0:full_header_bytes]

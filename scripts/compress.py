@@ -29,7 +29,7 @@ def compress_data(compression_method, s_bitstring, time):
         c_bitstring = bz2_compress(s_bitstring)
         header_size = 4
 
-    print(s_bitstring,c_bitstring)
+    # print(s_bitstring,c_bitstring)
 
     return c_bitstring, header_size
 

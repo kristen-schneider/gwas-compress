@@ -48,7 +48,7 @@ def main():
     full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, OUT_FILE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]
-    print(full_header)
+    # print(full_header)
 
     print('getting compressed block...')
     compressed_block_START = datetime.now()
@@ -56,7 +56,7 @@ def main():
     compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, BLOCK_TO_DECOMPRESS,
                                                          full_header, full_header_bytes,
                                                          DATA_TYPE_BYTE_SIZES, OUT_FILE)
-    print(compressed_block_info)
+    # print(compressed_block_info)
     ############
     compressed_block_END = datetime.now()
     compressed_block_TIME = compressed_block_END - compressed_block_START

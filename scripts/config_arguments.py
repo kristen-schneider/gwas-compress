@@ -10,7 +10,7 @@ def get_args_from_config(machine):
     args = dict()
     for arg in c[machine]:
         args[arg] = c[machine][arg]
-    print(args)
+    # print(args)
     return args
 
 def config_to_args():

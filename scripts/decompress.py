@@ -14,7 +14,7 @@ def decompress_data(compression_method, c_bitstring):
         dc_bitstring = compressed bitstring
     """
     # switch statement seems more appropriate here
-    print(c_bitstring)
+    # print(c_bitstring)
     # GZIP
     if compression_method == 1:
         c_bitstring = gzip_decompress(c_bitstring)
