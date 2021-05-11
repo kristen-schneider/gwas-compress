@@ -19,6 +19,7 @@ class TestCorrectHeader(unittest.TestCase):
     # 10 bytes
     gzip_header = b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff'
     zlib_header = b''
+    bz2_header = b'BZh9'
 
 
     def test_gzip_header(self):
@@ -30,12 +31,12 @@ class TestCorrectHeader(unittest.TestCase):
                 type_to_bytes_code_book[1]), 0)[0][0:len(self.gzip_header)],
                          self.gzip_header)
         self.assertEqual(compress.compress_data(
-                                1,
-                                serialize.serialize_list(
-                                    self.I,
-                                    1,
-                                    type_to_bytes_code_book[1]),0)[1],
-                         len(self.gzip_header))
+            1,
+            serialize.serialize_list(
+                self.I,
+                1,
+                type_to_bytes_code_book[1]),0)[1], len(self.gzip_header))
+
         self.assertEqual(compress.compress_data(
             1,
             serialize.serialize_list(
@@ -81,35 +82,35 @@ class TestCorrectHeader(unittest.TestCase):
                 type_to_bytes_code_book[1]), 0)[1],
                          len(self.zlib_header))
 
-    def test_zlib_header(self):
+    def test_bz2_header(self):
         self.assertEqual(compress.compress_data(
-            2,
+            3,
             serialize.serialize_list(
                 self.I,
                 1,
-                type_to_bytes_code_book[1]), 0)[0][0:len(self.zlib_header)],
-                         self.zlib_header)
+                type_to_bytes_code_book[1]), 0)[0][0:len(self.bz2_header)],
+                         self.bz2_header)
         self.assertEqual(compress.compress_data(
-            2,
+            3,
             serialize.serialize_list(
                 self.I,
                 1,
                 type_to_bytes_code_book[1]), 0)[1],
-                         len(self.zlib_header))
+                         len(self.bz2_header))
         self.assertEqual(compress.compress_data(
-            2,
+            3,
             serialize.serialize_list(
                 self.RI,
                 1,
-                type_to_bytes_code_book[1]), 0)[0][0:len(self.zlib_header)],
-                         self.zlib_header)
+                type_to_bytes_code_book[1]), 0)[0][0:len(self.bz2_header)],
+                         self.bz2_header)
         self.assertEqual(compress.compress_data(
-            2,
+            3,
             serialize.serialize_list(
                 self.RI,
                 1,
                 type_to_bytes_code_book[1]), 0)[1],
-                         len(self.zlib_header))
+                         len(self.bz2_header))
 
 
 if __name__ == '__main__':

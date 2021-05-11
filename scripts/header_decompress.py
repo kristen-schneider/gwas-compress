@@ -7,6 +7,14 @@ import deserialize
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
 
 def get_full_header(data_type_byte_sizes, OUT_FILE):
+    """
+    opens out file and returns full header
+
+    INPUT
+
+    OUTPUT
+
+    """
     compressed_file = open(OUT_FILE, 'rb')
     #content = compressed_file.read()
     STOP_HEADER = False
@@ -48,7 +56,10 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
             num_bytes_to_read = HEADER_TOOLS[0]
 
             header_types = compressed_file.read(num_bytes_to_read)
-            ds_header_types = deserialize.deserialize_int(header_types, 10, 5, 0)
+            ds_header_types = deserialize.deserialize_int(header_types,
+                                                          int(num_bytes_to_read/data_type_byte_sizes[1]),
+                                                          data_type_byte_sizes[1],
+                                                          0)
             HEADER_TYPES = ds_header_types
             total_bytes_read += num_bytes_to_read
 
@@ -56,7 +67,10 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
             num_bytes_to_read = HEADER_TOOLS[1]
 
             header_elements = compressed_file.read(num_bytes_to_read)
-            ds_header_elements = deserialize.deserialize_int(header_elements, 10, 5, 0)
+            ds_header_elements = deserialize.deserialize_int(header_elements,
+                                                             int(num_bytes_to_read/data_type_byte_sizes[1]),
+                                                             data_type_byte_sizes[1],
+                                                             0)
             HEADER_NUM_ELEMENTS = ds_header_elements
             total_bytes_read += num_bytes_to_read
 
@@ -64,7 +78,10 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
             num_bytes_to_read = HEADER_TOOLS[2]
 
             header_ends = compressed_file.read(num_bytes_to_read)
-            ds_header_ends = deserialize.deserialize_int(header_ends, 10, 5, 0)
+            ds_header_ends = deserialize.deserialize_int(header_ends,
+                                                          int(num_bytes_to_read/data_type_byte_sizes[1]),
+                                                          data_type_byte_sizes[1],
+                                                          0)
             HEADER_ENDS = ds_header_ends
             total_bytes_read += num_bytes_to_read
 
@@ -104,11 +121,3 @@ def decompress_header(data_type_byte_sizes, header_types, header_num_elements, h
 
 
     return full_ds_header
-
-
-# header = [1, 1, '\t', ['chr', 'position', 'other'], [1.00,12.12,3e+05], 3]
-# full_header_tools(header)
-# for h in c_full_header:
-#     print(h)
-# dc_full_header = decompress_header(c_full_header)
-# print(dc_full_header)

@@ -14,7 +14,7 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
 
 # USER-SPECIFIED PARAMETERS
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -25,10 +25,15 @@ DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
                         2:int(args['float_byte_size']),
                         3:int(args['string_byte_size']),
                         4:args['bytes_byte_size']}
+<<<<<<< HEAD
 print(COMPRESSION_METHOD[0])
+=======
+
+>>>>>>> 4e8cb01f4a5b5bf7ce97d976f823b96e807a4465
 # output file made from combining user specified params
-COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
-DATA_FILE = OUT_DIR + 'plot-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.csv'
+base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
+COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
+DATA_FILE = OUT_DIR + 'plot-' + str(BLOCK_SIZE) + '.csv'
 
 
 def main():
@@ -46,7 +51,7 @@ def main():
     print('generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
-    header_first_half = generate_header_first_half.get_header_data(IN_FILE, DATA_TYPE_CODE_BOOK, COMPRESSION_METHOD_CODE_BOOK[COMPRESSION_METHOD[0]])
+    header_first_half = generate_header_first_half.get_header_first_half(IN_FILE, DATA_TYPE_CODE_BOOK)
     ############
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
@@ -58,7 +63,7 @@ def main():
     column_labels = header_first_half[3]
     column_types = header_first_half[4]
     number_columns = header_first_half[5]
-    gzip_header = header_first_half[6]
+
 
     # 2. GET FUNNEL FORMAT
     ### list of blocks [[block1][block2]...[blockn]]
@@ -77,13 +82,12 @@ def main():
     print('compressing data...')
     compress_data_START = datetime.now()
     ### work ###
-    serialize_compress_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
+    serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
                                                                          COMPRESSION_METHOD, COMPRESSION_METHOD_CODE_BOOK, MTIME,
                                                                          header_first_half, funnel_format_data)
-    header_second_half = serialize_compress_data[0]
-    compressed_data = serialize_compress_data[1]
-    column_compression_times = serialize_compress_data[2]
-    print(compressed_data)
+    header_second_half = serialized_compressed_data[0]
+    compressed_data = serialized_compressed_data[1]
+    column_compression_times = serialized_compressed_data[2]
     df = open(DATA_FILE, 'w')
     for cctime in column_compression_times:
         df.write(cctime)
