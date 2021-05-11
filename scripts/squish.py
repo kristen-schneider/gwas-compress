@@ -14,7 +14,8 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip': 1, 'zlib': 2, 'bz2': 3, 'fastpfor128': 4, 'fastpfor256': 5}
 
 # USER-SPECIFIED PARAMETERS
-args = config_arguments.get_args_from_config('LOCAL')
+#args = config_arguments.get_args_from_config('LOCAL')
+args = config_arguments.get_args_from_config('MENDEL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -25,11 +26,6 @@ DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
                         2:int(args['float_byte_size']),
                         3:int(args['string_byte_size']),
                         4:args['bytes_byte_size']}
-<<<<<<< HEAD
-print(COMPRESSION_METHOD[0])
-=======
-
->>>>>>> 4e8cb01f4a5b5bf7ce97d976f823b96e807a4465
 # output file made from combining user specified params
 base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
 COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
