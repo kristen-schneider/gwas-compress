@@ -37,16 +37,23 @@ def full_header_tools(data_type_code_book, data_type_byte_sizes, full_header):
     return [serialized_header_types, serialized_header_num_elements, serialized_header_ends,
             serialized_header]
 
-def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
+def get_header_types(full_header, data_type_code_book):
     """
     returns the types of each element in the header
+
+    INPUT
+        full_header = full header (12 elements)
+        data_type_code_book = e.g. {int: 1, float: 2, str: 3, bytes:4}
+
+    OUTPUT
+        header_types = data types of each element in the header
     """
     header_types = []
     for h in full_header:
         if type(h) == list :h_type = type(h[0])
         else: h_type = type(h)
 
-        try: header_types.append(DATA_TYPE_CODE_BOOK[h_type])
+        try: header_types.append(data_type_code_book[h_type])
         except KeyError: print('no type for this data: ', h)
 
     return header_types
@@ -54,6 +61,12 @@ def get_header_types(full_header, DATA_TYPE_CODE_BOOK):
 def get_header_lengths(full_header):
     """
     returns the lengths of each element in the header
+
+    INPUT
+        full_header = full header (12 elements)
+
+    OUTPUT
+        header_lengths = lengths of each element in the header
     """
     header_lengths = []
     for h in full_header:
@@ -64,6 +77,14 @@ def get_header_lengths(full_header):
 def serialize_header(header_types, data_type_byte_sizes, full_header):
     """
     returns serialized header as a list
+
+    INPUT
+        header_types = data types of each element in the header
+        data_type_byte_sizes: from config file, assigns bytes to each data type, for compression
+        full_header = full header (12 elements)
+
+    OUTPUT
+        serialized_header_list = returns a list of serialized header elements
     """
     serialized_header_list = []
 
@@ -82,6 +103,12 @@ def serialize_header(header_types, data_type_byte_sizes, full_header):
 def join_serialized_list(serialized_header_list):
     """
     returns a full bitstring of a list of bitstrings
+
+    INPUT
+        serialized_header_list = returns a list of serialized header elements
+
+    OUTPUT
+       serialized_header = full bitstring of all serialized header data together
     """
     serialized_header = b''
     for sh in serialized_header_list:
@@ -91,6 +118,12 @@ def join_serialized_list(serialized_header_list):
 def get_header_ends(serialized_header_list):
     """
     return ends of each serialized element of the header
+
+    INPUT
+        serialized_header_list = returns a list of serialized header elements
+
+    OUTPUT
+        header_ends = end positions of each serialized element of header (for deserialization)
     """
     end = 0
     header_ends = []

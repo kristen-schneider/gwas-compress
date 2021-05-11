@@ -11,7 +11,7 @@ import header_compress
 # CONSTANTS
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
+COMPRESSION_METHOD_CODE_BOOK = {'gzip': 1, 'zlib': 2, 'bz2': 3, 'fastpfor128': 4, 'fastpfor256': 5}
 
 # USER-SPECIFIED PARAMETERS
 args = config_arguments.get_args_from_config('LOCAL')

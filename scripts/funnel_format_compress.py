@@ -1,4 +1,5 @@
 from datetime import datetime
+import compress_serialized_data
 import type_handling
 import serialize
 import compress
@@ -127,7 +128,7 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
         typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
 
         # compress column
-        compressed_column_info = compress_single_column(typed_column, column_compression_method, column_data_type,
+        compressed_column_info = compress_serialized_data.compress_single_column(typed_column, column_compression_method, column_data_type,
                                                    column_bytes, mtime)
 
         compressed_column_header_length = compressed_column_info[1] # length of header for compression type (e.g. 10 for gzip)
@@ -144,23 +145,23 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
 
     return compressed_block_header_bitstring, compressed_block_bitstring
 
-def compress_single_column(typed_column, column_compression_method, column_type, column_bytes, mtime):
-    """
-    compresses a single column of data
-
-    INPUT
-        typed_column = column as proper type (list of ints, rather than strings)
-        column_compression_method = method of compression for given column
-        column_type = data type for given column
-        column_bytes = number of bytes used for compression
-        mtime = for gzip.compress input
-
-    OUTPUT
-        compressed_column_info = compressed data and length of header which would help decompress data
-    """
-    serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes)
-    compressed_column_info = compress.compress_data(column_compression_method, serialized_column, mtime)
-    return compressed_column_info
+# def compress_single_column(typed_column, column_compression_method, column_type, column_bytes, mtime):
+#     """
+#     compresses a single column of data
+#
+#     INPUT
+#         typed_column = column as proper type (list of ints, rather than strings)
+#         column_compression_method = method of compression for given column
+#         column_type = data type for given column
+#         column_bytes = number of bytes used for compression
+#         mtime = for gzip.compress input
+#
+#     OUTPUT
+#         compressed_column_info = compressed data and length of header which would help decompress data
+#     """
+#     serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes)
+#     compressed_column_info = compress.compress_data(column_compression_method, serialized_column, mtime)
+#     return compressed_column_info
 
 # def old_compress_single_block(all_column_compression_times, data_type_code_book, data_type_byte_sizes,
 #                           compression_method, compression_method_code_book,
