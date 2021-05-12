@@ -46,7 +46,7 @@ def deserialize_data(dc_bitstring, block_size, data_type, num_bytes, chrm):
         num_bytes = number of bytes that is associated with this data type
 
     OUTPUT
-        ds_bitstring = derserialized data for one column (e.g. [1,1,1,1,1]
+        ds_bitstring = deserialized data for one column (e.g. [1,1,1,1,1]
     """
     ds_bitstring = []
     
