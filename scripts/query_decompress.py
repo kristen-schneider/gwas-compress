@@ -1,11 +1,28 @@
 import decompress
 import deserialize
+import decompress_serialized_data
+import decompress_array_data
+
 
 def query_block(compression_method_code_book, query_block_i, full_header,
-                full_header_bytes, DATA_TYPE_BYTE_SIZES, OUT_FILE):
-    '''
+                full_header_bytes, data_type_byte_sizes, compressed_file):
+    """
+    finds block to decompress and decompresses it's header, but keeps data in compressed form.
     returns decompressed block header, compressed block, and num rows in block
-    '''
+
+    INPUT
+        compression_method_code_book: e.g. {'gzip':1, 'zlib':2, 'bz2':3}
+        query_block_i: integer value which specifies which block we want to decompress
+        full_header: decompressed version of full header
+        full_header_bytes: number of bytes taken up by full header (to use as offset when reading compressed data)
+        data_type_byte_sizes: from config file, assigns bytes to each data type, for compression
+        compressed_file: file where compressed data has been written (read this to decompress)
+
+    OUTPUT
+        [ds_dc_curr_block_header: decompressed block header with end positions of columns
+        content_compressed_data[query_block_header_end:end_positions[query_block_i]]:compressed block
+        query_block_num_rows: number of rows that are in this block (different for last block sometimes)]
+    """
     # header info
     magic_number = full_header[0]
     version = full_header[1]
@@ -30,7 +47,7 @@ def query_block(compression_method_code_book, query_block_i, full_header,
     else:
         query_block_num_rows = block_sizes[1]
 
-    with open(OUT_FILE, 'rb') as r_file:
+    with open(compressed_file, 'rb') as r_file:
         all_compressed_data = r_file.read()
     # print(all_compressed_data)
     r_file.close()
@@ -56,7 +73,7 @@ def query_block(compression_method_code_book, query_block_i, full_header,
                                                       query_block_header)
     # print(dc_curr_block_header)
     ds_dc_curr_block_header = deserialize.deserialize_data(
-        dc_curr_block_header, num_columns, 1, DATA_TYPE_BYTE_SIZES[1], None)
+        dc_curr_block_header, num_columns, 1, data_type_byte_sizes[1], None)
     # print(ds_dc_curr_block_header)
 
     x = 'debug'
@@ -65,11 +82,26 @@ def query_block(compression_method_code_book, query_block_i, full_header,
             query_block_num_rows]
 
 
-def decompress_single_block(compression_method_code_book, compression_method, compressed_block, full_header, DATA_TYPE_BYTE_SIZES):
+def decompress_single_block(compression_method_code_book, compression_method_list, compressed_block,
+                            full_header, data_type_byte_sizes):
+    """
+    decompresses a single block of data from compressed file
+
+    INPUT
+        compression_method_code_book: e.g. {'gzip':1, 'zlib':2, 'bz2':3}
+        compression_method_list: list of compression methods for all columns
+        compressed_block: [decompressed block header, compressed data for a full block]
+        full_header: decompressed version of full header
+        data_type_byte_sizes: from config file, assigns bytes to each data type, for compression
+
+    OUTPUT
+        ds_dc_query_block: list of decompressed data (all of proper type)
+    """
+
     # header info
     magic_number = full_header[0]
     version = full_header[1]
-    delimeter = full_header[2]
+    delimiter = full_header[2]
     col_names = full_header[3]
     col_types = full_header[4]
     num_columns = full_header[5]
@@ -87,35 +119,35 @@ def decompress_single_block(compression_method_code_book, compression_method, co
 
     ds_dc_query_block = []
 
-    # getcurrent block data
-    # for each compressed column in this block we need to add the gzip header separately
-    column_start = 0
+    # iterate over each column and deserialize/decompress every column and append data to ds_dc_query_block
     for column_i in range(num_columns):
-        # get proper compression header for given column
-        compression_header = get_header_type(compression_method[column_i], full_header)
-        
-        if column_i == 0: chrm = True
-        else: chrm = False
-        
-        column_end = compressed_block_header[column_i]
-        column_data = compression_header + compressed_block_data[column_start:column_end]
-        
-        dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method[column_i]], column_data)
-        col_type = col_types[column_i]
-        ds_dc_column_data = deserialize.deserialize_data(
-            dc_column_data, num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type], chrm)
-        
+        col_compression_method = compression_method_list[column_i]
+        ds_dc_column_data = decompress_single_column(compression_method_code_book, col_compression_method,
+                                 compressed_block, column_i, full_header, data_type_byte_sizes)
         ds_dc_query_block.append(ds_dc_column_data)
-        column_start = column_end
-
     return ds_dc_query_block
 
-def decompress_single_column(compression_method_code_book, compression_method, compressed_block, query_column_i,
-                             full_header, DATA_TYPE_BYTE_SIZES):
+def decompress_single_column(compression_method_code_book, compression_method, compressed_block,
+                             query_column_i, full_header, data_type_byte_sizes):
+    """
+    decompresses a single column of data from compressed file
+
+    INPUT
+        compression_method_code_book: e.g. {'gzip':1, 'zlib':2, 'bz2':3}
+        compression_method: compression method used for given column
+        compressed_block: [decompressed block header, compressed data for a full block]
+        query_column_i: integer column number to decompress
+        full_header: decompressed version of full header
+        data_type_byte_sizes: from config file, assigns bytes to each data type, for compression
+
+    OUTPUT
+        ds_ds_column_data: decompressed column (as a list of values)
+    """
+
     # header info
     magic_number = full_header[0]
     version = full_header[1]
-    delimeter = full_header[2]
+    delimiter = full_header[2]
     col_names = full_header[3]
     col_types = full_header[4]
     num_columns = full_header[5]
@@ -127,9 +159,11 @@ def decompress_single_column(compression_method_code_book, compression_method, c
     dc_ds_block_header = compressed_block[0]
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]
+
     col_type = col_types[query_column_i]
+
     # get proper compression header for given column
-    compression_header = get_header_type(compression_method, full_header)
+    compression_header = get_compression_header(compression_method, full_header)
 
     # get correct block header
     ds_dc_column = []
@@ -144,14 +178,27 @@ def decompress_single_column(compression_method_code_book, compression_method, c
     compressed_column_end = dc_ds_block_header[query_column_i]
     compressed_column = compression_header + compressed_block_data[compressed_column_start:compressed_column_end]
     
-    # Switch decompression methods for differnt compression types (codecs vs. other)
-    print(compression_method)
-    dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method], compressed_column)
-    ds_ds_column_data = deserialize.deserialize_data(dc_column_data, num_rows, col_type,
-                                                     DATA_TYPE_BYTE_SIZES[col_type], query_column_i)
-    return ds_ds_column_data
+    # Switch decompression methods for different compression types (codecs vs. other)
+    if compression_method == 'gzip' or \
+        compression_method == 'zlib' or \
+        compression_method == 'bz2':
+        # dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method], compressed_column)
+        # ds_dc_column_data = deserialize.deserialize_data(dc_column_data, num_rows, col_type,
+        #                                              data_type_byte_sizes[col_type], query_column_i)
 
-def get_header_type(column_compression_method, full_header):
+        ds_dc_column_data = decompress_serialized_data.decompress_single_column(compression_method_code_book[compression_method],
+                                                                                compressed_column,
+                                                                                num_rows,
+                                                                                col_type,
+                                                                                data_type_byte_sizes[col_type],
+                                                                                query_column_i)
+    elif 'fastpfor' in compression_method:
+        ds_dc_column_data = decompress_array_data.decompress_single_column(compressed_column, len(compressed_column),
+                                                                           compression_method)
+
+    return ds_dc_column_data
+
+def get_compression_header(column_compression_method, full_header):
     """
     returns proper compression header for each compression type
     """
