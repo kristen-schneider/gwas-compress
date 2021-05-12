@@ -1,6 +1,6 @@
 from datetime import datetime
 import compress_serialized_data
-#import compress_array_data
+import compress_array_data
 import type_handling
 import serialize
 import compress
@@ -130,8 +130,7 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
 
         
         # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
-        print(column_compression_method)
-
+        #print(column_compression_method)
         # If we need serialized data to compress (gzip = 1, zlib = 2, bz2 = 3)
         if column_compression_method <= 3:
             # compress column using compress serialized data methods

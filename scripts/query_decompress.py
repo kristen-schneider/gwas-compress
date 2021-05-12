@@ -193,8 +193,16 @@ def decompress_single_column(compression_method_code_book, compression_method, c
                                                                                 data_type_byte_sizes[col_type],
                                                                                 query_column_i)
     elif 'fastpfor' in compression_method:
-        ds_dc_column_data = decompress_array_data.decompress_single_column(compressed_column, len(compressed_column),
-                                                                           compression_method)
+        # data input: serialized_data, block_size, data_type, num_bytes, chrm
+        ds_dc_column_data = decompress_array_data.decompress_single_column(compressed_column,
+                                                                            num_rows,
+                                                                            col_type,
+                                                                            data_type_byte_sizes[col_type],
+                                                                            query_column_i,
+                                                                            compression_method)
+    else:
+        print('cannot find proper compression method to decompress')
+        return -1    
 
     return ds_dc_column_data
 
