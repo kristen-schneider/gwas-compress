@@ -1,6 +1,8 @@
 import decompress
 import deserialize
 import decompress_serialized_data
+import decompress_array_data
+
 
 def query_block(compression_method_code_book, query_block_i, full_header,
                 full_header_bytes, data_type_byte_sizes, compressed_file):
@@ -190,6 +192,10 @@ def decompress_single_column(compression_method_code_book, compression_method, c
                                                                                 col_type,
                                                                                 data_type_byte_sizes[col_type],
                                                                                 query_column_i)
+    elif 'fastpfor' in compression_method:
+        compressed_arr = decompress_array_data.deserialize_array()
+        ds_dc_column_data = decompress_array_data.decompress_single_column(compressed_arr, arr_size, compression_method)
+
     return ds_dc_column_data
 
 def get_compression_header(column_compression_method, full_header):
