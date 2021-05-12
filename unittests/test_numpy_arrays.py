@@ -25,10 +25,9 @@ class TestNumpyArrays(unittest.TestCase):
         self.assertEqual(self.reg_arr, ds_np_arr)
 
     def test_to_numpy(self):
+        # convert a list to a numpy array of proper types
         new_np_arr = np.array(self.reg_arr, dtype=np.uint32, order='C')
-        print(type(new_np_arr))
-        print(type(self.np_arr))
-        self.assertEqual(self.np_arr, new_np_arr)
+        np.testing.assert_array_equal(self.np_arr, new_np_arr)
 
 
 if __name__ == '__main__':

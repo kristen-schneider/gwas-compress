@@ -193,8 +193,8 @@ def decompress_single_column(compression_method_code_book, compression_method, c
                                                                                 data_type_byte_sizes[col_type],
                                                                                 query_column_i)
     elif 'fastpfor' in compression_method:
-        compressed_arr = decompress_array_data.deserialize_array()
-        ds_dc_column_data = decompress_array_data.decompress_single_column(compressed_arr, arr_size, compression_method)
+        ds_dc_column_data = decompress_array_data.decompress_single_column(compressed_column, len(compressed_column),
+                                                                           compression_method)
 
     return ds_dc_column_data
 

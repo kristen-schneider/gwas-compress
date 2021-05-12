@@ -15,6 +15,8 @@ def deserialize_array(serialized_data, block_size, data_type, num_bytes, chrm):
     """
 
     ds_data = deserialize.deserialize_data(serialized_data, block_size, data_type, num_bytes, chrm)
+    np_arr = np.array(ds_data, dtype=np.uint32, order='C')
+    return np_arr
 
 
 
@@ -43,5 +45,4 @@ def deserialize_array(serialized_data, block_size, data_type, num_bytes, chrm):
 #     print('decomp after: ', decomp_arr)
 #     return decomp_arr[0:arr_size]
 
-a = np.ones()
 
