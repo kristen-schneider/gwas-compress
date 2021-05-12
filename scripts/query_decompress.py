@@ -93,15 +93,18 @@ def decompress_single_block(compression_method_code_book, compression_method, co
     for column_i in range(num_columns):
         # get proper compression header for given column
         compression_header = get_header_type(compression_method[column_i], full_header)
-
+        
         if column_i == 0: chrm = True
         else: chrm = False
+        
         column_end = compressed_block_header[column_i]
         column_data = compression_header + compressed_block_data[column_start:column_end]
+        
         dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method[column_i]], column_data)
         col_type = col_types[column_i]
         ds_dc_column_data = deserialize.deserialize_data(
             dc_column_data, num_rows, col_type, DATA_TYPE_BYTE_SIZES[col_type], chrm)
+        
         ds_dc_query_block.append(ds_dc_column_data)
         column_start = column_end
 
@@ -140,20 +143,29 @@ def decompress_single_column(compression_method_code_book, compression_method, c
 
     compressed_column_end = dc_ds_block_header[query_column_i]
     compressed_column = compression_header + compressed_block_data[compressed_column_start:compressed_column_end]
+    
+    # Switch decompression methods for differnt compression types (codecs vs. other)
+    print(compression_method)
     dc_column_data = decompress.decompress_data(compression_method_code_book[compression_method], compressed_column)
     ds_ds_column_data = deserialize.deserialize_data(dc_column_data, num_rows, col_type,
                                                      DATA_TYPE_BYTE_SIZES[col_type], query_column_i)
     return ds_ds_column_data
 
 def get_header_type(column_compression_method, full_header):
-    '''
-    returns proper compression header
-    '''
+    """
+    returns proper compression header for each compression type
+    """
+    codec_header = b''
     if column_compression_method == 'gzip':
         return full_header[6]
     elif column_compression_method == 'zlib':
         return full_header[7]
     elif column_compression_method == 'bz2':
         return full_header[8]
+    elif column_compression_method == 'fastpfor128':
+        return codec_header
+    elif column_compression_method == 'fastpfor256':
+        return codec_header
     else:
+        print('invalid compression type. cannot return a header.')
         return 0

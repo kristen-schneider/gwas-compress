@@ -152,9 +152,14 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
             elif column_compression_method == 5: codec == 'fastpfor256'
             numpy_compressed_column = compress_array_data.compress_single_column(typed_column, codec)     
             serialized_compressed_column = serialize.serialize_list(numpy_compressed_column, column_data_type, column_bytes)
-        
-            print(type(numpy_compressed_column), numpy_compressed_column)       
-            print(type(serialized_compressed_column), serialized_compressed_column)
+            
+            compressed_block_bitstring += serialized_compressed_column
+            
+            compressed_column_end_pos += len(serialized_compressed_column)
+            compressed_column_ends_list.append(compressed_column_end_pos)
+            #print(type(numpy_compressed_column), numpy_compressed_column)       
+            #print(type(serialized_compressed_column), serialized_compressed_column)
+            
         else:
             print('Unrecognized compression method. Value not found in compression method code book.')
             return -1
