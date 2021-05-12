@@ -71,8 +71,21 @@ def serialize_data(data, data_type, num_bytes):
         try:
             s_value = data.to_bytes(num_bytes, byteorder='big', signed=False)
         except AttributeError:
+            # data coming in from codec compression/numpy array
+            if type(data) != int:
+                data = int(data)
+                try: s_value = data.to_bytes(num_bytes, byteorder='big', signed=False)
+                except AttributeError:
+                    if 'X' in data or 'Y' in data:
+                        try:
+                            s_value = bytes(data, 'utf-8')
+                        except AttributeError:
+                            return -1
+                    else:
+                        print('cannot convert ' + str(data), ' to int')
+                        return -1
             # for chromosome X,Y values
-            if 'X' in data or 'Y' in data:
+            elif 'X' in data or 'Y' in data:
                 try:
                     s_value = bytes(data, 'utf-8')
                 except AttributeError:
