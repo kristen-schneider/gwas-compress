@@ -1,5 +1,6 @@
 from datetime import datetime
 import compress_serialized_data
+import compress_array_data
 import type_handling
 import serialize
 import compress
@@ -149,8 +150,11 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
             # match dictionary value to proper codec for pyfastpfor compression
             if column_compression_method == 4: codec = 'fastpfor128'
             elif column_compression_method == 5: codec == 'fastpfor256'
-            compressed_column_info = compress_array_data.compress_single_column(typed_column, codec)            
-    
+            numpy_compressed_column = compress_array_data.compress_single_column(typed_column, codec)     
+            serialized_compressed_column = serialize.serialize_list(numpy_compressed_column, column_data_type, column_bytes)
+        
+            print(type(numpy_compressed_column), numpy_compressed_column)       
+            print(type(serialized_compressed_column), serialized_compressed_column)
         else:
             print('Unrecognized compression method. Value not found in compression method code book.')
             return -1

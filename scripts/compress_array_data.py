@@ -2,7 +2,7 @@ from pyfastpfor import *
 import numpy as np
 
 def compress_single_column(typed_column, codec):
-    print('compressing with pyfastpfor codec')
+    #print('compressing with pyfastpfor codec')
     """
     compresses a single column of data using pyfastpfor codecs
     INPUT
