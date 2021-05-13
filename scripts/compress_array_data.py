@@ -1,4 +1,4 @@
-#from pyfastpfor import *
+from pyfastpfor import *
 import numpy as np
 
 def compress_single_column(typed_column, codec):

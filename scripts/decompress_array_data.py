@@ -1,4 +1,4 @@
-#from pyfastpfor import *
+from pyfastpfor import *
 import deserialize
 import numpy as np
 

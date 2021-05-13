@@ -121,7 +121,6 @@ def decompress_single_block(compression_method_code_book, compression_method_lis
     # iterate over each column and deserialize/decompress every column and append data to ds_dc_query_block
     for column_i in range(num_columns):
         col_compression_method = compression_method_list[column_i]
-        print(col_compression_method)
         ds_dc_column_data = decompress_single_column(compression_method_code_book, col_compression_method,
                                  compressed_block, column_i, full_header, data_type_byte_sizes)
         
@@ -158,6 +157,9 @@ def decompress_single_column(compression_method_code_book, compression_method, c
     end_positions = full_header[8]
     block_sizes = full_header[9]
 
+    if query_column_i == 0: chrm = 1
+    else: chrm = 0
+
     dc_ds_block_header = compressed_block[0]
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]
@@ -193,14 +195,14 @@ def decompress_single_column(compression_method_code_book, compression_method, c
                                                                                 num_rows,
                                                                                 col_type,
                                                                                 data_type_byte_sizes[col_type],
-                                                                                query_column_i)
+                                                                                chrm)
     elif 'fastpfor' in compression_method:
         # data input: serialized_data, block_size, data_type, num_bytes, chrm
         ds_dc_column_data = decompress_array_data.decompress_single_column(compressed_column,
                                                                             num_rows,
                                                                             col_type,
                                                                             data_type_byte_sizes[col_type],
-                                                                            query_column_i,
+                                                                            chrm,
                                                                             compression_method)
     
     else:
