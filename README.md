@@ -1,15 +1,16 @@
 # 1. To run compression (gzip, zlib, bz2, pyfastpfor128, pyfastpfor256...for now)
-*if fastpfor128 or fastpfor256 codecs are passed in compression, need to install pyfastpfor first (see below)*
-</p>Open config.ini file and fill out appropriate parameters under one of the options (local, fiji, mendel).
-</p>In squish.py: <br>
---pass correct CONSTANTS (_the correct constants might be a tunable parameter, or i might fix values._)
+*if fastpfor128 or fastpfor256 codecs are passed in compression, need to install pyfastpfor first (see below)*<br>
+</p>1. Open config.ini file and fill out appropriate parameters under one of the options (local, fiji, mendel).<br>
+</p>2. In squish.py: <br>
+--pass correct CONSTANTS (_the correct constants might be a tunable parameter, or i might fix values._)<br>
 --pass the correct option for aruguments.<br>
-*both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.*
+*both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.*<br>
+
 # 2. To run decompression (query) 
 </p>In query.py: <br>
---pass correct CONSTANTS (_the correct constants might be a tunable parameter, or i might fix values._)
+--pass correct CONSTANTS (_the correct constants might be a tunable parameter, or i might fix values._)<br>
 --pass the correct option for aruguments.<br>
-*both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.*
+*both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.*<br>
 
 ### CONFIG.INI (example)
 
