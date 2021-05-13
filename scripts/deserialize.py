@@ -17,6 +17,7 @@ def deserialize_block(dc_bitstring, block_size, column_data_types, type_to_bytes
     ds_bitstring_final = []
     num_columns = len(column_data_types)
 
+    
     start = 0    
     for c in range(num_columns):
         column_data_type = column_data_types[c]
