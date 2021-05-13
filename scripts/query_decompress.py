@@ -121,9 +121,11 @@ def decompress_single_block(compression_method_code_book, compression_method_lis
     # iterate over each column and deserialize/decompress every column and append data to ds_dc_query_block
     for column_i in range(num_columns):
         col_compression_method = compression_method_list[column_i]
+        print(col_compression_method)
         ds_dc_column_data = decompress_single_column(compression_method_code_book, col_compression_method,
                                  compressed_block, column_i, full_header, data_type_byte_sizes)
         
+        print(ds_dc_column_data.size)
         ds_dc_query_block.append(ds_dc_column_data)
     
     return ds_dc_query_block
