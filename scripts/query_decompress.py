@@ -76,7 +76,6 @@ def query_block(compression_method_code_book, query_block_i, full_header,
         dc_curr_block_header, num_columns, 1, data_type_byte_sizes[1], None)
     # print(ds_dc_curr_block_header)
 
-    x = 'debug'
     return [ds_dc_curr_block_header,
             content_compressed_data[query_block_header_end:end_positions[query_block_i]],
             query_block_num_rows]
@@ -124,7 +123,9 @@ def decompress_single_block(compression_method_code_book, compression_method_lis
         col_compression_method = compression_method_list[column_i]
         ds_dc_column_data = decompress_single_column(compression_method_code_book, col_compression_method,
                                  compressed_block, column_i, full_header, data_type_byte_sizes)
+        
         ds_dc_query_block.append(ds_dc_column_data)
+    
     return ds_dc_query_block
 
 def decompress_single_column(compression_method_code_book, compression_method, compressed_block,
@@ -200,10 +201,11 @@ def decompress_single_column(compression_method_code_book, compression_method, c
                                                                             data_type_byte_sizes[col_type],
                                                                             query_column_i,
                                                                             compression_method)
+    
     else:
         print('cannot find proper compression method to decompress')
         return -1    
-
+     
     return ds_dc_column_data
 
 def get_compression_header(column_compression_method, full_header):

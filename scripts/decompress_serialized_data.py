@@ -2,7 +2,6 @@ import deserialize
 import decompress
 
 def decompress_single_column(compression_method, c_bitstring, block_size, data_type, num_bytes, chrm):
-    print('decompressing with regular serialization')
     """
     decompresses a single column of data using gzip/zlib/bz2
     

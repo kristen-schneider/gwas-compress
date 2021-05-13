@@ -19,7 +19,7 @@ def decompress_single_column(serialized_data, block_size, data_type, num_bytes, 
     comp_np_arr = np.array(ds_data, dtype=np.uint32, order='C')
 
     decomp_np_arr = decompress_np_arr(comp_np_arr, decomp_arr_size, codec)
-    return decomp_np_arr
+    return decomp_np_arr[0:block_size]
 
 def decompress_np_arr(comp_np_arr, np_arr_size, codec):
     """
