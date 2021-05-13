@@ -45,7 +45,7 @@ python query.py
 in_file=/path/to/gwas.tsv
 out_dir=/path/to/out_dir
 block_size=3
-compression_method=gzip,gzip,gzip,gzip,gzip,gzip,gzip,gzip,gzip,gzip
+compression_method=gzip,fastpfor128,fastpfor256,gzip,gzip,gzip,gzip,gzip,gzip,gzip
 time=0
 int_byte_size=5
 float_byte_size=8
