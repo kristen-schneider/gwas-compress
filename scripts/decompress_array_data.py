@@ -1,4 +1,4 @@
-from pyfastpfor import *
+#from pyfastpfor import *
 import deserialize
 import numpy as np
 
@@ -15,7 +15,7 @@ def decompress_single_column(serialized_data, block_size, data_type, num_bytes, 
     """
     decomp_arr_size = 2*block_size
     
-    ds_data = deserialize.deserialize_data(serialized_data, block_size, data_type, num_bytes, chrm)
+    ds_data = deserialize.deserialize_list(serialized_data, block_size, data_type, num_bytes, chrm)
     comp_np_arr = np.array(ds_data, dtype=np.uint32, order='C')
 
     decomp_np_arr = decompress_np_arr(comp_np_arr, decomp_arr_size, codec)

@@ -21,7 +21,7 @@ class TestNumpyArrays(unittest.TestCase):
 
     def test_numpy_deserialize(self):
         # deserialize_data(bitstring, block_size, data_type, num_bytes, chrm)
-        ds_np_arr = deserialize.deserialize_data(self.s_arr, 5, 1, 5, 1)
+        ds_np_arr = deserialize.deserialize_list(self.s_arr, 5, 1, 5, 1)
         self.assertEqual(self.reg_arr, ds_np_arr)
 
     def test_to_numpy(self):

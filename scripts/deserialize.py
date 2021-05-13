@@ -1,42 +1,8 @@
 import type_handling
 import struct
 
-def deserialize_block(dc_bitstring, block_size, column_data_types, type_to_bytes_code_book, column_lengths):
-    """
-    take decompressed bitstring for a full block and break it into columns of decompressed bitstrings. call deserialize_data on each individual decompressed bitstring.
 
-    INPUT
-        dc_bitstring = decompressed bitstring for one block
-        block_size = number of rows in a block
-        column_data_types = list of data types in block (e.g. [1, 3]
-        type_to_bytes_code_book = dictionary of data types and their byte sizes (e.g. {1: 5, 2: 8, 3: 5})
-
-    OUTPUT
-        list_of_ds_bitstrings: list of deserialized bitstrings
-    """
-    ds_bitstring_final = []
-    num_columns = len(column_data_types)
-
-    
-    start = 0    
-    for c in range(num_columns):
-        column_data_type = column_data_types[c]
-        column_bytes = type_to_bytes_code_book[column_data_type] 
-
-        #column_length = type_handling.get_bitstring_length_by_data_type(block_size, column_data_type, column_bytes)
-        column_length = column_lengths[c]
-        column_dc_bitstring = dc_bitstring[start:start+column_length]
-        
-        start += column_length
-        
-        # deserialize a single bitstring at a time
-        column_ds_bitstring = deserialize_data(column_dc_bitstring, block_size, column_data_type, column_bytes)
-        ds_bitstring_final.append(column_ds_bitstring)
-
-    return ds_bitstring_final
-        
-
-def deserialize_data(dc_bitstring, block_size, data_type, num_bytes, chrm):
+def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
     """
     deserializes data for one column
 

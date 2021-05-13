@@ -72,7 +72,7 @@ def query_block(compression_method_code_book, query_block_i, full_header,
     dc_curr_block_header = decompress.decompress_data(compression_method_code_book[header_compression_type],
                                                       query_block_header)
     # print(dc_curr_block_header)
-    ds_dc_curr_block_header = deserialize.deserialize_data(
+    ds_dc_curr_block_header = deserialize.deserialize_list(
         dc_curr_block_header, num_columns, 1, data_type_byte_sizes[1], None)
     # print(ds_dc_curr_block_header)
 
@@ -125,7 +125,6 @@ def decompress_single_block(compression_method_code_book, compression_method_lis
         ds_dc_column_data = decompress_single_column(compression_method_code_book, col_compression_method,
                                  compressed_block, column_i, full_header, data_type_byte_sizes)
         
-        print(ds_dc_column_data.size)
         ds_dc_query_block.append(ds_dc_column_data)
     
     return ds_dc_query_block

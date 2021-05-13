@@ -86,13 +86,6 @@ class TestSerializationToDeserialization(unittest.TestCase):
             serialize.serialize_list([1.2, 3.45, np.nan, np.nan, 0.1234e+05], 2, type_to_bytes_code_book[2]), self.NA_s)
         self.assertEqual(serialize.serialize_list(['A', 'C', 'T', 'G', 'A'], 3, type_to_bytes_code_book[3]), self.S_s)
 
-        # serialize_list_columns(block_list, column_data_types, type_to_bytes_code_book)
-        self.assertEqual(serialize.serialize_block(self.I, [1], type_to_bytes_code_book), self.I_s)
-        self.assertEqual(serialize.serialize_block(self.F, [2], type_to_bytes_code_book), self.F_s)
-        self.assertEqual(serialize.serialize_block(self.NA, [2], type_to_bytes_code_book), self.NA_s)
-        self.assertEqual(serialize.serialize_block(self.S, [3], type_to_bytes_code_book), self.S_s)
-        self.assertEqual(serialize.serialize_block(self.IS, [1, 3], type_to_bytes_code_book), self.IS_s)
-        # self.assertEqual(serialize.serialize_list_columns(self.HEADER, [1,3], type_to_bytes_code_book), self.HEADER_s)
 
     def test_compress(self):
         # compress_data(s_bitstring, time)
@@ -112,15 +105,9 @@ class TestSerializationToDeserialization(unittest.TestCase):
 
     def test_deserialize(self):
         # deserialize_data(dc_bitstring, block_size, data_type, num_bytes)
-        self.assertEqual(deserialize.deserialize_data(self.I_dc, self.block_size, 1, type_to_bytes_code_book[1]), self.I_ds[0])
-        self.assertEqual(deserialize.deserialize_data(self.F_dc, self.block_size, 2, type_to_bytes_code_book[2]), self.F_ds[0])
-        self.assertEqual(deserialize.deserialize_data(self.S_dc, self.block_size, 3, type_to_bytes_code_book[3]), self.S_ds[0])
-
-        # deserialize_block_bitstring(dc_bitstring, block_size, column_data_types, type_to_bytes_code_book)
-        self.assertEqual(deserialize.deserialize_block(self.I_dc, self.block_size, [1], type_to_bytes_code_book, ), self.I_ds)
-        self.assertEqual(deserialize.deserialize_block(self.F_dc, self.block_size, [2], type_to_bytes_code_book, ), self.F_ds)
-        self.assertEqual(deserialize.deserialize_block(self.S_dc, self.block_size, [3], type_to_bytes_code_book, ), self.S_ds)
-        self.assertEqual(deserialize.deserialize_block(self.IS_dc, self.block_size, [1, 3], type_to_bytes_code_book ), self.IS_ds)
+        self.assertEqual(deserialize.deserialize_list(self.I_dc, self.block_size, 1, type_to_bytes_code_book[1]), self.I_ds[0])
+        self.assertEqual(deserialize.deserialize_list(self.F_dc, self.block_size, 2, type_to_bytes_code_book[2]), self.F_ds[0])
+        self.assertEqual(deserialize.deserialize_list(self.S_dc, self.block_size, 3, type_to_bytes_code_book[3]), self.S_ds[0])
 
 
 if __name__ == '__main__':

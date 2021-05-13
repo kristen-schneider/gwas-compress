@@ -14,5 +14,5 @@ def decompress_single_column(compression_method, c_bitstring, block_size, data_t
         decompressed_column = decompressed data (np array)
     """
     dc_column = decompress.decompress_data(compression_method, c_bitstring)
-    ds_column = deserialize.deserialize_data(dc_column, block_size, data_type, num_bytes, chrm)
+    ds_column = deserialize.deserialize_list(dc_column, block_size, data_type, num_bytes, chrm)
     return ds_column

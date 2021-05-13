@@ -1,39 +1,6 @@
 import type_handling
 import struct
 
-
-def serialize_block(block, column_data_types, type_to_bytes_code_book):
-    """
-    takes input block (list of columns) and serializes each column. returns one long bitstring.
-
-    INPUTS
-        block_list = one block in list of lists data structure (e.g. [[1,1,1...]['A', 'G', 'C', ...]...[...]])
-        column_data_types = list of types (1,2,3) for each column
-        type_to_bytes_code_book = code book which looks up the number of bytes used for each type
-
-    OUTPUTS
-     serialized_block_bitstring = one bitstring with all column serialization concatenated together
-    """
-
-    serialized_block_bitstring = b''
-    num_columns = len(column_data_types)
-
-    for column in range(num_columns):
-
-        curr_column = block[column]
-        data_type = column_data_types[column]
-        num_bytes = type_to_bytes_code_book[data_type]
-        
-        # convert column to proper type
-        correct_type_column = type_handling.convert_to_type(curr_column, data_type)
-
-        s_column = serialize_list(correct_type_column, data_type, num_bytes)
-
-        serialized_block_bitstring += s_column
-        print(len(serialized_block_bitstring))
-
-    return serialized_block_bitstring
-
 def serialize_list(in_list, data_type, num_bytes):
     """
     INPUT

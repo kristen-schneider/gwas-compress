@@ -25,7 +25,7 @@ def deserialize_one_column(s_block, block_header, column_i, block_size, data_typ
     end = block_header[column_i]
 
     s_column = s_block[start:end]
-    ds_column = deserialize.deserialize_data(s_column, block_size, data_type, num_bytes)
+    ds_column = deserialize.deserialize_list(s_column, block_size, data_type, num_bytes)
     return ds_column
 
 

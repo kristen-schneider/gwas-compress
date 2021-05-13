@@ -14,8 +14,7 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 COMPRESSION_METHOD_CODE_BOOK = {'gzip': 1, 'zlib': 2, 'bz2': 3, 'fastpfor128': 4, 'fastpfor256': 5}
 
 # USER-SPECIFIED PARAMETERS
-#args = config_arguments.get_args_from_config('LOCAL')
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
