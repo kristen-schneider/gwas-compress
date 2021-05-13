@@ -23,7 +23,7 @@ python
 **both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.**<br>
 
 ```
-python query.py
+python squish.py
 ```
 
 # 2. To run decompression (query) 
