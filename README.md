@@ -21,6 +21,7 @@ python
 - pass correct CONSTANTS (_the correct constants might be a tunable parameter, or i might fix values._)<br>
 - pass the correct option for aruguments.<br>
 **both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.**<br>
+
 ```
 python query.py
 ```
@@ -30,6 +31,7 @@ python query.py
 - pass correct CONSTANTS (_the correct constants might be a tunable parameter, or i might fix values._)<br>
 - pass the correct option for aruguments.<br>
 **both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.**<br>
+
 ```
 python query.py
 ```
