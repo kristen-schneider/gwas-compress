@@ -18,7 +18,7 @@ python
 # 1. To run compression (gzip, zlib, bz2, pyfastpfor128, pyfastpfor256...for now)
 </p>1. Open config.ini file and fill out appropriate parameters under one of the options (local, fiji, mendel).<br>
 </p>2. In squish.py: <br>
-- pass correct CONSTANTS (_the correct constants might be a tunable parameter, or i might fix values._)<br>
+- pass correct CONSTANTS (the correct constants might eventually be a tunable parameter, or i might fix values.)<br>
 - pass the correct option for aruguments.<br>
 **both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.**<br>
 
@@ -28,7 +28,7 @@ python squish.py
 
 # 2. To run decompression (query) 
 </p>In query.py: <br>
-- pass correct CONSTANTS (_the correct constants might be a tunable parameter, or i might fix values._)<br>
+- pass correct CONSTANTS (the correct constants might eventually be a tunable parameter, or i might fix values.)<br>
 - pass the correct option for aruguments.<br>
 **both of these should be commandline arguments or part of config eventually. user should not have to enter squish script.**<br>
 
