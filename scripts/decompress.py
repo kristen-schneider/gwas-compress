@@ -13,16 +13,14 @@ def decompress_data(compression_method, c_bitstring):
     OUTPUT
         dc_bitstring = compressed bitstring
     """
-    # switch statement seems more appropriate here
-    # print(c_bitstring)
     # GZIP
-    if compression_method == 1:
+    if compression_method == 'gzip':
         c_bitstring = gzip_decompress(c_bitstring)
     # ZLIB
-    elif compression_method == 2:
+    elif compression_method == 'zlib':
         c_bitstring = zlib_decompress(c_bitstring)
     # BZ2
-    elif compression_method == 3:
+    elif compression_method == 'bz2':
         c_bitstring = bz2_decompress(c_bitstring)
 
     return c_bitstring

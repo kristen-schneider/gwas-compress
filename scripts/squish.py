@@ -11,10 +11,10 @@ import header_compress
 # CONSTANTS
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-COMPRESSION_METHOD_CODE_BOOK = {'gzip': 1, 'zlib': 2, 'bz2': 3, 'fastpfor128': 4, 'fastpfor256': 5}
+# COMPRESSION_METHOD_CODE_BOOK = {'gzip': 1, 'zlib': 2, 'bz2': 3, 'fastpfor128': 4, 'fastpfor256': 5}
 
 # USER-SPECIFIED PARAMETERS
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -78,8 +78,7 @@ def main():
     compress_data_START = datetime.now()
     ### work ###
     serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
-                                                                         COMPRESSION_METHOD, COMPRESSION_METHOD_CODE_BOOK, MTIME,
-                                                                         header_first_half, funnel_format_data)
+                                                                         COMPRESSION_METHOD, header_first_half, funnel_format_data)
     header_second_half = serialized_compressed_data[0]
     compressed_data = serialized_compressed_data[1]
     column_compression_times = serialized_compressed_data[2]

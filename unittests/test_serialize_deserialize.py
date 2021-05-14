@@ -89,11 +89,11 @@ class TestSerializationToDeserialization(unittest.TestCase):
 
     def test_compress(self):
         # compress_data(s_bitstring, time)
-        self.assertEqual(compress.compress_data(self.I_s, self.mtime), self.I_c)
-        self.assertEqual(compress.compress_data(self.F_s, self.mtime), self.F_c)
-        self.assertEqual(compress.compress_data(self.NA_s, self.mtime), self.NA_c)
-        self.assertEqual(compress.compress_data(self.S_s, self.mtime), self.S_c)
-        self.assertEqual(compress.compress_data(self.IS_s, self.mtime), self.IS_c)
+        self.assertEqual(compress.compress_bitstring(self.I_s, self.mtime), self.I_c)
+        self.assertEqual(compress.compress_bitstring(self.F_s, self.mtime), self.F_c)
+        self.assertEqual(compress.compress_bitstring(self.NA_s, self.mtime), self.NA_c)
+        self.assertEqual(compress.compress_bitstring(self.S_s, self.mtime), self.S_c)
+        self.assertEqual(compress.compress_bitstring(self.IS_s, self.mtime), self.IS_c)
 
     def test_decompress(self):
         # decompress_data(c_bitstring)

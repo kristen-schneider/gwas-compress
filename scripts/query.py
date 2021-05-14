@@ -7,10 +7,10 @@ import query_decompress
 # CONSTANTS
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 # DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
+# COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
 
 # USER-SPECIFIED PARAMETERS
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -41,7 +41,7 @@ def main():
     print('getting compressed block...')
     compressed_block_START = datetime.now()
     ### work ###
-    compressed_block_info = query_decompress.query_block(COMPRESSION_METHOD_CODE_BOOK, BLOCK_TO_DECOMPRESS,
+    compressed_block_info = query_decompress.query_block(BLOCK_TO_DECOMPRESS,
                                                          full_header, full_header_bytes,
                                                          DATA_TYPE_BYTE_SIZES, OUT_FILE)
     #print(compressed_block_info[0])
@@ -53,9 +53,8 @@ def main():
     print('decompressing single block...')
     single_block_START = datetime.now()
     ### work ###
-    dc_single_block = query_decompress.decompress_single_block(
-        COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD,
-        compressed_block_info, full_header, DATA_TYPE_BYTE_SIZES)
+    dc_single_block = query_decompress.decompress_single_block(COMPRESSION_METHOD, compressed_block_info,
+                                                               full_header, DATA_TYPE_BYTE_SIZES)
     ############
     for dc in dc_single_block: print(dc)
     single_block_END = datetime.now()
@@ -65,9 +64,9 @@ def main():
     print('decompressing single column...')
     single_column_START = datetime.now()
     ### work ###
-    dc_single_column = query_decompress.decompress_single_column(
-        COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD[COLUMN_TO_DECOMPRESS],
-        compressed_block_info, COLUMN_TO_DECOMPRESS, full_header, DATA_TYPE_BYTE_SIZES)
+    dc_single_column = query_decompress.decompress_single_column(COMPRESSION_METHOD[COLUMN_TO_DECOMPRESS],
+                                                                 compressed_block_info, COLUMN_TO_DECOMPRESS,
+                                                                 full_header, DATA_TYPE_BYTE_SIZES)
     ############
     print(dc_single_column)
     single_column_END = datetime.now()

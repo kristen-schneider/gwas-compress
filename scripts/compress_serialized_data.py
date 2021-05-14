@@ -1,7 +1,7 @@
 import serialize
 import compress
 
-def compress_single_column(typed_column, column_compression_method, column_type, column_bytes, mtime):
+def compress_single_column(typed_column, column_compression_method, column_type, column_bytes):
     """
     compresses a single column of data using methods that take in serialized data (e.g. gzip, zlib, bz2)
 
@@ -16,5 +16,5 @@ def compress_single_column(typed_column, column_compression_method, column_type,
         compressed_column_info = compressed data and length of header which would help decompress data
     """
     serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes)
-    compressed_column_info = compress.compress_data(column_compression_method, serialized_column, mtime)
+    compressed_column_info = compress.compress_bitstring(column_compression_method, serialized_column)
     return compressed_column_info

@@ -23,28 +23,28 @@ class TestCorrectHeader(unittest.TestCase):
 
 
     def test_gzip_header(self):
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             1,
             serialize.serialize_list(
                 self.I,
                 1,
                 type_to_bytes_code_book[1]), 0)[0][0:len(self.gzip_header)],
                          self.gzip_header)
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             1,
             serialize.serialize_list(
                 self.I,
                 1,
                 type_to_bytes_code_book[1]),0)[1], len(self.gzip_header))
 
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             1,
             serialize.serialize_list(
                 self.RI,
                 1,
                 type_to_bytes_code_book[1]), 0)[0][0:len(self.gzip_header)],
                          self.gzip_header)
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             1,
             serialize.serialize_list(
                 self.RI,
@@ -53,28 +53,28 @@ class TestCorrectHeader(unittest.TestCase):
                          len(self.gzip_header))
 
     def test_zlib_header(self):
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             2,
             serialize.serialize_list(
                 self.I,
                 1,
                 type_to_bytes_code_book[1]), 0)[0][0:len(self.zlib_header)],
                          self.zlib_header)
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             2,
             serialize.serialize_list(
                 self.I,
                 1,
                 type_to_bytes_code_book[1]), 0)[1],
                          len(self.zlib_header))
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             2,
             serialize.serialize_list(
                 self.RI,
                 1,
                 type_to_bytes_code_book[1]), 0)[0][0:len(self.zlib_header)],
                          self.zlib_header)
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             2,
             serialize.serialize_list(
                 self.RI,
@@ -83,28 +83,28 @@ class TestCorrectHeader(unittest.TestCase):
                          len(self.zlib_header))
 
     def test_bz2_header(self):
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             3,
             serialize.serialize_list(
                 self.I,
                 1,
                 type_to_bytes_code_book[1]), 0)[0][0:len(self.bz2_header)],
                          self.bz2_header)
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             3,
             serialize.serialize_list(
                 self.I,
                 1,
                 type_to_bytes_code_book[1]), 0)[1],
                          len(self.bz2_header))
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             3,
             serialize.serialize_list(
                 self.RI,
                 1,
                 type_to_bytes_code_book[1]), 0)[0][0:len(self.bz2_header)],
                          self.bz2_header)
-        self.assertEqual(compress.compress_data(
+        self.assertEqual(compress.compress_bitstring(
             3,
             serialize.serialize_list(
                 self.RI,
