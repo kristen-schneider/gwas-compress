@@ -159,7 +159,7 @@ def decompress_single_column(compression_method_code_book, compression_method, c
 
     if query_column_i == 0: chrm = 1
     else: chrm = 0
-
+    
     dc_ds_block_header = compressed_block[0]
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]

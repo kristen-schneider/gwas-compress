@@ -16,7 +16,7 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
         ds_bitstring = deserialized data for one column (e.g. [1,1,1,1,1]
     """
     ds_bitstring = []
-    
+   
     if data_type == 1:
         ds_bitstring = deserialize_int(dc_bitstring, block_size, num_bytes, chrm)
         # for chromosome X,Y values
@@ -39,9 +39,10 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
 
 def deserialize_int(dc_bitstring, block_size, num_bytes, chrm):
     ds_bitstring = []
+     
     for i in range(block_size):
         curr_bytes = dc_bitstring[i*num_bytes:i*num_bytes+num_bytes]
-        if chrm and (b'X' in curr_bytes or b'Y' in curr_bytes):
+        if (chrm == 1) and (b'X' in curr_bytes or b'Y' in curr_bytes):
             return ['XY', ds_bitstring, i]
         curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
         ds_bitstring.append(curr_ds_value)
