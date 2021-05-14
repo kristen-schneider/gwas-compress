@@ -57,7 +57,7 @@ def main():
         COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD,
         compressed_block_info, full_header, DATA_TYPE_BYTE_SIZES)
     ############
-    #for dc in dc_single_block: print(dc)
+    for dc in dc_single_block: print(dc)
     single_block_END = datetime.now()
     single_block_TIME = single_block_END - single_block_START
     print(str(single_block_TIME) + ' for decompressing single block to compute...\n')
@@ -69,7 +69,7 @@ def main():
         COMPRESSION_METHOD_CODE_BOOK, COMPRESSION_METHOD[COLUMN_TO_DECOMPRESS],
         compressed_block_info, COLUMN_TO_DECOMPRESS, full_header, DATA_TYPE_BYTE_SIZES)
     ############
-    #print(dc_single_column)
+    print(dc_single_column)
     single_column_END = datetime.now()
     single_column_TIME = single_column_END - single_column_START
     print(str(single_column_TIME) + ' for decompressing single column to compute...\n')
