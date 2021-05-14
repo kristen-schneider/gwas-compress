@@ -1,6 +1,5 @@
 from datetime import datetime
-import compress_serialized_data
-import compress_array_data
+import compress_column
 import type_handling
 import serialize
 import compress
@@ -119,8 +118,8 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
                 or column_compression_method == 'zlib' \
                 or column_compression_method == 'bz2':
             # compress column using compress serialized data methods
-            compressed_column_info = compress_serialized_data.compress_single_column(typed_column, column_compression_method, column_data_type,
-                                                   column_bytes)
+            compressed_column_info = compress_column.compress_single_column_reg(typed_column, column_compression_method, column_data_type,
+                                                                                         column_bytes)
 
             compressed_column_header_length = compressed_column_info[1] # length of header for compression type (e.g. 10 for gzip)
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:] # bitstring of compressed dataa
@@ -134,7 +133,7 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
             # match dictionary value to proper codec for pyfastpfor compression
             if column_compression_method == 'fastpfor128': codec = 'fastpfor128'
             elif column_compression_method == 'fastpfor256': codec == 'fastpfor256'
-            numpy_compressed_column = compress_array_data.compress_single_column(typed_column, codec)     
+            numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column, codec)
             serialized_compressed_column = serialize.serialize_list(numpy_compressed_column, column_data_type, column_bytes)
             
             compressed_block_bitstring += serialized_compressed_column

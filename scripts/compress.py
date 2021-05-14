@@ -2,7 +2,6 @@ import gzip
 import zlib
 import bz2
 
-
 def compress_bitstring(compression_method, s_bitstring):
     """
     compress a serialized bitstring using specified compression method
@@ -80,3 +79,5 @@ def bz2_compress(s_bitstring):
 
     c_bitstring = bz2.compress(s_bitstring)
     return c_bitstring
+
+

@@ -1,7 +1,8 @@
 import decompress
 import deserialize
-import decompress_serialized_data
-import decompress_array_data
+import decompress_column
+# import decompress_serialized_data
+# import decompress_array_data
 
 
 def query_block(query_block_i, full_header,
@@ -187,20 +188,20 @@ def decompress_single_column(compression_method, compressed_block,
         # ds_dc_column_data = deserialize.deserialize_data(dc_column_data, num_rows, col_type,
         #                                              data_type_byte_sizes[col_type], query_column_i)
 
-        ds_dc_column_data = decompress_serialized_data.decompress_single_column(compression_method,
-                                                                                compressed_column,
-                                                                                num_rows,
-                                                                                col_type,
-                                                                                data_type_byte_sizes[col_type],
-                                                                                chrm)
+        ds_dc_column_data = decompress_column.decompress_single_column_reg(compression_method,
+                                                                                    compressed_column,
+                                                                                    num_rows,
+                                                                                    col_type,
+                                                                                    data_type_byte_sizes[col_type],
+                                                                                    chrm)
     elif 'fastpfor' in compression_method:
         # data input: serialized_data, block_size, data_type, num_bytes, chrm
-        ds_dc_column_data = decompress_array_data.decompress_single_column(compressed_column,
-                                                                            num_rows,
-                                                                            col_type,
-                                                                            data_type_byte_sizes[col_type],
-                                                                            chrm,
-                                                                            compression_method)
+        ds_dc_column_data = decompress_column.decompress_single_column_pyfast(compressed_column,
+                                                                                  num_rows,
+                                                                                  col_type,
+                                                                                  data_type_byte_sizes[col_type],
+                                                                                  chrm,
+                                                                                  compression_method)
     
     else:
         print('cannot find proper compression method to decompress')
