@@ -1,6 +1,4 @@
-import type_handling
 import serialize
-import compress
 
 def full_header_tools(data_type_code_book, data_type_byte_sizes, full_header):
     """

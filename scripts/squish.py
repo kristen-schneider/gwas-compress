@@ -1,6 +1,7 @@
-# IMPORTS
+#### IMPORTS ####
 # python imports
 from datetime import datetime
+
 # kristen imports
 import config_arguments
 import generate_header_first_half
@@ -8,19 +9,18 @@ import generate_funnel_format
 import funnel_format_compress
 import header_compress
 
-# CONSTANTS
+#### CONSTANTS ####
+# code book for easier type identification
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-# DATA_TYPE_BYTE_SIZES = {1: 5, 2: 8, 3: 5, 4:None}
-# COMPRESSION_METHOD_CODE_BOOK = {'gzip': 1, 'zlib': 2, 'bz2': 3, 'fastpfor128': 4, 'fastpfor256': 5}
 
-# USER-SPECIFIED PARAMETERS
+#### USER-SPECIFIED PARAMETERS ####
+# user should edit config.ini to reflect proper parameters
 args = config_arguments.get_args_from_config('LOCAL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
 BLOCK_SIZE = int(args['block_size'])
 COMPRESSION_METHOD = list(args['compression_method'].split(','))
-MTIME = int(args['time'])
 DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
                         2:int(args['float_byte_size']),
                         3:int(args['string_byte_size']),
@@ -32,17 +32,16 @@ DATA_FILE = OUT_DIR + 'plot-' + str(BLOCK_SIZE) + '.csv'
 
 
 def main():
-    '''
+    """
     1. gets beginning of header (magic number, version, delimiter, column labels, column types, num columns, gzip header)
     2. generates funnel format (list of blocks)
     3. compress data and get second half of header
     4. compress full header
     5. write compressed header
     6. write compressed data
-    '''
+    """
     # 1. GET FIRST HALF OF HEADER
     ### Magic number, version number, delimiter, column labels, column types, number columns, gzip header
-    ### [1,1,'\t',['chr', 'pos', 'ref', 'alt', 'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR', 'pval_EUR', 'low_confidence_EUR'],[1, 1, 3, 3, 2, 2, 2, 2, 2, 3],10,b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff']
     print('generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
@@ -78,7 +77,8 @@ def main():
     compress_data_START = datetime.now()
     ### work ###
     serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
-                                                                         COMPRESSION_METHOD, header_first_half, funnel_format_data)
+                                                                            COMPRESSION_METHOD, header_first_half,
+                                                                            funnel_format_data)
     header_second_half = serialized_compressed_data[0]
     compressed_data = serialized_compressed_data[1]
     column_compression_times = serialized_compressed_data[2]

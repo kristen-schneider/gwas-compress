@@ -23,6 +23,7 @@ def compress_all_blocks(data_type_code_book,
         all serialized, compressed data from blocks (header and data)
         compression times for each column //this bit is not included in new version
     """
+    # full header break down
     magic_number = header_first_half[0]
     version = header_first_half[1]
     delimiter = header_first_half[2]
@@ -33,8 +34,6 @@ def compress_all_blocks(data_type_code_book,
 
     block_header_ends = []
     block_ends = []
-    block_sizes = []
-    header_second_half = [[] for i in range(3)]  # last half of header
     compressed_content = b''
 
     block_header_end = 0
