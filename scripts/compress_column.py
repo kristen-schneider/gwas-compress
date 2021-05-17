@@ -1,7 +1,7 @@
 import serialize
 import compress
 import numpy as np
-#from pyfastpfor import *
+from pyfastpfor import *
 
 def compress_single_column_reg(typed_column, column_compression_method, column_type, column_bytes):
     """
