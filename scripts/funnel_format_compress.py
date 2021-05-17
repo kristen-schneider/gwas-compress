@@ -7,6 +7,7 @@ import write_compression_times
 
 def compress_all_blocks(data_type_code_book,
                         data_type_byte_sizes,
+                        available_compression_methods,
                         compression_method_list,
                         header_first_half, ff,
                         compression_times_file):
@@ -19,6 +20,7 @@ def compress_all_blocks(data_type_code_book,
         compression_method_list: list of compression methods for all columns
         header_first_half: data in first half of header
         ff: funnel format
+        available_compression_methods: all possible compression methods integrated into workflow
 
     OUTPUT
         second half of header
@@ -43,10 +45,19 @@ def compress_all_blocks(data_type_code_book,
 
     # to track times of compression:
     # dictionary: [column1: [block1, block2, ..., blockn]]
-    num_blocks = len(block_ends)
+    num_blocks = len(ff)
+    list_num_blocks = [[] for b in (range(num_blocks-1))]
+
+
     all_column_compression_times = {}
-    for col in range(number_columns):
-        all_column_compression_times[col] = []
+    compression_methods = {}
+    for comp_method in available_compression_methods:
+        compression_methods[comp_method] = list_num_blocks
+
+    for col in number_columns:
+        all_column_compression_times[col]
+
+
 
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):

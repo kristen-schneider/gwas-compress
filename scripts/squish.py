@@ -12,6 +12,7 @@ import header_compress
 #### CONSTANTS ####
 # code book for easier type identification
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'pyfastpfor128', 'pyfastpfor256']
 
 #### USER-SPECIFIED PARAMETERS ####
 # user should edit config.ini to reflect proper parameters
@@ -78,6 +79,7 @@ def main():
     compress_data_START = datetime.now()
     ### work ###
     serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
+                                                                            AVAILABLE_COMPRESSION_METHODS,
                                                                             COMPRESSION_METHOD, header_first_half,
                                                                             funnel_format_data, COMPRESSION_TIMES_FILE)
     header_second_half = serialized_compressed_data[0]
