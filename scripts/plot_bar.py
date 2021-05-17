@@ -1,5 +1,6 @@
-import ../block_pyfast
+# import ../block_pyfast
 import matplotlib.pyplot as plt
+import numpy as np
 
 
 i_file = '/home/krsc0813/projects/gwas-compress/plot_data/codecs_performance-1.tsv'
@@ -40,6 +41,10 @@ def plot_data(data):
     plt.xlabel('codec')
     plt.ylabel('compression ratio')
     plt.savefig('/home/krsc0813/projects/gwas-compress/plot_data/codecs_plot.png')
+
+def plot_data_dict(data_dict):
+
+    x_label = []
 
 
 if __name__ == '__main__':

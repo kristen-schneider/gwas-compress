@@ -26,7 +26,12 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
 
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
-    all_column_compression_times[column_compression_method].append(column_i_TIME)
+
+
+    try:
+        all_column_compression_times[column_i][column_compression_method].append(column_i_TIME)
+    except KeyError:
+        all_column_compression_times[column_i] = {column_compression_method: [column_i_TIME]}
 
     print(str(column_i_TIME) + ' for column ' + str(column_i+1) + ' to compress...\n')
     return compressed_column_info, all_column_compression_times
