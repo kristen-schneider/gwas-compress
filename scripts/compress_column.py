@@ -1,9 +1,11 @@
 import serialize
 import compress
 import numpy as np
-from pyfastpfor import *
+from datetime import datetime
+#from pyfastpfor import *
 
-def compress_single_column_reg(typed_column, column_compression_method, column_type, column_bytes):
+def compress_single_column_reg(typed_column, column_compression_method, column_type, column_bytes,
+                               column_i, all_column_compression_times):
     """
     compresses a single column of data using methods that take in serialized data (e.g. gzip, zlib, bz2)
 
@@ -16,12 +18,22 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     OUTPUT
         compressed_column_info = compressed data and length of header which would help decompress data
     """
+    column_i_START = datetime.now()
+    ### work ###
     serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes)
     compressed_column_info = compress.compress_bitstring(column_compression_method, serialized_column)
-    return compressed_column_info
+    ############
+
+    column_i_END = datetime.now()
+    column_i_TIME = column_i_END - column_i_START
+    all_column_compression_times[column_i].append(column_i_TIME)
+
+    print(str(column_i_TIME) + ' for column ' + str(column_i+1) + ' to compress...\n')
+    return compressed_column_info, all_column_compression_times
 
 
-def compress_single_column_pyfast(typed_column, codec):
+def compress_single_column_pyfast(typed_column, codec,
+                                  column_i, all_column_compression_times):
     # print('compressing with pyfastpfor codec')
     """
     compresses a single column of data using pyfastpfor codecs

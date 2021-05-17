@@ -3,11 +3,13 @@ import compress_column
 import type_handling
 import serialize
 import compress
+import write_compression_times
 
 def compress_all_blocks(data_type_code_book,
                         data_type_byte_sizes,
                         compression_method_list,
-                        header_first_half, ff):
+                        header_first_half, ff,
+                        compression_times_file):
     """
     returns 3 pieces of data which summarize serialized, compressed data
 
@@ -38,7 +40,13 @@ def compress_all_blocks(data_type_code_book,
 
     block_header_end = 0
     block_end = 0
-    all_column_compression_times = dict()
+
+    # to track times of compression:
+    # dictionary: [column1: [block1, block2, ..., blockn]]
+    num_blocks = len(block_ends)
+    all_column_compression_times = {}
+    for col in range(number_columns):
+        all_column_compression_times[col] = []
 
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):
@@ -64,7 +72,7 @@ def compress_all_blocks(data_type_code_book,
 
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
-        print(str(block_i_TIME) + ' for block ' + str(block_i) + ' to compress...\n')
+        print(str(block_i_TIME) + ' for block ' + str(block_i+1) + ' to compress...\n')
 
     # block_sizes = header_second_half[2]
     num_rows_first_block = len(ff[0][0])
@@ -73,7 +81,9 @@ def compress_all_blocks(data_type_code_book,
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
 
-    return header_second_half, compressed_content, all_column_compression_times
+    write_compression_times.write_times(all_column_compression_times, compression_times_file)
+
+    return header_second_half, compressed_content
 
 def compress_single_block(all_column_compression_times, data_type_code_book, data_type_byte_sizes,
                           compression_method_list, column_types, block):
@@ -81,11 +91,10 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
     compresses a single block of data, includes a block header which is a list of end positions of all columns
 
     INPUT
-        all_column_compression_times
+        all_column_compression_times = to track time of compression for each column
         data_type_code_book = e.g. {int: 1, float: 2, str: 3, bytes:4}
         data_type_byte_sizes = from config file, assigns bytes to each data type, for compression
         compression_method_list = list of compression methods for all columns
-        mtime = for gzip.compress input
         column_types = data type for each column
         block = all columns are lists of strings, need to type
 
@@ -117,12 +126,18 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
                 or column_compression_method == 'zlib' \
                 or column_compression_method == 'bz2':
             # compress column using compress serialized data methods
-            compressed_column_info = compress_column.compress_single_column_reg(typed_column, column_compression_method, column_data_type,
-                                                                                         column_bytes)
+            compressed_column_info = compress_column.compress_single_column_reg(typed_column,
+                                                                                column_compression_method,
+                                                                                column_data_type,
+                                                                                column_bytes,
+                                                                                column_i,
+                                                                                all_column_compression_times)
 
-            compressed_column_header_length = compressed_column_info[1] # length of header for compression type (e.g. 10 for gzip)
-            compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:] # bitstring of compressed dataa
+            compressed_column_header_length = compressed_column_info[0][1] # length of header for compression type (e.g. 10 for gzip)
+            compressed_column_bitstring = compressed_column_info[0][0][compressed_column_header_length:] # bitstring of compressed dataa
             compressed_block_bitstring += compressed_column_bitstring
+
+            compress_column_times = compressed_column_info[1]
 
             compressed_column_end_pos += len(compressed_column_bitstring)
             compressed_column_ends_list.append(compressed_column_end_pos)
@@ -132,10 +147,16 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
             # match dictionary value to proper codec for pyfastpfor compression
             if column_compression_method == 'fastpfor128': codec = 'fastpfor128'
             elif column_compression_method == 'fastpfor256': codec == 'fastpfor256'
-            numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column, codec)
+            numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
+                                                                                    codec,
+                                                                                    column_i,
+                                                                                    all_column_compression_times)
+            # must serialize a numpy column in order for the column to be properly written to our output file
             serialized_compressed_column = serialize.serialize_list(numpy_compressed_column, column_data_type, column_bytes)
             
             compressed_block_bitstring += serialized_compressed_column
+
+            compress_column_times = compressed_column_info[1]
             
             compressed_column_end_pos += len(serialized_compressed_column)
             compressed_column_ends_list.append(compressed_column_end_pos)

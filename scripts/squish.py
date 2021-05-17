@@ -13,14 +13,10 @@ import header_compress
 # code book for easier type identification
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 
-<<<<<<< HEAD
 #### USER-SPECIFIED PARAMETERS ####
 # user should edit config.ini to reflect proper parameters
 args = config_arguments.get_args_from_config('LOCAL')
-=======
-# USER-SPECIFIED PARAMETERS
-args = config_arguments.get_args_from_config('MENDEL')
->>>>>>> 28d21c95965c03185d6d5c6a3c6be5929037efc6
+
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -33,7 +29,7 @@ DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
 # output file made from combining user specified params
 base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
 COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
-DATA_FILE = OUT_DIR + 'plot-' + str(BLOCK_SIZE) + '.csv'
+COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
 
 
 def main():
@@ -83,17 +79,19 @@ def main():
     ### work ###
     serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
                                                                             COMPRESSION_METHOD, header_first_half,
-                                                                            funnel_format_data)
+                                                                            funnel_format_data, COMPRESSION_TIMES_FILE)
     header_second_half = serialized_compressed_data[0]
     compressed_data = serialized_compressed_data[1]
-    column_compression_times = serialized_compressed_data[2]
-    df = open(DATA_FILE, 'w')
-    for cctime in column_compression_times:
-        df.write(cctime)
-        df.write(',')
-        df.write(str(column_compression_times[cctime]))
-        df.write(',\n')
-    df.close()
+
+    # compression times data file
+    # column_compression_times = serialized_compressed_data[2]
+    # df = open(DATA_FILE, 'w')
+    # for cctime in column_compression_times:
+    #     df.write(cctime)
+    #     df.write(',')
+    #     df.write(str(column_compression_times[cctime]))
+    #     df.write(',\n')
+    # df.close()
 
     ############
     compress_data_END = datetime.now()
