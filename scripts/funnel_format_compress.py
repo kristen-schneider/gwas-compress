@@ -94,7 +94,8 @@ def compress_all_blocks(data_type_code_book,
 
     # for plotting compression comparisons
     write_compression_times.write_times(all_column_compression_times, out_dir)
-    plot_bar.plot_data_dict(all_column_compression_times)
+    dict_data = plot_bar.get_dict_data(out_dir)
+    plot_bar.plot_data(dict_data, available_compression_methods)
 
     return header_second_half, compressed_content
 
@@ -146,13 +147,11 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
                                                                                 column_i,
                                                                                 all_column_compression_times)
 
-            compressed_column_header_length = compressed_column_info[0][
-                1]  # length of header for compression type (e.g. 10 for gzip)
-            compressed_column_bitstring = compressed_column_info[0][0][
-                                          compressed_column_header_length:]  # bitstring of compressed dataa
+            compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
+            compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
             compressed_block_bitstring += compressed_column_bitstring
 
-            compress_column_times = compressed_column_info[1]
+            # compress_column_times = compressed_column_info[1]
 
             compressed_column_end_pos += len(compressed_column_bitstring)
             compressed_column_ends_list.append(compressed_column_end_pos)
@@ -174,7 +173,7 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
 
             compressed_block_bitstring += serialized_compressed_column
 
-            compress_column_times = compressed_column_info[1]
+            # compress_column_times = compressed_column_info[1]
 
             compressed_column_end_pos += len(serialized_compressed_column)
             compressed_column_ends_list.append(compressed_column_end_pos)

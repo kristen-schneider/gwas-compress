@@ -34,7 +34,7 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
         all_column_compression_times[column_i] = {column_compression_method: [column_i_TIME]}
 
     print(str(column_i_TIME) + ' for column ' + str(column_i+1) + ' to compress...\n')
-    return compressed_column_info, all_column_compression_times
+    return compressed_column_info
 
 
 def compress_single_column_pyfast(typed_column, codec,
