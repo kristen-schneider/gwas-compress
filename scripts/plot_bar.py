@@ -37,18 +37,22 @@ def plot_data(dict_data, available_compression_methods):
     plt.savefig('/home/krsc0813/projects/gwas-compress/plot_data/codecs_plot.png')
 
 
-
-
-
-
 def plot_loop(data, num_cols, available_compression_methods):
     num_methods = len(data)
-    col_labels = [i+1 for i in range(num_cols)]
-    x_axis = np.arange(num_methods)
+    col_labels = [(('column'+str(i+1))) for i in range(num_cols)]
+    x_axis_anchor = np.arange(num_methods)
+    max_val = 1
+    increment = num_methods
+    x_axis_delta = np.linspace(-max_val, max_val, num=increment)
 
     plt.figure(figsize=(15,20))
-    for cm in available_compression_methods:
-        plt.bar(data)
+
+    for cm in range(len(available_compression_methods)):
+        current_pos_delta = x_axis_delta[cm]
+        current_comp_method = available_compression_methods[cm]
+        current_data = data[current_comp_method]
+        width = 10/num_methods
+        plt.bar(x_axis_anchor+current_pos_delta, current_data, width, label=col_labels[cm])
 
     # for m in range(num_methods):
 
@@ -86,6 +90,11 @@ def get_final_data(full_data_dict, available_compression_methods, num_cols):
 
     return final_data
 
+# def mirrored(max_val, increment):
+#     x = np.arange(increment, max_val, increment)
+#     if x[-1] != max_val:
+#         x = np.r_[x, max_val]
+#     return np.r_[-x[::-1], 0, x]
 
 if __name__ == '__main__':
     main()
