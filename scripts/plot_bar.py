@@ -64,13 +64,13 @@ def time_to_float(all_data_str):
     return all_data_time
 
 def plot_data(dict_data, available_compression_methods):
-    # x = data[0]
-    # y = data[1]
-    # print(x)
-    # print(y)
-    #y = [1, 2, 4, 5, 6, 8, 2, 3, 4, 5, 6, 7, 8, 9, 11, 1, 3, 5, 2, 3, 8, 3, 13, 3, 4, 8, 2, 4, 9, 7, 8, 3, 11]
-    #x = ['jan', 'feb', 'march', 'april', 'may', 'june', 'july', 'august', 'sept', 'oct', 'nov', 'dec']
-    #y = [31, 28, 100, 40, 65, 82, 12, 90, 34, 43, 87, 20]
+    x = data[0]
+    y = data[1]
+    print(x)
+    print(y)
+    y = [1, 2, 4, 5, 6, 8, 2, 3, 4, 5, 6, 7, 8, 9, 11, 1, 3, 5, 2, 3, 8, 3, 13, 3, 4, 8, 2, 4, 9, 7, 8, 3, 11]
+    x = ['jan', 'feb', 'march', 'april', 'may', 'june', 'july', 'august', 'sept', 'oct', 'nov', 'dec']
+    y = [31, 28, 100, 40, 65, 82, 12, 90, 34, 43, 87, 20]
     column_labels = [c for c in sorted(dict_data.keys())]
 
     for col in dict_data:
@@ -80,7 +80,6 @@ def plot_data(dict_data, available_compression_methods):
             q = dict_data[col][method]
             plt.bar()
 
-
     pos = np.arange(len(column_labels))
 
     plt.figure(figsize=(15,20))
@@ -89,6 +88,18 @@ def plot_data(dict_data, available_compression_methods):
     plt.xlabel('codec')
     plt.ylabel('compression ratio')
     plt.savefig('/home/krsc0813/projects/gwas-compress/plot_data/codecs_plot.png')
+
+def plot_loop(out_dir, num_columns, available_compression_methods):
+
+    for col in range(num_columns):
+        for comp_method in available_compression_methods:
+            try:
+                f = open(out_dir+'column'+str(col)+'_'+comp_method+'.csv')
+
+            except FileNotFoundError: continue
+
+
+
 
 if __name__ == '__main__':
     main()
