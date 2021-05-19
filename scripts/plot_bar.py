@@ -39,10 +39,11 @@ def plot_data(dict_data, available_compression_methods):
 
 def plot_loop(data, num_cols, available_compression_methods):
     num_methods = len(data)
-    col_labels = [(('column'+str(i+1))) for i in range(num_cols)]
-    x_axis_anchor = np.arange(num_methods)
+
+    x_labels = [(('column'+str(i+1))) for i in range(num_cols)]
+    x_axis_anchor = np.arange(num_cols)*2
     max_val = 1
-    increment = num_methods
+    increment = num_methods+1
     x_axis_delta = np.linspace(-max_val, max_val, num=increment)
 
     plt.figure(figsize=(15,20))
@@ -51,9 +52,16 @@ def plot_loop(data, num_cols, available_compression_methods):
         current_pos_delta = x_axis_delta[cm]
         current_comp_method = available_compression_methods[cm]
         current_data = data[current_comp_method]
-        width = 10/num_methods
-        plt.bar(x_axis_anchor+current_pos_delta, current_data, width, label=col_labels[cm])
+        print(current_data)
+        width = 2/num_methods
+        plt.bar(x_axis_anchor+current_pos_delta, current_data, width,
+                label=available_compression_methods[cm])
 
+    plt.xticks(x_axis_anchor, x_labels, rotation=70)
+    plt.xlabel('x-axis')
+    plt.ylabel('y-axis')
+    plt.legend(prop={'size': 30})
+    plt.savefig('test.png')
     # for m in range(num_methods):
 
 
@@ -77,7 +85,7 @@ def get_col_method_avg(out_dir, col, method):
         data_all_blocks = read_write_compression_times.read_times(f)
         avg_time = statistics.mean(data_all_blocks)
     except FileNotFoundError:
-        avg_time = None
+        avg_time = 0
     return avg_time
 
 def get_final_data(full_data_dict, available_compression_methods, num_cols):
