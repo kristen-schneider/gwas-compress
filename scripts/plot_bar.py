@@ -37,14 +37,22 @@ def plot_data(dict_data, available_compression_methods):
     plt.savefig('/home/krsc0813/projects/gwas-compress/plot_data/codecs_plot.png')
 
 
-def get_loop_data(out_dir, num_columns, available_compression_methods):
-    # data for plotting
-    # [method1: [col1, col2, col3...]
-    # create empty dict data
 
+
+
+
+def plot_loop(data):
+    #
+    plt.bar(data)
+
+def get_loop_dict(out_dir, num_columns, available_compression_methods):
+    # data for plotting
+    # {method1: {col1: data}, {col2: data}, {col3: data}...}
+
+    # create empty dict data
     full_data_dict = {}
-    for col in range(num_columns):
-        full_data_dict[col] = {}
+    for method in range(len(available_compression_methods)):
+        full_data_dict[method] = {}
     for col_key in full_data_dict:
         for method in available_compression_methods:
             full_data_dict[col_key][method] = []
@@ -63,9 +71,7 @@ def get_loop_data(out_dir, num_columns, available_compression_methods):
             #
             # except FileNotFoundError: continue
 
-
-
-def plot_loop(out_dir, num_columns, available_compression_methods):
+def get_loop_data(dict):
 
 
 
