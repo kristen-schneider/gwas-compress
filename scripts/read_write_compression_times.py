@@ -2,6 +2,7 @@ import datetime
 
 
 def write_times(all_column_compression_times, out_dir):
+    out_dir = out_dir+'times/'
     for col in all_column_compression_times:
         for comp_method in all_column_compression_times[col]:
             df = open(out_dir + 'column' + str(col) + '_' + comp_method + '.csv', 'w')
