@@ -94,9 +94,9 @@ def compress_all_blocks(data_type_code_book,
 
     # for plotting compression comparisons
     read_write_compression_times.write_times(all_column_compression_times, out_dir)
-    dict1 = plot_bar.get_loop_dict(out_dir, number_columns, available_compression_methods)
-    dict2 = plot_bar.get_final_data(dict1, available_compression_methods, number_columns)
-    plot_bar.plot_loop(dict2, number_columns, available_compression_methods)
+    time_dict1 = plot_bar.get_loop_dict(out_dir+'times/', number_columns, available_compression_methods)
+    time_dict2 = plot_bar.get_final_data(time_dict1, available_compression_methods, number_columns)
+    plot_bar.plot_loop(time_dict2, number_columns, available_compression_methods)
     # plot_bar.plot_data(dict_data, available_compression_methods)
 
     return header_second_half, compressed_content
