@@ -13,14 +13,10 @@ import header_compress
 # code book for easier type identification
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 
-<<<<<<< HEAD
 #### USER-SPECIFIED PARAMETERS ####
 # user should edit config.ini to reflect proper parameters
-args = config_arguments.get_args_from_config('LOCAL')
-=======
-# USER-SPECIFIED PARAMETERS
 args = config_arguments.get_args_from_config('MENDEL')
->>>>>>> 28d21c95965c03185d6d5c6a3c6be5929037efc6
+
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
