@@ -3,7 +3,7 @@ import compress_column
 import type_handling
 import serialize
 import compress
-import write_compression_times
+import read_write_compression_times
 import plot_bar
 
 
@@ -93,8 +93,8 @@ def compress_all_blocks(data_type_code_book,
     header_second_half = [block_header_ends, block_ends, block_sizes]
 
     # for plotting compression comparisons
-    write_compression_times.write_times(all_column_compression_times, out_dir)
-    dict_data = plot_bar.get_dict_data(out_dir)
+    read_write_compression_times.write_times(all_column_compression_times, out_dir)
+    #dict_data = plot_bar.get_dict_data(out_dir)
     plot_bar.plot_loop(out_dir, number_columns, available_compression_methods)
     # plot_bar.plot_data(dict_data, available_compression_methods)
 

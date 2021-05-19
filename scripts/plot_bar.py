@@ -1,67 +1,14 @@
 # import ../block_pyfast
 import matplotlib.pyplot as plt
-import os
-import datetime
-import statistics
 import numpy as np
-
+import read_write_compression_times
+import statistics
 
 
 def main():
     print(get_dict_data())
-    #data = get_data(i_file)
-    #plot_data(data)
-
-def get_data(i_file):
-    x = []
-    y = []
-
-    f = open(i_file, 'r')
-    for line in f:
-        A = line.rstrip().split()
-        x.append(A[0])
-        y.append(float(A[1]))
-
-    return x, y        
-
-def get_dict_data(out_dir):
-    """
-
-    """
-    # format [column: compression_method[block1time, block2time...]]
-    dict_data = {}
-
-    for col_comp_file in os.listdir(out_dir):
-        if 'column' in col_comp_file:
-            f = open(out_dir+col_comp_file)
-            all_data_str = f.readline().split(',')[0:-2]
-            all_data_time = time_to_float(all_data_str)
-
-            full_name = col_comp_file.split('.')[0].split('_')
-            column_number = int(full_name[0].replace('column', ''))
-            compression_method = full_name[1]
-
-            try: dict_data[column_number][compression_method] = statistics.mean(all_data_time)
-            except KeyError: dict_data[column_number] = {compression_method: statistics.mean(all_data_time)}
-
-            # try: dict_data[column_number][compression_method].append()
 
 
-            print(col_comp_file)
-
-    return dict_data
-
-def time_to_float(all_data_str):
-    all_data_time = []
-    for d in all_data_str:
-        full_seconds = 0
-        time = datetime.datetime.strptime(d, '%H:%M:%S.%f')
-
-        time_zero = datetime.datetime.strptime('0:00:00.000000', '%H:%M:%S.%f')
-        time_delta = time - time_zero
-        total_seconds = time_delta.total_seconds()
-        all_data_time.append(total_seconds)
-    return all_data_time
 
 def plot_data(dict_data, available_compression_methods):
     x = data[0]
@@ -89,14 +36,37 @@ def plot_data(dict_data, available_compression_methods):
     plt.ylabel('compression ratio')
     plt.savefig('/home/krsc0813/projects/gwas-compress/plot_data/codecs_plot.png')
 
-def plot_loop(out_dir, num_columns, available_compression_methods):
+
+def get_loop_data(out_dir, num_columns, available_compression_methods):
+    # data for plotting
+    # [method1: [col1, col2, col3...]
+    # create empty dict data
+
+    full_data_dict = {}
+    for col in range(num_columns):
+        full_data_dict[col] = {}
+    for col_key in full_data_dict:
+        for method in available_compression_methods:
+            full_data_dict[col_key][method] = []
 
     for col in range(num_columns):
         for comp_method in available_compression_methods:
-            try:
-                f = open(out_dir+'column'+str(col)+'_'+comp_method+'.csv')
-
+            f = out_dir + 'column' + str(col) + '_' + comp_method + '.csv'
+            print(f)
+            try: data_all_blocks = read_write_compression_times.read_times(f)
             except FileNotFoundError: continue
+            avg_time = statistics.mean(data_all_blocks)
+            # try:
+            #     f = out_dir+'column'+str(col)+'_'+comp_method+'.csv'
+            #     data = f.readline().split(',')[0:-1]
+            #     print(f, data)
+            #
+            # except FileNotFoundError: continue
+
+
+
+def plot_loop(out_dir, num_columns, available_compression_methods):
+
 
 
 
