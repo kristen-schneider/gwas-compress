@@ -1,7 +1,7 @@
 import decompress
 import deserialize
 import numpy as np
-from pyfastpfor import *
+#from pyfastpfor import *
 
 def decompress_single_column_reg(compression_method, c_bitstring, block_size, data_type, num_bytes, chrm):
     """
