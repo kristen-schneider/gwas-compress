@@ -41,9 +41,17 @@ def plot_data(dict_data, available_compression_methods):
 
 
 
-def plot_loop(data):
-    #
-    plt.bar(data)
+def plot_loop(data, num_cols, available_compression_methods):
+    num_methods = len(data)
+    col_labels = [i+1 for i in range(num_cols)]
+    x_axis = np.arange(num_methods)
+
+    plt.figure(figsize=(15,20))
+    for cm in available_compression_methods:
+        plt.bar(data)
+
+    # for m in range(num_methods):
+
 
 def get_loop_dict(out_dir, num_columns, available_compression_methods):
     # data for plotting
@@ -51,30 +59,32 @@ def get_loop_dict(out_dir, num_columns, available_compression_methods):
 
     # create empty dict data
     full_data_dict = {}
-    for method in range(len(available_compression_methods)):
+    for method in available_compression_methods:
         full_data_dict[method] = {}
-    for col_key in full_data_dict:
-        for method in available_compression_methods:
-            full_data_dict[col_key][method] = []
+    for method_key in full_data_dict:
+        for col in range(num_columns):
+            full_data_dict[method_key][col] = get_col_method_avg(out_dir, col, method_key)
 
-    for col in range(num_columns):
-        for comp_method in available_compression_methods:
-            f = out_dir + 'column' + str(col) + '_' + comp_method + '.csv'
-            print(f)
-            try: data_all_blocks = read_write_compression_times.read_times(f)
-            except FileNotFoundError: continue
-            avg_time = statistics.mean(data_all_blocks)
-            # try:
-            #     f = out_dir+'column'+str(col)+'_'+comp_method+'.csv'
-            #     data = f.readline().split(',')[0:-1]
-            #     print(f, data)
-            #
-            # except FileNotFoundError: continue
+    return full_data_dict
 
-def get_loop_data(dict):
+def get_col_method_avg(out_dir, col, method):
+    try:
+        f = out_dir + 'column' + str(col) + '_' + method + '.csv'
+        data_all_blocks = read_write_compression_times.read_times(f)
+        avg_time = statistics.mean(data_all_blocks)
+    except FileNotFoundError:
+        avg_time = None
+    return avg_time
 
+def get_final_data(full_data_dict, available_compression_methods, num_cols):
+    # {method1: [col1, col2, col3...], method2: [col1, col2, col3...]}
+    final_data= {}
+    for cm in available_compression_methods:
+        for col in range(num_cols):
+            try: final_data[cm].append(full_data_dict[cm][col])
+            except KeyError: final_data[cm] = [full_data_dict[cm][col]]
 
-
+    return final_data
 
 
 if __name__ == '__main__':
