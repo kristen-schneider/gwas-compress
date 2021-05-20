@@ -2,10 +2,11 @@ import serialize
 import compress
 import numpy as np
 from datetime import datetime
-from pyfastpfor import *
+import sys
+#from pyfastpfor import *
 
 def compress_single_column_reg(typed_column, column_compression_method, column_type, column_bytes,
-                               column_i, all_column_compression_times):
+                               column_i, all_column_compression_times, all_column_compression_size_ratios):
     """
     compresses a single column of data using methods that take in serialized data (e.g. gzip, zlib, bz2)
 
@@ -18,7 +19,9 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     OUTPUT
         compressed_column_info = compressed data and length of header which would help decompress data
     """
+
     column_i_START = datetime.now()
+    column_i_BEFORE = sys.getsizeof(typed_column)
     ### work ###
     serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes)
     compressed_column_info = compress.compress_bitstring(column_compression_method, serialized_column)
@@ -26,19 +29,26 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
 
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
-
-
+    column_i_AFTER = sys.getsizeof(compressed_column_info[0])
+    column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
+    # adding to time dict
     try:
         all_column_compression_times[column_i][column_compression_method].append(column_i_TIME)
     except KeyError:
         all_column_compression_times[column_i] = {column_compression_method: [column_i_TIME]}
 
-    #print(str(column_i_TIME) + ' for column ' + str(column_i+1) + ' to compress...\n')
+    # adding to size ratio dict
+    try:
+        all_column_compression_size_ratios[column_i][column_compression_method].append(column_i_RATIO)
+    except KeyError:
+        all_column_compression_size_ratios[column_i] = {column_compression_method: [column_i_RATIO]}
+
     return compressed_column_info
 
 
 def compress_single_column_pyfast(typed_column, codec,
-                                  column_i, all_column_compression_times):
+                                  column_i, all_column_compression_times,
+                                  all_column_compression_size_ratios):
     # print('compressing with pyfastpfor codec')
     """
     compresses a single column of data using pyfastpfor codecs
