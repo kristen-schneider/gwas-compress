@@ -92,6 +92,7 @@ def compress_all_blocks(data_type_code_book,
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
 
+    # PLOTTING
     # for plotting compression comparisons
     read_write_compression_times.write_times(all_column_compression_times, out_dir)
     time_dict1 = plot_bar.get_loop_dict(out_dir+'times/', number_columns, available_compression_methods)
