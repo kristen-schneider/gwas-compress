@@ -5,7 +5,7 @@ def write_ratios(all_column_compression_size_ratios, out_dir):
             for d in range(len(all_column_compression_size_ratios[col][comp_method])):
                 # print(type(all_column_compression_times[col][comp_method][d]))
                 ratio = all_column_compression_size_ratios[col][comp_method][d]
-                df.write(str(all_column_compression_size_ratios[col][comp_method][d]) + ',')
+                df.write(str(ratio) + ',')
 
 
 def read_ratios(f):
