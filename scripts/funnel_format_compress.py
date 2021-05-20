@@ -83,7 +83,7 @@ def compress_all_blocks(data_type_code_book,
 
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
-        print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
+        #print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
 
     # block_sizes = header_second_half[2]
     num_rows_first_block = len(ff[0][0])

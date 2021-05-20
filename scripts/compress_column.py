@@ -2,7 +2,7 @@ import serialize
 import compress
 import numpy as np
 from datetime import datetime
-#from pyfastpfor import *
+from pyfastpfor import *
 
 def compress_single_column_reg(typed_column, column_compression_method, column_type, column_bytes,
                                column_i, all_column_compression_times):
@@ -33,7 +33,7 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     except KeyError:
         all_column_compression_times[column_i] = {column_compression_method: [column_i_TIME]}
 
-    print(str(column_i_TIME) + ' for column ' + str(column_i+1) + ' to compress...\n')
+    #print(str(column_i_TIME) + ' for column ' + str(column_i+1) + ' to compress...\n')
     return compressed_column_info
 
 
