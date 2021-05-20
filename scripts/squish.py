@@ -12,7 +12,7 @@ import header_compress
 #### CONSTANTS ####
 # code book for easier type identification
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'pyfastpfor128', 'pyfastpfor256']
+AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
 
 #### USER-SPECIFIED PARAMETERS ####
 # user should edit config.ini to reflect proper parameters

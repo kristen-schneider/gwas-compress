@@ -165,7 +165,7 @@ def compress_single_block(all_column_compression_times, data_type_code_book, dat
             if column_compression_method == 'fastpfor128':
                 codec = 'fastpfor128'
             elif column_compression_method == 'fastpfor256':
-                codec == 'fastpfor256'
+                codec = 'fastpfor256'
             numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
                                                                                     codec,
                                                                                     column_i,

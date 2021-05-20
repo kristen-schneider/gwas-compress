@@ -52,14 +52,15 @@ def plot_loop(data, num_cols, available_compression_methods):
         current_pos_delta = x_axis_delta[cm]
         current_comp_method = available_compression_methods[cm]
         current_data = data[current_comp_method]
-        print(current_data)
+        #print(current_data)
         width = 2/num_methods
         plt.bar(x_axis_anchor+current_pos_delta, current_data, width,
                 label=available_compression_methods[cm])
 
     plt.xticks(x_axis_anchor, x_labels, rotation=70)
-    plt.xlabel('x-axis')
-    plt.ylabel('y-axis')
+    plt.xlabel('column')
+    plt.ylabel('compression time (seconds)')
+    plt.title('compression time for ' + str(len(available_compression_methods)) + ' different compression methods')
     plt.legend(prop={'size': 30})
     plt.savefig('test.png')
     # for m in range(num_methods):
