@@ -50,6 +50,8 @@ def compress_single_column_pyfast(typed_column, codec,
         compressed_column = compressed data
     """
 
+    column_i_START = datetime.now()
+    ### work ###
     # convert input array to numpy array
     np_arr = np.array(typed_column, dtype=np.uint32, order='C')
     np_arr_size = np_arr.size
@@ -61,5 +63,13 @@ def compress_single_column_pyfast(typed_column, codec,
     # get codec method from pyfastpfor and use it for compression
     codec_method = getCodec(codec)
     comp_arr_size = codec_method.encodeArray(np_arr, np_arr_size, comp_arr, len(comp_arr))
+    ############
+    column_i_END = datetime.now()
+    column_i_TIME = column_i_END - column_i_START
+
+    try:
+        all_column_compression_times[column_i][codec].append(column_i_TIME)
+    except KeyError:
+        all_column_compression_times[column_i] = {codec: [column_i_TIME]}
 
     return comp_arr
