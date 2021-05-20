@@ -7,7 +7,7 @@ def write_times(all_column_compression_times, out_dir):
             for d in range(len(all_column_compression_times[col][comp_method])):
                 # print(type(all_column_compression_times[col][comp_method][d]))
                 time = all_column_compression_times[col][comp_method][d]
-                df.write(str(all_column_compression_times[col][comp_method][d]) + ',')
+                df.write(str(time) + ',')
 
 
 def read_times(f):
