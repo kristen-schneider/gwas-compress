@@ -180,6 +180,8 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                     column_i,
                                                                                     all_column_compression_times,
                                                                                     all_column_compression_size_ratios)
+            #numpy_compressed_column_size = numpy_compressed_column_info[1]
+            #numpy_compressed_column = numpy_compressed_column_info[0][0:numpy_compressed_column_size]
             # must serialize a numpy column in order for the column to be properly written to our output file
             serialized_compressed_column = serialize.serialize_list(numpy_compressed_column, column_data_type,
                                                                     column_bytes)

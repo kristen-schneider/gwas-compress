@@ -32,7 +32,6 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     column_i_AFTER = sys.getsizeof(compressed_column_info[0])
     column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
     
-    print(column_i_BEFORE, column_i_AFTER, len(typed_column), len(compressed_column_info[0]))
     # adding to time dict
     try:
         all_column_compression_times[column_i][column_compression_method].append(column_i_TIME)
@@ -76,14 +75,15 @@ def compress_single_column_pyfast(typed_column, codec,
     # get codec method from pyfastpfor and use it for compression
     codec_method = getCodec(codec)
     comp_arr_size = codec_method.encodeArray(np_arr, np_arr_size, comp_arr, len(comp_arr))
+    
     ############
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
-    column_i_AFTER = sys.getsizeof(comp_arr)
+    column_i_AFTER = sys.getsizeof(comp_arr[0:comp_arr_size])
     column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
 
-
-    print(column_i_BEFORE, column_i_AFTER, len(typed_column), len(comp_arr), comp_arr[-10:])
+    
+    #print(column_i_BEFORE, column_i_AFTER)
     # adding to time dict
     try:
         all_column_compression_times[column_i][codec].append(column_i_TIME)
@@ -96,4 +96,4 @@ def compress_single_column_pyfast(typed_column, codec,
     except KeyError:
         all_column_compression_size_ratios[column_i] = {codec: [column_i_RATIO]}
 
-    return comp_arr
+    return comp_arr[0:comp_arr_size]
