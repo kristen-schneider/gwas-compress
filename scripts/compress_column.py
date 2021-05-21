@@ -31,6 +31,8 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     column_i_TIME = column_i_END - column_i_START
     column_i_AFTER = sys.getsizeof(compressed_column_info[0])
     column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
+    
+    print(column_i_BEFORE, column_i_AFTER, len(typed_column), len(compressed_column_info[0]))
     # adding to time dict
     try:
         all_column_compression_times[column_i][column_compression_method].append(column_i_TIME)
@@ -81,6 +83,7 @@ def compress_single_column_pyfast(typed_column, codec,
     column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
 
 
+    print(column_i_BEFORE, column_i_AFTER, len(typed_column), len(comp_arr), comp_arr[-10:])
     # adding to time dict
     try:
         all_column_compression_times[column_i][codec].append(column_i_TIME)
