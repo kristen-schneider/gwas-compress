@@ -88,14 +88,27 @@ def convert_to_int(data, data_type):
 
 
 def float_to_int(float_data):
-    int_data = None
-    # float_data = float(data)
-    base_exponent = float_data.split('e')
-    base = base_exponent[0]
-    exponent = int(base_exponent[1])
+    """
+    converts a data type of float to a list of integers which can reconstruct the float
 
-    whole_decimal = int(''.join(base.split('.')))
-    int_data = [whole_decimal, exponent]
+    INPUT
+        float_data: data in float form (e.g. 4.213e-05)
+
+    OUTPUT
+        int_data: list [base, exponent];
+            where base is the float number without the decimal
+            and exponent is the signed value after 'e'
+    """
+    if float_data == 'NA':
+        # choose a value that is not seen in data
+        int_data = [0, -999]
+    else:
+        # split on base and exponent and create a list [base, exponent]
+        base_exponent = float_data.split('e')
+        base = base_exponent[0]
+        exponent = int(base_exponent[1])
+        whole_decimal = int(''.join(base.split('.')))
+        int_data = [whole_decimal, exponent]
     return int_data
 
 

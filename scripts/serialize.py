@@ -36,12 +36,12 @@ def serialize_data(data, data_type, num_bytes):
     s_value = None
     if data_type == 1:
         try:
-            s_value = data.to_bytes(num_bytes, byteorder='big', signed=False)
+            s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
         except AttributeError:
-            # data coming in from codec compression/numpy array
             if type(data) != int:
+                # data coming in from codec compression/numpy array
                 data = int(data)
-                try: s_value = data.to_bytes(num_bytes, byteorder='big', signed=False)
+                try: s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
                 except AttributeError:
                     if 'X' in data or 'Y' in data:
                         try:

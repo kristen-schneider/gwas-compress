@@ -27,14 +27,12 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     # float data is a list which contains [base, exponent] as integer.
     # serialized float data is two integers which can reconstruct original float
     if column_type == 2:
-        base = typed_column[0]
-        exponent = typed_column[1]
+        serialized_column = b''
         # for serialization, must change column type to being 1
         column_type = 1
-
-        serialized_base = serialize.serialize_list(base, column_type, column_bytes)
-        serialized_exponent = serialize.serialize_list(exponent, column_type, column_bytes)
-        serialized_column = serialized_base+serialized_exponent
+        for float_value in typed_column:
+            serialized_float = serialize.serialize_list(float_value, column_type, column_bytes)
+            serialized_column += serialized_float
 
     elif column_type == 1 or column_type == 3 or column_type == 4:
         # for serialization, must change column type to being 1
