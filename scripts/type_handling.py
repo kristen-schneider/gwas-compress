@@ -78,7 +78,7 @@ def convert_to_int(data, data_type):
         integer version of data
     """
     if data_type == 1:
-        return int(data)
+        return int_to_int(data)
     elif data_type == 2:
         return float_to_int(data)
     elif data_type == 3:
@@ -86,6 +86,26 @@ def convert_to_int(data, data_type):
     elif data_type == 4:
         return bytes_to_int(data)
 
+def int_to_int(in_data):
+    """
+    converts to type int
+
+    INPUT
+        in_data: input data (normal integer type or chrom x,y)
+
+    OUTPUT
+        out_data: integer value representing in_data (X = 23, Y = 24)
+    """
+    int_data = None
+    try:
+        return int(in_data)
+    except TypeError:
+        if in_data == 'X':
+            int_data = 23
+        elif in_data == 'Y':
+            int_data = 24
+        else: print('cannot convert chromosome to int')
+    return int_data
 
 def float_to_int(float_data):
     """
@@ -118,8 +138,6 @@ def string_to_int(string_data):
         false = 0
         true = 1
         A, C, G, T = 2, 3, 4, 5
-        chromosome x = 23
-        chromosome y = 24
         NA = -1
 
     INPUT
@@ -128,7 +146,6 @@ def string_to_int(string_data):
     OUTPUT
         int_data = string data converted to integer value according to mapping above.
     """
-    # (22 integer chromosomes, x and y)
     # A,C,T,G = 2,3,4,5
 
     int_data = None
@@ -145,10 +162,6 @@ def string_to_int(string_data):
         int_data = 4
     elif string_data == 'T':
         int_data = 5
-    elif string_data == 'X':
-        int_data = 23
-    elif string_data == 'Y':
-        int_data = 24
     elif string_data == 'NA':
         int_data = -1
     else:
