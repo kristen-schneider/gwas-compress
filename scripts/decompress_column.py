@@ -3,6 +3,9 @@ import deserialize
 import numpy as np
 # from pyfastpfor import *
 
+# when float data is NA, int data is [0,-999]
+# when string data is NA, int data is -1
+
 def decompress_single_column_reg(compression_method, c_bitstring, block_size, data_type, num_bytes, chrm):
     """
     decompresses a single column of data using gzip/zlib/bz2

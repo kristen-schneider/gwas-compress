@@ -120,6 +120,7 @@ def string_to_int(string_data):
         A, C, G, T = 2, 3, 4, 5
         chromosome x = 23
         chromosome y = 24
+        NA = -1
 
     INPUT
         string_data = single data value of type string
@@ -148,6 +149,8 @@ def string_to_int(string_data):
         int_data = 23
     elif string_data == 'Y':
         int_data = 24
+    elif string_data == 'NA':
+        int_data = -1
     else:
         try:
             int_data = int(string_data)

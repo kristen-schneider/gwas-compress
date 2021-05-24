@@ -1,6 +1,8 @@
 import type_handling
 import struct
 
+# when float data is NA, int data is [0,-999]
+# when string data is NA, int data is -1
 
 def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
     """
