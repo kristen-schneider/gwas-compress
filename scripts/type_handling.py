@@ -135,18 +135,21 @@ def convert_to_int(data, data_type):
         return string_to_int(data)
 
 def float_to_int(data):
-    float_data = None
-    data_list = data.split('.')
-    base = data_list[0]
-    decimal = data_list[1]
-    data_full_string = base+decimal
-    string_to_int(data_full_string)
-    return float_data
+    int_data = None
+    # float_data = float(data)
+    separate_exponent = data.split('e')
+    number = separate_exponent[0]
+    exponent = int(separate_exponent[1])
+    base_decimal = number.split('.')
+    base = int(base_decimal[0])
+    decimal = int(base_decimal[1])
+    int_data = [base, decimal, exponent]
+    return int_data
 
 def string_to_int(data):
     # (22 integer chromosomes, x and y)
     # A,C,T,G = 2,3,4,5
-    string_data = None
+    int_data = None
 
     if data == 'false': string_data = 0
     elif data == 'true': string_data = 1
@@ -156,6 +159,7 @@ def string_to_int(data):
     elif data == 'T': string_data = 5
     elif data == 'X': string_data = 23
     elif data == 'Y': string_data = 24
+    else: int_data = int(data)
 
     return string_data
 
