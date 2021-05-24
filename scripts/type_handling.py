@@ -5,10 +5,10 @@ def get_data_type(str_data, data_type_code_book):
     Most data is read in as a string. this will try and discern if it is actually an integer/float
 
     INPUT
-    data = incoming data. likely to be read in as string
+        data = incoming data. likely to be read in as string
     OUTPUT
-    data_type = int, float, or str
-    * removed bool functionality. if bool to add: int, float, bool, str.
+        data_type = int, float, or str
+        * removed bool functionality. if bool to add: int, float, bool, str.
     
     '''
     # hierarchy: int, float, string
@@ -33,10 +33,10 @@ def get_column_types(row, data_type_code_book):
     Data types are according to code_book
     
     INPUT
-    row = list of data that we see in a row (e.g. ['1', 'A', ...]
+        row = list of data that we see in a row (e.g. ['1', 'A', ...]
 
     OUTPUT
-    data_types_list = list of data types witnessed in that row (e.g. [1, 2, 2, 1, 1...])
+        data_types_list = list of data types witnessed in that row (e.g. [1, 2, 2, 1, 1...])
 
     '''
 
@@ -51,12 +51,12 @@ def convert_to_type(column_data, data_type):
     converts a list of values in a column of some data types into a list values in some column of new data_types
     
     INPUT
-    column_data = list of data (e.g. ['1','1','1','1','1']
-    data_type = type to which we want to convert (e.g. int)
-    data_type_code_book = code book which converts 
+        column_data = list of data (e.g. ['1','1','1','1','1']
+        data_type = type to which we want to convert (e.g. int)
+        data_type_code_book = code book which converts
 
     OUTPUT
-    correct_type_column = new list with correct type (e.g. [1,1,1,1,1])
+        correct_type_column = new list with correct type (e.g. [1,1,1,1,1])
 
     '''
     correct_type_column = []
@@ -92,12 +92,12 @@ def get_bitstring_length_by_data_type(block_size, data_type, num_bytes):
     returns the the lengths of a bitstring of given data type, bytes, and original number of elements
     
     INPUTS
-    block_size = number of rows present in a block
-    data_type = type of data to be represented in the bitstring (e.g. [1,1,1,1,1] = int
-    num_bytes = number of bytes we are using to be represented in this bitstring
+        block_size = number of rows present in a block
+        data_type = type of data to be represented in the bitstring (e.g. [1,1,1,1,1] = int
+        num_bytes = number of bytes we are using to be represented in this bitstring
 
     OUTPUTS
-    len_bitsring = this will return the length of a bitstring that should represent one column only
+        len_bitsring = this will return the length of a bitstring that should represent one column only
 
     '''
     if data_type == 1: bitstring_length = block_size*num_bytes
@@ -107,4 +107,55 @@ def get_bitstring_length_by_data_type(block_size, data_type, num_bytes):
         print('data is not of type int, float, or string')
         bitstring_length = -1 
     return bitstring_length
+
+def string_list_to_int(data_list, data_type):
+    '''
+    given a list of string data, return a list of typed data
+    '''
+    typed_list = []
+    for data in data_list:
+        typed_data = convert_to_int(data, data_type)
+        typed_list.append(typed_data)
+    return typed_list
+
+def convert_to_int(data, data_type):
+    '''
+    given any data (int, float, string)
+    INPUTS
+        data = intput data
+        data_tupe = original data type
+    OUTPUTS
+        integer version of data
+    '''
+    if data_type == 1:
+        return int(data)
+    elif data_type == 2:
+        return float_to_int(data)
+    elif data_type == 3:
+        return string_to_int(data)
+
+def float_to_int(data):
+    float_data = None
+    data_list = data.split('.')
+    base = data_list[0]
+    decimal = data_list[1]
+    data_full_string = base+decimal
+    string_to_int(data_full_string)
+    return float_data
+
+def string_to_int(data):
+    # (22 integer chromosomes, x and y)
+    # A,C,T,G = 2,3,4,5
+    string_data = None
+
+    if data == 'false': string_data = 0
+    elif data == 'true': string_data = 1
+    elif data == 'A': string_data = 2
+    elif data == 'C': string_data = 3
+    elif data == 'G': string_data = 4
+    elif data == 'T': string_data = 5
+    elif data == 'X': string_data = 23
+    elif data == 'Y': string_data = 24
+
+    return string_data
 

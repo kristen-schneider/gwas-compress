@@ -7,6 +7,7 @@ import config_arguments
 import generate_header_first_half
 import generate_funnel_format
 import funnel_format_compress
+import funnel_format_compress_ints
 import header_compress
 
 #### CONSTANTS ####
@@ -16,7 +17,7 @@ AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor
 
 #### USER-SPECIFIED PARAMETERS ####
 # user should edit config.ini to reflect proper parameters
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
 
 # included in config file
 IN_FILE = args['in_file']
@@ -84,6 +85,13 @@ def main():
                                                                             funnel_format_data, OUT_DIR)
     header_second_half = serialized_compressed_data[0]
     compressed_data = serialized_compressed_data[1]
+
+    serialized_compressed_data_all_ints = funnel_format_compress_ints.compress_all_blocks(AVAILABLE_COMPRESSION_METHODS,
+                                                                                          COMPRESSION_METHOD,
+                                                                                          header_first_half,
+                                                                                          funnel_format_data,
+                                                                                          OUT_DIR)
+
 
     # compression times data file
     # column_compression_times = serialized_compressed_data[2]
