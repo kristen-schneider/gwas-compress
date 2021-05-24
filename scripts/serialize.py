@@ -1,6 +1,3 @@
-import type_handling
-import struct
-
 def serialize_list(in_list, data_type, num_bytes):
     """
     serializes a list of data type integers, according to their original type
@@ -17,29 +14,53 @@ def serialize_list(in_list, data_type, num_bytes):
     s_value = None
 
     for i in in_list:
-        if data_type == 1:
-            s_value = serialize_int(i, num_bytes)
-        elif data_type == 2:
-            s_value = serialize_float(i, num_bytes)
-        elif data_type == 3:
-            s_value = serialize_string(i, num_bytes)
-        else:
-            print('bad input data type for serialization')
-
+        s_value = serialize_data(i, data_type, num_bytes)
         s_bitstring += s_value
     return s_bitstring
 
-def serialize_int(data, num_bytes):
+def serialize_data(data, data_type, num_bytes):
     """
     takes a single data value and serializes it properly for original integer values
 
     INPUT
         data: single data value
+        data_type: original data type value
         !! num_bytes: number of bytes used to serialize for a given data_type
 
     OUTPUT
         s_value: serialized data value
     """
+    s_value = None
+    # should work for all integer values
+    try:
+        s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+    # for numpy arrays and for some header values ('/t')
+    except AttributeError:
+        if data_type != 1:
+            # data coming in from codec compression/numpy array
+            try:
+                data = int(data)
+                s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+            # from string value (e.g. header data contains strings!)
+            except ValueError:
+                # string data in header
+                if data_type == 3:
+                    s_value = serialize_strings(data)
+                # bytes data in header
+                elif data_type == 4: return data
+
+    return s_value
+
+def serialize_strings(data):
+    """
+    converts string data to serialized data (used for file header)
+    """
+    # single string value (e.g. 'H')
+    s_value = bytes(data, 'utf-8')
+    if len(s_value) > 1:
+        s_value = b'\0'+s_value+b'\0'
+    return s_value
+
 
 
 

@@ -148,13 +148,28 @@ def string_to_int(string_data):
     """
     # A,C,T,G = 2,3,4,5
 
-    int_data = None
+    int_data = []
 
-    if string_data == 'false':
-        int_data = 0
-    elif string_data == 'true':
-        int_data = 1
-    elif string_data == 'A':
+    if len(string_data) > 1:
+        if string_data == 'false':
+            int_data = 0
+        elif string_data == 'true':
+            int_data = 1
+        elif string_data == 'NA':
+            int_data = -1
+        else:
+            for s in string_data:
+                int_data.append(single_string_to_int(s))
+    else:
+        int_data = single_string_to_int(string_data)
+    return int_data
+
+def single_string_to_int(string_data):
+    """
+    one single string value
+
+    """
+    if string_data == 'A':
         int_data = 2
     elif string_data == 'C':
         int_data = 3
@@ -162,15 +177,12 @@ def string_to_int(string_data):
         int_data = 4
     elif string_data == 'T':
         int_data = 5
-    elif string_data == 'NA':
-        int_data = -1
     else:
         try:
             int_data = int(string_data)
         except ValueError:
             print('cannot convert string to int')
             return int_data
-
     return int_data
 
 

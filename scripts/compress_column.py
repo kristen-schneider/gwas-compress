@@ -33,8 +33,16 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
         for float_value in typed_column:
             serialized_float = serialize.serialize_list(float_value, column_type, column_bytes)
             serialized_column += serialized_float
+    # string data can be INDELS (lists of multiple nucleotides
+    elif column_type == 3:
+        serialized_column = b''
+        # for serialization, must change column type to being 1
+        column_type = 1
+        for string_value in typed_column:
+            serialized_string = serialize.serialize_list(string_value, column_type, column_bytes)
+            serialized_column += serialized_string
 
-    elif column_type == 1 or column_type == 3 or column_type == 4:
+    elif column_type == 1 or column_type == 4:
         # for serialization, must change column type to being 1
         column_type = 1
         serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes)
