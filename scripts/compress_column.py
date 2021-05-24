@@ -22,8 +22,27 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
 
     column_i_START = datetime.now()
     column_i_BEFORE = sys.getsizeof(typed_column)
+
     ### work ###
-    serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes)
+    # float data is a list which contains [base, exponent] as integer.
+    # serialized float data is two integers which can reconstruct original float
+    if column_type == 2:
+        base = typed_column[0]
+        exponent = typed_column[1]
+        # for serialization, must change column type to being 1
+        column_type = 1
+
+        serialized_base = serialize.serialize_list(base, column_type, column_bytes)
+        serialized_exponent = serialize.serialize_list(exponent, column_type, column_bytes)
+        serialized_column = serialized_base+serialized_exponent
+
+    elif column_type == 1 or column_type == 3 or column_type == 4:
+        # for serialization, must change column type to being 1
+        column_type = 1
+        serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes)
+    else:
+        print('invalid column type for compression: ', column_type)
+
     compressed_column_info = compress.compress_bitstring(column_compression_method, serialized_column)
     ############
 

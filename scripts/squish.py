@@ -79,12 +79,12 @@ def main():
     print('compressing data...')
     compress_data_START = datetime.now()
     ### work ###
-    serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
-                                                                            AVAILABLE_COMPRESSION_METHODS,
-                                                                            COMPRESSION_METHOD, header_first_half,
-                                                                            funnel_format_data, OUT_DIR)
-    header_second_half = serialized_compressed_data[0]
-    compressed_data = serialized_compressed_data[1]
+    # serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
+    #                                                                         AVAILABLE_COMPRESSION_METHODS,
+    #                                                                         COMPRESSION_METHOD, header_first_half,
+    #                                                                         funnel_format_data, OUT_DIR)
+    # header_second_half = serialized_compressed_data[0]
+    # compressed_data = serialized_compressed_data[1]
 
     serialized_compressed_data_all_ints = funnel_format_compress_ints.compress_all_blocks(AVAILABLE_COMPRESSION_METHODS,
                                                                                           COMPRESSION_METHOD,
@@ -92,16 +92,9 @@ def main():
                                                                                           funnel_format_data,
                                                                                           OUT_DIR)
 
+    header_second_half = serialized_compressed_data_all_ints[0]
+    compressed_data = serialized_compressed_data_all_ints[1]
 
-    # compression times data file
-    # column_compression_times = serialized_compressed_data[2]
-    # df = open(DATA_FILE, 'w')
-    # for cctime in column_compression_times:
-    #     df.write(cctime)
-    #     df.write(',')
-    #     df.write(str(column_compression_times[cctime]))
-    #     df.write(',\n')
-    # df.close()
 
     ############
     compress_data_END = datetime.now()

@@ -146,7 +146,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             # compress column using compress serialized data methods
             compressed_column_info = compress_column.compress_single_column_reg(typed_column,
                                                                                 column_compression_method,
-                                                                                1,
+                                                                                column_data_type,
                                                                                 column_bytes,
                                                                                 column_i,
                                                                                 all_column_compression_times,
