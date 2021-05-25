@@ -81,30 +81,21 @@ def serialize_float(data, num_bytes):
 
 def serialize_string(data, num_bytes):
     """
-    converts string data to serialized data
+    converts string data to serialized data.
+    pads a string with more than one character with
+     leading and trailing zeros to indicate beginning and end of string
 
-    INPUT
-        data: integer values representing string data
+    INPUT:
+        data: string data
 
-    OUTPUT
-        s_value: serialized value representing string data
+    OUTPUT:
+        s_value: serialized string data
     """
-    s_bitstring = b''
-    indel_flag = -2
-    s_indel_flag = serialize_int(indel_flag, num_bytes)
-    s_bitstring+=s_indel_flag
-    # INDEL
-    if type(data) == list:
-        for i in data:
-            s_value = serialize_int(i, num_bytes)
-            s_bitstring += s_value
-        s_bitstring += s_indel_flag
-    # SNP
-    elif type(data) == int:
-        s_value = serialize_int(data, num_bytes)
-        s_bitstring += s_value
-
-    return s_bitstring
+    # single string value (e.g. 'H')
+    s_value = bytes(data, 'utf-8')
+    if len(s_value) > 1:
+        s_value = b'\0'+s_value+b'\0'
+    return s_value
 
 
 # def serialize_list(in_list, data_type, num_bytes):

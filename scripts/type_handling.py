@@ -1,3 +1,5 @@
+import math
+
 def get_column_types(row, data_type_code_book):
     """
     Given a row of data, returns all the types of data in that row
@@ -79,7 +81,8 @@ def convert_to_int(data, data_type):
     elif data_type == 2:
         return float_to_int(data)
     elif data_type == 3:
-        return string_to_int(data)
+        return data
+        # return string_to_int(data)
     elif data_type == 4:
         return bytes_to_int(data)
 
@@ -112,21 +115,24 @@ def float_to_int(float_data):
         float_data: data in float form (e.g. 4.213e-05)
 
     OUTPUT
-        int_data: list [base, exponent];
-            where base is the float number without the decimal
-            and exponent is the signed value after 'e'
+        int_data: large integer with little endian formatting number:
+        base  exp -/+
+        00000 000 0
     """
+    # 000000000
+    float_as_int = 0
     if float_data == 'NA':
         # choose a value that is not seen in data
-        int_data = [0, -999]
+        float_as_int = 0
     else:
-        # split on base and exponent and create a list [base, exponent]
         base_exponent = float_data.split('e')
-        base = base_exponent[0]
+        base = int(('').join(base_exponent[0].split('.')))
         exponent = int(base_exponent[1])
-        whole_decimal = int(''.join(base.split('.')))
-        int_data = [whole_decimal, exponent]
-    return int_data
+
+        float_as_int += base*10000
+        float_as_int += abs(exponent)*10
+        if exponent > 0: float_as_int += 1
+    return float_as_int
 
 
 def string_to_int(string_data):
