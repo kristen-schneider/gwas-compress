@@ -1,4 +1,4 @@
-def serialize_list(in_list, data_type, num_bytes, header):
+def serialize_list(in_list, data_type, num_bytes):
     """
     serializes a list of data type integers, according to their original type
 
@@ -14,11 +14,11 @@ def serialize_list(in_list, data_type, num_bytes, header):
     s_value = None
 
     for i in in_list:
-        s_value = serialize_data(i, data_type, num_bytes, header)
+        s_value = serialize_data(i, data_type, num_bytes)
         s_bitstring += s_value
     return s_bitstring
 
-def serialize_data(data, data_type, num_bytes, header):
+def serialize_data(data, data_type, num_bytes):
     """
     takes a single data value and serializes it properly for original integer values
 
@@ -45,13 +45,13 @@ def serialize_data(data, data_type, num_bytes, header):
             except ValueError:
                 # string data in header
                 if data_type == 3:
-                    s_value = serialize_strings(data, header)
+                    s_value = serialize_strings(data)
                 # bytes data in header
                 elif data_type == 4: return data
 
     return s_value
 
-def serialize_strings(data, header):
+def serialize_strings(data):
     """
     converts string data to serialized data (used for file header)
     """

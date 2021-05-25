@@ -49,8 +49,7 @@ class TestTypeHandling(unittest.TestCase):
         self.assertEqual(type_handling.get_bitstring_length_by_data_type(self.num_rows_in_block, 2, type_to_bytes_code_book[2]), 40)
         self.assertEqual(type_handling.get_bitstring_length_by_data_type(self.num_rows_in_block, 3, type_to_bytes_code_book[3]), 5)
 
-    def test_exp_float_to_int(self):
-        self.assertEqual(type_handling.float_to_int('4.213e-5'), 000004213)
+
 
 if __name__ == '__main__':
     unittest.main()

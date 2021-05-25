@@ -1,7 +1,7 @@
 from datetime import datetime
 import compress_column
 import type_handling
-import serialize
+import serialize_other
 import compress
 import read_write_compression_times
 import read_write_compression_ratios
@@ -150,8 +150,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                 column_bytes,
                                                                                 column_i,
                                                                                 all_column_compression_times,
-                                                                                all_column_compression_size_ratios,
-                                                                                False)
+                                                                                all_column_compression_size_ratios)
 
             compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
@@ -177,8 +176,8 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             #numpy_compressed_column_size = numpy_compressed_column_info[1]
             #numpy_compressed_column = numpy_compressed_column_info[0][0:numpy_compressed_column_size]
             # must serialize a numpy column in order for the column to be properly written to our output file
-            serialized_compressed_column = serialize.serialize_list(numpy_compressed_column, column_data_type,
-                                                                    column_bytes)
+            serialized_compressed_column = serialize_other.serialize_list(numpy_compressed_column, column_data_type,
+                                                                          column_bytes)
 
             compressed_block_bitstring += serialized_compressed_column
 
@@ -191,8 +190,8 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             print('Unrecognized compression method. Value not found in compression method code book.')
             return -1
 
-    serialized_block_header = serialize.serialize_list(compressed_column_ends_list, block_header_type,
-                                                       block_header_bytes, False)
+    serialized_block_header = serialize_other.serialize_list(compressed_column_ends_list, block_header_type,
+                                                             block_header_bytes)
     compressed_block_header_info = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
     compressed_block_header_compression_method_length = compressed_block_header_info[1]
     compressed_block_header_bitstring = compressed_block_header_info[0][

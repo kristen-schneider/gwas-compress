@@ -8,7 +8,7 @@ def decompress_data(compression_method, c_bitstring):
 
     INPUT
         compression_method: e.g. gzip, zlib, etc...
-        c_bitstring = serialized bitstring from the serialize_data method in serialize.py
+        c_bitstring = serialized bitstring from the serialize_data method in serialize_other.py
 
     OUTPUT
         dc_bitstring = compressed bitstring

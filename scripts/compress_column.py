@@ -1,4 +1,4 @@
-import serialize
+import serialize_other
 import compress
 import numpy as np
 from datetime import datetime
@@ -6,8 +6,7 @@ import sys
 # from pyfastpfor import *
 
 def compress_single_column_reg(typed_column, column_compression_method, column_type, column_bytes,
-                               column_i, all_column_compression_times, all_column_compression_size_ratios,
-                               header):
+                               column_i, all_column_compression_times, all_column_compression_size_ratios):
     """
     compresses a single column of data using methods that take in serialized data (e.g. gzip, zlib, bz2)
 
@@ -32,7 +31,7 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
         # for serialization, must change column type to being 1
         column_type = 1
         for float_value in typed_column:
-            serialized_float = serialize.serialize_list(float_value, column_type, column_bytes, header)
+            serialized_float = serialize_other.serialize_list(float_value, column_type, column_bytes)
             serialized_column += serialized_float
     # string data can be INDELS (lists of multiple nucleotides
     elif column_type == 3:
@@ -40,14 +39,14 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
         # for serialization, must change column type to being 1
         column_type = 1
         for string_value in typed_column:
-            try: serialized_string = serialize.serialize_list(string_value, column_type, column_bytes, header)
-            except TypeError: serialized_string = serialize.serialize_data(string_value, column_type, column_bytes, header)
+            try: serialized_string = serialize_other.serialize_list(string_value, column_type, column_bytes)
+            except TypeError: serialized_string = serialize_other.serialize_data(string_value, column_type, column_bytes)
             serialized_column += serialized_string
 
     elif column_type == 1 or column_type == 4:
         # for serialization, must change column type to being 1
         column_type = 1
-        serialized_column = serialize.serialize_list(typed_column, column_type, column_bytes, header)
+        serialized_column = serialize_other.serialize_list(typed_column, column_type, column_bytes)
     else:
         print('invalid column type for compression: ', column_type)
 
