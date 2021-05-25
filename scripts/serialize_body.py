@@ -1,6 +1,6 @@
 def serialize_list(in_list, data_type, num_bytes):
     """
-    serializes a list of data type integers, according to their original type
+    serializes a list of data according to their data type
 
     INPUT
         in_list: incoming list of integer values
@@ -42,7 +42,7 @@ def serialize_data(data, data_type, num_bytes):
         s_value = serialize_float(data, num_bytes)
     # strings
     elif data_type == 3:
-        s_value = serialize_string(data, num_bytes)
+        s_value = serialize_string(data)
     else:
         s_value = data
     return s_value
@@ -65,10 +65,7 @@ def serialize_int(data, num_bytes):
 
 def serialize_float(data, num_bytes):
     """
-        integer columns are 1 and 2:
-            chrm-data values 1-24
-                *special cases with X and Y values.
-            pos-data values in thousands and up
+        float columns are 4, 5, 6, 7, 8
         INPUT
             data: incoming data value
             num_bytes: number of bytes used to serialize for a given data_type
@@ -77,9 +74,10 @@ def serialize_float(data, num_bytes):
             s_value: serialized integer value
         """
     s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+    print(s_value)
     return s_value
 
-def serialize_string(data, num_bytes):
+def serialize_string(data):
     """
     converts string data to serialized data.
     pads a string with more than one character with

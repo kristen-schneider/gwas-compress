@@ -1,6 +1,7 @@
 import type_handling
 import struct
 
+
 # when float data is NA, int data is [0,-999]
 # when string data is NA, int data is -1
 
@@ -31,6 +32,7 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
 
     return ds_bitstring
 
+
 def deserialize_int(dc_bitstring, block_size, num_bytes, chrm):
     """
     takes serialized integer data and converts to integers.
@@ -42,10 +44,13 @@ def deserialize_int(dc_bitstring, block_size, num_bytes, chrm):
         curr_bytes = dc_bitstring[i * num_bytes:i * num_bytes + num_bytes]
         # these values are chromosomes and positions and should not be negative.
         curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
-        if curr_ds_value == 23: curr_ds_value ='X'
-        elif curr_ds_value == 24: curr_ds_value = 'Y'
+        if curr_ds_value == 23:
+            curr_ds_value = 'X'
+        elif curr_ds_value == 24:
+            curr_ds_value = 'Y'
         ds_bitstring.append(curr_ds_value)
     return ds_bitstring
+
 
 def deserialize_float(dc_bitstring, block_size, num_bytes):
     """
@@ -53,28 +58,25 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
     """
     ds_bitstring = []
     for i in range(block_size):
-        # one float value is two integers
-        single_float_bytes = 2*num_bytes
-        curr_bytes_base = dc_bitstring[i * single_float_bytes:
-                                       i * single_float_bytes + num_bytes]
-        curr_bytes_exponent = dc_bitstring[i * single_float_bytes+num_bytes:
-                                          i * single_float_bytes + single_float_bytes]
-
-        base_ds_value = struct.unpack('>f', curr_bytes_base)[0]
-        exponent_ds_value = struct.unpack('>f', curr_bytes_exponent)[0]
-
-        curr_ds_value = base_exponent_to_float([base_ds_value, exponent_ds_value])
+        curr_bytes = dc_bitstring[i * num_bytes:i * num_bytes + num_bytes]
+        curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=True)
+        # convert int back to float
         ds_bitstring.append(curr_ds_value)
     return ds_bitstring
-
-def base_exponent_to_float(base_exponent_list):
-    base = str(base_exponent_list[0])[0]
-    decimal = str(base_exponent_list[0])[1:]
-    exponent = base_exponent_list[1]
-
-    string_data = base+'.'+decimal+'e'+exponent
-    float_data = float(string_data)
-    return float_data
+    # for i in range(block_size):
+    #     # one float value is two integers
+    #     single_float_bytes = 2*num_bytes
+    #     curr_bytes_base = dc_bitstring[i * single_float_bytes:
+    #                                    i * single_float_bytes + num_bytes]
+    #     curr_bytes_exponent = dc_bitstring[i * single_float_bytes+num_bytes:
+    #                                       i * single_float_bytes + single_float_bytes]
+    #
+    #     base_ds_value = struct.unpack('>f', curr_bytes_base)[0]
+    #     exponent_ds_value = struct.unpack('>f', curr_bytes_exponent)[0]
+    #
+    #     curr_ds_value = base_exponent_to_float([base_ds_value, exponent_ds_value])
+    #     ds_bitstring.append(curr_ds_value)
+    return ds_bitstring
 
 
 def deserialize_string(dc_bitstring):
@@ -87,7 +89,7 @@ def deserialize_string(dc_bitstring):
         if curr_bytes == 0:
             INDEL = True
             INDEL_bitstring = ''
-            i += 1 # skip flag byte and move to INDEL
+            i += 1  # skip flag byte and move to INDEL
             while INDEL:
                 curr_bytes = dc_bitstring[i]
                 if curr_bytes != 0:
@@ -107,6 +109,8 @@ def deserialize_string(dc_bitstring):
             i += 1
     return ds_bitstring
 
+
+# deserialize_float(b'\x02\x82\xda\x82', 1, 4)
 
 # def deserialize_list_old(dc_bitstring, block_size, data_type, num_bytes, chrm):
 #     """

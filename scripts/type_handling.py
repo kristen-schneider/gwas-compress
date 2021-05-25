@@ -1,5 +1,3 @@
-import math
-
 def get_column_types(row, data_type_code_book):
     """
     Given a row of data, returns all the types of data in that row
@@ -119,7 +117,7 @@ def float_to_int(float_data):
         base  exp -/+
         00000 000 0
     """
-    # 000000000
+    # 000000000 - little endian
     float_as_int = 0
     if float_data == 'NA':
         # choose a value that is not seen in data
@@ -132,6 +130,7 @@ def float_to_int(float_data):
         float_as_int += base*10000
         float_as_int += abs(exponent)*10
         if exponent > 0: float_as_int += 1
+    print(float_as_int)
     return float_as_int
 
 
@@ -204,6 +203,31 @@ def bytes_to_int(bytes_data):
     int_data = int.from_bytes(bytes_data, byteorder='big', signed=False)
     return int_data
 
+def int_to_float(int_data):
+    """
+    converts a data type of int to a float (for float columns)
+
+    INPUT
+        int_data: data in int form (e.g. 42130050)
+
+    OUTPUT
+        float_data: data in float form (e.g. 4.213e-05)
+    """
+    # 000000000 - little endian
+    float_as_int = 0
+    if float_data == 'NA':
+        # choose a value that is not seen in data
+        float_as_int = 0
+    else:
+        base_exponent = float_data.split('e')
+        base = int(('').join(base_exponent[0].split('.')))
+        exponent = int(base_exponent[1])
+
+        float_as_int += base*10000
+        float_as_int += abs(exponent)*10
+        if exponent > 0: float_as_int += 1
+    print(float_as_int)
+    return float_as_int
 
 # # old functionality not used now that we convert everything to ints.
 # def convert_to_type(column_data, data_type):
