@@ -17,11 +17,17 @@ def full_header_tools(data_type_code_book, data_type_byte_sizes, full_header):
     """
     # get header types and serialize
     header_types = get_header_types(full_header, data_type_code_book)
-    serialized_header_types = serialize.serialize_list(header_types, data_type_code_book[int], data_type_byte_sizes[data_type_code_book[int]])
+    serialized_header_types = serialize.serialize_list(header_types,
+                                                       data_type_code_book[int],
+                                                       data_type_byte_sizes[data_type_code_book[int]],
+                                                       True)
 
     # get number of elements in each header item
     header_num_elements = get_header_lengths(full_header)
-    serialized_header_num_elements = serialize.serialize_list(header_num_elements, data_type_code_book[int], data_type_byte_sizes[data_type_code_book[int]])
+    serialized_header_num_elements = serialize.serialize_list(header_num_elements,
+                                                              data_type_code_book[int],
+                                                              data_type_byte_sizes[data_type_code_book[int]],
+                                                              True)
 
     # get full serialized header as a list
     serialized_header_list = serialize_header(header_types, data_type_byte_sizes, full_header)
@@ -30,7 +36,10 @@ def full_header_tools(data_type_code_book, data_type_byte_sizes, full_header):
 
     # get ends of each serialized element in column
     header_ends = get_header_ends(serialized_header_list)
-    serialized_header_ends = serialize.serialize_list(header_ends, data_type_code_book[int], data_type_byte_sizes[data_type_code_book[int]])
+    serialized_header_ends = serialize.serialize_list(header_ends,
+                                                      data_type_code_book[int],
+                                                      data_type_byte_sizes[data_type_code_book[int]],
+                                                      True)
 
     return [serialized_header_types, serialized_header_num_elements, serialized_header_ends,
             serialized_header]
@@ -91,9 +100,9 @@ def serialize_header(header_types, data_type_byte_sizes, full_header):
 
         # serialize a list and a single value differently
         if type(current_h) == list:
-            s_current_h = serialize.serialize_list(current_h, header_types[h], data_type_byte_sizes[header_types[h]])
+            s_current_h = serialize.serialize_list(current_h, header_types[h], data_type_byte_sizes[header_types[h]], True)
         else:
-            s_current_h = serialize.serialize_data(current_h, header_types[h], data_type_byte_sizes[header_types[h]])
+            s_current_h = serialize.serialize_data(current_h, header_types[h], data_type_byte_sizes[header_types[h]], True)
 
         serialized_header_list.append(s_current_h)
     return serialized_header_list

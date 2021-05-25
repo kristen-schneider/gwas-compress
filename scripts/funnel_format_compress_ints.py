@@ -150,7 +150,8 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                 column_bytes,
                                                                                 column_i,
                                                                                 all_column_compression_times,
-                                                                                all_column_compression_size_ratios)
+                                                                                all_column_compression_size_ratios,
+                                                                                False)
 
             compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
@@ -191,7 +192,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             return -1
 
     serialized_block_header = serialize.serialize_list(compressed_column_ends_list, block_header_type,
-                                                       block_header_bytes)
+                                                       block_header_bytes, False)
     compressed_block_header_info = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
     compressed_block_header_compression_method_length = compressed_block_header_info[1]
     compressed_block_header_bitstring = compressed_block_header_info[0][

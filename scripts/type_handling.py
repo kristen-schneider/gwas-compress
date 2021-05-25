@@ -147,6 +147,7 @@ def string_to_int(string_data):
         int_data = string data converted to integer value according to mapping above.
     """
     # A,C,T,G = 2,3,4,5
+    # -2 flags start of indel
 
     int_data = []
 
