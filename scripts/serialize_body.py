@@ -5,7 +5,7 @@ def serialize_list(in_list, data_type, num_bytes):
     INPUT
         in_list: incoming list of integer values
         data_type: original data type value
-        !! num_bytes: number of bytes used to serialize for a given data_type
+        num_bytes: number of bytes used to serialize for a given data_type
 
     OUPUT
         s_bitstring = serialized bitstring
@@ -15,54 +15,96 @@ def serialize_list(in_list, data_type, num_bytes):
 
     for i in in_list:
         s_value = serialize_data(i, data_type, num_bytes)
-        s_bitstring += s_value
+        try:
+            s_bitstring += s_value
+        except TypeError:
+            print('cannot concat s_value to bitstring: ', i, s_value)
     return s_bitstring
 
 def serialize_data(data, data_type, num_bytes):
     """
-    takes a single data value and serializes it properly for original integer values
+    serializes a single piece of data according to its data type
 
     INPUT
-        data: single data value
-        data_type: original data type value
-        !! num_bytes: number of bytes used to serialize for a given data_type
+        data: incoming data value
+        data_type: data type of data
+        num_bytes: number of bytes used to serialize for a given data_type
 
     OUTPUT
-        s_value: serialized data value
+        s_value: serialized data
     """
     s_value = None
-    # should work for all integer values
-    try:
-        s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
-    # for numpy arrays and for some header values ('/t')
-    except AttributeError:
-        if data_type != 1:
-            # data coming in from codec compression/numpy array
-            try:
-                data = int(data)
-                s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
-            # from string value (e.g. header data contains strings!)
-            except ValueError:
-                # string data in header
-                if data_type == 3:
-                    s_value = serialize_strings(data)
-                # bytes data in header
-                elif data_type == 4: return data
-
-    return s_value
-
-def serialize_strings(data):
-    """
-    converts string data to serialized data (used for file header)
-    """
-    # single string value (e.g. 'H')
-    s_value = bytes(data, 'utf-8')
-    if len(s_value) > 1:
-        s_value = b'\0'+s_value+b'\0'
+    # ints
+    if data_type == 1:
+        s_value = serialize_int(data, num_bytes)
+    # floats
+    elif data_type == 2:
+        s_value = serialize_float(data, num_bytes)
+    # strings
+    elif data_type == 3:
+        s_value = serialize_string(data, num_bytes)
+    else:
+        s_value = data
     return s_value
 
 
+def serialize_int(data, num_bytes):
+    """
+    integer columns are 1 and 2: chrm and pos
+    special cases with X and Y values.
 
+    INPUT
+        data: incoming data value
+        num_bytes: number of bytes used to serialize for a given data_type
+
+    OUTPUT
+        s_value: serialized integer value
+    """
+    s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+    return s_value
+
+def serialize_float(data, num_bytes):
+    """
+        integer columns are 1 and 2:
+            chrm-data values 1-24
+                *special cases with X and Y values.
+            pos-data values in thousands and up
+        INPUT
+            data: incoming data value
+            num_bytes: number of bytes used to serialize for a given data_type
+
+        OUTPUT
+            s_value: serialized integer value
+        """
+    s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+    return s_value
+
+def serialize_string(data, num_bytes):
+    """
+    converts string data to serialized data
+
+    INPUT
+        data: integer values representing string data
+
+    OUTPUT
+        s_value: serialized value representing string data
+    """
+    s_bitstring = b''
+    indel_flag = -2
+    s_indel_flag = serialize_int(indel_flag, num_bytes)
+    s_bitstring+=s_indel_flag
+    # INDEL
+    if type(data) == list:
+        for i in data:
+            s_value = serialize_int(i, num_bytes)
+            s_bitstring += s_value
+        s_bitstring += s_indel_flag
+    # SNP
+    elif type(data) == int:
+        s_value = serialize_int(data, num_bytes)
+        s_bitstring += s_value
+
+    return s_bitstring
 
 
 # def serialize_list(in_list, data_type, num_bytes):

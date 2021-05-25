@@ -1,6 +1,3 @@
-import numpy as np
-
-
 def get_column_types(row, data_type_code_book):
     """
     Given a row of data, returns all the types of data in that row
