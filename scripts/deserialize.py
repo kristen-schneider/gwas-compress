@@ -78,7 +78,6 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
     #
     #     curr_ds_value = base_exponent_to_float([base_ds_value, exponent_ds_value])
     #     ds_bitstring.append(curr_ds_value)
-    return ds_bitstring
 
 
 def deserialize_string(dc_bitstring):

@@ -12,7 +12,7 @@ def serialize_list(in_list, data_type, num_bytes):
     """
     s_bitstring = b''
     s_value = None
-
+    
     for i in in_list:
         s_value = serialize_data(i, data_type, num_bytes)
         try:
@@ -64,9 +64,7 @@ def serialize_int(data, num_bytes):
         s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
     # numpy data is not integer
     except AttributeError: 
-        data = int(data)
-        s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
-
+        s_value = data.tobytes(order='C')
     return s_value
 
 def serialize_float(data, num_bytes):
@@ -79,7 +77,11 @@ def serialize_float(data, num_bytes):
         OUTPUT
             s_value: serialized integer value
         """
-    s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+    try:
+        s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+    # numpy data is not integer
+    except AttributeError: 
+        s_value = data.tobytes(order='C')
     return s_value
 
 def serialize_string(data):

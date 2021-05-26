@@ -94,18 +94,15 @@ def compress_single_column_pyfast(typed_column, codec,
 
     # allocate space for compressed data
     comp_arr = np.zeros(np_arr_size + buffer_size, dtype=np.uint32, order='C')
-
     # get codec method from pyfastpfor and use it for compression
     codec_method = getCodec(codec)
     comp_arr_size = codec_method.encodeArray(np_arr, np_arr_size, comp_arr, len(comp_arr))
-    
     ############
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
     column_i_AFTER = sys.getsizeof(comp_arr[0:comp_arr_size])
     column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
 
-    
     #print(column_i_BEFORE, column_i_AFTER)
     # adding to time dict
     try:
