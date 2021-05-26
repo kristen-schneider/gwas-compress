@@ -121,15 +121,37 @@ def float_to_int(float_data):
     float_as_int = 0
     if float_data == 'NA':
         # choose a value that is not seen in data
-        float_as_int = 0
+        float_as_int = 999
     else:
+        # base, base_sign, exponent, exponent_sign
+        # 00000, 0, 00, 0,
+
         base_exponent = float_data.split('e')
-        base = int(('').join(base_exponent[0].split('.')))
+        base = float(base_exponent[0])
         exponent = int(base_exponent[1])
 
-        float_as_int += base*10000
-        float_as_int += abs(exponent)*10
+        # BASE
+        # base number gets proper space (e.g. 4.213 --> 42130)
+        # have to do this in two steps because
+        # rounding is lossy with python multiplication
+        # if we just did *100000000 we would get junk in the last 4 digits
+        float_as_int += abs(int(base*10000))
+        float_as_int *= 10000
+
+        # BASE SIGN
+        # is number negative or positive?
+        base_sign = 1  # positive
+        if float(base) < 0: base_sign = 0  # negative
+        float_as_int += base_sign * 1000
+
+        # EXPONENT
+        # exponents must be < 100
+        # otherwise the placement of the exponent bleeds into the base/base sign
+        float_as_int += abs(exponent) * 10
+
+        # EXPONENT SIGN
         if exponent > 0: float_as_int += 1
+
     print(float_as_int)
     return float_as_int
 
@@ -205,29 +227,29 @@ def bytes_to_int(bytes_data):
 
 def int_to_float(int_data):
     """
-    converts a data type of int to a float (for float columns)
+    converts a data type of int to a float
+    (for decompressing float columns)
 
     INPUT
         int_data: data in int form (e.g. 42130050)
 
     OUTPUT
-        float_data: data in float form (e.g. 4.213e-05)
+        int_as_float: data in float form (e.g. 4.213e-05)
     """
-    # 000000000 - little endian
-    float_as_int = 0
-    if float_data == 'NA':
-        # choose a value that is not seen in data
-        float_as_int = 0
-    else:
-        base_exponent = float_data.split('e')
-        base = int(('').join(base_exponent[0].split('.')))
-        exponent = int(base_exponent[1])
+    # base, base_sign, exponent, exponent_sign
+    # 00000, 0, 00, 0,
 
-        float_as_int += base*10000
-        float_as_int += abs(exponent)*10
-        if exponent > 0: float_as_int += 1
-    print(float_as_int)
-    return float_as_int
+    int_as_float = 0
+    if int_data == 0:
+        # choose a value that is not seen in data
+        float_data = 'NA'
+    else:
+        full_base = int(int_data/1000)
+        decimal_base = float(full_base/1000000)
+        exponent = int((int_data-(full_base*100))/10)
+        exponent_sign = int(int_data-(full_base*100)-(exponent*10))
+        print(full_base, decimal_base, exponent, exponent_sign)
+    return int_as_float
 
 # # old functionality not used now that we convert everything to ints.
 # def convert_to_type(column_data, data_type):

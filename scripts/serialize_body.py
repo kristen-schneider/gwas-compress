@@ -74,7 +74,6 @@ def serialize_float(data, num_bytes):
             s_value: serialized integer value
         """
     s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
-    print(s_value)
     return s_value
 
 def serialize_string(data):

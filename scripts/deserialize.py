@@ -61,7 +61,9 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
         curr_bytes = dc_bitstring[i * num_bytes:i * num_bytes + num_bytes]
         curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=True)
         # convert int back to float
-        ds_bitstring.append(curr_ds_value)
+        ds_float = type_handling.int_to_float(curr_ds_value)
+        ds_bitstring.append(ds_float)
+
     return ds_bitstring
     # for i in range(block_size):
     #     # one float value is two integers
