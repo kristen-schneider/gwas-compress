@@ -92,8 +92,16 @@ def main():
                                                                                           funnel_format_data,
                                                                                           OUT_DIR)
 
-    header_second_half = serialized_compressed_data_all_ints[0]
-    compressed_data = serialized_compressed_data_all_ints[1]
+    try:
+        header_second_half = serialized_compressed_data_all_ints[0]
+    except:
+        print('could not compress data')
+        return -1
+    try:
+        compressed_data = serialized_compressed_data_all_ints[1]
+    except:
+        print('could not compress data')
+        return -1
 
 
     ############

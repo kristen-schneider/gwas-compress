@@ -68,9 +68,16 @@ def compress_all_blocks(available_compression_methods,
                                                       all_column_compression_size_ratios,
                                                       compression_method_list,
                                                       column_types, curr_block)
-        compressed_block_header = compressed_block_info[0]
-        compressed_block_bitstring = compressed_block_info[1]
-
+        try:
+            compressed_block_header = compressed_block_info[0]
+        except TypeError: 
+            print('bad compression of single block.')
+            return -1
+        try:
+            compressed_block_bitstring = compressed_block_info[1]
+        except TypeError:
+            print('bad compression of single block.')
+            return -1
         len_curr_block = len(compressed_block_header) + len(compressed_block_bitstring)
         block_header_end = (block_end + len(compressed_block_header))
         block_end += len_curr_block
@@ -168,6 +175,9 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                 codec = 'fastpfor128'
             elif column_compression_method == 'fastpfor256':
                 codec = 'fastpfor256'
+            else:
+                print('Unrecognized compression method. Value not found in compression method code book.')
+                return -1
             numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
                                                                                     codec,
                                                                                     column_i,

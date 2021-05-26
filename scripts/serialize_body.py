@@ -60,7 +60,13 @@ def serialize_int(data, num_bytes):
     OUTPUT
         s_value: serialized integer value
     """
-    s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+    try:
+        s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+    # numpy data is not integer
+    except AttributeError: 
+        data = int(data)
+        s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
+
     return s_value
 
 def serialize_float(data, num_bytes):
