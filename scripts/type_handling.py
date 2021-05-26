@@ -152,7 +152,6 @@ def float_to_int(float_data):
         # EXPONENT SIGN
         if exponent > 0: float_as_int += 1
 
-    print(float_as_int)
     return float_as_int
 
 
@@ -240,16 +239,42 @@ def int_to_float(int_data):
     # 00000, 0, 00, 0,
 
     int_as_float = 0
-    if int_data == 0:
+    if int_data == 999:
         # choose a value that is not seen in data
         float_data = 'NA'
     else:
-        full_base = int(int_data/1000)
-        decimal_base = float(full_base/1000000)
-        exponent = int((int_data-(full_base*100))/10)
-        exponent_sign = int(int_data-(full_base*100)-(exponent*10))
-        print(full_base, decimal_base, exponent, exponent_sign)
+        int_as_float = get_float_parts(int_data)
+
     return int_as_float
+
+def get_float_parts(int_data):
+    base = int(int_data/10000)
+    decimal_base = float(base/10000)
+
+    leftover = int(int_data-(base*10000))
+
+    base_sign = int(leftover/1000)
+    leftover -= base_sign*1000
+
+    exponent = int(leftover/10)
+    leftover -= exponent*10
+
+    exponent_sign = leftover
+
+    int_as_float = construct_float(decimal_base, base_sign, exponent, exponent_sign)
+
+    return int_as_float
+
+def construct_float(base, base_sign, exponent, exponent_sign):
+    f = round(base, 4)
+    if base_sign == 0:
+        f *= -1
+    if exponent_sign == 0:
+        exponent *= -1
+
+    f = base * pow(10, exponent)
+
+    return f
 
 # # old functionality not used now that we convert everything to ints.
 # def convert_to_type(column_data, data_type):
