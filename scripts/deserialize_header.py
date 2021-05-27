@@ -43,10 +43,10 @@ def deserialize_int(dc_bitstring, block_size, num_bytes, chrm):
         curr_bytes = dc_bitstring[i * num_bytes:i * num_bytes + num_bytes]
         # these values are chromosomes and positions and should not be negative.
         curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
-        if curr_ds_value == 23:
-            curr_ds_value = 'X'
-        elif curr_ds_value == 24:
-            curr_ds_value = 'Y'
+        #if curr_ds_value == 23:
+        #    curr_ds_value = 'X'
+        #elif curr_ds_value == 24:
+        #    curr_ds_value = 'Y'
         ds_bitstring.append(curr_ds_value)
     return ds_bitstring
 
