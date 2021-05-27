@@ -180,7 +180,7 @@ def decompress_single_column(compression_method, compressed_block,
     compressed_column_end = dc_ds_block_header[query_column_i]
     compressed_column = compression_header + compressed_block_data[compressed_column_start:compressed_column_end]
     
-    # Switch decompression methods for different compression types (codecs vs. other)
+# Switch decompression methods for different compression types (codecs vs. other)
     if compression_method == 'gzip' or \
         compression_method == 'zlib' or \
         compression_method == 'bz2':
