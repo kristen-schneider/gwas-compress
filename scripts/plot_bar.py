@@ -56,7 +56,7 @@ def plot_loop_ratios(data, num_cols, available_compression_methods):
     plt.xticks(x_axis_anchor, x_labels, rotation=70)
     plt.xlabel('column')
     plt.ylabel('compression ratios (before/after in bytes)')
-    plt.title('compression time for ' + str(len(available_compression_methods)) + ' different compression methods')
+    plt.title('compression ratios for ' + str(len(available_compression_methods)) + ' different compression methods')
     plt.legend(prop={'size': 30})
     plt.savefig('ratios.png')
     # for m in range(num_methods):
