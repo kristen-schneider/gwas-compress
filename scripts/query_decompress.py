@@ -37,7 +37,6 @@ def query_block(query_block_i, full_header,
     block_header_ends = full_header[9]
     end_positions = full_header[10]
     block_sizes = full_header[11]
-
     # header is compressed with gzip
     header_compression_type = 'gzip'
 
@@ -162,7 +161,6 @@ def decompress_single_column(compression_method, compressed_block,
     num_rows = compressed_block[2]
 
     col_type = col_types[query_column_i]
-
     # get proper compression header for given column
     compression_header = get_compression_header(compression_method, full_header)
     
