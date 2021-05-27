@@ -19,7 +19,6 @@ def serialize_list(in_list, data_type, num_bytes):
             s_bitstring += s_value
         except TypeError:
             print('cannot concat s_value to bitstring: ', i, s_value)
-    print(in_list, s_bitstring)
     return s_bitstring
 
 def serialize_data(data, data_type, num_bytes):
@@ -46,7 +45,6 @@ def serialize_data(data, data_type, num_bytes):
         s_value = serialize_string(data)
     else:
         s_value = data
-    print(data,s_value)
     return s_value
 
 

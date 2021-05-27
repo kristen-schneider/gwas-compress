@@ -241,10 +241,9 @@ def int_to_float(int_data):
     int_as_float = 0
     if int_data == 999:
         # choose a value that is not seen in data
-        float_data = 'NA'
+        int_as_float = 'NA'
     else:
         int_as_float = get_float_parts(int_data)
-
     return int_as_float
 
 def get_float_parts(int_data):
