@@ -17,7 +17,7 @@ AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor
 
 #### USER-SPECIFIED PARAMETERS ####
 # user should edit config.ini to reflect proper parameters
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
 
 # included in config file
 IN_FILE = args['in_file']
@@ -114,9 +114,11 @@ def main():
     compress_header_START = datetime.now()
     ### work ###
     full_header = header_first_half+header_second_half
-    #print(full_header)
+    print(full_header)
     # header types, number of elements in each header
-    serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES, full_header)
+    serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_CODE_BOOK,
+                                                                DATA_TYPE_BYTE_SIZES,
+                                                                full_header)
     serialized_header_types = serialized_header_tools[0]
     serialized_header_num_elements = serialized_header_tools[1]
     serialized_header_ends = serialized_header_tools[2]

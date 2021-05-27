@@ -3,7 +3,7 @@ import compress
 import numpy as np
 from datetime import datetime
 import sys
-from pyfastpfor import *
+# from pyfastpfor import *
 
 def compress_single_column_reg(typed_column, column_compression_method, column_type, column_bytes,
                                column_i, all_column_compression_times, all_column_compression_size_ratios):
@@ -23,6 +23,7 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     column_i_START = datetime.now()
     column_i_BEFORE = sys.getsizeof(typed_column)
     serialized_column = serialize_body.serialize_list(typed_column, column_type, column_bytes)
+    print(serialized_column)
     ### work ###
     # float data is a list which contains [base, exponent] as integer.
     # serialized float data is two integers which can reconstruct original float
@@ -67,6 +68,7 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     except KeyError:
         all_column_compression_size_ratios[column_i] = {column_compression_method: [column_i_RATIO]}
 
+    print(compressed_column_info)
     return compressed_column_info
 
 

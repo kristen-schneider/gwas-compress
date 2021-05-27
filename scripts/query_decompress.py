@@ -1,5 +1,6 @@
 import decompress
 import deserialize_body
+import deserialize_header
 import decompress_column
 # import decompress_serialized_data
 # import decompress_array_data
@@ -72,7 +73,7 @@ def query_block(query_block_i, full_header,
     dc_curr_block_header = decompress.decompress_data(header_compression_type,
                                                       query_block_header)
     # print(dc_curr_block_header)
-    ds_dc_curr_block_header = deserialize_body.deserialize_list(
+    ds_dc_curr_block_header = deserialize_header.deserialize_list(
         dc_curr_block_header, num_columns, 1, data_type_byte_sizes[1], None)
     # print(ds_dc_curr_block_header)
 
@@ -178,8 +179,6 @@ def decompress_single_column(compression_method, compressed_block,
         compressed_column_start = 0
 
     compressed_column_end = dc_ds_block_header[query_column_i]
-    print(dc_ds_block_header)
-    print(compression_header, compressed_column_start, compressed_column_end)
     compressed_column = compression_header + compressed_block_data[compressed_column_start:compressed_column_end]
     
 # Switch decompression methods for different compression types (codecs vs. other)
