@@ -1,4 +1,5 @@
 import decompress
+import deserialize_header
 import deserialize_body
 import numpy as np
 # from pyfastpfor import *
@@ -19,7 +20,7 @@ def decompress_single_column_reg(compression_method, c_bitstring, block_size, da
         decompressed_column = decompressed data (np array)
     """
     dc_column = decompress.decompress_data(compression_method, c_bitstring)
-    ds_column = deserialize_body.deserialize_list(dc_column, block_size, data_type, num_bytes, chrm)
+    ds_column = deserialize_header.deserialize_list(dc_column, block_size, data_type, num_bytes, chrm)
     return ds_column
 
 
