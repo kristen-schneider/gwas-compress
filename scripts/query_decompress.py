@@ -117,7 +117,6 @@ def decompress_single_block(compression_method_list, compressed_block,
     num_rows = compressed_block[2]
 
     ds_dc_query_block = []
-
     # iterate over each column and deserialize/decompress every column and append data to ds_dc_query_block
     for column_i in range(num_columns):
         col_compression_method = compression_method_list[column_i]
@@ -125,7 +124,6 @@ def decompress_single_block(compression_method_list, compressed_block,
                                                      column_i, full_header, data_type_byte_sizes)
         
         ds_dc_query_block.append(ds_dc_column_data)
-    
     return ds_dc_query_block
 
 def decompress_single_column(compression_method, compressed_block,
@@ -167,7 +165,7 @@ def decompress_single_column(compression_method, compressed_block,
 
     # get proper compression header for given column
     compression_header = get_compression_header(compression_method, full_header)
-
+    
     # get correct block header
     ds_dc_column = []
     if query_column_i != 0:
@@ -180,7 +178,6 @@ def decompress_single_column(compression_method, compressed_block,
 
     compressed_column_end = dc_ds_block_header[query_column_i]
     compressed_column = compression_header + compressed_block_data[compressed_column_start:compressed_column_end]
-    
 # Switch decompression methods for different compression types (codecs vs. other)
     if compression_method == 'gzip' or \
         compression_method == 'zlib' or \
