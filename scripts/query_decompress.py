@@ -2,6 +2,7 @@ import decompress
 import deserialize_body
 import deserialize_header
 import decompress_column
+import type_handling
 # import decompress_serialized_data
 # import decompress_array_data
 
@@ -199,10 +200,17 @@ def decompress_single_column(compression_method, compressed_block,
                                                                                   chrm,
                                                                                   compression_method)
     
+        # must convert int back to float
+        if col_type == 2:
+            float_column = []
+            for i in ds_dc_column_data:
+                f = type_handling.int_to_float(i)
+                float_column.append(f)
+            return float_column
+            
     else:
         print('cannot find proper compression method to decompress')
-        return -1    
-     
+        return -1     
     return ds_dc_column_data
 
 def get_compression_header(column_compression_method, full_header):

@@ -21,13 +21,10 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
     """
     ds_bitstring = []
     if data_type == 1:
-        print('int')
         ds_bitstring = deserialize_int(dc_bitstring, block_size, num_bytes, chrm)
     elif data_type == 2:
-        print('float')
         ds_bitstring = deserialize_float(dc_bitstring, block_size, num_bytes)
     elif data_type == 3:
-        print('string')
         ds_bitstring = deserialize_string(dc_bitstring)
     elif data_type == 4:
         ds_bitstring = dc_bitstring
@@ -35,7 +32,6 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
         print('invalid data type: ', data_type)
         return -1
    
-    print(ds_bitstring)
     return ds_bitstring
 
 
@@ -67,15 +63,16 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
 
     """
     ds_bitstring = []
-    for i in range(block_size):
-        print(curr_bytes)
+    num_elements = int(len(dc_bitstring)/num_bytes)
+    for i in range(num_elements):
         curr_bytes = dc_bitstring[i * num_bytes:i * num_bytes + num_bytes]
         # curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=True)
         curr_ds_value = np.frombuffer(curr_bytes, dtype=np.uint32)
         # convert int back to float
-        ds_float = type_handling.int_to_float(curr_ds_value)
-        ds_bitstring.append(ds_float)
-
+        #ds_float = type_handling.int_to_float(curr_ds_value)
+        #ds_bitstring.append(ds_float)
+        ds_bitstring.append(curr_ds_value)
+    
     return ds_bitstring
     # for i in range(block_size):
     #     # one float value is two integers
