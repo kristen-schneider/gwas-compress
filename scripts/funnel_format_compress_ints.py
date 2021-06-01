@@ -104,18 +104,18 @@ def compress_all_blocks(available_compression_methods,
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
 
-    # PLOTTING
-    # time
-    read_write_compression_times.write_times(all_column_compression_times, out_dir+'times/')
-    time_dict1 = plot_bar.get_loop_dict(out_dir+'times/', number_columns, available_compression_methods, 'times')
-    time_dict2 = plot_bar.get_final_data(time_dict1, available_compression_methods, number_columns)
-    plot_bar.plot_loop_times(time_dict2, number_columns, available_compression_methods)
-    # size ratio
-    read_write_compression_ratios.write_ratios(all_column_compression_size_ratios, out_dir+'ratios/')
-    ratio_dict1 = plot_bar.get_loop_dict(out_dir+'ratios/', number_columns, available_compression_methods, 'ratios')
-    ratio_dict2 = plot_bar.get_final_data(ratio_dict1, available_compression_methods, number_columns)
-    plot_bar.plot_loop_ratios(ratio_dict2, number_columns, available_compression_methods)
-    # plot_bar.plot_data(dict_data, available_compression_methods)
+    # # PLOTTING
+    # # time
+    # read_write_compression_times.write_times(all_column_compression_times, out_dir+'times/')
+    # time_dict1 = plot_bar.get_loop_dict(out_dir+'times/', number_columns, available_compression_methods, 'times')
+    # time_dict2 = plot_bar.get_final_data(time_dict1, available_compression_methods, number_columns)
+    # plot_bar.plot_loop_times(time_dict2, number_columns, available_compression_methods)
+    # # size ratio
+    # read_write_compression_ratios.write_ratios(all_column_compression_size_ratios, out_dir+'ratios/')
+    # ratio_dict1 = plot_bar.get_loop_dict(out_dir+'ratios/', number_columns, available_compression_methods, 'ratios')
+    # ratio_dict2 = plot_bar.get_final_data(ratio_dict1, available_compression_methods, number_columns)
+    # plot_bar.plot_loop_ratios(ratio_dict2, number_columns, available_compression_methods)
+    # # plot_bar.plot_data(dict_data, available_compression_methods)
 
     return header_second_half, compressed_content
 
