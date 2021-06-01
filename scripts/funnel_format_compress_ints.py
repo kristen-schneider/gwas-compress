@@ -161,7 +161,6 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
         to_int_END = datetime.now()
         to_int_TIME = to_int_END - to_int_START
         block_conversion_time += to_int_TIME
-
     # print(block_conversion_time)
 
         # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
@@ -221,6 +220,8 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             return -1
 
     to_int_txt.write(str(block_conversion_time)+'\n')
+    #print('to int conversion: '+str(block_conversion_time))
+
     to_int_txt.close()
 
     serialized_block_header = serialize_body.serialize_list(compressed_column_ends_list, block_header_type,
