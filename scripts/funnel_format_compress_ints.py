@@ -55,6 +55,14 @@ def compress_all_blocks(available_compression_methods,
     for col in range(number_columns):
         all_column_compression_size_ratios[col] = {}
 
+
+    ####
+    # to see how long type conversion is taking per block
+    to_int = open('./type-conversion.txt', 'a')
+    to_int.truncate(0)
+    to_int.close()
+    ####
+
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):
         # start timer for block
@@ -136,13 +144,25 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
 
     compressed_column_ends_list = []
     compressed_column_end_pos = 0
+
+    to_int_txt = open('./type-conversion.txt', 'a')
+    block_conversion_start = datetime.now()
+    block_conversion_end = datetime.now()
+    block_conversion_time = block_conversion_end-block_conversion_start
+
     for column_i in range(len(block)):
         # column data
         column_compression_method = compression_method_list[column_i]
         column_data_type = column_types[column_i]
         column_bytes = 4
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
+        to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(block[column_i], column_data_type)
+        to_int_END = datetime.now()
+        to_int_TIME = to_int_END - to_int_START
+        block_conversion_time += to_int_TIME
+
+    # print(block_conversion_time)
 
         # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
         # print(column_compression_method)
@@ -199,6 +219,9 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
         else:
             print('Unrecognized compression method. Value not found in compression method code book.')
             return -1
+
+    to_int_txt.write(str(block_conversion_time)+'\n')
+    to_int_txt.close()
 
     serialized_block_header = serialize_body.serialize_list(compressed_column_ends_list, block_header_type,
                                                             block_header_bytes)

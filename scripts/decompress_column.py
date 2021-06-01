@@ -2,7 +2,7 @@ import decompress
 import deserialize_header
 import deserialize_body
 import numpy as np
-from pyfastpfor import *
+# from pyfastpfor import *
 
 # when float data is NA, int data is [0,-999]
 # when string data is NA, int data is -1
