@@ -67,7 +67,7 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
         all_column_compression_size_ratios[column_i] = {column_compression_method: [column_i_RATIO]}
 
     #print(column_i_START, column_i_END, column_i_TIME)
-    #print(column_i, column_compression_method, column_i_TIME)
+    print(column_i, column_compression_method, column_i_TIME)
     return compressed_column_info
 
 
@@ -116,5 +116,5 @@ def compress_single_column_pyfast(typed_column, codec,
     except KeyError:
         all_column_compression_size_ratios[column_i] = {codec: [column_i_RATIO]}
     
-    #print(column_i, codec, column_i_TIME)
+    print(column_i, codec, column_i_TIME)
     return comp_arr[0:comp_arr_size]
