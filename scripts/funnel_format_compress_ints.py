@@ -58,11 +58,6 @@ def compress_all_blocks(available_compression_methods,
     for col in range(number_columns):
         all_column_compression_size_ratios[col] = {}
 
-
-    f = open('/home/krsc0813/projects/gwas-compress/scripts/test_numpy.txt', 'ab')
-    f.truncate(0)
-    f.close()
-
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):
         # start timer for block

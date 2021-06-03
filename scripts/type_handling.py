@@ -97,7 +97,7 @@ def int_to_int(in_data):
     int_data = None
     try:
         return int(in_data)
-    except TypeError:
+    except ValueError:
         if in_data == 'X':
             int_data = 23
         elif in_data == 'Y':
