@@ -173,7 +173,6 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                 all_column_compression_size_ratios)
             compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
-            print(typed_column, compressed_column_bitstring)
             compressed_block_bitstring += compressed_column_bitstring
 
             compressed_column_end_pos += len(compressed_column_bitstring)
@@ -194,7 +193,6 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                     column_i,
                                                                                     all_column_compression_times,
                                                                                     all_column_compression_size_ratios)
-            print(typed_column, numpy_compressed_column)
             #numpy_compressed_column_size = numpy_compressed_column_info[1]
             #numpy_compressed_column = numpy_compressed_column_info[0][0:numpy_compressed_column_size]
             # must serialize a numpy column in order for the column to be properly written to our output file
