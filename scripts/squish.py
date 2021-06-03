@@ -17,7 +17,7 @@ AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor
 
 #### USER-SPECIFIED PARAMETERS ####
 # user should edit config.ini to reflect proper parameters
-args = config_arguments.get_args_from_config('LOCAL')
+args = config_arguments.get_args_from_config('MENDEL')
 
 # included in config file
 IN_FILE = args['in_file']
