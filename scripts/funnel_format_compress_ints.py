@@ -1,4 +1,7 @@
+# python imports
 from datetime import datetime
+import numpy as np
+# personal imports
 import compress_column
 import type_handling
 import serialize_body
@@ -193,8 +196,18 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             #numpy_compressed_column_size = numpy_compressed_column_info[1]
             #numpy_compressed_column = numpy_compressed_column_info[0][0:numpy_compressed_column_size]
             # must serialize a numpy column in order for the column to be properly written to our output file
+
+            # serialize data and print time it takes
+            serialize_column_start = datetime.now()
             serialized_compressed_column = serialize_body.serialize_list(numpy_compressed_column, column_data_type,
                                                                          column_bytes)
+            print(column_i, str(datetime.now()-serialize_column_start))
+
+            # write data immediately with numpy.ndarray.tofile
+            numpy_write_start = datetime.now()
+            np.ndarray.tofile('./test_numpy.txt')
+            print(column_i, str(datetime.now()-numpy_write_start))
+
             compressed_block_bitstring += serialized_compressed_column
 
             # compress_column_times = compressed_column_info[1]
