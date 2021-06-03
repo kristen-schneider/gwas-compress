@@ -71,7 +71,6 @@ def compress_all_blocks(available_compression_methods,
 
         # current block from funnel format
         curr_block = ff[block_i]
-
         compressed_block_info = compress_single_block(all_column_compression_times,
                                                       all_column_compression_size_ratios,
                                                       compression_method_list,
@@ -95,8 +94,8 @@ def compress_all_blocks(available_compression_methods,
 
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
-        #print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
-
+        print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
+    
     # block_sizes = header_second_half[2]
     num_rows_first_block = len(ff[0][0])
     num_rows_last_block = len(ff[-1][0])
@@ -104,18 +103,18 @@ def compress_all_blocks(available_compression_methods,
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
 
-    # # PLOTTING
-    # # time
-    # read_write_compression_times.write_times(all_column_compression_times, out_dir+'times/')
-    # time_dict1 = plot_bar.get_loop_dict(out_dir+'times/', number_columns, available_compression_methods, 'times')
-    # time_dict2 = plot_bar.get_final_data(time_dict1, available_compression_methods, number_columns)
-    # plot_bar.plot_loop_times(time_dict2, number_columns, available_compression_methods)
-    # # size ratio
-    # read_write_compression_ratios.write_ratios(all_column_compression_size_ratios, out_dir+'ratios/')
-    # ratio_dict1 = plot_bar.get_loop_dict(out_dir+'ratios/', number_columns, available_compression_methods, 'ratios')
-    # ratio_dict2 = plot_bar.get_final_data(ratio_dict1, available_compression_methods, number_columns)
-    # plot_bar.plot_loop_ratios(ratio_dict2, number_columns, available_compression_methods)
-    # # plot_bar.plot_data(dict_data, available_compression_methods)
+    # PLOTTING
+    # time
+    read_write_compression_times.write_times(all_column_compression_times, out_dir+'times/')
+    time_dict1 = plot_bar.get_loop_dict(out_dir+'times/', number_columns, available_compression_methods, 'times')
+    time_dict2 = plot_bar.get_final_data(time_dict1, available_compression_methods, number_columns)
+    plot_bar.plot_loop_times(time_dict2, number_columns, available_compression_methods)
+    # size ratio
+    read_write_compression_ratios.write_ratios(all_column_compression_size_ratios, out_dir+'ratios/')
+    ratio_dict1 = plot_bar.get_loop_dict(out_dir+'ratios/', number_columns, available_compression_methods, 'ratios')
+    ratio_dict2 = plot_bar.get_final_data(ratio_dict1, available_compression_methods, number_columns)
+    plot_bar.plot_loop_ratios(ratio_dict2, number_columns, available_compression_methods)
+    # plot_bar.plot_data(dict_data, available_compression_methods)
 
     return header_second_half, compressed_content
 
@@ -136,6 +135,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
         compressed_block_bitstring = serialized, compressed bitstring for block data
 
     """
+    block_start_time = datetime.now()
     compressed_block_bitstring = b''
 
     block_header_type = 1
@@ -169,6 +169,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
         if column_compression_method == 'gzip' \
                 or column_compression_method == 'zlib' \
                 or column_compression_method == 'bz2':
+            bug_start = datetime.now()
             # compress column using compress serialized data methods
             compressed_column_info = compress_column.compress_single_column_reg(typed_column,
                                                                                 column_compression_method,
@@ -177,7 +178,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                 column_i,
                                                                                 all_column_compression_times,
                                                                                 all_column_compression_size_ratios)
-
+            print(datetime.now()-bug_start)
             compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
             compressed_block_bitstring += compressed_column_bitstring
@@ -197,17 +198,20 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             else:
                 print('Unrecognized compression method. Value not found in compression method code book.')
                 return -1
+            bug_start = datetime.now()
             numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
                                                                                     codec,
                                                                                     column_i,
                                                                                     all_column_compression_times,
                                                                                     all_column_compression_size_ratios)
+            print(datetime.now()-bug_start)
             #numpy_compressed_column_size = numpy_compressed_column_info[1]
             #numpy_compressed_column = numpy_compressed_column_info[0][0:numpy_compressed_column_size]
             # must serialize a numpy column in order for the column to be properly written to our output file
+            new_bug = datetime.now()
             serialized_compressed_column = serialize_body.serialize_list(numpy_compressed_column, column_data_type,
                                                                          column_bytes)
-
+            print(datetime.now()-new_bug)
             compressed_block_bitstring += serialized_compressed_column
 
             # compress_column_times = compressed_column_info[1]
@@ -230,5 +234,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
     compressed_block_header_compression_method_length = compressed_block_header_info[1]
     compressed_block_header_bitstring = compressed_block_header_info[0][
                                         compressed_block_header_compression_method_length:]
-
+    block_end_time = datetime.now()
+    block_time = block_end_time - block_start_time
+    print(block_time)
     return compressed_block_header_bitstring, compressed_block_bitstring
