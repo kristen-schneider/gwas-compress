@@ -56,13 +56,6 @@ def compress_all_blocks(available_compression_methods,
         all_column_compression_size_ratios[col] = {}
 
 
-    ####
-    # to see how long type conversion is taking per block
-    to_int = open('./type-conversion.txt', 'a')
-    to_int.truncate(0)
-    to_int.close()
-    ####
-
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):
         # start timer for block
@@ -94,7 +87,7 @@ def compress_all_blocks(available_compression_methods,
 
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
-        print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
+        # print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
     
     # block_sizes = header_second_half[2]
     num_rows_first_block = len(ff[0][0])
@@ -145,7 +138,6 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
     compressed_column_ends_list = []
     compressed_column_end_pos = 0
 
-    to_int_txt = open('./type-conversion.txt', 'a')
     block_conversion_start = datetime.now()
     block_conversion_end = datetime.now()
     block_conversion_time = block_conversion_end-block_conversion_start
@@ -161,10 +153,8 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
         to_int_END = datetime.now()
         to_int_TIME = to_int_END - to_int_START
         block_conversion_time += to_int_TIME
-    # print(block_conversion_time)
 
         # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
-        # print(column_compression_method)
         # If we need serialized data to compress (gzip = 1, zlib = 2, bz2 = 3)
         if column_compression_method == 'gzip' \
                 or column_compression_method == 'zlib' \
@@ -178,12 +168,9 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                 column_i,
                                                                                 all_column_compression_times,
                                                                                 all_column_compression_size_ratios)
-            print(datetime.now()-bug_start)
             compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
             compressed_block_bitstring += compressed_column_bitstring
-
-            # compress_column_times = compressed_column_info[1]
 
             compressed_column_end_pos += len(compressed_column_bitstring)
             compressed_column_ends_list.append(compressed_column_end_pos)
@@ -198,20 +185,16 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             else:
                 print('Unrecognized compression method. Value not found in compression method code book.')
                 return -1
-            bug_start = datetime.now()
             numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
                                                                                     codec,
                                                                                     column_i,
                                                                                     all_column_compression_times,
                                                                                     all_column_compression_size_ratios)
-            print(datetime.now()-bug_start)
             #numpy_compressed_column_size = numpy_compressed_column_info[1]
             #numpy_compressed_column = numpy_compressed_column_info[0][0:numpy_compressed_column_size]
             # must serialize a numpy column in order for the column to be properly written to our output file
-            new_bug = datetime.now()
             serialized_compressed_column = serialize_body.serialize_list(numpy_compressed_column, column_data_type,
                                                                          column_bytes)
-            print(datetime.now()-new_bug)
             compressed_block_bitstring += serialized_compressed_column
 
             # compress_column_times = compressed_column_info[1]
@@ -223,10 +206,6 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             print('Unrecognized compression method. Value not found in compression method code book.')
             return -1
 
-    to_int_txt.write(str(block_conversion_time)+'\n')
-    #print('to int conversion: '+str(block_conversion_time))
-
-    to_int_txt.close()
 
     serialized_block_header = serialize_body.serialize_list(compressed_column_ends_list, block_header_type,
                                                             block_header_bytes)
@@ -236,5 +215,4 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                         compressed_block_header_compression_method_length:]
     block_end_time = datetime.now()
     block_time = block_end_time - block_start_time
-    print(block_time)
     return compressed_block_header_bitstring, compressed_block_bitstring
