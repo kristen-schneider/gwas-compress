@@ -156,6 +156,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
         to_int_TIME = to_int_END - to_int_START
         block_conversion_time += to_int_TIME
 
+        
         # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
         # If we need serialized data to compress (gzip = 1, zlib = 2, bz2 = 3)
         if column_compression_method == 'gzip' \
@@ -172,6 +173,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                 all_column_compression_size_ratios)
             compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
+            print(typed_column, compressed_column_bitstring)
             compressed_block_bitstring += compressed_column_bitstring
 
             compressed_column_end_pos += len(compressed_column_bitstring)
@@ -192,6 +194,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                                                                                     column_i,
                                                                                     all_column_compression_times,
                                                                                     all_column_compression_size_ratios)
+            print(typed_column, numpy_compressed_column)
             #numpy_compressed_column_size = numpy_compressed_column_info[1]
             #numpy_compressed_column = numpy_compressed_column_info[0][0:numpy_compressed_column_size]
             # must serialize a numpy column in order for the column to be properly written to our output file
@@ -204,7 +207,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
 
             
             # differnt serialize thing
-            tobytes_start = datetime.now()
+            #tobytes_start = datetime.now()
             serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
             #print('tobytes', str(datetime.now()-tobytes_start), tb)
             #print(tb == serialized_compressed_column)

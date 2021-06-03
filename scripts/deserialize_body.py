@@ -100,15 +100,20 @@ def deserialize_string(dc_bitstring):
             INDEL = True
             INDEL_bitstring = ''
             i += 1  # skip flag byte and move to INDEL
-            while INDEL:
-                curr_bytes = dc_bitstring[i]
-                if curr_bytes != 0:
-                    curr_ds_value = chr(curr_bytes)
-                    INDEL_bitstring += curr_ds_value
-                else:
-                    ds_bitstring.append(INDEL_bitstring)
-                    INDEL = False
-                i += 1
+            try:
+                indel_start = chr(dc_bitstring[i])
+                if 'A' in indel_start or 'C' in indel_start or 'G' in indel_start or 'T' in indel_start:
+                    while INDEL:
+                        curr_bytes = dc_bitstring[i]
+                        if curr_bytes != 0:
+                            curr_ds_value = chr(curr_bytes)
+                            INDEL_bitstring += curr_ds_value
+                        else:
+                            ds_bitstring.append(INDEL_bitstring)
+                            INDEL = False
+                        i += 1
+            except IndexError:
+                ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
         # treat normally (reg SNP)
         else:
             curr_ds_value = chr(curr_bytes)

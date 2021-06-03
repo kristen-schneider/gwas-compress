@@ -79,8 +79,8 @@ def convert_to_int(data, data_type):
     elif data_type == 2:
         return float_to_int(data)
     elif data_type == 3:
-        return data
-        # return string_to_int(data)
+        #return data
+        return string_to_int(data)
     elif data_type == 4:
         return bytes_to_int(data)
 
@@ -160,7 +160,7 @@ def string_to_int(string_data):
     takes string input and converts to integer.
         false = 0
         true = 1
-        A, C, G, T = 2, 3, 4, 5
+        #A, C, G, T = 2, 3, 4, 5
         NA = -1
 
     INPUT
@@ -180,13 +180,17 @@ def string_to_int(string_data):
         elif string_data == 'true':
             int_data = 1
         elif string_data == 'NA':
-            int_data = -1
+            int_data = 2
         else:
-            for s in string_data:
-                int_data.append(single_string_to_int(s))
+            return string_data
+        return int_data
+        #else:
+            #for s in string_data:
+            #    int_data.append(single_string_to_int(s))
     else:
-        int_data = single_string_to_int(string_data)
-    return int_data
+        return string_data
+        #int_data = single_string_to_int(string_data)
+    return string_data
 
 def single_string_to_int(string_data):
     """
@@ -274,6 +278,14 @@ def construct_float(base, base_sign, exponent, exponent_sign):
     f = base * pow(10, exponent)
 
     return f
+
+def int_to_string(i):
+    if i == 0: return 'False'
+    elif i == 1: return 'True'
+    elif i == 2: return 'NA'
+    else:
+        print('cannot convert int to string')
+        return -1
 
 # # old functionality not used now that we convert everything to ints.
 # def convert_to_type(column_data, data_type):

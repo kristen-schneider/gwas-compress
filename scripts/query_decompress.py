@@ -207,7 +207,13 @@ def decompress_single_column(compression_method, compressed_block,
                 f = type_handling.int_to_float(i)
                 float_column.append(f)
             return float_column
-            
+        # convert ints back to string
+        if col_type == 3:
+            string_column = []
+            for i in ds_dc_column_data:
+                s = type_handling.int_to_string(i)
+                string_column.append(s)
+            return string_column        
     else:
         print('cannot find proper compression method to decompress')
         return -1     
