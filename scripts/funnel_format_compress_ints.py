@@ -59,6 +59,10 @@ def compress_all_blocks(available_compression_methods,
         all_column_compression_size_ratios[col] = {}
 
 
+    f = open('/home/krsc0813/projects/gwas-compress/scripts/test_numpy.txt', 'ab')
+    f.truncate(0)
+    f.close()
+
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):
         # start timer for block
@@ -198,17 +202,25 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             # must serialize a numpy column in order for the column to be properly written to our output file
 
             # serialize data and print time it takes
-            serialize_column_start = datetime.now()
-            serialized_compressed_column = serialize_body.serialize_list(numpy_compressed_column, column_data_type,
-                                                                         column_bytes)
-            print('bytes', str(datetime.now()-serialize_column_start))
+            #serialize_column_start = datetime.now()
+            #serialized_compressed_column = serialize_body.serialize_list(numpy_compressed_column, column_data_type,
+            #                                                             column_bytes)
+            #print('kristen', str(datetime.now()-serialize_column_start), serialized_compressed_column)
+
+            
+            # differnt serialize thing
+            tobytes_start = datetime.now()
+            serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
+            #print('tobytes', str(datetime.now()-tobytes_start), tb)
+            #print(tb == serialized_compressed_column)
 
             # write data immediately with numpy.ndarray.tofile
-            numpy_write_start = datetime.now()
-            f = open('/home/krsc0813/projects/gwas-compress/scripts/test_numpy.txt', 'ab') 
-            numpy_compressed_column.tofile(f, '', '%d')
-            print('tofile', str(datetime.now()-numpy_write_start))
-
+            #numpy_write_start = datetime.now()
+            #f = open('/home/krsc0813/projects/gwas-compress/scripts/test_numpy.txt', 'ab') 
+            #numpy_compressed_column.tofile(f, '', '%d')
+            #f.close()
+            #print('tofile', str(datetime.now()-numpy_write_start))
+            
             compressed_block_bitstring += serialized_compressed_column
 
             # compress_column_times = compressed_column_info[1]
