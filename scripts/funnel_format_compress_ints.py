@@ -201,12 +201,13 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             serialize_column_start = datetime.now()
             serialized_compressed_column = serialize_body.serialize_list(numpy_compressed_column, column_data_type,
                                                                          column_bytes)
-            print(column_i, str(datetime.now()-serialize_column_start))
+            print('bytes', str(datetime.now()-serialize_column_start))
 
             # write data immediately with numpy.ndarray.tofile
             numpy_write_start = datetime.now()
-            np.ndarray.tofile('./test_numpy.txt')
-            print(column_i, str(datetime.now()-numpy_write_start))
+            f = open('/home/krsc0813/projects/gwas-compress/scripts/test_numpy.txt', 'ab') 
+            numpy_compressed_column.tofile(f, '', '%d')
+            print('tofile', str(datetime.now()-numpy_write_start))
 
             compressed_block_bitstring += serialized_compressed_column
 
