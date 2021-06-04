@@ -105,6 +105,7 @@ def deserialize_string(dc_bitstring):
                 if 'A' in indel_start or 'C' in indel_start or 'G' in indel_start or 'T' in indel_start:
                     while INDEL:
                         curr_bytes = dc_bitstring[i]
+                        print('indel: ', curr_bytes, indel_start, dc_bitstring)
                         if curr_bytes != 0:
                             curr_ds_value = chr(curr_bytes)
                             INDEL_bitstring += curr_ds_value
@@ -112,7 +113,7 @@ def deserialize_string(dc_bitstring):
                             ds_bitstring.append(INDEL_bitstring)
                             INDEL = False
                         i += 1
-                else: ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32) #raise IndexError
+                else: ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32) # true false values
             except IndexError:
                 ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
         # treat normally (reg SNP)
@@ -120,11 +121,10 @@ def deserialize_string(dc_bitstring):
             curr_ds_value = chr(curr_bytes)
             if curr_ds_value != None:
                 try: ds_bitstring.append(curr_ds_value)
-                except AttributeError: ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
+                except AttributeError: ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32) # true false values
             else:
                 print('value is of bad type, cannot deserialize')
             i += 1
-    #print(ds_bitstring)
     return ds_bitstring
 
 

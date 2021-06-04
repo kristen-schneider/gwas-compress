@@ -184,7 +184,6 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
             compressed_block_bitstring += compressed_column_bitstring
 
-            print(compressed_column_bitstring)
             compressed_column_end_pos += len(compressed_column_bitstring)
             compressed_column_ends_list.append(compressed_column_end_pos)
 
@@ -217,7 +216,6 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             # differnt serialize thing
             #tobytes_start = datetime.now()
             serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
-            print(serialized_compressed_column)
             #print('tobytes', str(datetime.now()-tobytes_start), tb)
             #print(tb == serialized_compressed_column)
 
