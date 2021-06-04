@@ -130,7 +130,7 @@ def compress_all_blocks(available_compression_methods,
     # plot_bar.plot_data(dict_data, available_compression_methods)
     print('plotting: ', datetime.now()-plotting_start)
     # return header_second_half, compressed_content
-
+    return header_second_half
 
 def compress_single_block(all_column_compression_times, all_column_compression_size_ratios,
                           compression_method_list, column_types, block):

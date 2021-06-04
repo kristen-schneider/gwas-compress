@@ -97,11 +97,11 @@ def main():
     except:
         print('could not compress data')
         return -1
-    try:
-        compressed_data = serialized_compressed_data_all_ints[1]
-    except:
-        print('could not compress data')
-        return -1
+    #try:
+    #    compressed_data = serialized_compressed_data_all_ints[1]
+    #except:
+    #    print('could not compress data')
+    #    return -1
 
 
     ############
@@ -137,7 +137,22 @@ def main():
     compress_header_TIME = compress_header_END - compress_header_START
     print(str(compress_header_TIME) + ' for header to compress...\n')
 
-
+    f_data = open('./testing_write.txt', 'rb')
+    data = f_data.read()
+    f_data.close()
+    
+    f = open('./testing_write_all.txt', 'ab')
+    f.truncate(0)
+    f.write(bytes_size_types)
+    f.write(bytes_size_num_elements)
+    f.write(bytes_size_ends)
+    f.write(bytes_size_data)
+    f.write(serialized_header_types)
+    f.write(serialized_header_num_elements)
+    f.write(serialized_header_ends)
+    f.write(serialized_header_data)
+    f.write(data)
+    f.close()
 
     # ######################################################
     # ## OLD WRITE METHOD WHERE EVERYTHING WRITTEN AT END ##
