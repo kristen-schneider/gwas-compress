@@ -37,7 +37,7 @@ def main():
     full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, OUT_FILE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]
-    print(full_header)
+    #print(full_header)
 
     print('getting compressed block...')
     compressed_block_START = datetime.now()
@@ -57,7 +57,7 @@ def main():
     dc_single_block = query_decompress.decompress_single_block(COMPRESSION_METHOD, compressed_block_info,
                                                                full_header, DATA_TYPE_BYTE_SIZES)
     ############
-    for dc in dc_single_block: print(dc)
+    #for dc in dc_single_block: print(dc)
     single_block_END = datetime.now()
     single_block_TIME = single_block_END - single_block_START
     print(str(single_block_TIME) + ' for decompressing single block to compute...\n')
@@ -69,7 +69,7 @@ def main():
                                                                  compressed_block_info, COLUMN_TO_DECOMPRESS,
                                                                  full_header, DATA_TYPE_BYTE_SIZES)
     ############
-    print(dc_single_column)
+    #print(dc_single_column)
     single_column_END = datetime.now()
     single_column_TIME = single_column_END - single_column_START
     print(str(single_column_TIME) + ' for decompressing single column to compute...\n')

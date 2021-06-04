@@ -103,7 +103,7 @@ def compress_all_blocks(available_compression_methods,
 
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
-        print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
+        #print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
    
     print('loop: ', datetime.now()-loop_start) 
     after_loop = datetime.now()
