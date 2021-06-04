@@ -190,7 +190,8 @@ def decompress_single_column(compression_method, compressed_block,
                                                                                     num_rows,
                                                                                     col_type,
                                                                                     data_type_byte_sizes[col_type],
-                                                                                    chrm)
+                                                                                    chrm,
+                                                                                    query_column_i)
     elif 'fastpfor' in compression_method:
         # data input: serialized_data, block_size, data_type, num_bytes, chrm
         ds_dc_column_data = decompress_column.decompress_single_column_pyfast(compressed_column,
@@ -198,7 +199,8 @@ def decompress_single_column(compression_method, compressed_block,
                                                                                   col_type,
                                                                                   data_type_byte_sizes[col_type],
                                                                                   chrm,
-                                                                                  compression_method)
+                                                                                  compression_method,
+                                                                              query_column_i)
     
         # must convert int back to float
         if col_type == 2:

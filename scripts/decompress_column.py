@@ -2,12 +2,12 @@ import decompress
 import deserialize_header
 import deserialize_body
 import numpy as np
-from pyfastpfor import *
+# from pyfastpfor import *
 
 # when float data is NA, int data is [0,-999]
 # when string data is NA, int data is -1
 
-def decompress_single_column_reg(compression_method, c_bitstring, block_size, data_type, num_bytes, chrm):
+def decompress_single_column_reg(compression_method, c_bitstring, block_size, data_type, num_bytes, chrm, column_i):
     """
     decompresses a single column of data using gzip/zlib/bz2
 
@@ -21,11 +21,11 @@ def decompress_single_column_reg(compression_method, c_bitstring, block_size, da
     """
     print('reg')
     dc_column = decompress.decompress_data(compression_method, c_bitstring)
-    ds_column = deserialize_body.deserialize_list(dc_column, block_size, data_type, num_bytes, chrm)
+    ds_column = deserialize_body.deserialize_list(dc_column, block_size, data_type, num_bytes, chrm, column_i)
     return ds_column
 
 
-def decompress_single_column_pyfast(serialized_data, block_size, data_type, num_bytes, chrm, codec):
+def decompress_single_column_pyfast(serialized_data, block_size, data_type, num_bytes, chrm, codec, column_i):
     """
     takes a serialized array and deserializes it and converts it to a numpy array of dtype=numpy.uint32
     usually intput data represents some kind of compressed numpy array we are trying to decompress
@@ -40,7 +40,7 @@ def decompress_single_column_pyfast(serialized_data, block_size, data_type, num_
     decomp_arr_size = 2 * block_size
 
 
-    ds_data = deserialize_body.deserialize_list(serialized_data, block_size, data_type, num_bytes, chrm)
+    ds_data = deserialize_body.deserialize_list(serialized_data, block_size, data_type, num_bytes, chrm, query_column_i)
     #print(ds_data)
     try:
         comp_np_arr = np.array(ds_data, dtype=np.uint32, order='C')
