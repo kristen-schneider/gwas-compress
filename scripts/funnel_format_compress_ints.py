@@ -29,6 +29,7 @@ def compress_all_blocks(available_compression_methods,
         all serialized, compressed data from blocks (header and data)
         compression times for each column //this bit is not included in new version
     """
+    before_loop = datetime.now()
     # full header break down
     magic_number = header_first_half[0]
     version = header_first_half[1]
@@ -58,6 +59,8 @@ def compress_all_blocks(available_compression_methods,
     for col in range(number_columns):
         all_column_compression_size_ratios[col] = {}
 
+    print('before loop: ', datetime.now()-before_loop)
+    loop_start = datetime.now()
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):
         # start timer for block
@@ -90,14 +93,17 @@ def compress_all_blocks(available_compression_methods,
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
         print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
-    
+   
+    print('loop: ', datetime.now()-loop_start) 
+    after_loop = datetime.now()
     # block_sizes = header_second_half[2]
     num_rows_first_block = len(ff[0][0])
     num_rows_last_block = len(ff[-1][0])
     block_sizes = [num_rows_first_block, num_rows_last_block]
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
-
+    print('after loop: ', datetime.now()-after_loop)
+    
     plotting_start = datetime.now()
     # PLOTTING
     # time
@@ -210,6 +216,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             # differnt serialize thing
             #tobytes_start = datetime.now()
             serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
+            print(serialized_compressed_column)
             #print('tobytes', str(datetime.now()-tobytes_start), tb)
             #print(tb == serialized_compressed_column)
 
