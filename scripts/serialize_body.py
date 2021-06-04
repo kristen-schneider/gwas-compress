@@ -43,6 +43,9 @@ def serialize_data(data, data_type, num_bytes):
     # strings
     elif data_type == 3:
         s_value = serialize_string(data)
+        # string value converted to int
+        if s_value == -1:
+            s_value = serialize_int(data, num_bytes)
     else:
         s_value = data
     return s_value
@@ -97,9 +100,11 @@ def serialize_string(data):
         s_value: serialized string data
     """
     # single string value (e.g. 'H')
-    s_value = bytes(data, 'utf-8')
-    if len(s_value) > 1:
-        s_value = b'\0'+s_value+b'\0'
+    try:
+        s_value = bytes(data, 'utf-8')
+        if len(s_value) > 1:
+            s_value = b'\0'+s_value+b'\0'
+    except TypeError: return -1
     return s_value
 
 
