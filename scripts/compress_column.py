@@ -67,6 +67,7 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     except KeyError:
         all_column_compression_size_ratios[column_i] = {column_compression_method: [column_i_RATIO]}
 
+    print(column_compression_method, column_i_BEFORE, column_i_AFTER, column_i_RATIO)
     return compressed_column_info
 
 
@@ -116,4 +117,5 @@ def compress_single_column_pyfast(typed_column, codec,
     except KeyError:
         all_column_compression_size_ratios[column_i] = {codec: [column_i_RATIO]}
     
+    print(codec, column_i_BEFORE, column_i_AFTER, column_i_RATIO)
     return comp_arr[0:comp_arr_size]
