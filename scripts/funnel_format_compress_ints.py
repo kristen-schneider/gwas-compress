@@ -184,6 +184,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
             compressed_block_bitstring += compressed_column_bitstring
 
+            print(compressed_column_bitstring)
             compressed_column_end_pos += len(compressed_column_bitstring)
             compressed_column_ends_list.append(compressed_column_end_pos)
 
