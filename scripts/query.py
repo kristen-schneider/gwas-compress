@@ -10,7 +10,7 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 # COMPRESSION_METHOD_CODE_BOOK = {'gzip':1, 'zlib':2, 'bz2':3}
 
 # USER-SPECIFIED PARAMETERS
-args = config_arguments.get_args_from_config('LOCAL')
+args = config_arguments.get_args_from_config('MENDEL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -68,7 +68,7 @@ def main():
                                                                  compressed_block_info, COLUMN_TO_DECOMPRESS,
                                                                  full_header, DATA_TYPE_BYTE_SIZES)
     ############
-    #print(dc_single_column)
+    print(dc_single_column)
     single_column_END = datetime.now()
     single_column_TIME = single_column_END - single_column_START
     print(str(single_column_TIME) + ' for decompressing single column to compute...\n')
