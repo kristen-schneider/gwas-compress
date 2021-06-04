@@ -112,16 +112,19 @@ def deserialize_string(dc_bitstring):
                             ds_bitstring.append(INDEL_bitstring)
                             INDEL = False
                         i += 1
+                else: ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32) #raise IndexError
             except IndexError:
                 ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
         # treat normally (reg SNP)
         else:
             curr_ds_value = chr(curr_bytes)
             if curr_ds_value != None:
-                ds_bitstring.append(curr_ds_value)
+                try: ds_bitstring.append(curr_ds_value)
+                except AttributeError: ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
             else:
                 print('value is of bad type, cannot deserialize')
             i += 1
+    #print(ds_bitstring)
     return ds_bitstring
 
 

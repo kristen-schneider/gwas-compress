@@ -2,7 +2,7 @@ import decompress
 import deserialize_header
 import deserialize_body
 import numpy as np
-# from pyfastpfor import *
+from pyfastpfor import *
 
 # when float data is NA, int data is [0,-999]
 # when string data is NA, int data is -1
@@ -19,6 +19,7 @@ def decompress_single_column_reg(compression_method, c_bitstring, block_size, da
     OUTPUT
         decompressed_column = decompressed data (np array)
     """
+    print('reg')
     dc_column = decompress.decompress_data(compression_method, c_bitstring)
     ds_column = deserialize_body.deserialize_list(dc_column, block_size, data_type, num_bytes, chrm)
     return ds_column
@@ -35,16 +36,17 @@ def decompress_single_column_pyfast(serialized_data, block_size, data_type, num_
     OUTPUT:
         np_array: numpy array of dtype=numpy.uint32
     """
+    print('pyfast')
     decomp_arr_size = 2 * block_size
 
 
     ds_data = deserialize_body.deserialize_list(serialized_data, block_size, data_type, num_bytes, chrm)
-    print(ds_data)
+    #print(ds_data)
     try:
         comp_np_arr = np.array(ds_data, dtype=np.uint32, order='C')
         #print(ds_data, comp_np_arr)
     except ValueError:
-        print(ds_data, data_type)
+        print('ds data: ', ds_data, data_type)
     decomp_np_arr = decompress_np_arr(comp_np_arr, decomp_arr_size, codec)
     return decomp_np_arr[0:block_size]
 
