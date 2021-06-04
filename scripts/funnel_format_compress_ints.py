@@ -29,6 +29,10 @@ def compress_all_blocks(available_compression_methods,
         all serialized, compressed data from blocks (header and data)
         compression times for each column //this bit is not included in new version
     """
+    f = open('./testing_write.txt', 'ab')
+    f.truncate(0)
+    f.close()
+
     before_loop = datetime.now()
     # full header break down
     magic_number = header_first_half[0]
@@ -88,7 +92,14 @@ def compress_all_blocks(available_compression_methods,
         block_end += len_curr_block
         block_header_ends.append(block_header_end)
         block_ends.append(block_end)
-        compressed_content += (compressed_block_header + compressed_block_bitstring)
+
+        ###
+        f = open('./testing_write.txt', 'ab')
+        f.write(compressed_block_header)
+        f.write(compressed_block_bitstring)
+        f.close()
+        ###
+        # compressed_content += (compressed_block_header + compressed_block_bitstring)
 
         block_i_END = datetime.now()
         block_i_TIME = block_i_END - block_i_START
@@ -118,7 +129,7 @@ def compress_all_blocks(available_compression_methods,
     plot_bar.plot_loop_ratios(ratio_dict2, number_columns, available_compression_methods)
     # plot_bar.plot_data(dict_data, available_compression_methods)
     print('plotting: ', datetime.now()-plotting_start)
-    return header_second_half, compressed_content
+    # return header_second_half, compressed_content
 
 
 def compress_single_block(all_column_compression_times, all_column_compression_size_ratios,

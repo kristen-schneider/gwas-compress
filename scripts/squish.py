@@ -139,42 +139,42 @@ def main():
 
 
 
-    ######################################################
-    ## OLD WRITE METHOD WHERE EVERYTHING WRITTEN AT END ##
-    ######################################################
-
-    # 5. WRITE COMPRESSED HEADER
-    print('writing header...')
-    write_header_START = datetime.now()
-    ### work ###
-    compressed_with_header = open(COMPRESSED_FILE, 'wb')
-    # write how many bytes are needed to store types, ends, and data (CONSTANT FIRST 4 BYTES)
-    compressed_with_header.write(bytes_size_types)
-    compressed_with_header.write(bytes_size_num_elements)
-    compressed_with_header.write(bytes_size_ends)
-    compressed_with_header.write(bytes_size_data)
-   
-    # write header types and header ends (serialized)
-    compressed_with_header.write(serialized_header_types)
-    compressed_with_header.write(serialized_header_num_elements)
-    compressed_with_header.write(serialized_header_ends)
-   
-    # write header (serialized)
-    compressed_with_header.write(serialized_header_data)
-    ############
-    write_header_END = datetime.now()
-    write_header_TIME = write_header_END - write_header_START
-    print(str(write_header_TIME) + ' for header to write...\n')
-   
-    # 6. WRITE COMPRESSED DATA
-    print('writing data...')
-    write_data_START = datetime.now()
-    ### work ###
-    compressed_with_header.write(compressed_data)
-    ############
-    write_data_END = datetime.now()
-    write_data_TIME = write_data_END - write_data_START
-    print(str(write_data_TIME) + ' for data to write...\n')
+    # ######################################################
+    # ## OLD WRITE METHOD WHERE EVERYTHING WRITTEN AT END ##
+    # ######################################################
+    #
+    # # 5. WRITE COMPRESSED HEADER
+    # print('writing header...')
+    # write_header_START = datetime.now()
+    # ### work ###
+    # compressed_with_header = open(COMPRESSED_FILE, 'wb')
+    # # write how many bytes are needed to store types, ends, and data (CONSTANT FIRST 4 BYTES)
+    # compressed_with_header.write(bytes_size_types)
+    # compressed_with_header.write(bytes_size_num_elements)
+    # compressed_with_header.write(bytes_size_ends)
+    # compressed_with_header.write(bytes_size_data)
+    #
+    # # write header types and header ends (serialized)
+    # compressed_with_header.write(serialized_header_types)
+    # compressed_with_header.write(serialized_header_num_elements)
+    # compressed_with_header.write(serialized_header_ends)
+    #
+    # # write header (serialized)
+    # compressed_with_header.write(serialized_header_data)
+    # ############
+    # write_header_END = datetime.now()
+    # write_header_TIME = write_header_END - write_header_START
+    # print(str(write_header_TIME) + ' for header to write...\n')
+    #
+    # # 6. WRITE COMPRESSED DATA
+    # print('writing data...')
+    # write_data_START = datetime.now()
+    # ### work ###
+    # compressed_with_header.write(compressed_data)
+    # ############
+    # write_data_END = datetime.now()
+    # write_data_TIME = write_data_END - write_data_START
+    # print(str(write_data_TIME) + ' for data to write...\n')
 
 if __name__ == '__main__':
     main()
