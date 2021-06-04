@@ -17,7 +17,7 @@ AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor
 
 #### USER-SPECIFIED PARAMETERS ####
 # user should edit config.ini to reflect proper parameters
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
 
 # included in config file
 IN_FILE = args['in_file']
@@ -93,7 +93,9 @@ def main():
                                                                                           OUT_DIR)
 
     try:
-        header_second_half = serialized_compressed_data_all_ints[0]
+        header_second_half = serialized_compressed_data_all_ints
+        # when i return everything...header is just first element
+        # header_second_half = serialized_compressed_data_all_ints[0]
     except:
         print('could not compress data')
         return -1
