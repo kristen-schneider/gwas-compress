@@ -1,6 +1,7 @@
 from collections import OrderedDict
 
-ref_alt_file = '/home/krsc0813/projects/gwas-compress/data/in/ref-alt-10.tsv'
+#ref_alt_file = '/home/krsc0813/projects/gwas-compress/data/in/ref-alt-10.tsv'
+ref_alt_file = '/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv'
 def main():
     header = ''
     f = open(ref_alt_file, 'r')
@@ -25,9 +26,6 @@ def main():
                 i_alt = run_length_encoding(alt)
             print(ref, i_ref, alt, i_alt)
 
-# AATCGTTGAAGCC
-# ATGGCAGGAGCGG
-
 def run_length_encoding(indel):
     rle = ''
     prev_b = ''
@@ -49,7 +47,7 @@ def run_length_encoding(indel):
                 rle += str(i)
                 
         prev_b = b
-        rle += str(i_count) 
+    rle += str(i_count)
     
     return int(rle)
 
