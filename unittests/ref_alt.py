@@ -16,14 +16,8 @@ def main():
             A = line.rstrip().split()
             ref = A[0]
             alt = A[1]
-            #SNP
-            if len(ref) == 1: i_ref = base_to_int(ref)
-            if len(alt) == 1: i_alt = base_to_int(alt)
-            #INDEL
-            if len(ref) > 1:
-                i_ref = run_length_encoding(ref)
-            if len(alt) > 1:
-                i_alt = run_length_encoding(alt)
+            i_ref = run_length_encoding(ref)
+            i_alt = run_length_encoding(alt)
             print(ref, i_ref, alt, i_alt)
 
 def run_length_encoding(indel):
