@@ -1,5 +1,5 @@
 import unittest
-from unittests import ref_alt
+from scripts import ref_alt
 
 
 class TestSerializationToDeserialization(unittest.TestCase):
