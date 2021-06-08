@@ -2,14 +2,17 @@
 # https://wiki.python.org/moin/BitArrays
 import array
 def main():
-    x = assumption1(True, True, 'C'*15)
+    data = ['T']*15
+    x = col_input(data)
     print(x)
 
 def col_input(column):
     """
     taken a column of indels and snps in a list and do the work...
     """
-    for n in range(len(column)):
+    num_fifteen_nucleotides_blocks = int(len(column)/15) + 1
+    print(num_fifteen_nucleotides_blocks)
+    for n in range(num_fifteen_nucleotides_blocks):
         fifteen_nucleotides = column[n:15]
         first_bit_info = get_first_bit(fifteen_nucleotides)
         first_bit = first_bit_info[0]
@@ -38,19 +41,20 @@ def col_input(column):
             else:
                 print('bad second bit')
                 return -1
+    return bitstring
 
 
 def get_first_bit(fifteen_nucleotides):
     """
     return 1 if there is an indel, and return the leading SNVs
     """
-    if len(fifteen_nucleotides) != 15:
-        print('incorrect input for 15 block')
-        return -1
+    # if len(fifteen_nucleotides) != 15:
+    #     print('incorrect input for 15 block')
+    #     return -1
     for i in range(len(fifteen_nucleotides)):
-        if len(fifteen_nucleotides[i] != 1):
+        if len(fifteen_nucleotides[i]) != 1:
             return 1, fifteen_nucleotides[0:i]
-    return 0
+    return 0, []
 
 
 def get_second_bit(SNVs_under_fifteen):
@@ -92,7 +96,7 @@ def encode_SNVs(SNVs):
     snv_bitstring = 0
     for v in range(len(SNVs)):
         # get proper bit representation for the variant
-        snv = shift_bit(get_variant_number(SNVs[v]), 2*v)
+        snv = shift_bit(get_variant_number(SNVs[v]), 2*v) | snv_bitstring
         # if we are on first snv, set bitstring
         if v == 0:
             snv_bitstring = snv
