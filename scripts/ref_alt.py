@@ -1,8 +1,21 @@
 from collections import OrderedDict
 
-#ref_alt_file = '/home/krsc0813/projects/gwas-compress/data/in/ref-alt-10.tsv'
-ref_alt_file = '/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv'
+ref_alt_file = '/home/krsc0813/projects/gwas-compress/data/ref-alt-all.tsv'
+#ref_alt_file = '/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv'
 def main():
+    print_long(ref_alt_file)
+    print_long('/home/krsc0813/projects/gwas-compress/data/ref-alt-int.tsv')
+
+def print_long(f_name):
+    f = open(f_name, 'r')
+    for line in f:
+        A = line.rstrip().split()
+        ref = A[0]
+        alt = A[1]
+
+        if len(ref) > 400 or len(alt) > 400: print('ref: ', ref, 'alt: ', alt)
+
+def base_rle():
     header = ''
     f = open(ref_alt_file, 'r')
     print('ref','ref_i','alt','alt_i')
@@ -18,7 +31,7 @@ def main():
             alt = A[1]
             i_ref = run_length_encoding(ref)
             i_alt = run_length_encoding(alt)
-            print(ref, i_ref, alt, i_alt)
+            print(i_ref, i_alt)
 
 def run_length_encoding(indel):
     rle = ''
@@ -52,7 +65,7 @@ def base_to_int(base):
     elif base == 'C': i = 2
     elif base == 'G': i = 3
     elif base == 'T': i = 4
-    else: print('not a valid base')
+    else: print(base, 'not a valid base')
     return i
 
 def get_maximums():
