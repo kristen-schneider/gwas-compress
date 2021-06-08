@@ -2,7 +2,7 @@
 # https://wiki.python.org/moin/BitArrays
 import array
 def main():
-    data = ['T']*15
+    data = ['G']*15
     x = col_input(data)
     print(x)
 
@@ -10,8 +10,7 @@ def col_input(column):
     """
     taken a column of indels and snps in a list and do the work...
     """
-    num_fifteen_nucleotides_blocks = int(len(column)/15) + 1
-    print(num_fifteen_nucleotides_blocks)
+    num_fifteen_nucleotides_blocks = int(len(column)/15)
     for n in range(num_fifteen_nucleotides_blocks):
         fifteen_nucleotides = column[n:15]
         first_bit_info = get_first_bit(fifteen_nucleotides)
@@ -41,6 +40,8 @@ def col_input(column):
             else:
                 print('bad second bit')
                 return -1
+
+    n += 15
     return bitstring
 
 
