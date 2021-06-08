@@ -23,10 +23,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     mix14 = 'CCCCCAAAAACCCCC'
     mix15 = 'TTTCCCGGGAAATAG'
 
-    def test_assumption1(self):
-        fifteen_SNVs_bool = True
-        SNVs_bool = True
-
+    def test_encode_SNVs(self):
         # 00 000000000000000000000000000000
         self.assertEqual(ref_alt.encode_SNVs(self.snpA), 0)
         # 00 010101010101010101010101010101
@@ -65,7 +62,6 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(ref_alt.encode_SNVs(self.mix14), 357564757)
         # 00 100011000000101010010101111111
         self.assertEqual(ref_alt.encode_SNVs(self.mix15), 587375999)
-
 
 if __name__ == '__main__':
     unittest.main()
