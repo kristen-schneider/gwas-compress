@@ -22,12 +22,22 @@ def col_input(column):
         # either < 15 SNVs or INDEL
         else:
             second_bit = get_second_bit(SNVs_under_fifteen)
+            bitstring = shift_bit(first_bit, 1) | second_bit
+
             # SNVs < 15
             if second_bit == 0:
                 # get how many SNVs there are
                 third_bit = get_num_SNVs(SNVs_under_fifteen)
+                bitstring = shift_bit(bitstring, 10) | third_bit
+                SNVs_bitstring = encode_SNVs(SNVs_under_fifteen)
+                bitstring = shift_bit(bitstring, 20) | SNVs_bitstring
 
-            # encode INDEL
+            # INDEL
+            elif second_bit == 1:
+                bitstring = bitstring
+            else:
+                print('bad second bit')
+                return -1
 
 
 def get_first_bit(fifteen_nucleotides):
@@ -58,11 +68,18 @@ def get_second_bit(SNVs_under_fifteen):
 
 
 def get_num_SNVs(SNVs_under_fifteen):
+    """
+    returns number of SNVs in a list if it is less than 15
+    """
     num_SNVs = 0
     for n in range(len(SNVs_under_fifteen)):
+        if len(SNVs_under_fifteen[n]) == 1:
+            num_SNVs += 1
+        else:
+            return num_SNVs
 
+    return num_SNVs
 
-    return len(SNVs_under_fifteen)
 
 def shift_bit(bitstring, shift):
     """
