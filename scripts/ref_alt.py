@@ -3,30 +3,84 @@
 import array
 
 def main():
-    # 1. fifteen consecutive snps
+    # 1. 1 bit: fifteen consecutive snps
+    # 2. 1 bit: snv or indel
+    # 3.a. 30 bits: snvs (up to 15)
+    # 3.b.i 10 bits: length of indel OR SNVs
+    # 3.b.ii 20 bits: snvs (up to 10)
 
+    # assumptions for round 1 is that we pack 16 snvs into one int.
+    # assume always 00
+    fifteen_SNVs_bool = True
+    SNVs_bool = True
+    As = 'AAAAAAAAAAAAAAA'
+    bitstring = bits_one_two(fifteen_SNVs_bool, SNVs_bool)
+    if fifteen_SNVs_bool:
+        # move over 30 bits
+        bitstring = bitstring
+        SNVs_bitsting = encode_SNVs(As)
+        bitstring = bitstring | SNVs_bitsting
+        print(bitstring)
 
-    variant = get_variant_number('A')
+def bits_one_two(fifteen_SNVs_bool, SNVs_bool):
+    # if first bit is zero, we know second bit
+    if fifteen_SNVs_bool:
+        # set first bit
+        bitstring = first_bit(fifteen_SNVs_bool)
 
+        # shift over 1. second bit is set as zero automatically
+        bitstring = shift_bit(bitstring, 1)
 
-def fifteen_snvs(fifteen_snvs_bool):
+    # else we do not know second bit
+    else:
+        # set first bit
+        bitstring = first_bit(fifteen_SNVs_bool)
+
+        # shift over 1.
+        bitstring = shift_bit(bitstring, 1)
+        # set second bit
+        bitstring = second_bit(SNVs_bool)
+
+    return bitstring
+
+def first_bit(fifteen_snvs_bool):
     """
     if there are fifteen snvs in a row, we want to return 0.
-    the beginning of our bitstring will be 0.
+    the first bit of our bitstring can be 0.
+    else we return 1.
+    the first bit of our bitstring can be 1.
     """
     if fifteen_snvs_bool:
         return 0
     else:
         return 1
 
-def bit_operations(bitstring, shift):
-    x = bitstring << shift
-    y = bitstring >> shift
-    return x,y
+def second_bit(snv_bool):
+    """
+    if we are looking at more snvs (less than 15), return 0.
+    the second bit of our bitstring can be 0.
+    else we return 1.
+    the second bit of our bitstring can be 1.
+    """
+    if snv_bool:
+        return 0
+    else:
+        return 1
 
-x=bit_operations(100, 1)
-print(x)
+def shift_bit(bitstring, shift):
+    return bitstring << shift
+    # y = bitstring >> shift
+    # return x,y
 
+
+def encode_SNVs(SNVs):
+    snv_bitstring = None
+    for v in SNVs:
+        v_bit = get_variant_number(v)
+        # initialize bitstring
+        snv_bitstring = v_bit
+        #
+        snv_bitstring = shift_bit(v_bit)
 
 def get_variant_number(base):
     if (base == 'A'):
