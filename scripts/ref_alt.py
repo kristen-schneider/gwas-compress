@@ -2,7 +2,7 @@
 # https://wiki.python.org/moin/BitArrays
 import array
 
-def main():
+def assumption1(fifteen_SNVs_bool, SNVs_bool, SNVs):
     # 1. 1 bit: fifteen consecutive snps
     # 2. 1 bit: snv or indel
     # 3.a. 30 bits: snvs (up to 15)
@@ -11,16 +11,18 @@ def main():
 
     # assumptions for round 1 is that we pack 16 snvs into one int.
     # assume always 00
-    fifteen_SNVs_bool = True
-    SNVs_bool = True
-    As = 'AAAAAAAAAAAAAAA'
+    # fifteen_SNVs_bool = True
+    # SNVs_bool = True
+    # As = 'AAAAAAAAAAAAAAA'
+    # Ts = 'TTTTTTTTTTTTTTT'
     bitstring = bits_one_two(fifteen_SNVs_bool, SNVs_bool)
     if fifteen_SNVs_bool:
         # move over 30 bits
         bitstring = bitstring
-        SNVs_bitsting = encode_SNVs(As)
+        SNVs_bitsting = encode_SNVs(SNVs)
         bitstring = bitstring | SNVs_bitsting
-        print(bitstring)
+
+    return bitstring
 
 def bits_one_two(fifteen_SNVs_bool, SNVs_bool):
     # if first bit is zero, we know second bit
@@ -74,13 +76,24 @@ def shift_bit(bitstring, shift):
 
 
 def encode_SNVs(SNVs):
-    snv_bitstring = None
-    for v in SNVs:
-        v_bit = get_variant_number(v)
-        # initialize bitstring
-        snv_bitstring = v_bit
-        #
-        snv_bitstring = shift_bit(v_bit)
+    snv_bitstring = 0
+    for v in range(len(SNVs)):
+        # get proper bit representation for the variant
+        snv = get_variant_number(SNVs[v])
+
+        # if we are on first snv, set bitsring
+        if v == 0:
+            snv_bitstring = snv
+        # # if we are on last snv, no not shift, just return
+        # elif v == 14:
+        #     snv_bitstring = snv_bitstring | snv
+        #     return snv_bitstring
+        # if we are in middle, shift bitstring
+        else:
+            # shift bitstring
+            snv_bitstring = shift_bit(snv_bitstring, 2)
+            snv_bitstring = snv_bitstring | snv
+    return snv_bitstring
 
 def get_variant_number(base):
     if (base == 'A'):
@@ -160,6 +173,6 @@ def single_encoded_bit():
 #         # print "\n"
 #         i += 1
 
-
-if __name__ == '__main__':
-        main()
+#
+# if __name__ == '__main__':
+#         main()
