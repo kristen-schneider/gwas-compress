@@ -1,11 +1,32 @@
-def main():
-    # 1.
-    get_variant_number('A')
+# https://wiki.python.org/moin/BitwiseOperators
+# https://wiki.python.org/moin/BitArrays
+import array
 
-def packed_bit():
-    return 0
-def single_encoded_bit():
-    return
+def main():
+    # 1. fifteen consecutive snps
+
+
+    variant = get_variant_number('A')
+
+
+def fifteen_snvs(fifteen_snvs_bool):
+    """
+    if there are fifteen snvs in a row, we want to return 0.
+    the beginning of our bitstring will be 0.
+    """
+    if fifteen_snvs_bool:
+        return 0
+    else:
+        return 1
+
+def bit_operations(bitstring, shift):
+    x = bitstring << shift
+    y = bitstring >> shift
+    return x,y
+
+x=bit_operations(100, 1)
+print(x)
+
 
 def get_variant_number(base):
     if (base == 'A'):
@@ -20,12 +41,14 @@ def get_variant_number(base):
         print('not a proper base')
         return -1
 
+
 def print_bit_array_element_be(bit_array_element, size):
     output = []
     for i in range(1, size + 1):
         output.append(get_bit(bit_array_element, i, size))
 
     print (' '.join([str(x) for x in output]))
+
 
 def get_bit(bit_array_element, n, size):
     return (bit_array_element >> (size - n)) & 1
@@ -36,6 +59,7 @@ def set_element_bit(bit_array_element, i, size):
     bit_array_element = bit_array_element | (1 << (size - i))
     return bit_array_element
 
+
 def set_bit(B, i, element_size):
     # chooses which element we want (i.e. chooses one of: 00000000 00000000 00000000)
     curr_element = (i - 1) / element_size
@@ -43,6 +67,15 @@ def set_bit(B, i, element_size):
     curr_i = i - curr_element * element_size;
 
     B[curr_element] = set_element_bit(B[curr_element], curr_i, element_size)
+
+
+def packed_bit():
+    return 0
+
+
+def single_encoded_bit():
+    return 1
+
 
 # def misc():
 #     for individual in genotype_file:
