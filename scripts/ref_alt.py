@@ -2,15 +2,11 @@
 # https://wiki.python.org/moin/BitArrays
 import math
 def main():
-    # assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
+    assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
     # data = ['AAAAA']*1
-    data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
-             'CT',
-             'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
-             'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G',
-             'A']
-    x = col_input(data)
-    print(x)
+    # data = 'ACGT'*7
+    # x = col_input(data)
+    # print(x)
 
 def col_input(column):
     """
@@ -55,11 +51,30 @@ def col_input(column):
             for t in tail_bitstrings: list_ints.append(t)
     # handle any SNVs left
     if len(SNVs) > 0:
-        start_bitstring = shift_bit(2, 30)
-        len_SNVs = shift_bit(len(SNVs), 20)
-        SNV_bitstring = encode_SNVs(SNVs)
-        full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
-        list_ints.append(full_bitstring)
+        if len(SNVs) <= 10:
+            start_bitstring = shift_bit(2, 30)
+            len_SNVs = shift_bit(len(SNVs), 20)
+            SNV_bitstring = encode_SNVs(SNVs)
+            full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
+            list_ints.append(full_bitstring)
+        elif len(SNVs) > 10 and len(SNVs) <= 15:
+            # 1-10
+            first_ten = SNVs[0:10]
+            start_ten = shift_bit(2, 30)
+            len_ten = shift_bit(len(first_ten), 20)
+            ten_bitstring = encode_SNVs(first_ten)
+            full_ten = start_ten | len_ten | ten_bitstring
+            list_ints.append(full_ten)
+            # 10-end
+            last_snv = SNVs[10:]
+            start_last = shift_bit(2, 30)
+            len_last = shift_bit(len(last_snv), 20)
+            last_bitstring = encode_SNVs(last_snv)
+            full_last = start_last | len_last | last_bitstring
+            list_ints.append(full_last)
+
+        else:
+            print('invalid length of SNVs')
 
     return list_ints
 

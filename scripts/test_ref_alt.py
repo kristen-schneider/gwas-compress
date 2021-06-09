@@ -69,6 +69,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     snp19 = 'T' * 25
     snp20 = 'T' * 40
     snp21 = 'C' * 11
+    snp22 = 'ACGT'*7
     def test_encode_SNVs_greater_than_15(self):
         # 00 000000000000000000000000000000, 10 000000101000000000000000000000
         self.assertEqual(ref_alt.col_input(self.snp16), [0, 2157969408])
@@ -78,10 +79,13 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(ref_alt.col_input(self.snp18), [715827882, 2158668458])
         # 00 111111111111111111111111111111, 10 000000101011111111111111111111
         self.assertEqual(ref_alt.col_input(self.snp19), [1073741823, 2159017983])
-        # 00 111111111111111111111111111111, 00 111111111111111111111111111111, 10 000000101011111111111111111111
+        # 00 111111111111111111111111111111, 00 111111111111111111111111111111, 10 0000001010 11111111111111111111
         self.assertEqual(ref_alt.col_input(self.snp20), [1073741823, 1073741823, 2159017983])
-        # 10 0000000010
-        self.assertEqual()
+        # 10 0000001010 01010101010101010101, 10 0000000001 00000000000000000001
+        self.assertEqual(ref_alt.col_input(self.snp21), [2158318933, 2148532225])
+        # ACGTACGTACGTACG TACGTACGTA CGT
+        # 00 100100111001001110010011100100, 10 0000001010 00111001001110010011, 10 0000000011 00000000000000111001
+        self.assertEqual(ref_alt.col_input(self.snp22), [618980580, 2158203795, 2150629433])
 
     indelA = ['AAAAA']*1
     indelC = ['CCCCC']*1
@@ -131,26 +135,26 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(ref_alt.col_input(self.snp_indel_snp_indel3), [2151678132, 3227517234, 2150629376, 3227517234])
 
 
-    # junk1 = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
-    #          'CT',
-    #          'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
-    #          'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'A',
-    #          'AAAAAAAAAA AATATATATATATAT ATATATATATAT',
-    #          'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C', 'C',
-    #          'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
-    #          'TA',
-    #          'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
-    #          'ACAGGAGGGCGGG']
-    # # # 10 0000001010 11101001111111011000
-    # # # 11 0000001010 00000000000000001101
-    # # # 00 000001111001101010111111111000
-    # # # 10 0000001011 10100001001000011111
-    # # # 10 0000000001 00000000000000000000
-    # # # 11 0000001010 00000000000000000000, 00 110011001100110011001100110000, 00 000000110011001100110011001100
-    #
-    # def test_junk(self):
-    #     self.assertEqual(ref_alt.col_input(self.junk1), [2158927832, 3223322637, 31895544, 2159677983,
-    #                                                      2148532224])
+    junk1 = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
+             'CT',
+             'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
+             'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'A',
+             'AAAAAAAAAA AATATATATATATAT ATATATATATAT',
+             'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C', 'C',
+             'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
+             'TA',
+             'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
+             'ACAGGAGGGCGGG']
+    # # 10 0000001010 11101001111111011000
+    # # 11 0000001010 00000000000000001101
+    # # 00 000001111001101010111111111000
+    # # 10 0000001011 10100001001000011111
+    # # 10 0000000001 00000000000000000000
+    # # 11 0000001010 00000000000000000000, 00 110011001100110011001100110000, 00 000000110011001100110011001100
+
+    def test_junk(self):
+        self.assertEqual(ref_alt.col_input(self.junk1), [2158927832, 3223322637, 31895544, 2159677983,
+                                                         2148532224])
 
 
 
