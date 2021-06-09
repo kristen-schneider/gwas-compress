@@ -95,10 +95,15 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(ref_alt.col_input(self.indelT), [3226469375])
 
     snp_indel1 = ['A', 'A', 'A', 'AAAAA']
+    snp_indel2 = ['A', 'A', 'A', 'CCCCC']
+    snp_indel3 = ['A', 'C', 'T', 'G', 'GATACA']
     def test_encode_SNPs_INDEL(self):
-        # 10 000000001100000000000000000000
+        # 10 000000001100000000000000000000, 11 000000010100000000000000000000
         self.assertEqual(ref_alt.col_input(self.snp_indel1), [2150629376, 3226468352])
-
+        # 10 000000001100000000000000000000, 11 000000010100000000000101010101
+        self.assertEqual(ref_alt.col_input(self.snp_indel2), [2150629376, 3226468693])
+        # 10 000000010000000000000010110100, 11 000000011000000000000100110010
+        self.assertEqual(ref_alt.col_input(self.snp_indel3), [2151678132, 3227517234])
 
 
 
