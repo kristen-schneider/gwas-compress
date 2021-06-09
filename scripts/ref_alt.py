@@ -2,8 +2,13 @@
 # https://wiki.python.org/moin/BitArrays
 import math
 def main():
-    data = ['AAAAA']*1
-    # data = ['C', 'T', 'T', 'CCCCCCCCCCTTTTT']
+    # assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
+    # data = ['AAAAA']*1
+    data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
+             'CT',
+             'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
+             'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G',
+             'A']
     x = col_input(data)
     print(x)
 
@@ -134,12 +139,23 @@ def assumption1(ref_alt_txt):
     # 3.b.ii 20 bits: snvs (up to 10)
 
     # assumptions for round 1 is that we pack 16 snvs into one int.
-    # assume always 00
-    bitstring = 00
-    SNVs_bitsting = encode_SNVs(SNVs)
-    bitstring = bitstring | SNVs_bitsting
+    f = open(ref_alt_txt, 'r')
+    all_refs = []
+    all_alts = []
+    for line in f:
+        A = line.rstrip().split()
+        ref = A[0]
+        all_refs.append(ref)
+        alt = A[1]
+        all_alts.append(alt)
+    int_refs = col_input(all_refs)
+    int_alts = col_input(all_alts)
+    print('reference as str: ', len(all_refs), all_refs)
+    print('reference as int: ', len(int_refs), int_refs)
+    print('alternate as str: ', len(all_alts), all_alts)
+    print('alternate as int: ', len(int_alts), int_alts)
 
-    return bitstring
+
 
 if __name__ == '__main__':
         main()

@@ -68,6 +68,7 @@ class TestSerializationToDeserialization(unittest.TestCase):
     snp18 = 'G' * 25
     snp19 = 'T' * 25
     snp20 = 'T' * 40
+    snp21 = 'C' * 11
     def test_encode_SNVs_greater_than_15(self):
         # 00 000000000000000000000000000000, 10 000000101000000000000000000000
         self.assertEqual(ref_alt.col_input(self.snp16), [0, 2157969408])
@@ -79,6 +80,8 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(ref_alt.col_input(self.snp19), [1073741823, 2159017983])
         # 00 111111111111111111111111111111, 00 111111111111111111111111111111, 10 000000101011111111111111111111
         self.assertEqual(ref_alt.col_input(self.snp20), [1073741823, 1073741823, 2159017983])
+        # 10 0000000010
+        self.assertEqual()
 
     indelA = ['AAAAA']*1
     indelC = ['CCCCC']*1
@@ -127,6 +130,27 @@ class TestSerializationToDeserialization(unittest.TestCase):
         # 10 000000010000000000000010110100, 11 000000011000000000000100110010, 10 000000001100000000000000000000, 11 000000011000000000000100110010
         self.assertEqual(ref_alt.col_input(self.snp_indel_snp_indel3), [2151678132, 3227517234, 2150629376, 3227517234])
 
+
+    # junk1 = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
+    #          'CT',
+    #          'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
+    #          'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'A',
+    #          'AAAAAAAAAA AATATATATATATAT ATATATATATAT',
+    #          'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C', 'C',
+    #          'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
+    #          'TA',
+    #          'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
+    #          'ACAGGAGGGCGGG']
+    # # # 10 0000001010 11101001111111011000
+    # # # 11 0000001010 00000000000000001101
+    # # # 00 000001111001101010111111111000
+    # # # 10 0000001011 10100001001000011111
+    # # # 10 0000000001 00000000000000000000
+    # # # 11 0000001010 00000000000000000000, 00 110011001100110011001100110000, 00 000000110011001100110011001100
+    #
+    # def test_junk(self):
+    #     self.assertEqual(ref_alt.col_input(self.junk1), [2158927832, 3223322637, 31895544, 2159677983,
+    #                                                      2148532224])
 
 
 
