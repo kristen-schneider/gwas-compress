@@ -94,12 +94,12 @@ def encode_INDEL(INDEL):
             # take first ten and add, then take 16 at a time
             if i == 0:
                 first_ten = INDEL[start_indel:end_indel]
-                first_ten_bitstring = end_indel(first_ten)
+                first_ten_bitstring = encode_SNVs(first_ten)
                 indel_bitstring.append(start_bitstring | len_INDEL | first_ten_bitstring)
             else:
                 INDEL = INDEL[start_indel:end_indel]
                 start_bitstring = shift_bit(0, 30)
-                indel_bitstring.append(start_bitstring | encode_INDEL(INDEL))
+                indel_bitstring.append(start_bitstring | encode_SNVs(INDEL))
             start_indel = end_indel
             end_indel += 16
 

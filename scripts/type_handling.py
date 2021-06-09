@@ -66,7 +66,6 @@ def string_list_to_int(data_list, data_type, column_i):
         for data in data_list:
             typed_data = convert_to_int(data, data_type)
             typed_list.append(typed_data)
-    print(typed_list)
     return typed_list
 
 
