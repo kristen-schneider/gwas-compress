@@ -2,7 +2,7 @@
 # https://wiki.python.org/moin/BitArrays
 import math
 def main():
-    data = ['C']*25
+    data = ['AAAAA']*1
     # data = ['C', 'T', 'T', 'CCCCCCCCCCTTTTT']
     x = col_input(data)
     print(x)
@@ -33,16 +33,15 @@ def col_input(column):
         else:
             # handle any SNVs we have collected
             if len(SNVs) > 0:
-                start_bitstring = shift_bit(1, 30)
+                start_bitstring = shift_bit(2, 30)
                 len_SNVs = shift_bit(len(SNVs), 20)
                 SNV_bitstring = encode_SNVs(SNVs)
                 full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
                 list_ints.append(full_bitstring)
+                SNVs = []
 
             # handle INDEL we encountered
             INDEL = row
-            # start_bitstring = shift_bit(3, 30)
-            # len_INDEL = shift_bit(len(INDEL), 20)
             INDEL_bitstring_info = encode_INDEL(INDEL)
             # first bitstring will need to include data about how long the INDEL is and such (for decoding)
             head_bitstring = INDEL_bitstring_info[0]
@@ -51,7 +50,7 @@ def col_input(column):
             for t in tail_bitstrings: list_ints.append(t)
     # handle any SNVs left
     if len(SNVs) > 0:
-        start_bitstring = shift_bit(1, 30)
+        start_bitstring = shift_bit(2, 30)
         len_SNVs = shift_bit(len(SNVs), 20)
         SNV_bitstring = encode_SNVs(SNVs)
         full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
@@ -95,19 +94,21 @@ def encode_INDEL(INDEL):
             # take first ten and add, then take 16 at a time
             if i == 0:
                 first_ten = INDEL[start_indel:end_indel]
-                first_ten_bitstring = encode_SNVs(first_ten)
+                first_ten_bitstring = end_indel(first_ten)
                 indel_bitstring.append(start_bitstring | len_INDEL | first_ten_bitstring)
             else:
                 INDEL = INDEL[start_indel:end_indel]
                 start_bitstring = shift_bit(0, 30)
-                indel_bitstring.append(start_bitstring | encode_SNVs(INDEL))
+                indel_bitstring.append(start_bitstring | encode_INDEL(INDEL))
             start_indel = end_indel
             end_indel += 16
 
     else:
-        start_bitstring = shift_bit(0, 30)
+        start_bitstring = shift_bit(3, 30)
         # treat it as a list of SNPs
-        indel_bitstring.append(start_bitstring | encode_SNVs(INDEL))
+        x = len(INDEL)
+        len_INDEL = shift_bit(len(INDEL), 20)
+        indel_bitstring.append(start_bitstring | len_INDEL | encode_SNVs(INDEL))
     return indel_bitstring
 
 
