@@ -3,7 +3,7 @@
 import math
 def main():
     # data = ['C']*15
-    data = ['C', 'T', 'T', 'GATACAGATACAGATACA']
+    data = ['C', 'T', 'T', 'CCCCCCCCCCTTTTT']
     x = col_input(data)
     print(x)
 
@@ -82,13 +82,17 @@ def encode_INDEL(INDEL):
     start_bitstring = shift_bit(3, 30)
     len_INDEL = shift_bit(len(INDEL), 20)
     if len(INDEL) > 10:
-        x = len(INDEL)
         num_ints = math.ceil(int(len(INDEL)-10)/16) + 1
         for i in range(num_ints):
             # take first ten and add, then take 16 at a time
-            first_ten = INDEL[start_indel:end_indel]
-            first_ten_bitstring = encode_SNVs(first_ten)
-            indel_bitstring.append(start_bitstring | len_INDEL | first_ten_bitstring)
+            if i == 0:
+                first_ten = INDEL[start_indel:end_indel]
+                first_ten_bitstring = encode_SNVs(first_ten)
+                indel_bitstring.append(start_bitstring | len_INDEL | first_ten_bitstring)
+            else:
+                INDEL = INDEL[start_indel:end_indel]
+                start_bitstring = shift_bit(0, 30)
+                indel_bitstring.append(start_bitstring | encode_SNVs(INDEL))
             start_indel = end_indel
             end_indel += 16
 
