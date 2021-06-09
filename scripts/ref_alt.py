@@ -1,18 +1,23 @@
 # https://wiki.python.org/moin/BitwiseOperators
 # https://wiki.python.org/moin/BitArrays
-import array
+import math
 def main():
-    data = ['G']*15
+    data = ['G']*20
     x = col_input(data)
     print(x)
 
 def col_input(column):
     """
-    taken a column of indels and snps in a list and do the work...
+    taken a full column of ref/alt bases as a list and return a list of integers
     """
-    num_fifteen_nucleotides_blocks = int(len(column)/15)
+    ref_alt_ints = []
+
+    num_fifteen_nucleotides_blocks = int(math.ceil(len(column)/15))
+    print(num_fifteen_nucleotides_blocks)
+    start_fifteen = 0
+    stop_fifteen = 15
     for n in range(num_fifteen_nucleotides_blocks):
-        fifteen_nucleotides = column[n:15]
+        fifteen_nucleotides = column[start_fifteen:stop_fifteen]
         first_bit_info = get_first_bit(fifteen_nucleotides)
         first_bit = first_bit_info[0]
         SNVs_under_fifteen = first_bit_info[1]
@@ -40,9 +45,10 @@ def col_input(column):
             else:
                 print('bad second bit')
                 return -1
-
-    n += 15
-    return bitstring
+        ref_alt_ints.append(bitstring)
+        start_fifteen = stop_fifteen
+        stop_fifteen += 15
+    return ref_alt_ints
 
 
 def get_first_bit(fifteen_nucleotides):
