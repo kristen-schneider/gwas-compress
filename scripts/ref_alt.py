@@ -3,7 +3,7 @@
 import math
 def main():
     # data = ['C']*15
-    data = ['C', 'T', 'T', 'GATACA']
+    data = ['C', 'T', 'T', 'GATACAGATACAGATACA']
     x = col_input(data)
     print(x)
 
@@ -43,10 +43,9 @@ def col_input(column):
             start_bitstring = shift_bit(3, 30)
             len_INDEL = shift_bit(len(INDEL), 20)
             INDEL_bitstring_info = encode_INDEL(INDEL)
+            # first bitstring will need to include data about how long the INDEL is and such (for decoding)
             head_bitstring = start_bitstring | len_INDEL | INDEL_bitstring_info[0]
             tail_bitstrings = INDEL_bitstring_info[1:]
-            # INDEL_bitstring = [head_bitstring]
-            # for t in tail_bitstrings: INDEL_bitstring.append(t)
             list_ints.append(head_bitstring)
             for t in tail_bitstrings: list_ints.append(t)
 
@@ -77,7 +76,23 @@ def encode_SNVs(SNVs):
 
 
 def encode_INDEL(INDEL):
-    indel_bitstring = [0,1,1]
+    indel_bitstring = []
+    start_indel = 0
+    end_indel = 10
+    if len(INDEL) > 10:
+        x = len(INDEL)
+        num_ints = math.ceil(int(len(INDEL)-10)/16) + 1
+        for i in range(num_ints):
+            # take first ten and add, then take 16 at a time
+            first_ten = INDEL[start_indel:end_indel]
+            first_ten_bitstring = encode_SNVs(first_ten)
+            indel_bitstring.append(first_ten_bitstring)
+            start_indel = end_indel
+            end_indel += 16
+
+    else:
+        # treat it as a list of SNPs
+        indel_bitstring.append(encode_SNVs(INDEL))
     return indel_bitstring
 
 
