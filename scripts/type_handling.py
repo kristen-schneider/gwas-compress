@@ -1,3 +1,5 @@
+import ref_alt
+
 def get_column_types(row, data_type_code_book):
     """
     Given a row of data, returns all the types of data in that row
@@ -46,7 +48,7 @@ def get_data_type(str_data, data_type_code_book):
                 return type(str_data)
 
 
-def string_list_to_int(data_list, data_type):
+def string_list_to_int(data_list, data_type, column_i):
     """
     given a list of string data, return a list of ints
 
@@ -58,9 +60,13 @@ def string_list_to_int(data_list, data_type):
         typed_list: list of ints
     """
     typed_list = []
-    for data in data_list:
-        typed_data = convert_to_int(data, data_type)
-        typed_list.append(typed_data)
+    if column_i == 2 or column_i == 3:
+        typed_list = ref_alt.col_input(data_list)
+    else:
+        for data in data_list:
+            typed_data = convert_to_int(data, data_type)
+            typed_list.append(typed_data)
+    print(typed_list)
     return typed_list
 
 
