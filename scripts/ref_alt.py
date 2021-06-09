@@ -125,7 +125,8 @@ def get_variant_number(base):
         print('not a proper base')
         return -1
 
-def assumption1(SNVs):
+ref_alt_txt = ''
+def assumption1(ref_alt_txt):
     # 1. 1 bit: fifteen consecutive snps
     # 2. 1 bit: snv or indel
     # 3.a. 30 bits: snvs (up to 15)
