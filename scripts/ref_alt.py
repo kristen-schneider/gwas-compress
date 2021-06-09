@@ -2,11 +2,55 @@
 # https://wiki.python.org/moin/BitArrays
 import math
 def main():
-    data = ['G']*20
+    # data = ['C']*15
+    data = ['C', 'T', 'T', 'GATACA']
     x = col_input(data)
     print(x)
 
 def col_input(column):
+    """
+    takes a full column of ref/alt bases and finds an element to encode; and then encodes it
+        1. 15 SNVs in a row
+        2. < 15 SNVs in a row
+        3. INDEL
+    returns list of integers
+    """
+    list_ints = []
+    SNVs = []
+    for row in column:
+        # only SNV
+        if len(row) == 1:
+            SNVs.append(row)
+            # 15 SNVs in a row
+            if len(SNVs) == 15:
+                SNV_bitstring = encode_SNVs(SNVs)
+                start_bitstring = shift_bit(0, 30)
+                full_bitstring = start_bitstring | SNV_bitstring
+                list_ints.append(start_bitstring | SNV_bitstring)
+
+        # encountered an INDEL
+        else:
+            # handle any SNVs we have collected
+            if len(SNVs) > 0:
+                start_bitstring = shift_bit(1, 30)
+                len_SNVs = shift_bit(len(SNVs), 20)
+                SNV_bitstring = encode_SNVs(SNVs)
+                full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
+                list_ints.append(full_bitstring)
+
+            # handle INDEL we encountered
+            INDEL = row
+            start_bitstring = shift_bit(3, 30)
+            len_INDEL = shift_bit(len(INDEL), 20)
+            INDEL_bitstring = encode_INDEL(INDEL)
+            full_bitstring = start_bitstring | len_INDEL | INDEL_bitstring
+            list_ints.append(full_bitstring)
+
+    return list_ints
+
+
+
+def long_col_input(column):
     """
     taken a full column of ref/alt bases as a list and return a list of integers
     """
@@ -30,8 +74,9 @@ def col_input(column):
         else:
             second_bit = get_second_bit(SNVs_under_fifteen)
             bitstring = shift_bit(first_bit, 1) | second_bit
+            num_fifteen_nucleotides_blocks += 1
 
-            # SNVs < 15
+            # only SNVs < 15
             if second_bit == 0:
                 # get how many SNVs there are
                 third_bit = get_num_SNVs(SNVs_under_fifteen)
@@ -55,9 +100,6 @@ def get_first_bit(fifteen_nucleotides):
     """
     return 1 if there is an indel, and return the leading SNVs
     """
-    # if len(fifteen_nucleotides) != 15:
-    #     print('incorrect input for 15 block')
-    #     return -1
     for i in range(len(fifteen_nucleotides)):
         if len(fifteen_nucleotides[i]) != 1:
             return 1, fifteen_nucleotides[0:i]
@@ -70,7 +112,7 @@ def get_second_bit(SNVs_under_fifteen):
     returns 1 if list is an INDEL, and returns INDEL
     """
     if len(SNVs_under_fifteen[0]) == 1:
-        return 0
+        return 0,
     elif len(SNVs_under_fifteen[0]) > 1:
         return 1, SNVs_under_fifteen[0]
     else:
@@ -100,6 +142,9 @@ def shift_bit(bitstring, shift):
 
 
 def encode_SNVs(SNVs):
+    """
+    given a list of SNVs, convert to int
+    """
     snv_bitstring = 0
     for v in range(len(SNVs)):
         # get proper bit representation for the variant
@@ -110,6 +155,11 @@ def encode_SNVs(SNVs):
         else:
             snv_bitstring = snv_bitstring | snv
     return snv_bitstring
+
+
+def encode_INDEL(INDEL):
+    indel_bitstring = 0
+    return indel_bitstring
 
 
 def get_variant_number(base):
