@@ -3,6 +3,7 @@ from scripts import ref_alt
 
 
 class TestSerializationToDeserialization(unittest.TestCase):
+
     snpA = 'A'*15
     snpC = 'C'*15
     snpG = 'G'*15
@@ -22,7 +23,6 @@ class TestSerializationToDeserialization(unittest.TestCase):
     snp13 = 'ACGTACGTACGTCCC'
     snp14 = 'CCCCCAAAAACCCCC'
     snp15 = 'TTTCCCGGGAAATAG'
-
     def test_encode_SNVs_length_15(self):
         # 00 000000000000000000000000000000
         self.assertEqual(ref_alt.encode_SNVs(self.snpA), 0)
@@ -104,6 +104,29 @@ class TestSerializationToDeserialization(unittest.TestCase):
         self.assertEqual(ref_alt.col_input(self.snp_indel2), [2150629376, 3226468693])
         # 10 000000010000000000000010110100, 11 000000011000000000000100110010
         self.assertEqual(ref_alt.col_input(self.snp_indel3), [2151678132, 3227517234])
+
+    snp_indel_snp1 = ['A', 'A', 'A', 'AAAAA', 'A', 'A', 'A']
+    snp_indel_snp2 = ['A', 'A', 'A', 'CCCCC', 'A', 'A', 'A']
+    snp_indel_snp3 = ['A', 'C', 'T', 'G', 'GATACA', 'A', 'A', 'A']
+    def test_encode_SNPs_INDEL_SNPs(self):
+        # 10 000000001100000000000000000000, 11 000000010100000000000000000000, 10 000000001100000000000000000000
+        self.assertEqual(ref_alt.col_input(self.snp_indel_snp1), [2150629376, 3226468352, 2150629376])
+        # 10 000000001100000000000000000000, 11 000000010100000000000101010101, 10 000000001100000000000000000000
+        self.assertEqual(ref_alt.col_input(self.snp_indel_snp2), [2150629376, 3226468693, 2150629376])
+        # 10 000000010000000000000010110100, 11 000000011000000000000100110010, 10 000000001100000000000000000000
+        self.assertEqual(ref_alt.col_input(self.snp_indel_snp3), [2151678132, 3227517234, 2150629376])
+
+    snp_indel_snp_indel1 = ['A', 'A', 'A', 'AAAAA', 'A', 'A', 'A', 'AAAAA']
+    snp_indel_snp_indel2 = ['A', 'A', 'A', 'CCCCC', 'A', 'A', 'A', 'CCCCC']
+    snp_indel_snp_indel3 = ['A', 'C', 'T', 'G', 'GATACA', 'A', 'A', 'A', 'GATACA']
+    def test_encode_SNPs_INDEL_SNPs_INDEL(self):
+        # 10 000000001100000000000000000000, 11 000000010100000000000000000000, 10 000000001100000000000000000000, 11 000000010100000000000000000000
+        self.assertEqual(ref_alt.col_input(self.snp_indel_snp_indel1), [2150629376, 3226468352, 2150629376, 3226468352])
+        # 10 000000001100000000000000000000, 11 000000010100000000000101010101, 10 000000001100000000000000000000, 11 000000010100000000000101010101
+        self.assertEqual(ref_alt.col_input(self.snp_indel_snp_indel2), [2150629376, 3226468693, 2150629376, 3226468693])
+        # 10 000000010000000000000010110100, 11 000000011000000000000100110010, 10 000000001100000000000000000000, 11 000000011000000000000100110010
+        self.assertEqual(ref_alt.col_input(self.snp_indel_snp_indel3), [2151678132, 3227517234, 2150629376, 3227517234])
+
 
 
 
