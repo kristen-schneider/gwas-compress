@@ -2,8 +2,8 @@
 # https://wiki.python.org/moin/BitArrays
 import math
 def main():
-    # data = ['C']*15
-    data = ['C', 'T', 'T', 'CCCCCCCCCCTTTTT']
+    data = ['C']*25
+    # data = ['C', 'T', 'T', 'CCCCCCCCCCTTTTT']
     x = col_input(data)
     print(x)
 
@@ -27,6 +27,7 @@ def col_input(column):
                 start_bitstring = shift_bit(0, 30)
                 full_bitstring = start_bitstring | SNV_bitstring
                 list_ints.append(full_bitstring)
+                SNVs = []
 
         # encountered an INDEL
         else:
@@ -48,6 +49,13 @@ def col_input(column):
             tail_bitstrings = INDEL_bitstring_info[1:]
             list_ints.append(head_bitstring)
             for t in tail_bitstrings: list_ints.append(t)
+    # handle any SNVs left
+    if len(SNVs) > 0:
+        start_bitstring = shift_bit(1, 30)
+        len_SNVs = shift_bit(len(SNVs), 20)
+        SNV_bitstring = encode_SNVs(SNVs)
+        full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
+        list_ints.append(full_bitstring)
 
     return list_ints
 
