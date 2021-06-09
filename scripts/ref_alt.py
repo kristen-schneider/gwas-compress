@@ -26,7 +26,7 @@ def col_input(column):
                 SNV_bitstring = encode_SNVs(SNVs)
                 start_bitstring = shift_bit(0, 30)
                 full_bitstring = start_bitstring | SNV_bitstring
-                list_ints.append(start_bitstring | SNV_bitstring)
+                list_ints.append(full_bitstring)
 
         # encountered an INDEL
         else:
@@ -42,96 +42,15 @@ def col_input(column):
             INDEL = row
             start_bitstring = shift_bit(3, 30)
             len_INDEL = shift_bit(len(INDEL), 20)
-            INDEL_bitstring = encode_INDEL(INDEL)
-            full_bitstring = start_bitstring | len_INDEL | INDEL_bitstring
-            list_ints.append(full_bitstring)
+            INDEL_bitstring_info = encode_INDEL(INDEL)
+            head_bitstring = start_bitstring | len_INDEL | INDEL_bitstring_info[0]
+            tail_bitstrings = INDEL_bitstring_info[1:]
+            # INDEL_bitstring = [head_bitstring]
+            # for t in tail_bitstrings: INDEL_bitstring.append(t)
+            list_ints.append(head_bitstring)
+            for t in tail_bitstrings: list_ints.append(t)
 
     return list_ints
-
-
-
-def long_col_input(column):
-    """
-    taken a full column of ref/alt bases as a list and return a list of integers
-    """
-    ref_alt_ints = []
-
-    num_fifteen_nucleotides_blocks = int(math.ceil(len(column)/15))
-    print(num_fifteen_nucleotides_blocks)
-    start_fifteen = 0
-    stop_fifteen = 15
-    for n in range(num_fifteen_nucleotides_blocks):
-        fifteen_nucleotides = column[start_fifteen:stop_fifteen]
-        first_bit_info = get_first_bit(fifteen_nucleotides)
-        first_bit = first_bit_info[0]
-        SNVs_under_fifteen = first_bit_info[1]
-
-        # fifteen SNVs in a row
-        if first_bit == 0:
-            # leading zeros for 15 snvs won't matter
-            bitstring = encode_SNVs(fifteen_nucleotides)
-        # either < 15 SNVs or INDEL
-        else:
-            second_bit = get_second_bit(SNVs_under_fifteen)
-            bitstring = shift_bit(first_bit, 1) | second_bit
-            num_fifteen_nucleotides_blocks += 1
-
-            # only SNVs < 15
-            if second_bit == 0:
-                # get how many SNVs there are
-                third_bit = get_num_SNVs(SNVs_under_fifteen)
-                bitstring = shift_bit(bitstring, 10) | third_bit
-                SNVs_bitstring = encode_SNVs(SNVs_under_fifteen)
-                bitstring = shift_bit(bitstring, 20) | SNVs_bitstring
-
-            # INDEL
-            elif second_bit == 1:
-                bitstring = bitstring
-            else:
-                print('bad second bit')
-                return -1
-        ref_alt_ints.append(bitstring)
-        start_fifteen = stop_fifteen
-        stop_fifteen += 15
-    return ref_alt_ints
-
-
-def get_first_bit(fifteen_nucleotides):
-    """
-    return 1 if there is an indel, and return the leading SNVs
-    """
-    for i in range(len(fifteen_nucleotides)):
-        if len(fifteen_nucleotides[i]) != 1:
-            return 1, fifteen_nucleotides[0:i]
-    return 0, []
-
-
-def get_second_bit(SNVs_under_fifteen):
-    """
-    returns 0 if list is of SNVs and list is size < 15
-    returns 1 if list is an INDEL, and returns INDEL
-    """
-    if len(SNVs_under_fifteen[0]) == 1:
-        return 0,
-    elif len(SNVs_under_fifteen[0]) > 1:
-        return 1, SNVs_under_fifteen[0]
-    else:
-        print('bad second bit calculation')
-        return -1
-
-
-def get_num_SNVs(SNVs_under_fifteen):
-    """
-    returns number of SNVs in a list if it is less than 15
-    """
-    num_SNVs = 0
-    for n in range(len(SNVs_under_fifteen)):
-        if len(SNVs_under_fifteen[n]) == 1:
-            num_SNVs += 1
-        else:
-            return num_SNVs
-
-    return num_SNVs
 
 
 def shift_bit(bitstring, shift):
@@ -158,7 +77,7 @@ def encode_SNVs(SNVs):
 
 
 def encode_INDEL(INDEL):
-    indel_bitstring = 0
+    indel_bitstring = [0,1,1]
     return indel_bitstring
 
 
