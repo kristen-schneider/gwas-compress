@@ -125,36 +125,46 @@ def encode_INDEL(INDEL):
     start_indel = 0
     end_indel = 10
     start_bitstring = shift_bit(3, 30)
-    len_INDEL = shift_bit(len(INDEL), 20)
-    if len(INDEL) > 10:
-        num_ints = math.ceil(int(len(INDEL)-10)/16) + 1
-        for i in range(num_ints):
-            # take first ten and add, then take 16 at a time
-            if i == 0:
-                first_ten = INDEL[start_indel:end_indel]
-                first_ten_bitstring = encode_fifteen_SNVs(first_ten)
-                indel_bitstring.append(start_bitstring | len_INDEL | first_ten_bitstring)
-            else:
-                rest_of_INDEL = INDEL[start_indel:end_indel]
-                # just like
-                if len(rest_of_INDEL) == 15:
-                    start_bitstring = shift_bit(0, 30)
-                    indel_bitstring.append(start_bitstring | encode_fifteen_SNVs(rest_of_INDEL))
+    # len_INDEL = shift_bit(len(INDEL), 20)
+    num_ints = math.ceil(int(len(INDEL) - 10) / 16) + 1
+    for i in range(num_ints):
+        curr_INDEL_segment = INDEL[start_indel:end_indel]
+        curr_INDEL_length = shift_bit(len(curr_INDEL_segment), 20)
+        curr_INDEL_encode = encode_under_fifteen_SNVs(curr_INDEL_segment)
+        indel_bitstring.append(start_bitstring | curr_INDEL_length | curr_INDEL_encode)
+        start_indel = end_indel
+        end_indel += 10
 
-                elif len(rest_of_INDEL) > 0 and len(rest_of_INDEL < 15):
-                    indel_bitstring.append(i for i in encode_under_fifteen_SNVs(SNVs))
-                    SNVs = []
-                    start_bitstring = shift_bit(0, 30)
-                    indel_bitstring.append(start_bitstring | encode_fifteen_SNVs(rest_of_INDEL))
-            start_indel = end_indel
-            end_indel += 16
+    return indel_bitstring
 
-    else:
-        start_bitstring = shift_bit(3, 30)
-        # treat it as a list of SNPs
-        x = len(INDEL)
-        len_INDEL = shift_bit(len(INDEL), 20)
-        indel_bitstring.append(start_bitstring | len_INDEL | encode_fifteen_SNVs(INDEL))
+
+    # if len(INDEL) > 10:
+    #     num_ints = math.ceil(int(len(INDEL)-10)/16) + 1
+    #     for i in range(num_ints):
+    #         # # take first ten and add, then take 16 at a time
+    #         # if i == 0:
+    #         #     first_ten = INDEL[start_indel:end_indel]
+    #         #     first_ten_bitstring = encode_fifteen_SNVs(first_ten)
+    #         #     indel_bitstring.append(start_bitstring | len_INDEL | first_ten_bitstring)
+    #         # else:
+    #         #     rest_of_INDEL = INDEL[start_indel:end_indel]
+    #         #     # just like
+    #         #     if len(rest_of_INDEL) == 15:
+    #         #         start_bitstring = shift_bit(0, 30)
+    #         #         indel_bitstring.append(start_bitstring | encode_fifteen_SNVs(rest_of_INDEL))
+    #         #
+    #         #     elif len(rest_of_INDEL) > 0 and len(rest_of_INDEL < 15):
+    #         #         indel_bitstring.append(i for i in encode_under_fifteen_SNVs(SNVs))
+    #         #         SNVs = []
+    #         #         start_bitstring = shift_bit(0, 30)
+    #         #         indel_bitstring.append(start_bitstring | encode_fifteen_SNVs(rest_of_INDEL))
+    #         start_indel = end_indel
+    #         end_indel += 16
+    #
+    # else:
+    #     start_bitstring = shift_bit(3, 30)
+    #     len_INDEL = shift_bit(len(INDEL), 20)
+    #     indel_bitstring.append(start_bitstring | len_INDEL | encode_fifteen_SNVs(INDEL))
     return indel_bitstring
 
 
