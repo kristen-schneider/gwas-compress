@@ -79,7 +79,7 @@ def shift_bit(bitstring, shift):
     return bitstring << shift
 
 
-def encode_fifteen_SNVs(SNVs):
+def encode_SNVs(SNVs):
     """
     given a list of SNVs, convert to int
     """
@@ -140,7 +140,7 @@ def encode_INDEL(INDEL):
     start_indel = 0
     end_indel = 10
 
-    start_bitstring = shift_bit(3, 30)
+    # start_bitstring = shift_bit(3, 30)
     len_INDEL = shift_bit(len(INDEL), 20)
 
     num_ints = math.ceil(int(len(INDEL) - 10) / 16) + 1
@@ -149,49 +149,18 @@ def encode_INDEL(INDEL):
         if i == 1:
             first_ten_bases = INDEL[start_indel:end_indel]
             INDEL_flag = shift_bit(3, 30)
-            first_ten_length = shift_bit(len(first_ten_bases), 20)
-            first_ten_encoding = encode_ten_SNVs()
-
+            first_ten_encoding = encode_SNVs(first_ten_bases)
+            indel_ints.append(INDEL_flag | len_INDEL | first_ten_encoding)
+        # all other bases are encoded with length in 6 bits and then room for 13 bases (26 bits)
         else:
-            curr_INDEL_segment = INDEL[start_indel:end_indel]
-            curr_INDEL_length = shift_bit(len(curr_INDEL_segment), 20)
-            curr_INDEL_encode = encode_under_fifteen_SNVs(curr_INDEL_segment)
-            indel_ints.append(start_bitstring | curr_INDEL_length | curr_INDEL_encode)
+            curr_segment = INDEL[start_indel:end_indel]
+            curr_segment_length = shift_bit(len(curr_segment), 26)
+            curr_segment_encode = encode_under_fifteen_SNVs(curr_segment)
+            indel_ints.append(curr_segment_length | curr_segment_encode)
 
         start_indel = end_indel
         end_indel += 13
-
     return indel_ints
-
-
-    # if len(INDEL) > 10:
-    #     num_ints = math.ceil(int(len(INDEL)-10)/16) + 1
-    #     for i in range(num_ints):
-    #         # # take first ten and add, then take 16 at a time
-    #         # if i == 0:
-    #         #     first_ten = INDEL[start_indel:end_indel]
-    #         #     first_ten_bitstring = encode_fifteen_SNVs(first_ten)
-    #         #     indel_bitstring.append(start_bitstring | len_INDEL | first_ten_bitstring)
-    #         # else:
-    #         #     rest_of_INDEL = INDEL[start_indel:end_indel]
-    #         #     # just like
-    #         #     if len(rest_of_INDEL) == 15:
-    #         #         start_bitstring = shift_bit(0, 30)
-    #         #         indel_bitstring.append(start_bitstring | encode_fifteen_SNVs(rest_of_INDEL))
-    #         #
-    #         #     elif len(rest_of_INDEL) > 0 and len(rest_of_INDEL < 15):
-    #         #         indel_bitstring.append(i for i in encode_under_fifteen_SNVs(SNVs))
-    #         #         SNVs = []
-    #         #         start_bitstring = shift_bit(0, 30)
-    #         #         indel_bitstring.append(start_bitstring | encode_fifteen_SNVs(rest_of_INDEL))
-    #         start_indel = end_indel
-    #         end_indel += 16
-    #
-    # else:
-    #     start_bitstring = shift_bit(3, 30)
-    #     len_INDEL = shift_bit(len(INDEL), 20)
-    #     indel_bitstring.append(start_bitstring | len_INDEL | encode_fifteen_SNVs(INDEL))
-    return indel_bitstring
 
 
 def get_variant_number(base):
