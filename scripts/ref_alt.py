@@ -121,21 +121,47 @@ def encode_under_fifteen_SNVs(SNVs):
 
 
 def encode_INDEL(INDEL):
-    indel_bitstring = []
+    """
+    INDELs are encoded by:
+    first 10 elements =
+    11 0000000000 00000000000000000000
+    --indel-flag = 2 bits
+    --length-full-indel = 10 bits
+    --bases = 20 bits
+
+    rest of elements =
+    000000 00000000000000000000000000
+    --length-of-current-segment = 6 bits
+    --bases = 26 bits
+    """
+    # list of integers which encode full indel
+    indel_ints = []
+    # first ten
     start_indel = 0
     end_indel = 10
+
     start_bitstring = shift_bit(3, 30)
-    # len_INDEL = shift_bit(len(INDEL), 20)
+    len_INDEL = shift_bit(len(INDEL), 20)
+
     num_ints = math.ceil(int(len(INDEL) - 10) / 16) + 1
     for i in range(num_ints):
-        curr_INDEL_segment = INDEL[start_indel:end_indel]
-        curr_INDEL_length = shift_bit(len(curr_INDEL_segment), 20)
-        curr_INDEL_encode = encode_under_fifteen_SNVs(curr_INDEL_segment)
-        indel_bitstring.append(start_bitstring | curr_INDEL_length | curr_INDEL_encode)
-        start_indel = end_indel
-        end_indel += 10
+        # first 10 bases are encoded differently than rest
+        if i == 1:
+            first_ten_bases = INDEL[start_indel:end_indel]
+            INDEL_flag = shift_bit(3, 30)
+            first_ten_length = shift_bit(len(first_ten_bases), 20)
+            first_ten_encoding = encode_ten_SNVs()
 
-    return indel_bitstring
+        else:
+            curr_INDEL_segment = INDEL[start_indel:end_indel]
+            curr_INDEL_length = shift_bit(len(curr_INDEL_segment), 20)
+            curr_INDEL_encode = encode_under_fifteen_SNVs(curr_INDEL_segment)
+            indel_ints.append(start_bitstring | curr_INDEL_length | curr_INDEL_encode)
+
+        start_indel = end_indel
+        end_indel += 13
+
+    return indel_ints
 
 
     # if len(INDEL) > 10:
