@@ -19,6 +19,27 @@ def main():
 
 def col_input(column):
     """
+    SNP
+    1 5     26
+    0 00000 00000000000000000000000000
+    --snps
+    --length of snp
+    --snp bases
+
+    INDEL
+    ** first int **
+    1 11          20
+    1 00000000000 00000000000000000000
+    --indels
+    --length of full indel (need this to see how many ints are used)
+    --indels
+
+    ** rest of ints **
+    6      26
+    000000 000000000000000000000000
+    --length of bases
+    --bases
+
     takes a full column of ref/alt bases and finds an element to encode; and then encodes it
         1. 15 SNVs in a row
         2. < 15 SNVs in a row
@@ -31,9 +52,10 @@ def col_input(column):
         # only SNV
         if len(row) == 1:
             SNVs.append(row)
-            # 15 SNVs in a row
+
+            # if we achieve 15 SNVs in a row, encode them and move on
             if len(SNVs) == 15:
-                SNV_bitstring = encode_fifteen_SNVs(SNVs)
+                SNV_bitstring = encode_SNVs(SNVs)
                 start_bitstring = shift_bit(0, 30)
                 full_bitstring = start_bitstring | SNV_bitstring
                 list_ints.append(full_bitstring)
@@ -45,7 +67,7 @@ def col_input(column):
             if len(SNVs) <= 10:
                 start_bitstring = shift_bit(2, 30)
                 len_SNVs = shift_bit(len(SNVs), 20)
-                SNV_bitstring = encode_fifteen_SNVs(SNVs)
+                SNV_bitstring = encode_SNVs(SNVs)
                 full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
                 list_ints.append(full_bitstring)
                 SNVs = []
@@ -99,7 +121,7 @@ def encode_under_fifteen_SNVs(SNVs):
     if len(SNVs) <= 10:
         start_bitstring = shift_bit(2, 30)
         len_SNVs = shift_bit(len(SNVs), 20)
-        SNV_bitstring = encode_fifteen_SNVs(SNVs)
+        SNV_bitstring = encode_SNVs(SNVs)
         full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
         list_ints.append(full_bitstring)
     elif len(SNVs) > 10 and len(SNVs) <= 15:
@@ -107,14 +129,14 @@ def encode_under_fifteen_SNVs(SNVs):
         first_ten = SNVs[0:10]
         start_ten = shift_bit(2, 30)
         len_ten = shift_bit(len(first_ten), 20)
-        ten_bitstring = encode_fifteen_SNVs(first_ten)
+        ten_bitstring = encode_SNVs(first_ten)
         full_ten = start_ten | len_ten | ten_bitstring
         list_ints.append(full_ten)
         # 10-end
         last_snv = SNVs[10:]
         start_last = shift_bit(2, 30)
         len_last = shift_bit(len(last_snv), 20)
-        last_bitstring = encode_fifteen_SNVs(last_snv)
+        last_bitstring = encode_SNVs(last_snv)
         full_last = start_last | len_last | last_bitstring
         list_ints.append(full_last)
     return list_ints
@@ -153,10 +175,14 @@ def encode_INDEL(INDEL):
             indel_ints.append(INDEL_flag | len_INDEL | first_ten_encoding)
         # all other bases are encoded with length in 6 bits and then room for 13 bases (26 bits)
         else:
+            curr_segment_ints = []
             curr_segment = INDEL[start_indel:end_indel]
             curr_segment_length = shift_bit(len(curr_segment), 26)
             curr_segment_encode = encode_under_fifteen_SNVs(curr_segment)
-            indel_ints.append(curr_segment_length | curr_segment_encode)
+            for s in curr_segment_encode:
+                curr_segment_ints.append(curr_segment_length | s)
+            for i in curr_segment_ints:
+                indel_ints.append(i)
 
         start_indel = end_indel
         end_indel += 13
