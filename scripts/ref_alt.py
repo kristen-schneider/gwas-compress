@@ -42,12 +42,28 @@ def col_input(column):
         # encountered an INDEL
         else:
             # handle any SNVs we have collected
-            if len(SNVs) > 0:
+            if len(SNVs) <= 10:
                 start_bitstring = shift_bit(2, 30)
                 len_SNVs = shift_bit(len(SNVs), 20)
                 SNV_bitstring = encode_SNVs(SNVs)
                 full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
                 list_ints.append(full_bitstring)
+                SNVs = []
+            elif len(SNVs) > 10 and len(SNVs) <= 15:
+                # 1-10
+                first_ten = SNVs[0:10]
+                start_ten = shift_bit(2, 30)
+                len_ten = shift_bit(len(first_ten), 20)
+                ten_bitstring = encode_SNVs(first_ten)
+                full_ten = start_ten | len_ten | ten_bitstring
+                list_ints.append(full_ten)
+                # 10-end
+                last_snv = SNVs[10:]
+                start_last = shift_bit(2, 30)
+                len_last = shift_bit(len(last_snv), 20)
+                last_bitstring = encode_SNVs(last_snv)
+                full_last = start_last | len_last | last_bitstring
+                list_ints.append(full_last)
                 SNVs = []
 
             # handle INDEL we encountered
@@ -81,6 +97,7 @@ def col_input(column):
             last_bitstring = encode_SNVs(last_snv)
             full_last = start_last | len_last | last_bitstring
             list_ints.append(full_last)
+            SNVs = []
 
         else:
             print('invalid length of SNVs')
