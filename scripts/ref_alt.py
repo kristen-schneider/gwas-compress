@@ -14,7 +14,7 @@ def main():
     #          'TA',
     #          'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
     #          'ACAGGAGGGCGGG']
-    data = 'A', 'A', 'A', 'AAAAA'
+    data = ['A', 'A', 'A', 'AAAAA']
     x = encode_column(data)
     print(x)
 
@@ -66,19 +66,14 @@ def encode_column(column):
 
             # handle INDEL we encountered
             INDEL = row
-            INDEL_bitstring_info = encode_INDEL(INDEL)
+            INDEL_bitstring_list = encode_INDEL(INDEL)
+            for i in INDEL_bitstring_list:
+                all_ints.append(i)
 
-            # # first bitstring will need to include data about how long the INDEL is and such (for decoding)
-            # head_bitstring = INDEL_bitstring_info[0]
-            # tail_bitstrings = INDEL_bitstring_info[1:]
-            # all_ints.append(head_bitstring)
-            # for t in tail_bitstrings: all_ints.append(t)
     # handle any SNVs left
     if len(SNVs) > 0:
         all_ints.append(encode_SNVs(SNVs, len(SNVs)))
         SNVs = []
-    else:
-        print('invalid length of SNVs')
 
     return all_ints
 
