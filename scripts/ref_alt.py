@@ -6,8 +6,7 @@ def main():
     data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
              'CT',
              'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
-             'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G',
-             'A',
+             'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'A',
              'AAAAAAAAAAAATATATATATATATATATATATATAT',
              'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C',
              'C', 'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
@@ -61,8 +60,9 @@ def encode_column(column):
         # encountered an INDEL
         else:
             # handle any SNVs we have collected
-            all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
-            SNVs = []
+            if len(SNVs) > 0:
+                all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
+                SNVs = []
 
             # handle INDEL we encountered
             INDEL = row
