@@ -54,14 +54,14 @@ def encode_column(column):
 
             # if we achieve 13 SNVs in a row, encode them and move on
             if len(SNVs) == 13:
-                SNV_bitstring = encode_SNVs(SNVs, len(SNVs))
+                SNV_bitstring = encode_SNVs(SNVs, len(SNVs), 0)
                 all_ints.append(SNV_bitstring)
                 SNVs = []
 
         # encountered an INDEL
         else:
             # handle any SNVs we have collected
-            all_ints.append(encode_SNVs(SNVs, len(SNVs)))
+            all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
             SNVs = []
 
             # handle INDEL we encountered
@@ -72,7 +72,7 @@ def encode_column(column):
 
     # handle any SNVs left
     if len(SNVs) > 0:
-        all_ints.append(encode_SNVs(SNVs, len(SNVs)))
+        all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
         SNVs = []
 
     return all_ints
@@ -85,7 +85,7 @@ def shift_bit(bitstring, shift):
     return bitstring << shift
 
 
-def encode_SNVs(SNVs, length):
+def encode_SNVs(SNVs, length, INDEL_ten_flag):
     """
     given a list of SNVs, convert to int
     """
@@ -93,8 +93,11 @@ def encode_SNVs(SNVs, length):
 
     # flag to specify SNVs
     SNV_flag = shift_bit(0, 31)
-    # SNV length here is 13
-    SNV_length = shift_bit(length, 26)
+
+    if INDEL_ten_flag:
+        SNV_length = shift_bit(length, 20)
+    else:
+        SNV_length = shift_bit(length, 26)
 
     for v in range(len(SNVs)):
         # get proper bit representation for the variant
@@ -132,14 +135,14 @@ def encode_INDEL(INDEL):
         if i == 0:
             first_ten_bases = INDEL[start_indel:end_indel]
             INDEL_flag = shift_bit(1, 31)
-            first_ten_encoding = encode_SNVs(first_ten_bases, len_full_INDEL)
+            first_ten_encoding = encode_SNVs(first_ten_bases, len_full_INDEL, 1)
             indel_ints.append(INDEL_flag | first_ten_encoding)
 
         # all other bases are encoded with length in 6 bits and then room for 13 bases (26 bits)
         else:
             # next 13 bases
             curr_segment = INDEL[start_indel:end_indel]
-            curr_segment_encode = encode_SNVs(curr_segment, len(curr_segment))
+            curr_segment_encode = encode_SNVs(curr_segment, len(curr_segment), 0)
             indel_ints.append(curr_segment_encode)
 
         start_indel = end_indel
