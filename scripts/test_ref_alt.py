@@ -5,53 +5,30 @@ from scripts import ref_alt
 class TestSerializationToDeserialization(unittest.TestCase):
 
     def test_encode_SNVs_length_15(self):
-        # 00 000000000000000000000000000000
-        self.assertEqual(ref_alt.encode_SNVs('A'*15), 0)
-        # 00 010101010101010101010101010101
-        self.assertEqual(ref_alt.encode_SNVs('C'*15), 357913941)
-        # 00 101010101010101010101010101010
-        self.assertEqual(ref_alt.encode_SNVs('G'*15), 715827882)
-        # 00 111111111111111111111111111111
-        self.assertEqual(ref_alt.encode_SNVs('T'*15), 1073741823)
+        # 001101 00000000000000000000000000
+        self.assertEqual(ref_alt.encode_SNVs('A'*13), 872415232)
+        # 001101 01010101010101010101010101
+        self.assertEqual(ref_alt.encode_SNVs('C'*13), 894784853)
+        # 001101 10101010101010101010101010
+        self.assertEqual(ref_alt.encode_SNVs('G'*13), 917154474)
+        # 001101 11111111111111111111111111
+        self.assertEqual(ref_alt.encode_SNVs('T'*13), 939524095)
 
-    # snp16 = 'A' * 25
-    # snp17 = 'C' * 25
-    # snp18 = 'G' * 25
-    # snp19 = 'T' * 25
-    # snp20 = 'T' * 40
-    # snp21 = 'C' * 11
-    # snp22 = 'ACGT'*7
-    # def test_encode_SNVs_greater_than_15(self):
-    #     # 00 000000000000000000000000000000, 10 000000101000000000000000000000
-    #     self.assertEqual(ref_alt.col_input(self.snp16), [0, 2157969408])
-    #     # 00 010101010101010101010101010101, 10 000000101001010101010101010101
-    #     self.assertEqual(ref_alt.col_input(self.snp17), [357913941, 2158318933])
-    #     # 00 101010101010101010101010101010, 10 000000101010101010101010101010
-    #     self.assertEqual(ref_alt.col_input(self.snp18), [715827882, 2158668458])
-    #     # 00 111111111111111111111111111111, 10 000000101011111111111111111111
-    #     self.assertEqual(ref_alt.col_input(self.snp19), [1073741823, 2159017983])
-    #     # 00 111111111111111111111111111111, 00 111111111111111111111111111111, 10 0000001010 11111111111111111111
-    #     self.assertEqual(ref_alt.col_input(self.snp20), [1073741823, 1073741823, 2159017983])
-    #     # 10 0000001010 01010101010101010101, 10 0000000001 00000000000000000001
-    #     self.assertEqual(ref_alt.col_input(self.snp21), [2158318933, 2148532225])
-    #     # ACGTACGTACGTACG TACGTACGTA CGT
-    #     # 00 100100111001001110010011100100, 10 0000001010 00111001001110010011, 10 0000000011 00000000000000111001
-    #     self.assertEqual(ref_alt.col_input(self.snp22), [618980580, 2158203795, 2150629433])
 
-    # indelA = ['AAAAA']*1
-    # indelC = ['CCCCC']*1
-    # indelG = ['GGGGG']*1
-    # indelT = ['TTTTT']*1
-    # def test_encode_INDELs_only(self):
-    #     # 11 000000010100000000000000000000
-    #     self.assertEqual(ref_alt.col_input(self.indelA), [3226468352])
-    #     # 11 000000010100000000000101010101
-    #     self.assertEqual(ref_alt.col_input(self.indelC), [3226468693])
-    #     # 11 000000010100000000001010101010
-    #     self.assertEqual(ref_alt.col_input(self.indelG), [3226469034])
-    #     # 11 000000010100000000001111111111
-    #     self.assertEqual(ref_alt.col_input(self.indelT), [3226469375])
-    #
+    indelA = 'AAAAA'*1
+    indelC = 'CCCCC'*1
+    indelG = 'GGGGG'*1
+    indelT = 'TTTTT'*1
+    def test_encode_INDELs(self):
+        # 1 00101 00000000000000000000000000
+        self.assertEqual(ref_alt.encode_INDEL(self.indelA), [2483027968])
+        # 1 00101 00000000000000000101010101
+        self.assertEqual(ref_alt.encode_INDEL(self.indelC), [2483028309])
+        # 1 00101 00000000000000001010101010
+        self.assertEqual(ref_alt.encode_INDEL(self.indelG), [2483028650])
+        # 1 00101 00000000000000001111111111
+        self.assertEqual(ref_alt.encode_INDEL(self.indelT), [2483028991])
+
     # snp_indel1 = ['A', 'A', 'A', 'AAAAA']
     # snp_indel2 = ['A', 'A', 'A', 'CCCCC']
     # snp_indel3 = ['A', 'C', 'T', 'G', 'GATACA']

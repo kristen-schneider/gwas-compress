@@ -14,8 +14,8 @@ def main():
     #          'TA',
     #          'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
     #          'ACAGGAGGGCGGG']
-    data = 'AAA'
-    x = col_input(data)
+    data = 'AAAAA'
+    x = encode_INDEL(data)
     print(x)
 
 def col_input(column):
@@ -54,15 +54,8 @@ def col_input(column):
 
             # if we achieve 13 SNVs in a row, encode them and move on
             if len(SNVs) == 13:
-                # flag to specify SNVs
-                SNV_flag = shift_bit(0, 31)
-                # SNV length here is 13
-                SNV_length = shift_bit(len(SNVs), 26)
-                # encode all 13 SNVS
                 SNV_bitstring = encode_SNVs(SNVs)
-                # final int
-                full_SNV_bitstring = SNV_flag | SNV_length | SNV_bitstring
-                all_ints.append(full_SNV_bitstring)
+                all_ints.append(SNV_bitstring)
                 SNVs = []
 
         # encountered an INDEL
@@ -108,42 +101,12 @@ def encode_SNVs(SNVs):
     # SNV length here is 13
     SNV_length = shift_bit(len(SNVs), 26)
 
-    SNVs = []
     for v in range(len(SNVs)):
         # get proper bit representation for the variant
         snv = shift_bit(get_variant_number(SNVs[v]), 2*v) | SNV_bitstring
-        # if we are on first snv, set bitstring
-        if v == 0:
-            SNV_bitstring = snv
-        else:
-            SNV_bitstring = SNV_bitstring | snv
+        SNV_bitstring = SNV_bitstring | snv
 
     return SNV_flag | SNV_length | SNV_bitstring
-
-# def encode_under_fifteen_SNVs(SNVs):
-#     list_ints = []
-#     if len(SNVs) <= 10:
-#         start_bitstring = shift_bit(2, 30)
-#         len_SNVs = shift_bit(len(SNVs), 20)
-#         SNV_bitstring = encode_SNVs(SNVs)
-#         full_bitstring = start_bitstring | len_SNVs | SNV_bitstring
-#         list_ints.append(full_bitstring)
-#     elif len(SNVs) > 10 and len(SNVs) <= 15:
-#         # 1-10
-#         first_ten = SNVs[0:10]
-#         start_ten = shift_bit(2, 30)
-#         len_ten = shift_bit(len(first_ten), 20)
-#         ten_bitstring = encode_SNVs(first_ten)
-#         full_ten = start_ten | len_ten | ten_bitstring
-#         list_ints.append(full_ten)
-#         # 10-end
-#         last_snv = SNVs[10:]
-#         start_last = shift_bit(2, 30)
-#         len_last = shift_bit(len(last_snv), 20)
-#         last_bitstring = encode_SNVs(last_snv)
-#         full_last = start_last | len_last | last_bitstring
-#         list_ints.append(full_last)
-#     return list_ints
 
 def encode_INDEL(INDEL):
     """
@@ -171,7 +134,7 @@ def encode_INDEL(INDEL):
     num_ints = math.ceil(int(len(INDEL) - 10) / 13) + 1
     for i in range(num_ints):
         # first 10 bases are encoded differently than rest
-        if i == 1:
+        if i == 0:
             first_ten_bases = INDEL[start_indel:end_indel]
             INDEL_flag = shift_bit(1, 31)
             first_ten_encoding = encode_SNVs(first_ten_bases)
