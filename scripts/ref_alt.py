@@ -3,18 +3,18 @@
 import math
 def main():
     # assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
-    # data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
-    #          'CT',
-    #          'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
-    #          'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G',
-    #          'A',
-    #          'AAAAAAAAAAAATATATATATATATATATATATATAT',
-    #          'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C',
-    #          'C', 'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
-    #          'TA',
-    #          'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
-    #          'ACAGGAGGGCGGG']
-    data = ['A', 'A', 'A', 'AAAAA']
+    data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
+             'CT',
+             'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
+             'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G',
+             'A',
+             'AAAAAAAAAAAATATATATATATATATATATATATAT',
+             'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C',
+             'C', 'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
+             'TA',
+             'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
+             'ACAGGAGGGCGGG']
+    # data = ['A', 'A', 'A', 'AAAAA']
     x = encode_column(data)
     print(x)
 
