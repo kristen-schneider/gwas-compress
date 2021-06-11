@@ -14,11 +14,11 @@ def main():
     #          'TA',
     #          'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
     #          'ACAGGAGGGCGGG']
-    data = 'AAAAA'
-    x = encode_INDEL(data)
+    data = 'A', 'A', 'A', 'AAAAA'
+    x = encode_column(data)
     print(x)
 
-def col_input(column):
+def encode_column(column):
     """
     SNV
     1 5     26
@@ -54,14 +54,14 @@ def col_input(column):
 
             # if we achieve 13 SNVs in a row, encode them and move on
             if len(SNVs) == 13:
-                SNV_bitstring = encode_SNVs(SNVs)
+                SNV_bitstring = encode_SNVs(SNVs, len(SNVs))
                 all_ints.append(SNV_bitstring)
                 SNVs = []
 
         # encountered an INDEL
         else:
             # handle any SNVs we have collected
-            all_ints.append(encode_SNVs(SNVs))
+            all_ints.append(encode_SNVs(SNVs, len(SNVs)))
             SNVs = []
 
             # handle INDEL we encountered
@@ -75,7 +75,7 @@ def col_input(column):
             # for t in tail_bitstrings: all_ints.append(t)
     # handle any SNVs left
     if len(SNVs) > 0:
-        all_ints.append(encode_SNVs(SNVs))
+        all_ints.append(encode_SNVs(SNVs, len(SNVs)))
         SNVs = []
     else:
         print('invalid length of SNVs')
@@ -90,7 +90,7 @@ def shift_bit(bitstring, shift):
     return bitstring << shift
 
 
-def encode_SNVs(SNVs):
+def encode_SNVs(SNVs, length):
     """
     given a list of SNVs, convert to int
     """
@@ -99,7 +99,7 @@ def encode_SNVs(SNVs):
     # flag to specify SNVs
     SNV_flag = shift_bit(0, 31)
     # SNV length here is 13
-    SNV_length = shift_bit(len(SNVs), 26)
+    SNV_length = shift_bit(length, 26)
 
     for v in range(len(SNVs)):
         # get proper bit representation for the variant
@@ -129,7 +129,7 @@ def encode_INDEL(INDEL):
     start_indel = 0
     end_indel = 10
 
-    len_full_INDEL = shift_bit(len(INDEL), 20)
+    len_full_INDEL = len(INDEL)
 
     num_ints = math.ceil(int(len(INDEL) - 10) / 13) + 1
     for i in range(num_ints):
@@ -137,14 +137,14 @@ def encode_INDEL(INDEL):
         if i == 0:
             first_ten_bases = INDEL[start_indel:end_indel]
             INDEL_flag = shift_bit(1, 31)
-            first_ten_encoding = encode_SNVs(first_ten_bases)
-            indel_ints.append(INDEL_flag | len_full_INDEL | first_ten_encoding)
+            first_ten_encoding = encode_SNVs(first_ten_bases, len_full_INDEL)
+            indel_ints.append(INDEL_flag | first_ten_encoding)
 
         # all other bases are encoded with length in 6 bits and then room for 13 bases (26 bits)
         else:
             # next 13 bases
             curr_segment = INDEL[start_indel:end_indel]
-            curr_segment_encode = encode_SNVs(curr_segment)
+            curr_segment_encode = encode_SNVs(curr_segment, len(curr_segment))
             indel_ints.append(curr_segment_encode)
 
         start_indel = end_indel
@@ -183,8 +183,8 @@ def assumption1(ref_alt_txt):
         all_refs.append(ref)
         alt = A[1]
         all_alts.append(alt)
-    int_refs = col_input(all_refs)
-    int_alts = col_input(all_alts)
+    int_refs = encode_column(all_refs)
+    int_alts = encode_column(all_alts)
     print('reference as str: ', len(all_refs), all_refs)
     print('reference as int: ', len(int_refs), int_refs)
     print('alternate as str: ', len(all_alts), all_alts)

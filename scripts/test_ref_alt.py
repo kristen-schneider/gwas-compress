@@ -2,17 +2,17 @@ import unittest
 from scripts import ref_alt
 
 
-class TestSerializationToDeserialization(unittest.TestCase):
+class TestEncodeRefAltToInt(unittest.TestCase):
 
-    def test_encode_SNVs_length_15(self):
+    def test_encode_SNVs(self):
         # 001101 00000000000000000000000000
-        self.assertEqual(ref_alt.encode_SNVs('A'*13), 872415232)
+        self.assertEqual(ref_alt.encode_SNVs('A'*13, 13), 872415232)
         # 001101 01010101010101010101010101
-        self.assertEqual(ref_alt.encode_SNVs('C'*13), 894784853)
+        self.assertEqual(ref_alt.encode_SNVs('C'*13, 13), 894784853)
         # 001101 10101010101010101010101010
-        self.assertEqual(ref_alt.encode_SNVs('G'*13), 917154474)
+        self.assertEqual(ref_alt.encode_SNVs('G'*13, 13), 917154474)
         # 001101 11111111111111111111111111
-        self.assertEqual(ref_alt.encode_SNVs('T'*13), 939524095)
+        self.assertEqual(ref_alt.encode_SNVs('T'*13, 13), 939524095)
 
 
     indelA = 'AAAAA'*1
@@ -29,16 +29,16 @@ class TestSerializationToDeserialization(unittest.TestCase):
         # 1 00101 00000000000000001111111111
         self.assertEqual(ref_alt.encode_INDEL(self.indelT), [2483028991])
 
-    # snp_indel1 = ['A', 'A', 'A', 'AAAAA']
-    # snp_indel2 = ['A', 'A', 'A', 'CCCCC']
-    # snp_indel3 = ['A', 'C', 'T', 'G', 'GATACA']
-    # def test_encode_SNPs_INDEL(self):
-    #     # 10 000000001100000000000000000000, 11 000000010100000000000000000000
-    #     self.assertEqual(ref_alt.col_input(self.snp_indel1), [2150629376, 3226468352])
-    #     # 10 000000001100000000000000000000, 11 000000010100000000000101010101
-    #     self.assertEqual(ref_alt.col_input(self.snp_indel2), [2150629376, 3226468693])
-    #     # 10 000000010000000000000010110100, 11 000000011000000000000100110010
-    #     self.assertEqual(ref_alt.col_input(self.snp_indel3), [2151678132, 3227517234])
+    snp_indel1 = ['A', 'A', 'A', 'AAAAA']
+    snp_indel2 = ['A', 'A', 'A', 'CCCCC']
+    snp_indel3 = ['A', 'C', 'T', 'G', 'GATACA']
+    def test_encode_SNP_INDEL(self):
+        # 0 00011 00000000000000000000000000, 1 00101 00000000000000000000000000
+        self.assertEqual(ref_alt.encode_column(self.snp_indel1), [201326592, 2483027968])
+        # 0 00011 00000000000000000000000000, 1 00101 00000000000000000101010101
+        self.assertEqual(ref_alt.encode_column(self.snp_indel2), [201326592, 2483028309])
+        # 0 00100 00000000000000000010110100, 1 00110 00000000000000000100110010
+        self.assertEqual(ref_alt.encode_column(self.snp_indel3), [268435636, 2550137138])
     #
     # snp_indel_snp1 = ['A', 'A', 'A', 'AAAAA', 'A', 'A', 'A']
     # snp_indel_snp2 = ['A', 'A', 'A', 'CCCCC', 'A', 'A', 'A']
