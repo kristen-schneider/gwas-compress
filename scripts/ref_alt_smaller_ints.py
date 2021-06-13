@@ -51,8 +51,7 @@ def encode_column(column):
         if len(row) == 1:
             SNVs.append(row)
 
-            # if we achieve 13 SNVs in a row, encode them and move on
-            if len(SNVs) == 13:
+            if len(SNVs) == 1:
                 SNV_bitstring = encode_SNVs(SNVs, len(SNVs), 0)
                 all_ints.append(SNV_bitstring)
                 SNVs = []
@@ -72,7 +71,7 @@ def encode_column(column):
 
     # handle any SNVs left
     if len(SNVs) > 0:
-        all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
+        all_ints.append(encode_SNVs(SNVs, len(SNVs), 0))
         SNVs = []
 
     return all_ints
@@ -91,8 +90,9 @@ def encode_SNVs(SNVs, length, INDEL_ten_flag):
     """
     SNV_bitstring = 0
 
+    # 00000000000000000000000000000 000
     # flag to specify SNVs
-    SNV_flag = shift_bit(0, 31)
+    SNV_flag = 0
 
     if INDEL_ten_flag:
         SNV_length = shift_bit(length, 20)
@@ -104,7 +104,7 @@ def encode_SNVs(SNVs, length, INDEL_ten_flag):
         snv = shift_bit(get_variant_number(SNVs[v]), 2*v) | SNV_bitstring
         SNV_bitstring = SNV_bitstring | snv
 
-    return SNV_flag | SNV_length | SNV_bitstring
+    return SNV_flag | shift_bit(SNV_bitstring, 2)
 
 def encode_INDEL(INDEL):
     """
