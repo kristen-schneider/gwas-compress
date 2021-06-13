@@ -2,23 +2,6 @@
 # https://wiki.python.org/moin/BitArrays
 import math
 def main():
-<<<<<<< HEAD
-    assumption1('/home/krsc0813/projects/gwas-compress/ref-alt.txt')
-    # assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
-    #data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
-    #         'CT',
-    #         'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
-    #         'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'A',
-    #         'AAAAAAAAAAAATATATATATATATATATATATATAT',
-    #         'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C',
-    #         'C', 'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
-    #         'TA',
-    #         'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
-    #         'ACAGGAGGGCGGG']
-    # data = ['A', 'A', 'A', 'AAAAA']
-    #x = encode_column(data)
-    #print(x)
-=======
     assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
     # data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
     #          'CT',
@@ -33,7 +16,6 @@ def main():
     # # data = ['A', 'A', 'A', 'AAAAA']
     # x = encode_column(data)
     # print(x)
->>>>>>> 80f1ae2c8d5a2dbb527c98b4cdc51f167be216ca
 
 def encode_column(column):
     """
@@ -69,8 +51,7 @@ def encode_column(column):
         if len(row) == 1:
             SNVs.append(row)
 
-            # if we achieve 13 SNVs in a row, encode them and move on
-            if len(SNVs) == 13:
+            if len(SNVs) == 1:
                 SNV_bitstring = encode_SNVs(SNVs, len(SNVs), 0)
                 all_ints.append(SNV_bitstring)
                 SNVs = []
@@ -90,7 +71,7 @@ def encode_column(column):
 
     # handle any SNVs left
     if len(SNVs) > 0:
-        all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
+        all_ints.append(encode_SNVs(SNVs, len(SNVs), 0))
         SNVs = []
 
     return all_ints
@@ -109,8 +90,9 @@ def encode_SNVs(SNVs, length, INDEL_ten_flag):
     """
     SNV_bitstring = 0
 
+    # 00000000000000000000000000000 000
     # flag to specify SNVs
-    SNV_flag = shift_bit(0, 31)
+    SNV_flag = 0
 
     if INDEL_ten_flag:
         SNV_length = shift_bit(length, 20)
@@ -122,7 +104,7 @@ def encode_SNVs(SNVs, length, INDEL_ten_flag):
         snv = shift_bit(get_variant_number(SNVs[v]), 2*v) | SNV_bitstring
         SNV_bitstring = SNV_bitstring | snv
 
-    return SNV_flag | SNV_length | SNV_bitstring
+    return SNV_flag | shift_bit(SNV_bitstring, 2)
 
 def encode_INDEL(INDEL):
     """
@@ -148,7 +130,6 @@ def encode_INDEL(INDEL):
     len_full_INDEL = len(INDEL)
 
     num_ints = math.ceil(int(len(INDEL) - 10) / 13) + 1
-    #print(INDEL, num_ints)
     for i in range(num_ints):
         # first 10 bases are encoded differently than rest
         if i == 0:
@@ -179,7 +160,7 @@ def get_variant_number(base):
     elif (base == 'T'):
         return 3
     else:
-        print('not a proper base', base)
+        print('not a proper base')
         return -1
 
 ref_alt_txt = ''
@@ -209,5 +190,5 @@ def assumption1(ref_alt_txt):
 
 
 
-#if __name__ == '__main__':
-#        main()
+if __name__ == '__main__':
+        main()
