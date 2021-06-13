@@ -2,20 +2,21 @@
 # https://wiki.python.org/moin/BitArrays
 import math
 def main():
+    assumption1('/home/krsc0813/projects/gwas-compress/ref-alt.txt')
     # assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
-    data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
-             'CT',
-             'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
-             'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'A',
-             'AAAAAAAAAAAATATATATATATATATATATATATAT',
-             'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C',
-             'C', 'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
-             'TA',
-             'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
-             'ACAGGAGGGCGGG']
+    #data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
+    #         'CT',
+    #         'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
+    #         'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'A',
+    #         'AAAAAAAAAAAATATATATATATATATATATATATAT',
+    #         'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C',
+    #         'C', 'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
+    #         'TA',
+    #         'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
+    #         'ACAGGAGGGCGGG']
     # data = ['A', 'A', 'A', 'AAAAA']
-    x = encode_column(data)
-    print(x)
+    #x = encode_column(data)
+    #print(x)
 
 def encode_column(column):
     """
@@ -130,6 +131,7 @@ def encode_INDEL(INDEL):
     len_full_INDEL = len(INDEL)
 
     num_ints = math.ceil(int(len(INDEL) - 10) / 13) + 1
+    #print(INDEL, num_ints)
     for i in range(num_ints):
         # first 10 bases are encoded differently than rest
         if i == 0:
@@ -160,7 +162,7 @@ def get_variant_number(base):
     elif (base == 'T'):
         return 3
     else:
-        print('not a proper base')
+        print('not a proper base', base)
         return -1
 
 ref_alt_txt = ''
@@ -190,5 +192,5 @@ def assumption1(ref_alt_txt):
 
 
 
-if __name__ == '__main__':
-        main()
+#if __name__ == '__main__':
+#        main()
