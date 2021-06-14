@@ -2,24 +2,8 @@
 # https://wiki.python.org/moin/BitArrays
 import math
 def main():
-<<<<<<< HEAD
-    assumption1('/home/krsc0813/projects/gwas-compress/ref-alt.txt')
-    # assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
-    #data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
-    #         'CT',
-    #         'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
-    #         'T', 'T', 'C', 'A', 'G', 'A', 'C', 'A', 'G', 'G', 'A',
-    #         'AAAAAAAAAAAATATATATATATATATATATATATAT',
-    #         'G', 'G', 'G', 'T', 'C', 'C', 'A', 'G', 'A', 'C', 'T', 'C', 'T', 'A', 'C',
-    #         'C', 'G', 'T', 'T', 'C', 'A', 'T', 'C', 'C', 'C',
-    #         'TA',
-    #         'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
-    #         'ACAGGAGGGCGGG']
-    # data = ['A', 'A', 'A', 'AAAAA']
-    #x = encode_column(data)
-    #print(x)
-=======
-    assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
+    #assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
+    assumption1('/home/krsc0813/projects/gwas-compress/scripts/ref-alt-cols.txt')
     # data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
     #          'CT',
     #          'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
@@ -33,7 +17,6 @@ def main():
     # # data = ['A', 'A', 'A', 'AAAAA']
     # x = encode_column(data)
     # print(x)
->>>>>>> 80f1ae2c8d5a2dbb527c98b4cdc51f167be216ca
 
 def encode_column(column):
     """
@@ -209,5 +192,5 @@ def assumption1(ref_alt_txt):
 
 
 
-#if __name__ == '__main__':
-#        main()
+if __name__ == '__main__':
+        main()
