@@ -1,4 +1,5 @@
-import ref_alt_smaller_ints
+import ref_alt
+#import ref_alt_smaller_ints
 
 def get_column_types(row, data_type_code_book):
     """
@@ -61,7 +62,7 @@ def string_list_to_int(data_list, data_type, column_i):
     """
     typed_list = []
     if column_i == 2 or column_i == 3:
-        typed_list = ref_alt_smaller_ints.encode_column(data_list)
+        typed_list = ref_alt.encode_column(data_list)
     else:
         for data in data_list:
             typed_data = convert_to_int(data, data_type)
