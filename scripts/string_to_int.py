@@ -28,30 +28,35 @@ def encode_column(column):
     all_ints = []   # to return at end
 
     SNVs = []   # start collecting SNVs
-    for row in column:
-        # only SNV
-        if len(row) == 1:
-            SNVs.append(row)
+    for bases in column:
+        # handle TRUE/FALSE/NA strings different than REF/ALT strings
+        if bases.lower() == 'true' or bases.lower() == 'false' or bases.lower == 'na':
+            all_ints = true_false_na(column)
 
-            # if we achieve 13 SNVs in a row, encode them and move on
-            if len(SNVs) == 13:
-                SNV_bitstring = encode_SNVs(SNVs, len(SNVs), 0)
-                all_ints.append(SNV_bitstring)
-                SNVs = []
-
-        # encountered an INDEL
+        # handle SNVs/INDELs
         else:
-            # handle any SNVs we have collected
-            if len(SNVs) > 0:
-                all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
-                SNVs = []
+            # only SNV
+            if len(bases) == 1:
+                SNVs.append(bases)
 
-            # handle INDEL we encountered
-            INDEL = row
-            INDEL_bitstring_list = encode_INDEL(INDEL)
-            for i in INDEL_bitstring_list:
-                all_ints.append(i)
+                # if we achieve 13 SNVs in a row, encode them and move on
+                if len(SNVs) == 13:
+                    SNV_bitstring = encode_SNVs(SNVs, len(SNVs), 0)
+                    all_ints.append(SNV_bitstring)
+                    SNVs = []
 
+            # encountered an INDEL
+            else:
+                # handle any SNVs we have collected
+                if len(SNVs) > 0:
+                    all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
+                    SNVs = []
+
+                # handle INDEL we encountered
+                INDEL = bases
+                INDEL_bitstring_list = encode_INDEL(INDEL)
+                for i in INDEL_bitstring_list:
+                    all_ints.append(i)
 
     # handle any SNVs left
     if len(SNVs) > 0:
@@ -59,6 +64,23 @@ def encode_column(column):
         SNVs = []
 
     return all_ints
+
+def true_false_na(column):
+    """
+
+    """
+    int_column = []
+    for d in column:
+        if d.lower() == 'true':
+            int_column.append(1)
+        elif d.lower() == 'false':
+            int_column.append(0)
+        elif d.lower() == 'na':
+            int_column.append(-1)
+        else:
+            print('invalid t/f/na data')
+            return -1
+    return int_column
 
 
 def shift_bit(bitstring, shift):
@@ -133,7 +155,6 @@ def encode_INDEL(INDEL):
         start_indel = end_indel
         end_indel += 13
     return indel_ints
-
 
 def get_variant_number(base):
     if (base == 'A'):

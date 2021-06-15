@@ -11,14 +11,13 @@ def convert_list_to_int(in_list, data_type):
         for d in in_list: list_as_int.append(float_to_int.float_to_int(d))
     # strings
     elif data_type == 3:
-        for d in in_list:
-            if 'true' in d.lower(): list_as_int.append(1)
-            elif 'false' in d.lower(): list_as_int.append(0)
-            elif 'na' in d.lower(): list_as_int.append(-1)
-            else:
-                list_as_int = string_to_int.encode_column(in_list)
+        list_as_int = string_to_int.encode_column(in_list)
     # bytes
     elif data_type == 4:
+        return in_list
+    else:
+        print('invalid data type')
+        return -1
 
 
     return list_as_int
