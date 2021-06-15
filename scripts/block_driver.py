@@ -1,7 +1,8 @@
 import column_compress
 from datetime import datetime
 
-def block_compression(compression_style, in_file, block_size, delimiter, num_columns, column_data_types, codecs_list):
+def block_compression(compression_style,
+                      in_file, block_size, delimiter, num_columns, column_data_types, codecs_list):
     """
     opens gwas file and splits into block
     for each block:
@@ -23,22 +24,29 @@ def block_compression(compression_style, in_file, block_size, delimiter, num_col
                 block.append(line.rstrip().split(delimiter))
                 block_line_count += 1
             elif len(block) == block_size:
-                # split into columns
-                block_as_columns = block_to_columns(block, num_columns)
-                # convert column to ints
-                block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
-                # compress full block
-                block_compressed = column_compress.compress_block(block_as_columns_ints, codecs_list)
-
-                # write block header and block
-
+                # compress block according to compression style
+                if compression_style == 'bgzip_compare':
+                    bgzip_compare_compression()
+                elif compression_style == 'int_pyfast':
+                    int_pyfast_compression(in_file, block_size, delimiter, num_columns, column_data_types, codecs_list)
+                elif compression_style == 'int_mix':
+                    int_mix_compression()
+                elif compression_style == 'all_mix':
+                    all_mix_compression()
+                else:
+                    print('invalid compression style')
+                    return -1
             else:
                 print('block exceed block size.')
                 return -1
 
     gwas_file.close()
 
-def column_int_pyfast_compression(in_file, block_size, delimiter, num_columns, column_data_types, codecs_list):
+def bgzip_compare_compression():
+    print('bgzip compare compression')
+
+
+def int_pyfast_compression(in_file, block_size, delimiter, num_columns, column_data_types, codecs_list):
     """
     opens gwas file and splits into block
     for each block:
@@ -76,6 +84,12 @@ def column_int_pyfast_compression(in_file, block_size, delimiter, num_columns, c
                 return -1
 
     gwas_file.close()
+
+def int_mix_compression():
+    print('int mix compression')
+
+def all_mix_compression():
+    print('all mix compression')
 
 
 def block_to_columns(block, num_columns):
