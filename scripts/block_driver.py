@@ -1,4 +1,5 @@
 import column_compress
+import convert_to_int
 from datetime import datetime
 
 def block_compression(compression_style,
@@ -13,7 +14,7 @@ def block_compression(compression_style,
     block_line_count = 0
     block = []
 
-    for line in in_file:
+    for line in gwas_file:
         # fill header
         if gwas_file_header == '':
             gwas_file_header = line
@@ -28,11 +29,11 @@ def block_compression(compression_style,
                 if compression_style == 'bgzip_compare':
                     bgzip_compare_compression()
                 elif compression_style == 'int_pyfast':
-                    int_pyfast_compression(in_file, block_size, delimiter, num_columns, column_data_types, codecs_list)
+                    int_compression(block, num_columns, column_data_types, codecs_list)
                 elif compression_style == 'int_mix':
-                    int_mix_compression()
+                    int_compression(block, num_columns, column_data_types, codecs_list)
                 elif compression_style == 'all_mix':
-                    all_mix_compression()
+                    all_data_type_compression()
                 else:
                     print('invalid compression style')
                     return -1
@@ -46,49 +47,25 @@ def bgzip_compare_compression():
     print('bgzip compare compression')
 
 
-def int_pyfast_compression(in_file, block_size, delimiter, num_columns, column_data_types, codecs_list):
+def int_compression(block, num_columns, column_data_types, codecs_list):
     """
-    opens gwas file and splits into block
-    for each block:
+    for a block:
         splits into columns
         converts to integers
         compresses column of integers
     """
-    gwas_file = open(in_file, 'r')
-    gwas_file_header = ''
-    block_line_count = 0
-    block = []
 
-    for line in in_file:
-        # fill header
-        if gwas_file_header == '':
-            gwas_file_header = line
-        # start with data
-        else:
-            # check to see if block is full size
-            if len(block) < block_size:
-                block.append(line.rstrip().split(delimiter))
-                block_line_count += 1
-            elif len(block) == block_size:
-                # split into columns
-                block_as_columns = block_to_columns(block, num_columns)
-                # convert column to ints
-                block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
-                # compress full block
-                block_compressed = column_compress.compress_block(block_as_columns_ints, codecs_list)
+    # split into columns
+    block_as_columns = block_to_columns(block, num_columns)
+    # convert column to ints
+    block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
+    # compress full block
+    block_compressed = column_compress.compress_block(block_as_columns_ints, codecs_list)
 
-                # write block header and block
+    return block_compressed
 
-            else:
-                print('block exceed block size.')
-                return -1
 
-    gwas_file.close()
-
-def int_mix_compression():
-    print('int mix compression')
-
-def all_mix_compression():
+def all_data_type_compression():
     print('all mix compression')
 
 
@@ -97,7 +74,7 @@ def block_to_columns(block, num_columns):
     takes a block which is a list of rows (a row is a list of column data as strings)
     and formats the block as a list of columns
     """
-    block_as_columns = [[] * num_columns]
+    block_as_columns = [[] for i in range(num_columns)]
     block_size = len(block)  # do not want to pass in block size parameter bc the last block might not be max size
 
     # take each column from each row and append to the column-based block

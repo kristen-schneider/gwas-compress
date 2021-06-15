@@ -1,0 +1,24 @@
+import float_to_int
+import string_to_int
+
+def convert_list_to_int(in_list, data_type):
+    list_as_int = []
+    # ints
+    if data_type == 1:
+        for d in in_list: list_as_int.append(int(d))
+    # floats
+    elif data_type == 2:
+        for d in in_list: list_as_int.append(float_to_int.float_to_int(d))
+    # strings
+    elif data_type == 3:
+        for d in in_list:
+            if 'true' in d.lower(): list_as_int.append(1)
+            elif 'false' in d.lower(): list_as_int.append(0)
+            elif 'na' in d.lower(): list_as_int.append(-1)
+            else:
+                list_as_int = string_to_int.encode_column(in_list)
+    # bytes
+    elif data_type == 4:
+
+
+    return list_as_int

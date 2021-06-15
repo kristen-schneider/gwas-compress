@@ -79,9 +79,9 @@ def main():
     # 2. STARTING COMPRESSION OF DATA
     # depending on the compression style, we will break up the file differently
 
-    block_driver.column_int_pyfast_compression(IN_FILE, BLOCK_SIZE,
-                                               delimiter, num_columns, column_data_types,
-                                               CODECS_LIST)
+    block_driver.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
+                                   delimiter, num_columns, column_data_types,
+                                   CODECS_LIST)
 
     # do a simple block-based compression
     # idk yet what this means. do we convert to ints? do we use fastpfor codecs?
