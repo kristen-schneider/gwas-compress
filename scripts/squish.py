@@ -6,7 +6,6 @@ from datetime import datetime
 import config_arguments
 import generate_header_first_half
 import generate_funnel_format
-import funnel_format_compress
 import funnel_format_compress_ints
 import header_compress
 
@@ -15,27 +14,9 @@ import header_compress
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
 
-#### USER-SPECIFIED PARAMETERS ####
-# user should edit config.ini to reflect proper parameters
-args = config_arguments.get_args_from_config('MENDEL')
-
-# included in config file
-IN_FILE = args['in_file']
-OUT_DIR = args['out_dir']
-BLOCK_SIZE = int(args['block_size'])
-COMPRESSION_METHOD = list(args['compression_method'].split(','))
-DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
-                        2:int(args['float_byte_size']),
-                        3:int(args['string_byte_size']),
-                        4:args['bytes_byte_size']}
-# output file made from combining user specified params
-base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
-COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
-COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
-
-
 def main():
     """
+    0. get arguments from user to run compression according to their preferences
     1. gets beginning of header (magic number, version, delimiter, column labels, column types, num columns, gzip header)
     2. generates funnel format (list of blocks)
     3. compress data and get second half of header
@@ -43,6 +24,25 @@ def main():
     5. write compressed header
     6. write compressed data
     """
+    # 1. GET ARGUMENTS
+    # user should edit config.ini to reflect proper parameters
+    args = config_arguments.get_args_from_config('LOCAL')
+
+    # included in config file
+    IN_FILE = args['in_file']
+    OUT_DIR = args['out_dir']
+    BLOCK_SIZE = int(args['block_size'])
+    COMPRESSION_STYLE = args['compression_style']
+    COMPRESSION_METHOD = list(args['compression_method'].split(','))
+    DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
+                            2: int(args['float_byte_size']),
+                            3: int(args['string_byte_size']),
+                            4: args['bytes_byte_size']}
+    # output file made from combining user specified params
+    base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
+    COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
+    COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
+
     # 1. GET FIRST HALF OF HEADER
     ### Magic number, version number, delimiter, column labels, column types, number columns, gzip header
     print('generating start of header...')
