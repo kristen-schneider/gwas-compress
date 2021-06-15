@@ -60,7 +60,7 @@ def int_compression(block, num_columns, column_data_types, codecs_list):
     # convert column to ints
     block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
     # compress full block
-    block_compressed = column_compress.compress_block(block_as_columns_ints, codecs_list)
+    block_compressed = column_compress.compress_block(num_columns, block_as_columns_ints, codecs_list)
 
     return block_compressed
 
