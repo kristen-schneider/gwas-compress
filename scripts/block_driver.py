@@ -1,4 +1,4 @@
-import column_compress
+import column_based_compression
 import convert_to_int
 from datetime import datetime
 
@@ -87,8 +87,8 @@ def int_compression(block, num_columns, column_data_types, codecs_list, data_typ
     block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
     # compress full block
     new_column_data_types = [1]*num_columns
-    block_compressed = column_compress.compress_block(num_columns, block_as_columns_ints, codecs_list,
-                                                      new_column_data_types, data_type_byte_sizes)
+    block_compressed = column_based_compression.compress_block(num_columns, block_as_columns_ints, codecs_list,
+                                                               new_column_data_types, data_type_byte_sizes)
 
     return block_compressed
 

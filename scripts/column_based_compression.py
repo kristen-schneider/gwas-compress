@@ -29,7 +29,6 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
             compressed_column_bitstring = compressed_column_info[0][compression_method_header_length:]
             block_header.append(len(compressed_column_bitstring))
             compressed_block_bitstring += compressed_column_bitstring
-            # compressed_block.append(compress_with_other(curr_column, column_codec, column_data_type, column_num_bytes))
 
         # fastpfor codecs
         else:
