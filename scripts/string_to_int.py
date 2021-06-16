@@ -30,7 +30,7 @@ def encode_column(column):
     SNVs = []   # start collecting SNVs
     for bases in column:
         # handle TRUE/FALSE/NA strings different than REF/ALT strings
-        if bases.lower() == 'true' or bases.lower() == 'false' or bases.lower == 'na':
+        if bases.lower() == 'true' or bases.lower() == 'false' or bases.lower() == 'na':
             all_ints = true_false_na(column)
 
         # handle SNVs/INDELs

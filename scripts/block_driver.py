@@ -25,22 +25,42 @@ def block_compression(compression_style,
             if len(block) < block_size:
                 block.append(line.rstrip().split(delimiter))
                 block_line_count += 1
+            # if block is full size, compress block
             elif len(block) == block_size:
                 # compress block according to compression style
                 if compression_style == 'bgzip_compare':
                     bgzip_compare_compression()
                 elif compression_style == 'int_pyfast':
                     int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
-                elif compression_style == 'int_mix':
-                    int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
-                elif compression_style == 'all_mix':
+                elif compression_style == 'int_other':
+                    compressed_block_info = int_compression(block, num_columns, column_data_types,
+                                                            codecs_list, data_type_byte_sizes)
+
+                elif compression_style == 'all_other':
                     all_data_type_compression()
                 else:
                     print('invalid compression style')
                     return -1
+                # reset block information
+                block = []
+                block.append(line.rstrip().split(delimiter))
+                block_line_count += 1
             else:
                 print('block exceed block size.')
                 return -1
+    if len(block) > 0:
+        # compress block according to compression style
+        if compression_style == 'bgzip_compare':
+            bgzip_compare_compression()
+        elif compression_style == 'int_pyfast':
+            int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
+        elif compression_style == 'int_other':
+            compressed_block_info = int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
+        elif compression_style == 'all_other':
+            all_data_type_compression()
+        else:
+            print('invalid compression style')
+            return -1
 
     gwas_file.close()
 
@@ -61,8 +81,9 @@ def int_compression(block, num_columns, column_data_types, codecs_list, data_typ
     # convert column to ints
     block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
     # compress full block
+    new_column_data_types = [1]*num_columns
     block_compressed = column_compress.compress_block(num_columns, block_as_columns_ints, codecs_list,
-                                                      column_data_types, data_type_byte_sizes)
+                                                      new_column_data_types, data_type_byte_sizes)
 
     return block_compressed
 

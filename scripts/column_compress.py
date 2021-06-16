@@ -11,7 +11,9 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
     """
 
     """
-    compressed_block = []
+    compressed_block_bitstring = b'' # a bitstring of compressed columns (for gzip/zlib/bz2)
+    compressed_block_list = []
+    block_header = []
     for col_index in range(num_columns):
         column_codec = codecs_list[col_index]
         curr_column = block_as_columns_ints[col_index]
@@ -22,12 +24,26 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
         if column_codec == 'gzip' \
             or column_codec == 'zlib' \
             or column_codec == 'bz2':
-            compressed_block.append(compress_with_other(curr_column, column_codec, column_data_type, col_num_bytes))
+            compressed_column_info = compress_with_other(curr_column, column_codec, column_data_type, column_num_bytes)
+            compression_method_header_length = compressed_column_info[1]
+            compressed_column_bitstring = compressed_column_info[0][0:compression_method_header_length]
+            block_header.append(len(compressed_column_bitstring))
+            compressed_block_bitstring += compressed_column_bitstring
+            # compressed_block.append(compress_with_other(curr_column, column_codec, column_data_type, column_num_bytes))
 
         # fastpfor codecs
         else:
-            compressed_block.append(comress_with_fastpfor(curr_column, column_codec))
+            compressed_column_np_array = comress_with_fastpfor(curr_column, column_codec)
+            block_header.append(len(compressed_column_np_array))
+            compressed_block_list.append(compressed_column_np_array)
 
+    if compressed_column_bitstring != b'':
+        return block_header, compressed_column_bitstring
+    elif compressed_column_np_array != []:
+        return block_header, compressed_column_np_array
+    else:
+        print('block compression is empty')
+        return -1
 
 
 def compress_with_other(column, column_codec, column_data_type, column_num_bytes):
