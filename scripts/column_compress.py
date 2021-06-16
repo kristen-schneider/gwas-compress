@@ -26,7 +26,7 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
             or column_codec == 'bz2':
             compressed_column_info = compress_with_other(curr_column, column_codec, column_data_type, column_num_bytes)
             compression_method_header_length = compressed_column_info[1]
-            compressed_column_bitstring = compressed_column_info[0][0:compression_method_header_length]
+            compressed_column_bitstring = compressed_column_info[0][compression_method_header_length:]
             block_header.append(len(compressed_column_bitstring))
             compressed_block_bitstring += compressed_column_bitstring
             # compressed_block.append(compress_with_other(curr_column, column_codec, column_data_type, column_num_bytes))
@@ -38,9 +38,9 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
             compressed_block_list.append(compressed_column_np_array)
 
     if compressed_column_bitstring != b'':
-        return block_header, compressed_column_bitstring
+        return block_header, compressed_block_bitstring
     elif compressed_column_np_array != []:
-        return block_header, compressed_column_np_array
+        return block_header, compressed_block_list
     else:
         print('block compression is empty')
         return -1

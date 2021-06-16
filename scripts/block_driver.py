@@ -35,6 +35,8 @@ def block_compression(compression_style,
                 elif compression_style == 'int_other':
                     compressed_block_info = int_compression(block, num_columns, column_data_types,
                                                             codecs_list, data_type_byte_sizes)
+                    # write block header and compressed block
+                    print(compressed_block_info)
 
                 elif compression_style == 'all_other':
                     all_data_type_compression()
@@ -55,7 +57,10 @@ def block_compression(compression_style,
         elif compression_style == 'int_pyfast':
             int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
         elif compression_style == 'int_other':
-            compressed_block_info = int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
+            compressed_block_info = int_compression(block, num_columns, column_data_types,
+                                                    codecs_list, data_type_byte_sizes)
+            # write block header and compressed block
+            print(compressed_block_info)
         elif compression_style == 'all_other':
             all_data_type_compression()
         else:
