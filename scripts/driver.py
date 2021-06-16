@@ -77,9 +77,10 @@ def main():
     bz2_header = header_first_half[7]
 
     # 2. COMPRESSION DATA
-    block_driver.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
+    end_of_header = block_driver.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
                                    delimiter, num_columns, column_data_types,
-                                   CODECS_LIST, DATA_TYPE_BYTE_SIZES)
+                                   CODECS_LIST, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
+    print(end_of_header)
 
     # do a simple block-based compression
     # idk yet what this means. do we convert to ints? do we use fastpfor codecs?

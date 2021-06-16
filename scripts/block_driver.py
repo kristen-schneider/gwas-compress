@@ -1,10 +1,12 @@
 import column_based_compression
 import convert_to_int
+import serialize_body
+import compress
 from datetime import datetime
 
 def block_compression(compression_style,
                       in_file, block_size, delimiter, num_columns, column_data_types,
-                      codecs_list, data_type_byte_sizes):
+                      codecs_list, data_type_byte_sizes, out_file):
     """
     opens gwas file and splits into block
     for each block:
@@ -25,6 +27,11 @@ def block_compression(compression_style,
     end_blocks_list = []
     end_blocks_value = 0
     size_of_last_block = -1
+
+    # open output file and clear it if data already written
+    o = open(out_file, 'ab')
+    o.truncate(0)
+    o.close()
 
     # open file and prepare space for compressed data
     gwas_file = open(in_file, 'r')
@@ -67,15 +74,23 @@ def block_compression(compression_style,
                     print('invalid compression style')
                     return -1
 
+                # compress block header
+                serialized_block_header = serialize_body.serialize_list(compressed_block_info[0],
+                                                                        1, data_type_byte_sizes[1])
+                compressed_block_header = compress.compress_bitstring('gzip', serialized_block_header)
                 # fill end of header information
-                end_block_headers_value += len(compressed_block_info[0])
+                end_block_headers_value += len(compressed_block_header)
                 end_block_headers_list.append(end_block_headers_value)
                 end_blocks_value += len(compressed_block_info[1])
                 end_blocks_list.append(end_blocks_value)
                 size_of_last_block = len(block)
 
                 # write block header and compressed block
-                print(compressed_block_info)
+                print(compressed_block_header, compressed_block_info[1])
+                o = open(out_file, 'ab')
+                o.write(compressed_block_header)
+                o.write(compressed_block_info[1])
+                o.close()
 
                 # reset block information
                 block = []
@@ -110,15 +125,23 @@ def block_compression(compression_style,
             print('invalid compression style')
             return -1
 
+        # compress block header
+        serialized_block_header = serialize_body.serialize_list(compressed_block_info[0],
+                                                                1, data_type_byte_sizes[1])
+        compressed_block_header = compress.compress_bitstring('gzip', serialized_block_header)
         # fill end of header information
-        end_block_headers_value += len(compressed_block_info[0])
+        end_block_headers_value += len(compressed_block_header)
         end_block_headers_list.append(end_block_headers_value)
         end_blocks_value += len(compressed_block_info[1])
         end_blocks_list.append(end_blocks_value)
         size_of_last_block = len(block)
 
         # write block header and compressed block
-        print(compressed_block_info)
+        print(compressed_block_header, compressed_block_info[1])
+        o = open(out_file, 'ab')
+        o.write(compressed_block_header)
+        o.write(compressed_block_info[1])
+        o.close()
 
     gwas_file.close()
 
