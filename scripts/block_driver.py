@@ -19,6 +19,13 @@ def block_compression(compression_style,
     :param codecs_list: list of codecs for each column
     :param data_type_byte_sizes: dictionary for byte sizes for each data type
     """
+    # prepare space for end of header information
+    end_block_headers_list = []
+    end_block_headers_value = 0
+    end_blocks_list = []
+    end_blocks_value = 0
+    size_of_last_block = -1
+
     # open file and prepare space for compressed data
     gwas_file = open(in_file, 'r')
     gwas_file_header = ''
@@ -52,14 +59,23 @@ def block_compression(compression_style,
                 elif compression_style == 'int_other':
                     compressed_block_info = int_compression(block, num_columns, column_data_types,
                                                             codecs_list, data_type_byte_sizes)
-                    # write block header and compressed block
-                    print(compressed_block_info)
+
                 # all data types
                 elif compression_style == 'all_other':
                     all_data_type_compression()
                 else:
                     print('invalid compression style')
                     return -1
+
+                # fill end of header information
+                end_block_headers_value += len(compressed_block_info[0])
+                end_block_headers_list.append(end_block_headers_value)
+                end_blocks_value += len(compressed_block_info[1])
+                end_blocks_list.append(end_blocks_value)
+                size_of_last_block = len(block)
+
+                # write block header and compressed block
+                print(compressed_block_info)
 
                 # reset block information
                 block = []
@@ -86,8 +102,7 @@ def block_compression(compression_style,
         elif compression_style == 'int_other':
             compressed_block_info = int_compression(block, num_columns, column_data_types,
                                                     codecs_list, data_type_byte_sizes)
-            # write block header and compressed block
-            print(compressed_block_info)
+
         # all data types
         elif compression_style == 'all_other':
             all_data_type_compression()
@@ -95,7 +110,20 @@ def block_compression(compression_style,
             print('invalid compression style')
             return -1
 
+        # fill end of header information
+        end_block_headers_value += len(compressed_block_info[0])
+        end_block_headers_list.append(end_block_headers_value)
+        end_blocks_value += len(compressed_block_info[1])
+        end_blocks_list.append(end_blocks_value)
+        size_of_last_block = len(block)
+
+        # write block header and compressed block
+        print(compressed_block_info)
+
     gwas_file.close()
+
+    end_of_header = [end_block_headers_list, end_blocks_list, size_of_last_block]
+    return end_of_header
 
 def bgzip_compare_compression():
     """
