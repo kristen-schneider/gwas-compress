@@ -76,9 +76,7 @@ def main():
     gzip_header = header_first_half[6]
     bz2_header = header_first_half[7]
 
-    # 2. STARTING COMPRESSION OF DATA
-    # depending on the compression style, we will break up the file differently
-
+    # 2. COMPRESSION DATA
     block_driver.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
                                    delimiter, num_columns, column_data_types,
                                    CODECS_LIST, DATA_TYPE_BYTE_SIZES)

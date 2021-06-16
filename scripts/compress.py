@@ -29,7 +29,7 @@ def compress_bitstring(compression_method, s_bitstring):
         c_bitstring = bz2_compress(s_bitstring)
         header_size = 4
 
-    return c_bitstring, header_size
+    return c_bitstring[header_size:]
 
 
 def gzip_compress(s_bitstring, time):

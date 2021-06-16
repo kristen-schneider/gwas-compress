@@ -24,9 +24,7 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
         if column_codec == 'gzip' \
             or column_codec == 'zlib' \
             or column_codec == 'bz2':
-            compressed_column_info = compress_with_other(curr_column, column_codec, column_data_type, column_num_bytes)
-            compression_method_header_length = compressed_column_info[1]
-            compressed_column_bitstring = compressed_column_info[0][compression_method_header_length:]
+            compressed_column_bitstring = compress_with_other(curr_column, column_codec, column_data_type, column_num_bytes)
             block_header.append(len(compressed_column_bitstring))
             compressed_block_bitstring += compressed_column_bitstring
 
@@ -48,6 +46,8 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
 def compress_with_other(column, column_codec, column_data_type, column_num_bytes):
     """
     compress a column of integers with gzip, zlib, or bz2
+
+    :return compressed_column: compressed column excluding compression header
     """
     compressed_column = b''
     column_i_START = datetime.now()
