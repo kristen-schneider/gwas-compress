@@ -81,7 +81,7 @@ def main():
 
     block_driver.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
                                    delimiter, num_columns, column_data_types,
-                                   CODECS_LIST)
+                                   CODECS_LIST, DATA_TYPE_BYTE_SIZES)
 
     # do a simple block-based compression
     # idk yet what this means. do we convert to ints? do we use fastpfor codecs?

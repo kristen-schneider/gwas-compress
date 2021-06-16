@@ -3,7 +3,8 @@ import convert_to_int
 from datetime import datetime
 
 def block_compression(compression_style,
-                      in_file, block_size, delimiter, num_columns, column_data_types, codecs_list):
+                      in_file, block_size, delimiter, num_columns, column_data_types,
+                      codecs_list, data_type_byte_sizes):
     """
     opens gwas file and splits into block
     for each block:
@@ -29,9 +30,9 @@ def block_compression(compression_style,
                 if compression_style == 'bgzip_compare':
                     bgzip_compare_compression()
                 elif compression_style == 'int_pyfast':
-                    int_compression(block, num_columns, column_data_types, codecs_list)
+                    int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
                 elif compression_style == 'int_mix':
-                    int_compression(block, num_columns, column_data_types, codecs_list)
+                    int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
                 elif compression_style == 'all_mix':
                     all_data_type_compression()
                 else:
@@ -47,7 +48,7 @@ def bgzip_compare_compression():
     print('bgzip compare compression')
 
 
-def int_compression(block, num_columns, column_data_types, codecs_list):
+def int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes):
     """
     for a block:
         splits into columns
@@ -60,7 +61,8 @@ def int_compression(block, num_columns, column_data_types, codecs_list):
     # convert column to ints
     block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
     # compress full block
-    block_compressed = column_compress.compress_block(num_columns, block_as_columns_ints, codecs_list)
+    block_compressed = column_compress.compress_block(num_columns, block_as_columns_ints, codecs_list,
+                                                      column_data_types, data_type_byte_sizes)
 
     return block_compressed
 

@@ -2,7 +2,12 @@ import numpy as np
 from datetime import datetime
 import sys
 # from pyfastpfor import *
-def compress_block(num_columns, block_as_columns_ints, codecs_list):
+
+import serialize_body
+import compress
+
+def compress_block(num_columns, block_as_columns_ints, codecs_list,
+                   column_data_types, data_type_byte_sizes):
     """
 
     """
@@ -10,12 +15,14 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list):
     for col_index in range(num_columns):
         column_codec = codecs_list[col_index]
         curr_column = block_as_columns_ints[col_index]
+        column_data_type = column_data_types[col_index]
+        column_num_bytes = data_type_byte_sizes[column_data_type]
 
         # gzip, zlib, and bz2 codecs
         if column_codec == 'gzip' \
             or column_codec == 'zlib' \
             or column_codec == 'bz2':
-            compressed_block.append(compress_with_other(curr_column, column_codec))
+            compressed_block.append(compress_with_other(curr_column, column_codec, column_data_type, col_num_bytes))
 
         # fastpfor codecs
         else:
@@ -23,7 +30,7 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list):
 
 
 
-def compress_with_other(column, column_codec):
+def compress_with_other(column, column_codec, column_data_type, column_num_bytes):
     """
     compress a column of integers with gzip, zlib, or bz2
     """
@@ -32,6 +39,8 @@ def compress_with_other(column, column_codec):
     column_i_BEFORE = sys.getsizeof(column)
     column_i_END = datetime.now()
     ### work ###
+    serialized_column = serialize_body.serialize_list(column, column_data_type, column_num_bytes)
+    compressed_column = compress.compress_bitstring(column_codec, serialized_column)
 
     ############
     column_i_TIME = column_i_END - column_i_START
@@ -39,7 +48,7 @@ def compress_with_other(column, column_codec):
     column_i_AFTER = sys.getsizeof(compressed_column)
     column_i_RATIO = float(column_i_BEFORE / column_i_AFTER)
 
-
+    return compressed_column
 
 def comress_with_fastpfor(column, codec):
     """
