@@ -29,9 +29,12 @@ def block_compression(compression_style,
     size_of_last_block = -1
 
     # open output file and clear it if data already written
-    o = open(out_file, 'ab')
-    o.truncate(0)
-    o.close()
+    f = open('./testing_write.txt', 'ab')
+    f.truncate(0)
+    f.close()
+    # o = open(out_file, 'ab')
+    # o.truncate(0)
+    # o.close()
 
     # open file and prepare space for compressed data
     gwas_file = open(in_file, 'r')
@@ -86,11 +89,15 @@ def block_compression(compression_style,
                 size_of_last_block = len(block)
 
                 # write block header and compressed block
-                print(compressed_block_header, compressed_block_info[1])
-                o = open(out_file, 'ab')
-                o.write(compressed_block_header)
-                o.write(compressed_block_info[1])
-                o.close()
+                # # print(compressed_block_header, compressed_block_info[1])
+                f = open('./testing_write.txt', 'ab')
+                f.write(compressed_block_header)
+                f.write(compressed_block_info[1])
+                f.close()
+                # o = open(out_file, 'ab')
+                # o.write(compressed_block_header)
+                # o.write(compressed_block_info[1])
+                # o.close()
 
                 # reset block information
                 block = []
@@ -137,11 +144,15 @@ def block_compression(compression_style,
         size_of_last_block = len(block)
 
         # write block header and compressed block
-        print(compressed_block_header, compressed_block_info[1])
-        o = open(out_file, 'ab')
-        o.write(compressed_block_header)
-        o.write(compressed_block_info[1])
-        o.close()
+        # print(compressed_block_header, compressed_block_info[1])
+        f = open('./testing_write.txt', 'ab')
+        f.write(compressed_block_header)
+        f.write(compressed_block_info[1])
+        f.close()
+        # o = open(out_file, 'ab')
+        # o.write(compressed_block_header)
+        # o.write(compressed_block_info[1])
+        # o.close()
 
     gwas_file.close()
 
