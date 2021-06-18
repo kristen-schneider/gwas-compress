@@ -58,7 +58,7 @@ def main():
     dc_single_block = query_decompress.decompress_single_block(COMPRESSION_METHOD, compressed_block_info,
                                                                full_header, DATA_TYPE_BYTE_SIZES)
     ############
-    #for dc in dc_single_block: print(dc)
+    for dc in dc_single_block: print(dc)
     single_block_END = datetime.now()
     single_block_TIME = single_block_END - single_block_START
     print(str(single_block_TIME) + ' for decompressing single block to compute...\n')
