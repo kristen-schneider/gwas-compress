@@ -14,6 +14,7 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
     compressed_block_bitstring = b'' # a bitstring of compressed columns (for gzip/zlib/bz2)
     compressed_block_list = []
     block_header = []
+    col_end_bit = 0
     for col_index in range(num_columns):
         column_codec = codecs_list[col_index]
         curr_column = block_as_columns_ints[col_index]
@@ -25,13 +26,15 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
             or column_codec == 'zlib' \
             or column_codec == 'bz2':
             compressed_column_bitstring = compress_with_other(curr_column, column_codec, column_data_type, column_num_bytes)
-            block_header.append(len(compressed_column_bitstring))
+            col_end_bit += len(compressed_column_bitstring)
+            block_header.append(col_end_bit)
             compressed_block_bitstring += compressed_column_bitstring
 
         # fastpfor codecs
         else:
             compressed_column_np_array = comress_with_fastpfor(curr_column, column_codec)
-            block_header.append(len(compressed_column_np_array))
+            col_end_bit += len(compressed_column_np_array)
+            block_header.append(col_end_bit)
             compressed_block_list.append(compressed_column_np_array)
 
     if compressed_column_bitstring != b'':

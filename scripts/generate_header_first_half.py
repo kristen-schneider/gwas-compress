@@ -48,7 +48,6 @@ def get_header_first_half(in_file, data_type_code_book):
     header_first_half.append(column_types_list)
     header_first_half.append(num_columns)
     header_first_half.append(gzip_header)
-    header_first_half.append(zlib_header)
     header_first_half.append(bz2_header)
 
     return header_first_half

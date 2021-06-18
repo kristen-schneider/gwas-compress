@@ -34,6 +34,7 @@ OUT_FILE = '/Users/kristen/PycharmProjects/gwas-compress/scripts/testing_write_a
 
 def main():
 
+
     full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, OUT_FILE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]

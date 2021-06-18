@@ -34,8 +34,31 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm, query
    
     return ds_bitstring
 
-
 def deserialize_int(dc_bitstring, block_size, num_bytes, chrm):
+    """
+    takes serialized integer data and converts to integers.
+    accounts for X and Y chromosomes being 23 and 24, respectfully
+    """
+    ds_bitstring = []
+    # ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
+    #for every piece of data in a given block
+    for i in range(block_size):
+        curr_bytes = dc_bitstring[i * num_bytes:i * num_bytes + num_bytes]
+        #print(i, curr_bytes)
+        #these values are chromosomes and positions and should not be negative.
+        # curr_ds_value = np.frombuffer(curr_bytes, dtype=np.uint32)
+        curr_ds_value = b''
+        #print(np.frombuffer(dc_bitstring, dtype=np.uint32))
+        if curr_ds_value == 23:
+           curr_ds_value = 'X'
+        elif curr_ds_value == 24:
+           curr_ds_value = 'Y'
+        else:
+            curr_ds_value = int.from_bytes(curr_bytes, byteorder='big', signed=False)
+        ds_bitstring.append(curr_ds_value)
+    return ds_bitstring
+
+def deserialize_int_fastpfor(dc_bitstring, block_size, num_bytes, chrm):
     """
     takes serialized integer data and converts to integers.
     accounts for X and Y chromosomes being 23 and 24, respectfully

@@ -84,7 +84,7 @@ def block_compression(compression_style,
                 # fill end of header information
                 end_block_headers_value += len(compressed_block_header)
                 end_block_headers_list.append(end_block_headers_value)
-                end_blocks_value += len(compressed_block_info[1])
+                end_blocks_value += (len(compressed_block_header)+len(compressed_block_info[1]))
                 end_blocks_list.append(end_blocks_value)
                 size_of_last_block = len(block)
 
@@ -92,7 +92,9 @@ def block_compression(compression_style,
                 # # print(compressed_block_header, compressed_block_info[1])
                 f = open('./testing_write.txt', 'ab')
                 f.write(compressed_block_header)
+                print(len(compressed_block_header), compressed_block_header)
                 f.write(compressed_block_info[1])
+                print(len(compressed_block_info[1]), compressed_block_info[1])
                 f.close()
                 # o = open(out_file, 'ab')
                 # o.write(compressed_block_header)
@@ -147,7 +149,9 @@ def block_compression(compression_style,
         # print(compressed_block_header, compressed_block_info[1])
         f = open('./testing_write.txt', 'ab')
         f.write(compressed_block_header)
+        print(len(compressed_block_header), compressed_block_header)
         f.write(compressed_block_info[1])
+        print(len(compressed_block_info[1]), compressed_block_info[1])
         f.close()
         # o = open(out_file, 'ab')
         # o.write(compressed_block_header)
@@ -156,7 +160,7 @@ def block_compression(compression_style,
 
     gwas_file.close()
 
-    end_of_header = [end_block_headers_list, end_blocks_list, size_of_last_block]
+    end_of_header = [end_block_headers_list, end_blocks_list, [block_size,size_of_last_block]]
     return end_of_header
 
 def bgzip_compare_compression():
