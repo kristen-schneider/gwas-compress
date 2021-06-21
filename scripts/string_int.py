@@ -206,16 +206,17 @@ def decode_int_to_string(int_value):
         # 67108863 = 00000011111111111111111111111111
         encoded_snv_bases = int_value & 67108863
 
-        for base in range(num_snvs):
-            curr_snv =
+        for base_bits in range(num_snvs):
+            curr_snv_binary= encoded_snv_bases & 3
+            encoded_snv_bases = shift_bit_decoding(encoded_snv_bases, 2)
+            snv_base = get_base_from_binary(curr_snv_binary)
+            snv_bases.append(snv_base)
 
 
     elif type_flag == 1:
         snv_length = shift_bit_decoding(int_value, 20)-32
     else:
         print('not an indel or snv...')
-
-    print(snv_length)
 
     return snv_bases
 
