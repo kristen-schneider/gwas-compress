@@ -197,37 +197,79 @@ def decode_int_to_string(int_list):
     returns list of bases
     """
     snv_bases = []
+    print('decoding integers to string bases')
 
-    for i in int_list:
-        curr_integer = i
+    for i in range(len(int_list)):
 
-        print('decoding integers to string bases')
+        curr_integer = int_list[i]
+
         type_flag = shift_bit_decoding(curr_integer, 31)
+
         if type_flag == 0:
-            num_snvs = shift_bit_decoding(curr_integer, 26)
-
-            # 67108863 = 00000011111111111111111111111111
-            encoded_snv_bases = curr_integer & 67108863
-
-            for base_bits in range(num_snvs):
-                curr_snv_binary= encoded_snv_bases & 3
-                encoded_snv_bases = shift_bit_decoding(encoded_snv_bases, 2)
-                snv_base = get_base_from_binary(curr_snv_binary)
-                snv_bases.append(snv_base)
-
+            snv_bases.append(decode_snv(curr_integer))
 
         elif type_flag == 1:
-            INDEL = ''
             num_int_stored_for_INDEL = shift_bit_decoding(curr_integer, 20)-32
+            indel_ints = int_list[i:i+num_int_stored_for_INDEL]
 
-            # 1048575 = 00000000000011111111111111111111
-            encoded_indel = curr_integer
 
 
         else:
             print('not an indel or snv...')
 
     return snv_bases
+
+def decode_snv(curr_integer):
+    snv_bases = []
+    num_snvs = shift_bit_decoding(curr_integer, 26)
+
+    # 67108863 = 00000011111111111111111111111111
+    encoded_snv_bases = curr_integer & 67108863
+
+    for base_bits in range(num_snvs):
+        curr_snv_binary = encoded_snv_bases & 3
+        encoded_snv_bases = shift_bit_decoding(encoded_snv_bases, 2)
+        snv_base = get_base_from_binary(curr_snv_binary)
+        snv_bases.append(snv_base)
+    return snv_bases
+
+def decode_indel(indel_ints):
+    """
+
+    """
+    INDEL = ''
+    for i in range(len(indel_ints)):
+        # first integer is different than rest
+        if i == 0:
+            first_int = indel_ints[i]
+            # 2047 = 011111111111
+            num_bases_first_int = shift_bit_decoding(first_int, 20) & 2047
+
+            # 1048575 = 00000000000011111111111111111111
+            encoded_indel_first_int = first_int & 1048575
+
+            for base_bits in range(num_bases_first_int):
+                curr_base_binary = encoded_indel_first_int & 3
+                encoded_indel_first_int = shift_bit_decoding(encoded_indel_first_int, 2)
+                indel_base = get_base_from_binary(curr_base_binary)
+                INDEL+=indel_base
+
+        # all other ints
+        else:
+            curr_int = indel_ints[i]
+            # 63 = 111111
+            num_bases_curr_int = shift_bit_decoding(curr_int, 26) & 63
+
+            # 67108863 = 00000011111111111111111111111111
+            encoded_indel_first_int = curr_int & 67108863
+
+            for base_bits in range(num_bases_curr_int):
+                curr_base_binary = encoded_indel_first_int & 3
+                encoded_indel_first_int = shift_bit_decoding(encoded_indel_first_int, 2)
+                indel_base = get_base_from_binary(curr_base_binary)
+                INDEL += indel_base
+
+        return INDEL
 
 
 def shift_bit_decoding(bitstring, shift):
