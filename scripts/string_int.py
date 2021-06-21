@@ -202,20 +202,22 @@ def decode_int_to_string(int_list):
     for i in range(len(int_list)):
 
         curr_integer = int_list[i]
-
-        type_flag = shift_bit_decoding(curr_integer, 31)
-
-        if type_flag == 0:
-            snv_bases.append(decode_snv(curr_integer))
-
-        elif type_flag == 1:
-            num_int_stored_for_INDEL = shift_bit_decoding(curr_integer, 20)-32
-            indel_ints = int_list[i:i+num_int_stored_for_INDEL]
-
-
-
+        if curr_integer == 1: snv_bases.append('True')
+        elif curr_integer == 0: snv_bases.append('False')
         else:
-            print('not an indel or snv...')
+            type_flag = shift_bit_decoding(curr_integer, 31)
+
+            if type_flag == 0:
+                snv_bases.append(decode_snv(curr_integer))
+
+            elif type_flag == 1:
+                # 2047 = 011111111111
+                num_int_for_indel = shift_bit_decoding(curr_integer, 20) & 2047
+                indel_ints = int_list[i:i+num_int_for_indel]
+                snv_bases.append(decode_indel(indel_ints))
+
+            else:
+                print('not an indel or snv...')
 
     return snv_bases
 
@@ -242,13 +244,10 @@ def decode_indel(indel_ints):
         # first integer is different than rest
         if i == 0:
             first_int = indel_ints[i]
-            # 2047 = 011111111111
-            num_bases_first_int = shift_bit_decoding(first_int, 20) & 2047
-
             # 1048575 = 00000000000011111111111111111111
             encoded_indel_first_int = first_int & 1048575
 
-            for base_bits in range(num_bases_first_int):
+            for base_bits in range(10):
                 curr_base_binary = encoded_indel_first_int & 3
                 encoded_indel_first_int = shift_bit_decoding(encoded_indel_first_int, 2)
                 indel_base = get_base_from_binary(curr_base_binary)
@@ -269,7 +268,7 @@ def decode_indel(indel_ints):
                 indel_base = get_base_from_binary(curr_base_binary)
                 INDEL += indel_base
 
-        return INDEL
+    return INDEL
 
 
 def shift_bit_decoding(bitstring, shift):
@@ -290,5 +289,3 @@ def get_base_from_binary(binary):
     else:
         print('not a proper binary value', binary)
         return -1
-
-print(shift_bit_decoding(201326635, 26))
