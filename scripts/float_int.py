@@ -90,11 +90,12 @@ def get_float_parts(int_data):
 
 def construct_float(base, base_sign, exponent, exponent_sign):
     f = round(base, 4)
-    if base_sign == 0:
-        f *= -1
     if exponent_sign == 0:
         exponent *= -1
 
-    f = base * pow(10, exponent)
+    if base_sign == 0:
+        f = -1 * base * pow(10, exponent)
+    else:
+        f = base * pow(10, exponent)
 
     return f
