@@ -171,7 +171,7 @@ def get_variant_number(base):
         return -1
 
 
-def decode_int_to_string(int_value):
+def decode_int_to_string(int_list):
     """
     SNV
     1 5     26
@@ -198,25 +198,34 @@ def decode_int_to_string(int_value):
     """
     snv_bases = []
 
-    print('decoding integers to string bases')
-    type_flag = shift_bit_decoding(int_value, 31)
-    if type_flag == 0:
-        num_snvs = shift_bit_decoding(int_value, 26)
+    for i in int_list:
+        curr_integer = i
 
-        # 67108863 = 00000011111111111111111111111111
-        encoded_snv_bases = int_value & 67108863
+        print('decoding integers to string bases')
+        type_flag = shift_bit_decoding(curr_integer, 31)
+        if type_flag == 0:
+            num_snvs = shift_bit_decoding(curr_integer, 26)
 
-        for base_bits in range(num_snvs):
-            curr_snv_binary= encoded_snv_bases & 3
-            encoded_snv_bases = shift_bit_decoding(encoded_snv_bases, 2)
-            snv_base = get_base_from_binary(curr_snv_binary)
-            snv_bases.append(snv_base)
+            # 67108863 = 00000011111111111111111111111111
+            encoded_snv_bases = curr_integer & 67108863
+
+            for base_bits in range(num_snvs):
+                curr_snv_binary= encoded_snv_bases & 3
+                encoded_snv_bases = shift_bit_decoding(encoded_snv_bases, 2)
+                snv_base = get_base_from_binary(curr_snv_binary)
+                snv_bases.append(snv_base)
 
 
-    elif type_flag == 1:
-        snv_length = shift_bit_decoding(int_value, 20)-32
-    else:
-        print('not an indel or snv...')
+        elif type_flag == 1:
+            INDEL = ''
+            num_int_stored_for_INDEL = shift_bit_decoding(curr_integer, 20)-32
+
+            # 1048575 = 00000000000011111111111111111111
+            encoded_indel = curr_integer
+
+
+        else:
+            print('not an indel or snv...')
 
     return snv_bases
 
