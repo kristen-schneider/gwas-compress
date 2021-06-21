@@ -159,7 +159,7 @@ def decompress_single_column_int(compression_method, compressed_block,
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]
 
-    col_type = 1#column_data_types[query_column_i]
+    col_type = column_data_types[query_column_i]
     # get proper compression header for given column
     compression_header = get_compression_header(compression_method, full_header)
     

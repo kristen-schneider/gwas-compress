@@ -8,7 +8,7 @@ import numpy as np
 # when float data is NA, int data is [0,-999]
 # when string data is NA, int data is -1
 
-def decompress_single_column_standard(compression_method, c_bitstring, block_size, data_type, num_bytes, chrm, column_i):
+def decompress_single_column_standard(compressed_column, num_rows, col_type, num_bytes, chrm, compression_method, query_column_i):
     """
     decompresses a single column of data using gzip/zlib/bz2
 
@@ -20,9 +20,9 @@ def decompress_single_column_standard(compression_method, c_bitstring, block_siz
     OUTPUT
         decompressed_column = decompressed data (np array)
     """
-    dc_column = decompress.decompress_data(compression_method, c_bitstring)
-    ds_column = deserialize_body.deserialize_list(dc_column, block_size, data_type, num_bytes, chrm, column_i)
-    original_type_column = convert_from_int.convert_list_from_int(ds_column, data_type)
+    dc_column = decompress.decompress_data(compression_method, compressed_column)
+    ds_column = deserialize_body.deserialize_list(dc_column, num_rows, col_type, num_bytes, chrm, query_column_i)
+    original_type_column = convert_from_int.convert_list_from_int(ds_column, col_type)
     return original_type_column
 
 

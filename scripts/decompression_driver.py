@@ -67,7 +67,7 @@ def main():
     elif 'all' in COMPRESSION_STYLE:
         print('all data types')
     ############
-    # for dc in dc_single_block: print(dc)
+    for dc in dc_single_block: print(dc)
     single_block_END = datetime.now()
     single_block_TIME = single_block_END - single_block_START
     print(str(single_block_TIME) + ' for decompressing single block to compute...\n')

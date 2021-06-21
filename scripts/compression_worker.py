@@ -83,7 +83,7 @@ def block_compression(compression_style,
                 size_of_last_block = len(block)
 
                 # write block header and compressed block
-                # print(compressed_block_header, compressed_block_info[1])
+                print(compressed_block_header, compressed_block_info[1])
                 f = open('./testing_write.txt', 'ab')
                 f.write(compressed_block_header)
                 f.write(compressed_block_info[1])
@@ -178,7 +178,7 @@ def block_compression(compression_style,
         size_of_last_block = len(block)
 
         # write block header and compressed block
-        # print(compressed_block_header, compressed_block_info[1])
+        print(compressed_block_header, compressed_block_info[1])
         f = open('./testing_write.txt', 'ab')
         f.write(compressed_block_header)
         f.write(compressed_block_info[1])
@@ -219,6 +219,7 @@ def int_compression(block, num_columns, column_data_types, codecs_list, data_typ
     block_as_columns = block_to_columns(block, num_columns)
     # convert column to ints
     block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
+    print(block_as_columns_ints)
     # compress full block
     new_column_data_types = [1]*num_columns
     block_compressed = column_based_compression.compress_block(num_columns, block_as_columns_ints, codecs_list,

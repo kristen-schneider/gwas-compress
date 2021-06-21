@@ -8,7 +8,7 @@ def convert_list_from_int(int_list, data_type):
         return int_list
     # floats
     elif data_type == 2:
-        for d in int_list: list_as_type.append(float_int.int_to_floatt(d))
+        for d in int_list: list_as_type.append(float_int.int_to_float(d))
     # strings
     elif data_type == 3:
         return int_list
