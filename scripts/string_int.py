@@ -168,3 +168,7 @@ def get_variant_number(base):
     else:
         print('not a proper base', base)
         return -1
+
+
+def decoded_int_to_string():
+    print('decoding integers to string bases')

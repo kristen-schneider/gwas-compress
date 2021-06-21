@@ -159,7 +159,7 @@ def decompress_single_column(compression_method, compressed_block,
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]
 
-    col_type = column_data_types[query_column_i]
+    col_type = 1#column_data_types[query_column_i]
     # get proper compression header for given column
     compression_header = get_compression_header(compression_method, full_header)
     
@@ -175,6 +175,7 @@ def decompress_single_column(compression_method, compressed_block,
     
     compressed_column_end = dc_ds_block_header[query_column_i]
     compressed_column = compression_header + compressed_block_data[compressed_column_start:compressed_column_end]
+    print(compressed_block_data[compressed_column_start:compressed_column_end])
 # Switch decompression methods for different compression types (codecs vs. other)
     if compression_method == 'gzip' or \
         compression_method == 'zlib' or \

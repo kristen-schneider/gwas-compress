@@ -59,7 +59,7 @@ def compress_with_other(column, column_codec, column_data_type, column_num_bytes
     ### work ###
     serialized_column = serialize_body.serialize_list(column, column_data_type, column_num_bytes)
     compressed_column = compress.compress_bitstring(column_codec, serialized_column)
-
+    # print(compressed_column)
     ############
     column_i_TIME = column_i_END - column_i_START
     # print(column_i_TIME, 'for column with codec ', codec, ' to compress')

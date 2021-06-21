@@ -1,6 +1,7 @@
 import decompress
 import deserialize_header
 import deserialize_body
+import convert_from_int
 import numpy as np
 # from pyfastpfor import *
 
@@ -21,6 +22,7 @@ def decompress_single_column_reg(compression_method, c_bitstring, block_size, da
     """
     dc_column = decompress.decompress_data(compression_method, c_bitstring)
     ds_column = deserialize_body.deserialize_list(dc_column, block_size, data_type, num_bytes, chrm, column_i)
+    original_type_column = convert_from_int.convert_list_from_int(ds_column, data_type)
     return ds_column
 
 
