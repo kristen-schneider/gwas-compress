@@ -25,7 +25,7 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm, query
     elif data_type == 2:
         ds_bitstring = deserialize_float(dc_bitstring, block_size, num_bytes)
     elif data_type == 3:
-        ds_bitstring = deserialize_string(dc_bitstring, query_column_i)
+        ds_bitstring = deserialize_string(dc_bitstring, query_column_i, num_bytes)
     elif data_type == 4:
         ds_bitstring = dc_bitstring
     else:
@@ -112,48 +112,53 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
     #     ds_bitstring.append(curr_ds_value)
 
 
-def deserialize_string(dc_bitstring, query_column_i):
+def deserialize_string(dc_bitstring, query_column_i, num_bytes):
     """
     strings can be SNPs, INDELs, or 'True'/'False'
     """
     ds_bitstring = []
-    loop = len(dc_bitstring)
-    i = 0
-    
-    while i < loop:
-        curr_bytes = dc_bitstring[i]
-        # treat as INDEL
-        if curr_bytes == 0 and (query_column_i == 2 or query_column_i == 3):
-            INDEL = True
-            INDEL_bitstring = ''
-            i += 1  # skip flag byte and move to INDEL
-            #try:
-            #indel_start = chr(dc_bitstring[i])
-            while INDEL:
-                curr_bytes = dc_bitstring[i]
-                if curr_bytes != 0:
-                    curr_ds_value = chr(curr_bytes)
-                    INDEL_bitstring += curr_ds_value
-                else:
-                    ds_bitstring.append(INDEL_bitstring)
-                    INDEL = False
-                i += 1
-                # if 'A' in indel_start or 'C' in indel_start or 'G' in indel_start or 'T' in indel_start:
-                #
-                # else: ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32) # true false values
-            #except IndexError:
-            #    ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
-        # treat normally (reg SNP)
-        else:
-            if (query_column_i == 2 or query_column_i == 3):
-                curr_ds_value = chr(curr_bytes)
-                if curr_ds_value != None:
-                    ds_bitstring.append(curr_ds_value)
-                else:
-                    print('value is of bad type, cannot deserialize')
-            elif query_column_i == 9:
-                ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
-            i += 1
+    num_ints = int(len(dc_bitstring)/num_bytes)
+    start = 0
+    for i in range(num_ints):
+        end = 4*(i+1)
+        curr_int = int.from_bytes(dc_bitstring[start:end], byteorder='big', signed=False)
+        ds_bitstring.append(curr_int)
+        start = end
+
+    # while i < loop:
+    #     curr_bytes = dc_bitstring[i]
+    #     # treat as INDEL
+    #     if curr_bytes == 0 and (query_column_i == 2 or query_column_i == 3):
+    #         INDEL = True
+    #         INDEL_bitstring = ''
+    #         i += 1  # skip flag byte and move to INDEL
+    #         #try:
+    #         #indel_start = chr(dc_bitstring[i])
+    #         while INDEL:
+    #             curr_bytes = dc_bitstring[i]
+    #             if curr_bytes != 0:
+    #                 curr_ds_value = chr(curr_bytes)
+    #                 INDEL_bitstring += curr_ds_value
+    #             else:
+    #                 ds_bitstring.append(INDEL_bitstring)
+    #                 INDEL = False
+    #             i += 1
+    #             # if 'A' in indel_start or 'C' in indel_start or 'G' in indel_start or 'T' in indel_start:
+    #             #
+    #             # else: ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32) # true false values
+    #         #except IndexError:
+    #         #    ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
+    #     # treat normally (reg SNP)
+    #     else:
+    #         if (query_column_i == 2 or query_column_i == 3):
+    #             curr_ds_value = chr(curr_bytes)
+    #             if curr_ds_value != None:
+    #                 ds_bitstring.append(curr_ds_value)
+    #             else:
+    #                 print('value is of bad type, cannot deserialize')
+    #         elif query_column_i == 9:
+    #             ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
+    #         i += 1
     return ds_bitstring
 
 

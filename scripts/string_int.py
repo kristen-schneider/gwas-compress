@@ -83,8 +83,9 @@ def true_false_na(column):
     return int_column
 
 
-def shift_bit(bitstring, shift):
+def shift_bit_encoding(bitstring, shift):
     """
+    shifts bit to left
     shifting for little endian format
     """
     return bitstring << shift
@@ -97,16 +98,16 @@ def encode_SNVs(SNVs, length, INDEL_ten_flag):
     SNV_bitstring = 0
 
     # flag to specify SNVs
-    SNV_flag = shift_bit(0, 31)
+    SNV_flag = shift_bit_encoding(0, 31)
 
     if INDEL_ten_flag:
-        SNV_length = shift_bit(length, 20)
+        SNV_length = shift_bit_encoding(length, 20)
     else:
-        SNV_length = shift_bit(length, 26)
+        SNV_length = shift_bit_encoding(length, 26)
 
     for v in range(len(SNVs)):
         # get proper bit representation for the variant
-        snv = shift_bit(get_variant_number(SNVs[v]), 2*v) | SNV_bitstring
+        snv = shift_bit_encoding(get_variant_number(SNVs[v]), 2 * v) | SNV_bitstring
         SNV_bitstring = SNV_bitstring | snv
 
     return SNV_flag | SNV_length | SNV_bitstring
@@ -141,7 +142,7 @@ def encode_INDEL(INDEL):
         # first 10 bases are encoded differently than rest
         if i == 0:
             first_ten_bases = INDEL[start_indel:end_indel]
-            INDEL_flag = shift_bit(1, 31)
+            INDEL_flag = shift_bit_encoding(1, 31)
             first_ten_encoding = encode_SNVs(first_ten_bases, len_full_INDEL, 1)
             indel_ints.append(INDEL_flag | first_ten_encoding)
 
@@ -170,5 +171,72 @@ def get_variant_number(base):
         return -1
 
 
-def decoded_int_to_string():
+def decode_int_to_string(int_value):
+    """
+    SNV
+    1 5     26
+    0 00000 00000000000000000000000000
+    --snvs
+    --length of snv (can be up to 13)
+    --snv bases
+
+    INDEL
+    ** first int **
+    1 11          20
+    1 00000000000 00000000000000000000
+    --indels
+    --length of full indel (need this to see how many ints are used)
+    --indels
+
+    ** rest of ints **
+    6      26
+    000000 000000000000000000000000
+    --length of bases
+    --bases
+
+    returns list of bases
+    """
+    snv_bases = []
+
     print('decoding integers to string bases')
+    type_flag = shift_bit_decoding(int_value, 31)
+    if type_flag == 0:
+        num_snvs = shift_bit_decoding(int_value, 26)
+
+        # 67108863 = 00000011111111111111111111111111
+        encoded_snv_bases = int_value & 67108863
+
+        for base in range(num_snvs):
+            curr_snv =
+
+
+    elif type_flag == 1:
+        snv_length = shift_bit_decoding(int_value, 20)-32
+    else:
+        print('not an indel or snv...')
+
+    print(snv_length)
+
+    return snv_bases
+
+
+def shift_bit_decoding(bitstring, shift):
+    """
+    shifts bit to right
+    """
+    return bitstring >> shift
+
+def get_base_from_binary(binary):
+    if (binary == 00):
+        return 'A'
+    elif (binary == 1):
+        return 'C'
+    elif (binary == 2):
+        return 'G'
+    elif (binary == 3):
+        return 'T'
+    else:
+        print('not a proper binary value', binary)
+        return -1
+
+print(shift_bit_decoding(201326635, 26))
