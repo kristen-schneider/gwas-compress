@@ -6,42 +6,33 @@ from datetime import datetime
 import config_arguments
 import generate_header_first_half
 import bgzip_compare
-import block_driver
+import compression_worker
 import header_compress
 
+# 0. GET ARGUMENTS
 
-#### CONSTANTS ####
-# code book for easier type identification
+# CONSTANTS
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes: 4}
 
-
-# AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
+# USER-SPECIFIED PARAMETERS
+# user should edit config.ini to reflect proper parameters
+args = config_arguments.get_args_from_config('LOCAL')
+# included in config file
+IN_FILE = args['in_file']
+OUT_DIR = args['out_dir']
+BLOCK_SIZE = int(args['block_size'])
+COMPRESSION_STYLE = args['compression_style']
+CODECS_LIST = list(args['compression_method'].split(','))
+DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
+                        2: int(args['float_byte_size']),
+                        3: int(args['string_byte_size']),
+                        4: args['bytes_byte_size']}
+# output file made from combining user specified params
+base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
+COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
+COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
 
 def main():
-    """
-    0. get arguments from user to run compression according to their preferences
-    1. gets beginning of header (magic number, version, delimiter, column labels, column types, num columns, gzip header)
-    2.
-    """
-    # 1. GET ARGUMENTS
-    # user should edit config.ini to reflect proper parameters
-    args = config_arguments.get_args_from_config('LOCAL')
-
-    # included in config file
-    IN_FILE = args['in_file']
-    OUT_DIR = args['out_dir']
-    BLOCK_SIZE = int(args['block_size'])
-    COMPRESSION_STYLE = args['compression_style']
-    CODECS_LIST = list(args['compression_method'].split(','))
-    DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
-                            2: int(args['float_byte_size']),
-                            3: int(args['string_byte_size']),
-                            4: args['bytes_byte_size']}
-    # output file made from combining user specified params
-    base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
-    COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
-    COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
-
     # 1. GET FIRST HALF OF HEADER
     # first half of header is not dependent on compression style
     #
@@ -82,9 +73,9 @@ def main():
     print('compressing data...')
     file_compression_start_time = datetime.now()
     ### work ###
-    end_of_header = block_driver.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
-                                   delimiter, num_columns, column_data_types,
-                                   CODECS_LIST, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
+    end_of_header = compression_worker.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
+                                                         delimiter, num_columns, column_data_types,
+                                                         CODECS_LIST, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
     ############
     # print(end_of_header)
     print(datetime.now()-file_compression_start_time, ' for start of full compression to complete...\n')
