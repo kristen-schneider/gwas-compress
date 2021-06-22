@@ -200,7 +200,7 @@ def decode_int_to_string(int_list):
     returns list of bases
     """
     snv_bases = []
-
+    curr_indel_bases = None
     SNV_INDEL = False
     for i in range(len(int_list)):
         curr_integer = int_list[i]
@@ -221,7 +221,7 @@ def decode_int_to_string(int_list):
                 num_int_for_indel = shift_bit_decoding(curr_integer, 20) & 2047
                 indel_ints = int_list[i:i+num_int_for_indel]
                 curr_indel_bases = decode_indel(indel_ints)
-                if curr_indel_bases != None: snv_bases.append(indel_bases)
+                if curr_indel_bases != None: snv_bases.append(curr_indel_bases)
 
             else:
                 print('not an indel or snv...')
