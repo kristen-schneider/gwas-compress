@@ -69,4 +69,5 @@ def decompress_np_arr(comp_np_arr, np_arr_size, codec):
     decomp_arr_size = codec_method.decodeArray(comp_np_arr, comp_np_arr_size, decomp_np_arr, np_arr_size)
 
     # print('decomp after: ', decomp_arr)
+    #print(decomp_np_arr[0:np_arr_size])
     return decomp_np_arr[0:np_arr_size]

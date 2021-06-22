@@ -201,22 +201,27 @@ def decode_int_to_string(int_list):
     """
     snv_bases = []
 
+    SNV_INDEL = False
     for i in range(len(int_list)):
-
         curr_integer = int_list[i]
-        if curr_integer == 1: snv_bases.append('True')
-        elif curr_integer == 0: snv_bases.append('False')
+        if curr_integer == 1 and not SNV_INDEL:
+            snv_bases.append('True')
+        elif curr_integer == 0 and not SNV_INDEL:
+            snv_bases.append('False')
         else:
+            SNV_INDEL = True
             type_flag = shift_bit_decoding(curr_integer, 31)
 
             if type_flag == 0:
-                snv_bases.append(decode_snv(curr_integer))
+                curr_snv_bases = decode_snv(curr_integer)
+                if curr_snv_bases != None: snv_bases.append(curr_snv_bases)
 
             elif type_flag == 1:
                 # 2047 = 011111111111
                 num_int_for_indel = shift_bit_decoding(curr_integer, 20) & 2047
                 indel_ints = int_list[i:i+num_int_for_indel]
-                snv_bases.append(decode_indel(indel_ints))
+                curr_indel_bases = decode_indel(indel_ints)
+                if curr_indel_bases != None: snv_bases.append(indel_bases)
 
             else:
                 print('not an indel or snv...')
@@ -235,7 +240,7 @@ def decode_snv(curr_integer):
         encoded_snv_bases = shift_bit_decoding(encoded_snv_bases, 2)
         snv_base = get_base_from_binary(curr_snv_binary)
         snv_bases.append(snv_base)
-    return snv_bases
+    if len(snv_bases) > 0: return snv_bases
 
 def decode_indel(indel_ints):
     """
@@ -271,7 +276,7 @@ def decode_indel(indel_ints):
                 indel_base = get_base_from_binary(curr_base_binary)
                 INDEL += indel_base
 
-    return INDEL
+    if len(INDEL) > 0: return INDEL
 
 
 def shift_bit_decoding(bitstring, shift):

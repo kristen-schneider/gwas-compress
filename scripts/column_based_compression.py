@@ -95,4 +95,5 @@ def comress_with_fastpfor(column, codec):
     column_i_RATIO = float(column_i_BEFORE / column_i_AFTER)
 
     #print('pyfast compression: ', column_i_TIME, column_i_RATIO)
+    print(comp_arr[0:comp_arr_size])
     return comp_arr[0:comp_arr_size]
