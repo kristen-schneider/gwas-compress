@@ -107,15 +107,11 @@ def block_compression(compression_style,
 
         # column-based compression
         # Integer types
-        elif compression_style == 'int_pyfast':
+        elif 'int' in compression_style:
             compressed_block_info = int_compression(block, num_columns, column_data_types, codecs_list,
                                                     data_type_byte_sizes)
-        elif compression_style == 'int_other':
-            compressed_block_info = int_compression(block, num_columns, column_data_types,
-                                                    codecs_list, data_type_byte_sizes)
-
         # all data types
-        elif compression_style == 'all_other':
+        elif 'all' in compression_style:
             all_data_type_compression()
         else:
             print('invalid compression style')

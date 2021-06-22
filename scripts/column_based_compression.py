@@ -1,7 +1,7 @@
 import numpy as np
 from datetime import datetime
 import sys
-# from pyfastpfor import *
+from pyfastpfor import *
 
 import serialize_body
 import compress
@@ -36,6 +36,7 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
             col_end_bit += len(compressed_column_np_array)
             block_header.append(col_end_bit)
             compressed_block_list.append(compressed_column_np_array)
+
     if compressed_column_bitstring != b'':
         return block_header, compressed_block_bitstring
     elif compressed_column_np_array != []:
@@ -91,7 +92,6 @@ def comress_with_fastpfor(column, codec):
     # print(column_i_TIME, 'for column with codec ', codec, ' to compress')
     column_i_AFTER = sys.getsizeof(comp_arr[0:comp_arr_size])
     column_i_RATIO = float(column_i_BEFORE / column_i_AFTER)
-
 
     #print('pyfast compression: ', column_i_TIME, column_i_RATIO)
     return comp_arr
