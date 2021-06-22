@@ -39,7 +39,6 @@ def decompress_single_column_pyfast(serialized_data, block_size, data_type, num_
     """
     decomp_arr_size = 2 * block_size
     ds_data = deserialize_body.deserialize_list_fastpfor(serialized_data)
-    print(ds_data)
     #ds_data = deserialize_body.deserialize_list(serialized_data, block_size, data_type, num_bytes, chrm, column_i)
     try:
         comp_np_arr = np.array(ds_data, dtype=np.uint32, order='C')

@@ -3,6 +3,7 @@ import deserialize_body
 import deserialize_header
 import decompress_column
 import type_handling
+import string_int
 # import decompress_serialized_data
 # import decompress_array_data
 
@@ -209,11 +210,13 @@ def decompress_single_column_int(compression_method, compressed_block,
             return float_column
         # convert ints back to string
         if col_type == 3:
-            string_column = []
-            for i in ds_dc_column_data:
-                s = type_handling.int_to_string(i)
-                string_column.append(s)
-            return string_column        
+            s = string_int.decode_int_to_string(ds_dc_column_data) 
+            #string_column = []
+            #for i in ds_dc_column_data:
+                #s = type_handling.int_to_string(i)
+                #string_column.append(s)
+            #return string_column     
+            return s   
     else:
         print('cannot find proper compression method to decompress')
         return -1     
