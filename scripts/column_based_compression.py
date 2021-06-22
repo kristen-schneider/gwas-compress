@@ -37,7 +37,7 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
             col_end_bit += len(serialized_compressed_column)
             block_header.append(col_end_bit)
             compressed_block_bitstring += serialized_compressed_column
-
+    
     if compressed_block_bitstring != b'':
         return block_header, compressed_block_bitstring
     # elif compressed_column_np_array != []:

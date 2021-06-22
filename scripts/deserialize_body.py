@@ -34,6 +34,10 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm, query
    
     return ds_bitstring
 
+def deserialize_list_fastpfor(dc_bitstring):
+    ds_bitstring = np.frombuffer(dc_bitstring, dtype=np.uint32)
+    return ds_bitstring 
+
 def deserialize_int(dc_bitstring, block_size, num_bytes, chrm):
     """
     takes serialized integer data and converts to integers.
