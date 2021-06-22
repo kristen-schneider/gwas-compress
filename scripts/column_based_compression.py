@@ -35,12 +35,13 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
             compressed_column_np_array = comress_with_fastpfor(curr_column, column_codec)
             col_end_bit += len(compressed_column_np_array)
             block_header.append(col_end_bit)
-            compressed_block_list.append(compressed_column_np_array)
+            serialized_compressed_column = compressed_column_np_array.tobytes(order='C')
+            compressed_block_bitstring += serialized_compressed_column
 
     if compressed_column_bitstring != b'':
         return block_header, compressed_block_bitstring
-    elif compressed_column_np_array != []:
-        return block_header, compressed_block_list
+    # elif compressed_column_np_array != []:
+    #     return block_header, compressed_block_list
     else:
         print('block compression is empty')
         return -1
@@ -94,4 +95,4 @@ def comress_with_fastpfor(column, codec):
     column_i_RATIO = float(column_i_BEFORE / column_i_AFTER)
 
     #print('pyfast compression: ', column_i_TIME, column_i_RATIO)
-    return comp_arr
+    return comp_arr[0:comp_arr_size]
