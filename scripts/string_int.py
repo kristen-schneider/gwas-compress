@@ -292,7 +292,3 @@ def get_base_from_binary(binary):
     else:
         print('not a proper binary value', binary)
         return -1
-<<<<<<< HEAD
-=======
-
->>>>>>> 377456f88b1f36c529b773ae6004201e05722a5f
