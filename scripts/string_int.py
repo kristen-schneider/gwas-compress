@@ -291,4 +291,3 @@ def get_base_from_binary(binary):
         print('not a proper binary value', binary)
         return -1
 
-print(shift_bit_decoding(201326635, 26))

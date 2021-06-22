@@ -68,6 +68,9 @@ def serialize_int(data, num_bytes):
     # numpy data is not integer
     except AttributeError: 
         s_value = data.tobytes(order='C')
+    except OverflowError:
+        print(data)
+        return -1
     return s_value
 
 def serialize_float(data, num_bytes):

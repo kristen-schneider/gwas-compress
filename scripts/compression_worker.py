@@ -83,55 +83,10 @@ def block_compression(compression_style,
                 size_of_last_block = len(block)
 
                 # write block header and compressed block
-                print(compressed_block_header, compressed_block_info[1])
                 f = open('./testing_write.txt', 'ab')
                 f.write(compressed_block_header)
                 f.write(compressed_block_info[1])
                 f.close()
-
-
-
-
-                # # block-based compression
-                # if compression_style == 'bgzip_compare':
-                #     bgzip_compare_compression()
-                #
-                # # column-based compression
-                # # Integer types
-                # elif compression_style == 'int_pyfast':
-                #     compressed_block_info = int_compression(block, num_columns, column_data_types, codecs_list, data_type_byte_sizes)
-                # elif compression_style == 'int_other':
-                #     compressed_block_info = int_compression(block, num_columns, column_data_types,
-                #                                             codecs_list, data_type_byte_sizes)
-                #
-                # # all data types
-                # elif compression_style == 'all_other':
-                #     all_data_type_compression()
-                # else:
-                #     print('invalid compression style')
-                #     return -1
-                #
-                # # compress block header
-                # serialized_block_header = serialize_body.serialize_list(compressed_block_info[0],
-                #                                                         1, data_type_byte_sizes[1])
-                # compressed_block_header = compress.compress_bitstring('gzip', serialized_block_header)
-                # # fill end of header information
-                # end_block_headers_value += len(compressed_block_header)
-                # end_block_headers_list.append(end_block_headers_value)
-                # end_blocks_value += (len(compressed_block_header)+len(compressed_block_info[1]))
-                # end_blocks_list.append(end_blocks_value)
-                # size_of_last_block = len(block)
-
-                # write block header and compressed block
-                # # print(compressed_block_header, compressed_block_info[1])
-                # f = open('./testing_write.txt', 'ab')
-                # f.write(compressed_block_header)
-                # f.write(compressed_block_info[1])
-                # f.close()
-                # o = open(out_file, 'ab')
-                # o.write(compressed_block_header)
-                # o.write(compressed_block_info[1])
-                # o.close()
 
                 # reset block information
                 block = []
@@ -178,7 +133,6 @@ def block_compression(compression_style,
         size_of_last_block = len(block)
 
         # write block header and compressed block
-        print(compressed_block_header, compressed_block_info[1])
         f = open('./testing_write.txt', 'ab')
         f.write(compressed_block_header)
         f.write(compressed_block_info[1])
@@ -219,7 +173,6 @@ def int_compression(block, num_columns, column_data_types, codecs_list, data_typ
     block_as_columns = block_to_columns(block, num_columns)
     # convert column to ints
     block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
-    print(block_as_columns_ints)
     # compress full block
     new_column_data_types = [1]*num_columns
     block_compressed = column_based_compression.compress_block(num_columns, block_as_columns_ints, codecs_list,
