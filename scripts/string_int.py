@@ -67,7 +67,7 @@ def encode_column(column):
 
 def true_false_na(column):
     """
-
+    encodes true as 1, false as 0, NA as -1
     """
     int_column = []
     for d in column:
@@ -158,6 +158,9 @@ def encode_INDEL(INDEL):
     return indel_ints
 
 def get_variant_number(base):
+    """
+    converts back from
+    """
     if (base == 'A'):
         return 0
     elif (base == 'C'):
@@ -197,7 +200,6 @@ def decode_int_to_string(int_list):
     returns list of bases
     """
     snv_bases = []
-    print('decoding integers to string bases')
 
     for i in range(len(int_list)):
 
@@ -244,10 +246,11 @@ def decode_indel(indel_ints):
         # first integer is different than rest
         if i == 0:
             first_int = indel_ints[i]
+            first_int_length = first_int & 4194304
             # 1048575 = 00000000000011111111111111111111
             encoded_indel_first_int = first_int & 1048575
 
-            for base_bits in range(10):
+            for base_bits in range(first_int_length):
                 curr_base_binary = encoded_indel_first_int & 3
                 encoded_indel_first_int = shift_bit_decoding(encoded_indel_first_int, 2)
                 indel_base = get_base_from_binary(curr_base_binary)
