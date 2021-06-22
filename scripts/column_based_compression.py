@@ -37,9 +37,9 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
             block_header.append(col_end_bit)
             compressed_block_list.append(compressed_column_np_array)
 
-    if compressed_column_bitstring != b'':
+    if compressed_block_bitstring != b'':
         return block_header, compressed_block_bitstring
-    elif compressed_column_np_array != []:
+    elif compressed_block_list != []:
         return block_header, compressed_block_list
     else:
         print('block compression is empty')

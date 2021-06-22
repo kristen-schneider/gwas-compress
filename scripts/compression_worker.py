@@ -85,7 +85,7 @@ def block_compression(compression_style,
                 # write block header and compressed block
                 f = open('./testing_write.txt', 'ab')
                 f.write(compressed_block_header)
-                f.write(compressed_block_info[1])
+                f.write(compressed_block)
                 f.close()
 
                 # reset block information
@@ -121,6 +121,7 @@ def block_compression(compression_style,
         serialized_block_header = serialize_body.serialize_list(compressed_block_info[0],
                                                                 1, data_type_byte_sizes[1])
         compressed_block_header = compress.compress_bitstring('gzip', serialized_block_header)
+        compressed_block = compressed_block_info[1]
         # fill end of header information
         end_block_headers_value += len(compressed_block_header)
         end_block_headers_list.append(end_block_headers_value)
@@ -131,7 +132,7 @@ def block_compression(compression_style,
         # write block header and compressed block
         f = open('./testing_write.txt', 'ab')
         f.write(compressed_block_header)
-        f.write(compressed_block_info[1])
+        f.write(compressed_block)
         f.close()
         # o = open(out_file, 'ab')
         # o.write(compressed_block_header)
