@@ -33,9 +33,9 @@ def compress_block(num_columns, block_as_columns_ints, codecs_list,
         # fastpfor codecs
         else:
             compressed_column_np_array = comress_with_fastpfor(curr_column, column_codec)
-            col_end_bit += len(compressed_column_np_array)
-            block_header.append(col_end_bit)
             serialized_compressed_column = compressed_column_np_array.tobytes(order='C')
+            col_end_bit += len(serialized_compressed_column)
+            block_header.append(col_end_bit)
             compressed_block_bitstring += serialized_compressed_column
 
     if compressed_block_bitstring != b'':

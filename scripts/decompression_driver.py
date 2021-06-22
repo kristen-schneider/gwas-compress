@@ -11,8 +11,8 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 
 # USER-SPECIFIED PARAMETERS
 # user should edit config.ini to reflect proper parameters
-args = config_arguments.get_args_from_config('LOCAL')
-# args = config_arguments.get_args_from_config('MENDEL')
+# args = config_arguments.get_args_from_config('LOCAL')
+args = config_arguments.get_args_from_config('MENDEL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -29,8 +29,8 @@ DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
 # output file made from combining user specified params
 base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
 OUT_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
-OUT_FILE = '/Users/kristen/PycharmProjects/gwas-compress/scripts/testing_write_all.txt'
-# OUT_FILE = '/home/krsc0813/projects/gwas-compress/scripts/testing_write_all.txt'
+# OUT_FILE = '/Users/kristen/PycharmProjects/gwas-compress/scripts/testing_write_all.txt'
+OUT_FILE = '/home/krsc0813/projects/gwas-compress/scripts/testing_write_all.txt'
 
 # COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
 # DATA_FILE = OUT_DIR + 'plot-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.csv'
