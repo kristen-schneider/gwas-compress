@@ -16,8 +16,11 @@ def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, c
     block_header_end = 0
     block_end = 0
     for block in funnel_format:
-        if len(block) not in block_sizes: block_sizes.append(len(block))
+        curr_block_size = len(block[0])
+        if curr_block_size not in block_sizes: block_sizes.append(len(block))
         block_header = []
+        compressed_block = b''
+        column_end_position = 0
         for column_i in range(len(block)):
             curr_column = block[column_i]
             curr_column_data_type = column_data_types[column_i]
@@ -29,16 +32,26 @@ def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, c
             # compress column
             compressed_column = compress_column_ints(column_as_ints, curr_column_codec, data_type_byte_sizes)
 
-            # fill in block header
-            bloc
+            # add to block header
+            column_end_position += len(compressed_column)
+            block_header.append(column_end_position)
+            # add to compressed block
+            compressed_block += compressed_column
 
-        bug = 'here'
-        serialized_block_header = serialize_body.serialize_list(block_header_and_compressed[0], 1, data_type_byte_sizes[1])
-        compressed_block = block_header_and_compressed[1]
-        #print(serialized_block_header, compressed_block)
+        serialized_block_header = serialize_body.serialize_list(block_header, 1, data_type_byte_sizes[1])
+        print(serialized_block_header, compressed_block)
+
+        # add to block header end positions
+        block_header_end += len(serialized_block_header)
+        block_header_end_positions.append(block_header_end)
+        # add to block end positions
+        block_end += len(compressed_block)
+        block_end_positions.append(block_end)
         #f.write(serialized_block_header)
         #f.write(compressed_block)
     f.close()
+    print([block_header_end_positions, block_end_positions, block_sizes])
+    return [block_header_end_positions, block_end_positions, block_sizes]
 
 def compress_column_ints(column, column_codec, data_type_byte_sizes):
     compressed_column = b''
