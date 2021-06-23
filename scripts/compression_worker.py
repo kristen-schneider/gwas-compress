@@ -6,15 +6,15 @@ from datetime import datetime
 
 def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, codecs_list, data_type_byte_sizes):
     for block in funnel_format:
-        # split into columns
-        block_as_columns = block_to_columns(block)
         # convert column to ints
-        block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
+        block_as_columns_ints = convert_block_to_int(block, column_data_types)
         # compress full block
         new_column_data_types = [1] * num_columns
-        block_compressed = column_based_compression.compress_block(num_columns, block_as_columns_ints, codecs_list,
+        block_header_and_compressed = column_based_compression.compress_block(num_columns, block_as_columns_ints, codecs_list,
                                                                    new_column_data_types, data_type_byte_sizes)
-        print(block_compressed)
+        serialized_block_header = serialize_body.serialize_list(block_header_and_compressed[0], 1, data_type_byte_sizes[1])
+        compressed_block = block_header_and_compressed[1]
+        print(serialized_block_header, compressed_block)
 
 
 
