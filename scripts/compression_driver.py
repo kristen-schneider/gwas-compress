@@ -8,6 +8,7 @@ import generate_header_first_half
 import bgzip_compare
 import compression_worker
 import header_compress
+import generate_funnel_format
 
 # 0. GET ARGUMENTS
 
@@ -67,69 +68,74 @@ def main():
     gzip_header = start_of_header[6]
     bz2_header = start_of_header[7]
 
-    # 2. COMPRESS DATA
-    # compresses data
-    # writes compressed block header and compressed block after each block
-    # returns end of header
-    print('compressing data...')
-    file_compression_start_time = datetime.now()
-    ### work ###
-    end_of_header = compression_worker.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
-                                                         delimiter, num_columns, column_data_types,
-                                                         CODECS_LIST, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
-    ############
-    # print(end_of_header)
-    print(datetime.now()-file_compression_start_time, ' for start of full compression to complete...\n')
+    # 2. GENERATE FUNNEL FORMAT FOR INTS
+    funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, num_columns, delimiter)
+
+    # 3. COMPRESS DATA
+    end_of_header = compression_worker.compress_funnel_format_ints(funnel_format_data, num_columns, column_data_types, CODECS_LIST,DATA_TYPE_BYTE_SIZES)
+    # # 2. COMPRESS DATA
+    # # compresses data
+    # # writes compressed block header and compressed block after each block
+    # # returns end of header
+    # print('compressing data...')
+    # file_compression_start_time = datetime.now()
+    # ### work ###
+    # end_of_header = compression_worker.block_compression(COMPRESSION_STYLE, IN_FILE, BLOCK_SIZE,
+    #                                                      delimiter, num_columns, column_data_types,
+    #                                                      CODECS_LIST, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
+    # ############
+    # # print(end_of_header)
+    # print(datetime.now()-file_compression_start_time, ' for start of full compression to complete...\n')
 
 
-    # 3. COMPRESS HEADER
-    print('compressing header...')
-    compress_header_start_time = datetime.now()
-    ### work ###
-    full_header = start_of_header + end_of_header
-    print(full_header)
-    # header types, number of elements in each header
-    serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_CODE_BOOK,
-                                                                DATA_TYPE_BYTE_SIZES,
-                                                                full_header)
-    serialized_header_types = serialized_header_tools[0]
-    serialized_header_num_elements = serialized_header_tools[1]
-    serialized_header_ends = serialized_header_tools[2]
-    serialized_header_data = serialized_header_tools[3]
-
-    size_types = len(serialized_header_types)
-    bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
-    size_elements = len(serialized_header_num_elements)
-    bytes_size_num_elements = size_elements.to_bytes(2, byteorder='big', signed=False)
-    size_ends = len(serialized_header_ends)
-    bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
-    size_data = len(serialized_header_data)
-    bytes_size_data = size_data.to_bytes(2, byteorder='big', signed=False)
-    ############
-    print(datetime.now() - compress_header_start_time, ' for header to compress...\n')
-
-
-    # 4. WRITING HEADER
-    f_data = open('./testing_write.txt', 'rb')
-    data = f_data.read()
-    f_data.close()
-
-    f = open('./testing_write_all.txt', 'ab')
-    f.truncate(0)
-    f.write(bytes_size_types)
-    f.write(bytes_size_num_elements)
-    f.write(bytes_size_ends)
-    f.write(bytes_size_data)
-    f.write(serialized_header_types)
-    f.write(serialized_header_num_elements)
-    f.write(serialized_header_ends)
-    f.write(serialized_header_data)
-
-    # 5. READING DATA AND REWRITING DATA BENEATH HEADER
-    f.write(data)
-    f.close()
-
-    # 6. COPY WRITTEN DATA AND WRITE HEADER THEN DATA
+    # # 3. COMPRESS HEADER
+    # print('compressing header...')
+    # compress_header_start_time = datetime.now()
+    # ### work ###
+    # full_header = start_of_header + end_of_header
+    # print(full_header)
+    # # header types, number of elements in each header
+    # serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_CODE_BOOK,
+    #                                                             DATA_TYPE_BYTE_SIZES,
+    #                                                             full_header)
+    # serialized_header_types = serialized_header_tools[0]
+    # serialized_header_num_elements = serialized_header_tools[1]
+    # serialized_header_ends = serialized_header_tools[2]
+    # serialized_header_data = serialized_header_tools[3]
+    #
+    # size_types = len(serialized_header_types)
+    # bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
+    # size_elements = len(serialized_header_num_elements)
+    # bytes_size_num_elements = size_elements.to_bytes(2, byteorder='big', signed=False)
+    # size_ends = len(serialized_header_ends)
+    # bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
+    # size_data = len(serialized_header_data)
+    # bytes_size_data = size_data.to_bytes(2, byteorder='big', signed=False)
+    # ############
+    # print(datetime.now() - compress_header_start_time, ' for header to compress...\n')
+    #
+    #
+    # # 4. WRITING HEADER
+    # f_data = open('./testing_write.txt', 'rb')
+    # data = f_data.read()
+    # f_data.close()
+    #
+    # f = open('./testing_write_all.txt', 'ab')
+    # f.truncate(0)
+    # f.write(bytes_size_types)
+    # f.write(bytes_size_num_elements)
+    # f.write(bytes_size_ends)
+    # f.write(bytes_size_data)
+    # f.write(serialized_header_types)
+    # f.write(serialized_header_num_elements)
+    # f.write(serialized_header_ends)
+    # f.write(serialized_header_data)
+    #
+    # # 5. READING DATA AND REWRITING DATA BENEATH HEADER
+    # f.write(data)
+    # f.close()
+    #
+    # # 6. COPY WRITTEN DATA AND WRITE HEADER THEN DATA
 
 
 if __name__ == '__main__':

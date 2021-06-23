@@ -4,6 +4,20 @@ import serialize_body
 import compress
 from datetime import datetime
 
+def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, codecs_list, data_type_byte_sizes):
+    for block in funnel_format:
+        # split into columns
+        block_as_columns = block_to_columns(block)
+        # convert column to ints
+        block_as_columns_ints = convert_block_to_int(block_as_columns, column_data_types)
+        # compress full block
+        new_column_data_types = [1] * num_columns
+        block_compressed = column_based_compression.compress_block(num_columns, block_as_columns_ints, codecs_list,
+                                                                   new_column_data_types, data_type_byte_sizes)
+        print(block_compressed)
+
+
+
 def block_compression(compression_style,
                       in_file, block_size, delimiter, num_columns, column_data_types,
                       codecs_list, data_type_byte_sizes, out_file):
@@ -181,17 +195,16 @@ def int_compression(block, num_columns, column_data_types, codecs_list, data_typ
 def all_data_type_compression():
     print('all mix compression')
 
-def block_to_columns(block, num_columns):
+def block_to_columns(block):
     """
     takes a block which is a list of rows (a row is a list of column data as strings)
     and formats the block as a list of columns
 
-    :param block: block as list of rows
-    :param num_columns: number of columns in block
+    :param block: block as list of columns
     :return block_as_columns: block as list of columns
     """
     block_as_columns = [[] for i in range(num_columns)]
-    block_size = len(block)  # do not want to pass in block size parameter bc the last block might not be max size
+    block_size = len(block[0])  # do not want to pass in block size parameter bc the last block might not be max size
 
     # take each column from each row and append to the column-based block
     for row in range(block_size):
