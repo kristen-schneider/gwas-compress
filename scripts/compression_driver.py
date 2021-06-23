@@ -16,9 +16,11 @@ import generate_funnel_format
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes: 4}
 
 # USER-SPECIFIED PARAMETERS
+print('0. getting arguments...')
+get_arguments_start_time = datetime.now()
 # user should edit config.ini to reflect proper parameters
-# args = config_arguments.get_args_from_config('LOCAL')
-args = config_arguments.get_args_from_config('MENDEL')
+args = config_arguments.get_args_from_config('LOCAL')
+# args = config_arguments.get_args_from_config('MENDEL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -33,6 +35,8 @@ DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
 base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
 COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
 COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
+print(datetime.now() - get_arguments_start_time, ' to get arguments.\n')
+
 
 def main():
     # 1. GET FIRST HALF OF HEADER
@@ -47,7 +51,7 @@ def main():
     # number columns,
     # gzip header
 
-    print('generating start of header...')
+    print('1. generating start of header...')
     start_of_header_start_time = datetime.now()
 
     ### work ###
@@ -69,12 +73,12 @@ def main():
     bz2_header = start_of_header[7]
 
     # 2. GENERATE FUNNEL FORMAT FOR INTS
-    print('generating funnel format...')
+    print('2. generating funnel format...')
     ff_start_time = datetime.now()
     funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, num_columns, delimiter)
     print(datetime.now()-ff_start_time, ' for funnel format to compute...\n')
     # 3. COMPRESS DATA
-    print('compressing data...')
+    print('3. compressing data...')
     compression_start_time = datetime.now()
     compression_worker.compress_funnel_format_ints(funnel_format_data, num_columns, column_data_types, CODECS_LIST,DATA_TYPE_BYTE_SIZES)
     print(datetime.now()-compression_start_time, ' for compression to complete...\n')

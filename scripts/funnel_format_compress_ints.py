@@ -11,8 +11,7 @@ import read_write_compression_ratios
 import plot_bar
 
 
-def compress_all_blocks(available_compression_methods,
-                        compression_method_list,
+def compress_all_blocks(compression_method_list,
                         header_first_half, ff,
                         out_dir):
     """
@@ -33,7 +32,6 @@ def compress_all_blocks(available_compression_methods,
     f.truncate(0)
     f.close()
 
-    before_loop = datetime.now()
     # full header break down
     magic_number = header_first_half[0]
     version = header_first_half[1]
@@ -63,8 +61,6 @@ def compress_all_blocks(available_compression_methods,
     for col in range(number_columns):
         all_column_compression_size_ratios[col] = {}
 
-    print('before loop: ', datetime.now()-before_loop)
-    loop_start = datetime.now()
     # go through funnel format, and compress each block
     for block_i in range(len(ff)):
         # start timer for block
@@ -105,31 +101,28 @@ def compress_all_blocks(available_compression_methods,
         block_i_TIME = block_i_END - block_i_START
         #print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
    
-    print('loop: ', datetime.now()-loop_start) 
-    after_loop = datetime.now()
     # block_sizes = header_second_half[2]
     num_rows_first_block = len(ff[0][0])
     num_rows_last_block = len(ff[-1][0])
     block_sizes = [num_rows_first_block, num_rows_last_block]
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
-    print('after loop: ', datetime.now()-after_loop)
-    
+
     plotting_start = datetime.now()
     # PLOTTING
-    # time
-    read_write_compression_times.write_times(all_column_compression_times, out_dir+'times/')
-    time_dict1 = plot_bar.get_loop_dict(out_dir+'times/', number_columns, available_compression_methods, 'times')
-    time_dict2 = plot_bar.get_final_data(time_dict1, available_compression_methods, number_columns)
-    plot_bar.plot_loop_times(time_dict2, number_columns, available_compression_methods)
-    # size ratio
-    read_write_compression_ratios.write_ratios(all_column_compression_size_ratios, out_dir+'ratios/')
-    ratio_dict1 = plot_bar.get_loop_dict(out_dir+'ratios/', number_columns, available_compression_methods, 'ratios')
-    ratio_dict2 = plot_bar.get_final_data(ratio_dict1, available_compression_methods, number_columns)
-    plot_bar.plot_loop_ratios(ratio_dict2, number_columns, available_compression_methods)
-    # plot_bar.plot_data(dict_data, available_compression_methods)
-    print('plotting: ', datetime.now()-plotting_start)
-    # return header_second_half, compressed_content
+    # # time
+    # read_write_compression_times.write_times(all_column_compression_times, out_dir+'times/')
+    # time_dict1 = plot_bar.get_loop_dict(out_dir+'times/', number_columns, available_compression_methods, 'times')
+    # time_dict2 = plot_bar.get_final_data(time_dict1, available_compression_methods, number_columns)
+    # plot_bar.plot_loop_times(time_dict2, number_columns, available_compression_methods)
+    # # size ratio
+    # read_write_compression_ratios.write_ratios(all_column_compression_size_ratios, out_dir+'ratios/')
+    # ratio_dict1 = plot_bar.get_loop_dict(out_dir+'ratios/', number_columns, available_compression_methods, 'ratios')
+    # ratio_dict2 = plot_bar.get_final_data(ratio_dict1, available_compression_methods, number_columns)
+    # plot_bar.plot_loop_ratios(ratio_dict2, number_columns, available_compression_methods)
+    # # plot_bar.plot_data(dict_data, available_compression_methods)
+    # print('plotting: ', datetime.now()-plotting_start)
+    # # return header_second_half, compressed_content
     return header_second_half
 
 def compress_single_block(all_column_compression_times, all_column_compression_size_ratios,

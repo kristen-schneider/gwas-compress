@@ -25,9 +25,12 @@ def main():
     6. write compressed data
     """
     # 1. GET ARGUMENTS
+    print('0. getting arguments...')
+    get_arguments_start_time = datetime.now()
+
     # user should edit config.ini to reflect proper parameters
-    #args = config_arguments.get_args_from_config('LOCAL')
-    args = config_arguments.get_args_from_config('MENDEL')
+    args = config_arguments.get_args_from_config('LOCAL')
+    # args = config_arguments.get_args_from_config('MENDEL')
 
     # included in config file
     IN_FILE = args['in_file']
@@ -43,10 +46,10 @@ def main():
     base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
     COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
     COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
-
+    print(datetime.now()-get_arguments_start_time, ' to get arguments.\n')
     # 1. GET FIRST HALF OF HEADER
     ### Magic number, version number, delimiter, column labels, column types, number columns, gzip header
-    print('generating start of header...')
+    print('1. generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
     header_first_half = generate_header_first_half.get_header_first_half(IN_FILE, DATA_TYPE_CODE_BOOK)
@@ -67,7 +70,7 @@ def main():
     ### list of blocks [[block1][block2]...[blockn]]
     ### --> a block is a list of columns: block1 = [[col1], [co2]...[colm]]
     ### -----> a column is a list of string values: col1 = ['1','1','1','1','1']
-    print('generating funnel format...')
+    print('2. generating funnel format...')
     funnel_format_START = datetime.now()
     ### work ###
     funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, number_columns, delimiter)
@@ -77,7 +80,7 @@ def main():
     print(str(funnel_format_TIME) + ' for funnel format to compute...\n')
 
     # 3. COMPRESS DATA, GET SECOND HALF OF HEADER
-    print('compressing data...')
+    print('3. compressing data...')
     compress_data_START = datetime.now()
     ### work ###
     # serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
@@ -87,8 +90,7 @@ def main():
     # header_second_half = serialized_compressed_data[0]
     # compressed_data = serialized_compressed_data[1]
 
-    serialized_compressed_data_all_ints = funnel_format_compress_ints.compress_all_blocks(AVAILABLE_COMPRESSION_METHODS,
-                                                                                          COMPRESSION_METHOD,
+    serialized_compressed_data_all_ints = funnel_format_compress_ints.compress_all_blocks(COMPRESSION_METHOD,
                                                                                           header_first_half,
                                                                                           funnel_format_data,
                                                                                           OUT_DIR)
@@ -110,10 +112,10 @@ def main():
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START
-    print(str(compress_data_TIME) + ' for full compression to complete...\n')
+    print(str(compress_data_TIME) + ' for compression to complete...\n')
 
     # 4. COMPRESS HEADER
-    print('compressing header...')
+    print('4. compressing header...')
     compress_header_START = datetime.now()
     ### work ###
     full_header = header_first_half+header_second_half
