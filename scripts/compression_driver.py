@@ -77,6 +77,7 @@ def main():
     ff_start_time = datetime.now()
     funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, num_columns, delimiter)
     print(datetime.now()-ff_start_time, ' for funnel format to compute...\n')
+
     # 3. COMPRESS DATA
     print('3. compressing data...')
     compression_start_time = datetime.now()

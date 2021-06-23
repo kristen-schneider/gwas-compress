@@ -1,6 +1,7 @@
 import compress_column
 import convert_to_int
 import serialize_body
+import compress
 from datetime import datetime
 
 def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, codecs_list, data_type_byte_sizes):
@@ -17,7 +18,7 @@ def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, c
     block_end = 0
     for block in funnel_format:
         curr_block_size = len(block[0])
-        if curr_block_size not in block_sizes: block_sizes.append(len(block))
+        if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
         block_header = []
         compressed_block = b''
         column_end_position = 0
@@ -39,16 +40,19 @@ def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, c
             compressed_block += compressed_column
 
         serialized_block_header = serialize_body.serialize_list(block_header, 1, data_type_byte_sizes[1])
-        print(serialized_block_header, compressed_block)
+        compressed_block_header = compress.compress_bitstring('gzip', serialized_block_header)
+        print(compressed_block_header, compressed_block)
 
         # add to block header end positions
-        block_header_end += len(serialized_block_header)
+        block_header_end += len(compressed_block_header)
         block_header_end_positions.append(block_header_end)
         # add to block end positions
         block_end += len(compressed_block)
         block_end_positions.append(block_end)
-        #f.write(serialized_block_header)
-        #f.write(compressed_block)
+        # add to block_sizes (maybe)
+        if len(block_sizes) < 2: block_sizes.append(curr_block_size)
+        f.write(compressed_block_header)
+        f.write(compressed_block)
     f.close()
     print([block_header_end_positions, block_end_positions, block_sizes])
     return [block_header_end_positions, block_end_positions, block_sizes]
