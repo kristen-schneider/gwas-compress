@@ -29,15 +29,15 @@ def main():
     get_arguments_start_time = datetime.now()
 
     # user should edit config.ini to reflect proper parameters
-    # args = config_arguments.get_args_from_config('LOCAL')
-    args = config_arguments.get_args_from_config('MENDEL')
+    args = config_arguments.get_args_from_config('LOCAL')
+    # args = config_arguments.get_args_from_config('MENDEL')
 
     # included in config file
     IN_FILE = args['in_file']
     OUT_DIR = args['out_dir']
     BLOCK_SIZE = int(args['block_size'])
     COMPRESSION_STYLE = args['compression_style']
-    COMPRESSION_METHOD = list(args['compression_method'].split(','))
+    CODECS_LIST = list(args['compression_method'].split(','))
     DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
                             2: int(args['float_byte_size']),
                             3: int(args['string_byte_size']),
@@ -67,9 +67,6 @@ def main():
 
 
     # 2. GET FUNNEL FORMAT
-    ### list of blocks [[block1][block2]...[blockn]]
-    ### --> a block is a list of columns: block1 = [[col1], [co2]...[colm]]
-    ### -----> a column is a list of string values: col1 = ['1','1','1','1','1']
     print('2. generating funnel format...')
     funnel_format_START = datetime.now()
     ### work ###
@@ -83,27 +80,21 @@ def main():
     print('3. compressing data...')
     compress_data_START = datetime.now()
     ### work ###
-    # serialized_compressed_data = funnel_format_compress.compress_all_blocks(DATA_TYPE_CODE_BOOK, DATA_TYPE_BYTE_SIZES,
-    #                                                                         AVAILABLE_COMPRESSION_METHODS,
-    #                                                                         COMPRESSION_METHOD, header_first_half,
-    #                                                                         funnel_format_data, OUT_DIR)
-    # header_second_half = serialized_compressed_data[0]
-    # compressed_data = serialized_compressed_data[1]
-
-    serialized_compressed_data_all_ints = funnel_format_compress_ints.compress_all_blocks(COMPRESSION_METHOD,
-                                                                                          header_first_half,
-                                                                                          funnel_format_data,
-                                                                                          OUT_DIR)
+    serialized_compressed_data = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
+                                                                                 header_first_half,
+                                                                                 funnel_format_data,
+                                                                                 DATA_TYPE_BYTE_SIZES,
+                                                                                 OUT_DIR)
 
     try:
-        header_second_half = serialized_compressed_data_all_ints
+        header_second_half = serialized_compressed_data
         # when i return everything...header is just first element
-        # header_second_half = serialized_compressed_data_all_ints[0]
+        # header_second_half = serialized_compressed_data[0]
     except:
         print('could not compress data')
         return -1
     #try:
-    #    compressed_data = serialized_compressed_data_all_ints[1]
+    #    compressed_data = serialized_compressed_data[1]
     #except:
     #    print('could not compress data')
     #    return -1
