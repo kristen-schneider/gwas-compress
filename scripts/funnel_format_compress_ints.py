@@ -179,10 +179,10 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             compressed_column = compress_column.compress_single_column_standard(typed_column,
                                                                                 column_compression_method,
                                                                                 1,
-                                                                                column_bytes,
-                                                                                column_i,
-                                                                                all_column_compression_times,
-                                                                                all_column_compression_size_ratios)
+                                                                                column_bytes)
+                                                                                # column_i,
+                                                                                # all_column_compression_times,
+                                                                                # all_column_compression_size_ratios)
             # print(column_i, datetime.now()-compression_timer_start)
             compressed_block_bitstring += compressed_column
 
@@ -200,10 +200,10 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                 print('Unrecognized compression method. Value not found in compression method code book.')
                 return -1
             numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
-                                                                                    codec,
-                                                                                    column_i,
-                                                                                    all_column_compression_times,
-                                                                                    all_column_compression_size_ratios)
+                                                                                    codec)
+                                                                                    # column_i,
+                                                                                    # all_column_compression_times,
+                                                                                    # all_column_compression_size_ratios)
             #numpy_compressed_column_size = numpy_compressed_column_info[1]
             #numpy_compressed_column = numpy_compressed_column_info[0][0:numpy_compressed_column_size]
             # must serialize a numpy column in order for the column to be properly written to our output file
