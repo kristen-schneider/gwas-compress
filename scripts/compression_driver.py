@@ -17,8 +17,8 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes: 4}
 
 # USER-SPECIFIED PARAMETERS
 # user should edit config.ini to reflect proper parameters
-args = config_arguments.get_args_from_config('LOCAL')
-# args = config_arguments.get_args_from_config('MENDEL')
+# args = config_arguments.get_args_from_config('LOCAL')
+args = config_arguments.get_args_from_config('MENDEL')
 # included in config file
 IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
@@ -69,10 +69,15 @@ def main():
     bz2_header = start_of_header[7]
 
     # 2. GENERATE FUNNEL FORMAT FOR INTS
+    print('generating funnel format...')
+    ff_start_time = datetime.now()
     funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, num_columns, delimiter)
-
+    print(datetime.now()-ff_start_time, ' for funnel format to compute...\n')
     # 3. COMPRESS DATA
-    end_of_header = compression_worker.compress_funnel_format_ints(funnel_format_data, num_columns, column_data_types, CODECS_LIST,DATA_TYPE_BYTE_SIZES)
+    print('compressing data...')
+    compression_start_time = datetime.now()
+    compression_worker.compress_funnel_format_ints(funnel_format_data, num_columns, column_data_types, CODECS_LIST,DATA_TYPE_BYTE_SIZES)
+    print(datetime.now()-compression_start_time, ' for compression to complete...\n')
     # # 2. COMPRESS DATA
     # # compresses data
     # # writes compressed block header and compressed block after each block

@@ -5,6 +5,8 @@ import compress
 from datetime import datetime
 
 def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, codecs_list, data_type_byte_sizes):
+    f = open('./testing_write.txt', 'ab')
+    f.truncate(0)
     for block in funnel_format:
         # convert column to ints
         block_as_columns_ints = convert_block_to_int(block, column_data_types)
@@ -14,9 +16,10 @@ def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, c
                                                                    new_column_data_types, data_type_byte_sizes)
         serialized_block_header = serialize_body.serialize_list(block_header_and_compressed[0], 1, data_type_byte_sizes[1])
         compressed_block = block_header_and_compressed[1]
-        print(serialized_block_header, compressed_block)
-
-
+        #print(serialized_block_header, compressed_block)
+        #f.write(serialized_block_header)
+        #f.write(compressed_block)
+    f.close()
 
 def block_compression(compression_style,
                       in_file, block_size, delimiter, num_columns, column_data_types,

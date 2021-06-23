@@ -1,7 +1,7 @@
 import numpy as np
 from datetime import datetime
 import sys
-# from pyfastpfor import *
+from pyfastpfor import *
 
 import serialize_body
 import compress
