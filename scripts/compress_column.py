@@ -5,8 +5,8 @@ from datetime import datetime
 import sys
 # from pyfastpfor import *
 
-def compress_single_column_reg(typed_column, column_compression_method, column_type, column_bytes,
-                               column_i, all_column_compression_times, all_column_compression_size_ratios):
+def compress_single_column_standard(column, column_codec, column_data_type, column_num_bytes):
+    #column_i, all_column_compression_times, all_column_compression_size_ratios):
     """
     compresses a single column of data using methods that take in serialized data (e.g. gzip, zlib, bz2)
 
@@ -21,58 +21,35 @@ def compress_single_column_reg(typed_column, column_compression_method, column_t
     """
 
     column_i_START = datetime.now()
-    column_i_BEFORE = sys.getsizeof(typed_column)
-    serialized_column = serialize_body.serialize_list(typed_column, column_type, column_bytes)
+    column_i_BEFORE = sys.getsizeof(column)
     ### work ###
-    # float data is a list which contains [base, exponent] as integer.
-    # serialized float data is two integers which can reconstruct original float
-    # if column_type == 2:
-    #     serialized_column = b''
-    #     # for serialization, must change column type to being 1
-    #     for float_value in typed_column:
-    #         serialized_float = serialize_body.serialize_list(float_value, column_type, column_bytes)
-    #         serialized_column += serialized_float
-    # # string data can be INDELS (lists of multiple nucleotides
-    # elif column_type == 3:
-    #     serialized_column = b''
-    #     # for serialization, must change column type to being 1
-    #     for string_value in typed_column:
-    #         try: serialized_string = serialize_body.serialize_list(string_value, column_type, column_bytes)
-    #         except TypeError: serialized_string = serialize_body.serialize_data(string_value, column_type, column_bytes)
-    #         serialized_column += serialized_string
+    serialized_column = serialize_body.serialize_list(column, column_data_type, column_num_bytes)
+    compressed_column = compress.compress_bitstring(column_codec, serialized_column)
     #
-    # elif column_type == 1 or column_type == 4:
-    #     # for serialization, must change column type to being 1
-    #     serialized_column = serialize_body.serialize_list(typed_column, column_type, column_bytes)
-    # else:
-    #     print('invalid column type for compression: ', column_type)
-    ############
-    compressed_column_info = compress.compress_bitstring(column_compression_method, serialized_column)
-
-    column_i_END = datetime.now()
-    column_i_TIME = column_i_END - column_i_START
-    #print(column_i_TIME, 'for column with compression method ', column_compression_method, ' to compress') 
-    column_i_AFTER = sys.getsizeof(compressed_column_info[0])
-    column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
+    # column_i_END = datetime.now()
+    # column_i_TIME = column_i_END - column_i_START
+    # #print(column_i_TIME, 'for column with compression method ', column_compression_method, ' to compress')
+    # column_i_AFTER = sys.getsizeof(compressed_column_info[0])
+    # column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
     
-    # adding to time dict
-    try:
-        all_column_compression_times[column_i][column_compression_method].append(column_i_TIME)
-    except KeyError:
-        all_column_compression_times[column_i] = {column_compression_method: [column_i_TIME]}
+    # # adding to time dict
+    # try:
+    #     all_column_compression_times[column_i][column_compression_method].append(column_i_TIME)
+    # except KeyError:
+    #     all_column_compression_times[column_i] = {column_compression_method: [column_i_TIME]}
+    #
+    # # adding to size ratio dict
+    # try:
+    #     all_column_compression_size_ratios[column_i][column_compression_method].append(column_i_RATIO)
+    # except KeyError:
+    #     all_column_compression_size_ratios[column_i] = {column_compression_method: [column_i_RATIO]}
 
-    # adding to size ratio dict
-    try:
-        all_column_compression_size_ratios[column_i][column_compression_method].append(column_i_RATIO)
-    except KeyError:
-        all_column_compression_size_ratios[column_i] = {column_compression_method: [column_i_RATIO]}
-
-    return compressed_column_info
+    return compressed_column
 
 
-def compress_single_column_pyfast(typed_column, codec,
-                                  column_i, all_column_compression_times,
-                                  all_column_compression_size_ratios):
+def compress_single_column_pyfast(typed_column, codec):
+                                  #column_i, all_column_compression_times,
+                                  #all_column_compression_size_ratios):
     # print('compressing with pyfastpfor codec')
     """
     compresses a single column of data using pyfastpfor codecs
@@ -102,17 +79,17 @@ def compress_single_column_pyfast(typed_column, codec,
     column_i_AFTER = sys.getsizeof(comp_arr[0:comp_arr_size])
     column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
 
-    #print(column_i_BEFORE, column_i_AFTER)
-    # adding to time dict
-    try:
-        all_column_compression_times[column_i][codec].append(column_i_TIME)
-    except KeyError:
-        all_column_compression_times[column_i] = {codec: [column_i_TIME]}
-
-    # adding to size ratio dict
-    try:
-        all_column_compression_size_ratios[column_i][codec].append(column_i_RATIO)
-    except KeyError:
-        all_column_compression_size_ratios[column_i] = {codec: [column_i_RATIO]}
+    # #print(column_i_BEFORE, column_i_AFTER)
+    # # adding to time dict
+    # try:
+    #     all_column_compression_times[column_i][codec].append(column_i_TIME)
+    # except KeyError:
+    #     all_column_compression_times[column_i] = {codec: [column_i_TIME]}
+    #
+    # # adding to size ratio dict
+    # try:
+    #     all_column_compression_size_ratios[column_i][codec].append(column_i_RATIO)
+    # except KeyError:
+    #     all_column_compression_size_ratios[column_i] = {codec: [column_i_RATIO]}
     
     return comp_arr[0:comp_arr_size]

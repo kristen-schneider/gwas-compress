@@ -151,13 +151,13 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
                 or column_compression_method == 'zlib' \
                 or column_compression_method == 'bz2':
             # compress column using compress serialized data methods
-            compressed_column_info = compress_column.compress_single_column_reg(typed_column,
-                                                                                column_compression_method,
-                                                                                column_data_type,
-                                                                                column_bytes,
-                                                                                column_i,
-                                                                                all_column_compression_times,
-                                                                                all_column_compression_size_ratios)
+            compressed_column_info = compress_column.compress_single_column_standard(typed_column,
+                                                                                     column_compression_method,
+                                                                                     column_data_type,
+                                                                                     column_bytes,
+                                                                                     column_i,
+                                                                                     all_column_compression_times,
+                                                                                     all_column_compression_size_ratios)
 
             compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
             compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
