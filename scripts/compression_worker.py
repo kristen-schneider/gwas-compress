@@ -41,7 +41,7 @@ def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, c
 
         serialized_block_header = serialize_body.serialize_list(block_header, 1, data_type_byte_sizes[1])
         compressed_block_header = compress.compress_bitstring('gzip', serialized_block_header)
-        print(compressed_block_header, compressed_block)
+        #print(compressed_block_header, compressed_block)
 
         # add to block header end positions
         block_header_end += len(compressed_block_header)
@@ -54,7 +54,7 @@ def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, c
         f.write(compressed_block_header)
         f.write(compressed_block)
     f.close()
-    print([block_header_end_positions, block_end_positions, block_sizes])
+    #print([block_header_end_positions, block_end_positions, block_sizes])
     return [block_header_end_positions, block_end_positions, block_sizes]
 
 def compress_column_ints(column, column_codec, data_type_byte_sizes):
@@ -70,7 +70,8 @@ def compress_column_ints(column, column_codec, data_type_byte_sizes):
                                                                             col_data_type, col_num_bytes)
     # pyfast
     else:
-        compressed_column = compress_column.compress_single_column_pyfast(column, column_codec)
+        compressed_np_arr = compress_column.compress_single_column_pyfast(column, column_codec)
+        compressed_column = serialize_body.serialize_list(compressed_np_arr, col_data_type, col_num_bytes)
 
     return compressed_column
 
