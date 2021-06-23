@@ -69,7 +69,6 @@ def serialize_int(data, num_bytes):
     except AttributeError: 
         s_value = data.tobytes(order='C')
     except OverflowError:
-        print(data)
         return -1
     return s_value
 

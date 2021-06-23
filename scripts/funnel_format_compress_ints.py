@@ -166,7 +166,7 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
         # column data
         column_compression_method = compression_method_list[column_i]
         column_data_type = column_types[column_i]
-        column_bytes = 4
+        column_bytes = 5
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
         to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(block[column_i], column_data_type, column_i)
@@ -183,19 +183,17 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
             # compress column using compress serialized data methods
 
             compression_timer_start = datetime.now()
-            compressed_column_info = compress_column.compress_single_column_reg(typed_column,
+            compressed_column = compress_column.compress_single_column_reg(typed_column,
                                                                                 column_compression_method,
-                                                                                column_data_type,
+                                                                                1,
                                                                                 column_bytes,
                                                                                 column_i,
                                                                                 all_column_compression_times,
                                                                                 all_column_compression_size_ratios)
             # print(column_i, datetime.now()-compression_timer_start)
-            compressed_column_header_length = compressed_column_info[1]  # length of header for compression type (e.g. 10 for gzip)
-            compressed_column_bitstring = compressed_column_info[0][compressed_column_header_length:]  # bitstring of compressed data
-            compressed_block_bitstring += compressed_column_bitstring
+            compressed_block_bitstring += compressed_column
 
-            compressed_column_end_pos += len(compressed_column_bitstring)
+            compressed_column_end_pos += len(compressed_column)
             compressed_column_ends_list.append(compressed_column_end_pos)
 
         # If we need array data to compress (fastpfor128 = 4 and fastpfor256 = 5)
@@ -251,10 +249,8 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
 
     serialized_block_header = serialize_body.serialize_list(compressed_column_ends_list, block_header_type,
                                                             block_header_bytes)
-    compressed_block_header_info = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
-    compressed_block_header_compression_method_length = compressed_block_header_info[1]
-    compressed_block_header_bitstring = compressed_block_header_info[0][
-                                        compressed_block_header_compression_method_length:]
+    compressed_block_header = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
+
     block_end_time = datetime.now()
     block_time = block_end_time - block_start_time
-    return compressed_block_header_bitstring, compressed_block_bitstring
+    return compressed_block_header, compressed_block_bitstring
