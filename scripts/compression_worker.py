@@ -1,5 +1,6 @@
 import compress_column
 import convert_to_int
+import type_handling
 import serialize_body
 import compress
 from datetime import datetime
@@ -28,7 +29,8 @@ def compress_funnel_format_ints(funnel_format, num_columns, column_data_types, c
             curr_column_codec = codecs_list[column_i]
 
             # convert column to ints
-            column_as_ints = convert_column_to_int(curr_column, curr_column_data_type)
+            column_as_ints = type_handling.string_list_to_int(curr_column, curr_column_data_type, column_i)
+            #column_as_ints = convert_column_to_int(curr_column, curr_column_data_type)
 
             # compress column
             compressed_column = compress_column_ints(column_as_ints, curr_column_codec, data_type_byte_sizes)
