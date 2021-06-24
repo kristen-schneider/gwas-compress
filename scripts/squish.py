@@ -29,8 +29,8 @@ def main():
     get_arguments_start_time = datetime.now()
 
     # user should edit config.ini to reflect proper parameters
-    # args = config_arguments.get_args_from_config('LOCAL')
-    args = config_arguments.get_args_from_config('MENDEL')
+    args = config_arguments.get_args_from_config('LOCAL')
+    # args = config_arguments.get_args_from_config('MENDEL')
 
     # included in config file
     IN_FILE = args['in_file']
@@ -119,11 +119,11 @@ def main():
     compress_header_TIME = compress_header_END - compress_header_START
     print(str(compress_header_TIME) + ' for header to compress...\n')
 
-    f_data = open('../testing_write.txt', 'rb')
+    f_data = open('testing_write.txt', 'rb')
     data = f_data.read()
     f_data.close()
     
-    f = open('../testing_write_all.txt', 'ab')
+    f = open('testing_write_all.txt', 'ab')
     f.truncate(0)
     f.write(bytes_size_types)
     f.write(bytes_size_num_elements)
