@@ -66,45 +66,13 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
 
         # WRITE DATA
-        ###
         f = open('./testing_write.txt', 'ab')
         f.write(compressed_block_header)
+        print(compressed_block_header)
         f.write(compressed_block)
+        print(compressed_block)
         f.close()
-        ###
 
-        # try:
-        #     compressed_block_header = compressed_block_info[0]
-        # except TypeError:
-        #     print('bad compression of single block.')
-        #     return -1
-    #     try:
-    #         compressed_block_bitstring = compressed_block_info[1]
-    #     except TypeError:
-    #         print('bad compression of single block.')
-    #         return -1
-    #     len_curr_block = len(compressed_block_header) + len(compressed_block_bitstring)
-    #     block_header_end = (block_end + len(compressed_block_header))
-    #     block_end += len_curr_block
-    #     block_header_ends.append(block_header_end)
-    #     block_ends.append(block_end)
-    #
-        # ###
-        # f = open('./testing_write.txt', 'ab')
-        # f.write(compressed_block_header)
-        # f.write(compressed_block_bitstring)
-        # f.close()
-        # ###
-    #     # compressed_content += (compressed_block_header + compressed_block_bitstring)
-    #
-    #     block_i_END = datetime.now()
-    #     block_i_TIME = block_i_END - block_i_START
-    #     #print(str(block_i_TIME) + ' for block ' + str(block_i + 1) + ' to compress...\n')
-    #
-    # # block_sizes = header_second_half[2]
-    # num_rows_first_block = len(ff[0][0])
-    # num_rows_last_block = len(ff[-1][0])
-    # block_sizes = [num_rows_first_block, num_rows_last_block]
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
     header_second_half = [block_header_ends, block_ends, block_sizes]

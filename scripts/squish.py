@@ -80,25 +80,11 @@ def main():
     print('3. compressing data...')
     compress_data_START = datetime.now()
     ### work ###
-    serialized_compressed_data = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
+    header_second_half = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
                                                                                  header_first_half,
                                                                                  funnel_format_data,
                                                                                  DATA_TYPE_BYTE_SIZES,
                                                                                  OUT_DIR)
-
-    try:
-        header_second_half = serialized_compressed_data
-        # when i return everything...header is just first element
-        # header_second_half = serialized_compressed_data[0]
-    except:
-        print('could not compress data')
-        return -1
-    #try:
-    #    compressed_data = serialized_compressed_data[1]
-    #except:
-    #    print('could not compress data')
-    #    return -1
-
 
     ############
     compress_data_END = datetime.now()
