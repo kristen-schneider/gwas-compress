@@ -1,5 +1,4 @@
 # IMPORTS
-import decompress
 import deserialize_header
 
 #
@@ -57,9 +56,9 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
 
             header_types = compressed_file.read(num_bytes_to_read)
             ds_header_types = deserialize_header.deserialize_int(header_types,
-                                                               int(num_bytes_to_read/data_type_byte_sizes[1]),
-                                                               data_type_byte_sizes[1],
-                                                               0)
+                                                                 int(num_bytes_to_read/data_type_byte_sizes[1]),
+                                                                 data_type_byte_sizes[1],
+                                                                 0)
             HEADER_TYPES = ds_header_types
             total_bytes_read += num_bytes_to_read
 
@@ -68,9 +67,9 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
 
             header_elements = compressed_file.read(num_bytes_to_read)
             ds_header_elements = deserialize_header.deserialize_int(header_elements,
-                                                                  int(num_bytes_to_read/data_type_byte_sizes[1]),
-                                                                  data_type_byte_sizes[1],
-                                                                  0)
+                                                                    int(num_bytes_to_read/data_type_byte_sizes[1]),
+                                                                    data_type_byte_sizes[1],
+                                                                    0)
             HEADER_NUM_ELEMENTS = ds_header_elements
             total_bytes_read += num_bytes_to_read
 
@@ -79,9 +78,9 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
 
             header_ends = compressed_file.read(num_bytes_to_read)
             ds_header_ends = deserialize_header.deserialize_int(header_ends,
-                                                              int(num_bytes_to_read/data_type_byte_sizes[1]),
-                                                              data_type_byte_sizes[1],
-                                                              0)
+                                                                int(num_bytes_to_read/data_type_byte_sizes[1]),
+                                                                data_type_byte_sizes[1],
+                                                                0)
             HEADER_ENDS = ds_header_ends
             total_bytes_read += num_bytes_to_read
 

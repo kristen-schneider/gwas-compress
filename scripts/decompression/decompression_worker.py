@@ -1,5 +1,4 @@
 import decompress
-import deserialize_body
 import deserialize_header
 import decompress_column
 import type_handling
@@ -184,22 +183,22 @@ def decompress_single_column_int(compression_method, compressed_block,
         compression_method == 'bz2':
 
         ds_dc_column_data = decompress_column.decompress_single_column_standard(compressed_column,
-                                                                              num_rows,
-                                                                              col_type,
-                                                                              data_type_byte_sizes[col_type],
-                                                                              chrm,
-                                                                              compression_method,
-                                                                              query_column_i)
+                                                                                num_rows,
+                                                                                col_type,
+                                                                                data_type_byte_sizes[col_type],
+                                                                                chrm,
+                                                                                compression_method,
+                                                                                query_column_i)
 
 
     elif 'fastpfor' in compression_method:
         # data input: serialized_data, block_size, data_type, num_bytes, chrm
         ds_dc_column_data = decompress_column.decompress_single_column_pyfast(compressed_column,
-                                                                                  num_rows,
-                                                                                  col_type,
-                                                                                  data_type_byte_sizes[col_type],
-                                                                                  chrm,
-                                                                                  compression_method,
+                                                                              num_rows,
+                                                                              col_type,
+                                                                              data_type_byte_sizes[col_type],
+                                                                              chrm,
+                                                                              compression_method,
                                                                               query_column_i)
     
         # must convert int back to float

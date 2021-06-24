@@ -1,5 +1,4 @@
 import config_arguments
-import sys
 from datetime import datetime
 import header_decompress
 import decompression_worker
@@ -64,7 +63,7 @@ def main():
     ### work ###
     if 'int' in COMPRESSION_STYLE:
         dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
-                                                                   full_header, DATA_TYPE_BYTE_SIZES)
+                                                                           full_header, DATA_TYPE_BYTE_SIZES)
     elif 'all' in COMPRESSION_STYLE:
         print('all data types')
     ############
@@ -77,8 +76,8 @@ def main():
     single_column_START = datetime.now()
     ### work ###
     dc_single_column = decompression_worker.decompress_single_column_int(CODECS_LIST[COLUMN_TO_DECOMPRESS],
-                                                                     compressed_block_info, COLUMN_TO_DECOMPRESS,
-                                                                     full_header, DATA_TYPE_BYTE_SIZES)
+                                                                         compressed_block_info, COLUMN_TO_DECOMPRESS,
+                                                                         full_header, DATA_TYPE_BYTE_SIZES)
     ############
     print(dc_single_column)
     single_column_END = datetime.now()

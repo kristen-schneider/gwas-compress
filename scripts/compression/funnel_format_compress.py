@@ -1,8 +1,7 @@
 from datetime import datetime
-import compress_column
 import type_handling
 import serialize_body
-import compress
+from scripts.compression import compress, compress_column
 import read_write_compression_times
 import read_write_compression_ratios
 import plot_bar

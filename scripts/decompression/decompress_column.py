@@ -1,5 +1,4 @@
 import decompress
-import deserialize_header
 import deserialize_body
 import convert_from_int
 import numpy as np

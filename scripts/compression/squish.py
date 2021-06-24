@@ -81,10 +81,10 @@ def main():
     compress_data_START = datetime.now()
     ### work ###
     header_second_half = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
-                                                                                 header_first_half,
-                                                                                 funnel_format_data,
-                                                                                 DATA_TYPE_BYTE_SIZES,
-                                                                                 OUT_DIR)
+                                                                         header_first_half,
+                                                                         funnel_format_data,
+                                                                         DATA_TYPE_BYTE_SIZES,
+                                                                         OUT_DIR)
 
     ############
     compress_data_END = datetime.now()
@@ -119,11 +119,11 @@ def main():
     compress_header_TIME = compress_header_END - compress_header_START
     print(str(compress_header_TIME) + ' for header to compress...\n')
 
-    f_data = open('./testing_write.txt', 'rb')
+    f_data = open('../testing_write.txt', 'rb')
     data = f_data.read()
     f_data.close()
     
-    f = open('./testing_write_all.txt', 'ab')
+    f = open('../testing_write_all.txt', 'ab')
     f.truncate(0)
     f.write(bytes_size_types)
     f.write(bytes_size_num_elements)

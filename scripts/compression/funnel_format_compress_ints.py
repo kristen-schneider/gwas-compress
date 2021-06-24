@@ -1,15 +1,11 @@
 # python imports
 from datetime import datetime
-import numpy as np
 
 # personal imports
-import compress_column
 import type_handling
 import serialize_body
-import compress
-import read_write_compression_times
-import read_write_compression_ratios
-import plot_bar
+from scripts.compression import compress, compress_column
+
 
 def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data_type_byte_sizes, out_dir):
     """
@@ -24,7 +20,7 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     OUTPUT
         second half of header
     """
-    f = open('./testing_write.txt', 'ab')
+    f = open('../testing_write.txt', 'ab')
     f.truncate(0)
     f.close()
 
@@ -66,7 +62,7 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
 
         # WRITE DATA
-        f = open('./testing_write.txt', 'ab')
+        f = open('../testing_write.txt', 'ab')
         f.write(compressed_block_header)
         #print(compressed_block_header)
         f.write(compressed_block)
