@@ -68,9 +68,9 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         # WRITE DATA
         f = open('./testing_write.txt', 'ab')
         f.write(compressed_block_header)
-        print(compressed_block_header)
+        #print(compressed_block_header)
         f.write(compressed_block)
-        print(compressed_block)
+        #print(compressed_block)
         f.close()
 
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
@@ -151,6 +151,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
                                                                                     # all_column_compression_size_ratios)
 
             serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
+            print(serialized_compressed_column)
             compressed_block_bitstring += serialized_compressed_column
 
             compressed_column_end_pos += len(serialized_compressed_column)
