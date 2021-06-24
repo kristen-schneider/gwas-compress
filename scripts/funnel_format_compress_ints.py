@@ -49,20 +49,29 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         # current block from funnel format
         curr_block = funnel_format_data[block_i]
 
-        curr_block_size = len(curr_block[0])
-        if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
-
         # compress block
         block_header_and_data = compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes)
-        block_header = block_header_and_data[0]
+        compressed_block_header = block_header_and_data[0]
         compressed_block = block_header_and_data[1]
 
+        # HEADER END DATA
         # add to block header ends
-        block_header_end += len(block_header)
+        block_header_end += len(compressed_block_header)
         block_header_ends.append(block_header_end)
         # add to block ends
         block_end += len(compressed_block)
         block_ends.append(block_end)
+        # block sizes
+        curr_block_size = len(curr_block[0])
+        if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
+
+        # WRITE DATA
+        ###
+        f = open('./testing_write.txt', 'ab')
+        f.write(compressed_block_header)
+        f.write(compressed_block)
+        f.close()
+        ###
 
         # try:
         #     compressed_block_header = compressed_block_info[0]
@@ -80,12 +89,12 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     #     block_header_ends.append(block_header_end)
     #     block_ends.append(block_end)
     #
-    #     ###
-    #     f = open('./testing_write.txt', 'ab')
-    #     f.write(compressed_block_header)
-    #     f.write(compressed_block_bitstring)
-    #     f.close()
-    #     ###
+        # ###
+        # f = open('./testing_write.txt', 'ab')
+        # f.write(compressed_block_header)
+        # f.write(compressed_block_bitstring)
+        # f.close()
+        # ###
     #     # compressed_content += (compressed_block_header + compressed_block_bitstring)
     #
     #     block_i_END = datetime.now()
