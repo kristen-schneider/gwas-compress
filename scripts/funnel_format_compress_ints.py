@@ -88,14 +88,14 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
 
     OUTPUT
         compressed_block_header_bitstring = serialized, compressed bitstring for header of block (col end positions)
-        compressed_block_bitstring = serialized, compressed bitstring for block data
+        compressed_block = serialized, compressed bitstring for block data
 
     """
-    compressed_block_bitstring = b''
+    compressed_block = b''
 
     block_header_compression_method = 'gzip'
 
-    compressed_column_ends_list = []
+    block_header = []
     compressed_column_end_pos = 0
 
     for column_i in range(len(curr_block)):
@@ -109,7 +109,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         to_int_END = datetime.now()
         to_int_TIME = to_int_END - to_int_START
 
-        
+        codec = codecs_list[0]
         # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
         # If we need serialized data to compress (gzip = 1, zlib = 2, bz2 = 3)
         if column_compression_method == 'gzip' \
@@ -126,10 +126,10 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
                                                                                 # all_column_compression_times,
                                                                                 # all_column_compression_size_ratios)
             # print(column_i, datetime.now()-compression_timer_start)
-            compressed_block_bitstring += compressed_column
+            compressed_block += compressed_column
 
             compressed_column_end_pos += len(compressed_column)
-            compressed_column_ends_list.append(compressed_column_end_pos)
+            block_header.append(compressed_column_end_pos)
 
         # If we need array data to compress (fastpfor128 = 4 and fastpfor256 = 5)
         elif 'fastpfor' in column_compression_method:
@@ -149,17 +149,17 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
 
             serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
             print(serialized_compressed_column)
-            compressed_block_bitstring += serialized_compressed_column
+            compressed_block += serialized_compressed_column
 
             compressed_column_end_pos += len(serialized_compressed_column)
-            compressed_column_ends_list.append(compressed_column_end_pos)
+            block_header.append(compressed_column_end_pos)
 
         else:
             print('Unrecognized compression method. Value not found in compression method code book.')
             return -1
 
+    numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codec)
+    # serialized_block_header = serialize_body.serialize_list(block_header, 1, 4)
+    # compressed_block_header = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
 
-    serialized_block_header = serialize_body.serialize_list(compressed_column_ends_list, 1, 4)
-    compressed_block_header = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
-
-    return compressed_block_header, compressed_block_bitstring
+    return compressed_block_header, compressed_block
