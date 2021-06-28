@@ -1,8 +1,10 @@
 import decompress
 import deserialize_header
+import deserialize_body
 import decompress_column
 import type_handling
 import string_int
+import numpy as np
 # import decompress_serialized_data
 # import decompress_array_data
 
@@ -65,18 +67,17 @@ def query_block(query_block_i, full_header,
     else:
         query_block_header_start = 0
 
-    # to signify that we need not worry about X and Y in data
     query_block_header_end = block_header_ends[query_block_i]
-    query_block_header = gzip_header + content_compressed_data[query_block_header_start:query_block_header_end]
-    # get decompressed, deserialized block header (compressed with gzip for now)
-    dc_curr_block_header = decompress.decompress_data(header_compression_type,
-                                                      query_block_header)
+    query_block_header_bytes = content_compressed_data[query_block_header_start:query_block_header_end]
+    query_block_header_np_arr = deserialize_body.deserialize_list_fastpfor(query_block_header_bytes)
+    query_block_header_decomp_arr = decompress_column.decompress_np_arr(query_block_header_np_arr, num_columns, 'fastpfor128')
+    #dc_curr_block_header = np.array(query_block_header, dtype=np.uint32, order='C') 
     # print(dc_curr_block_header)
-    ds_dc_curr_block_header = deserialize_header.deserialize_list(
-        dc_curr_block_header, num_columns, 1, data_type_byte_sizes[1], None)
+    #ds_dc_curr_block_header = deserialize_header.deserialize_list(
+    #    dc_curr_block_header, num_columns, 1, data_type_byte_sizes[1], None)
     # print(ds_dc_curr_block_header)
 
-    return [ds_dc_curr_block_header,
+    return [query_block_header_decomp_arr,
             content_compressed_data[query_block_header_end:end_positions[query_block_i]],
             query_block_num_rows]
 

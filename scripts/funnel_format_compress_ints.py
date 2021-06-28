@@ -53,11 +53,22 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
 
         # HEADER END DATA
         # add to block header ends
-        block_header_end += len(compressed_block_header)
+        print(len(compressed_block_header))
+        try:
+            block_header_end = (block_ends[block_i-1]+len(compressed_block_header))
+            print(block_header_end)
+        except IndexError:
+            block_header_end += (0+len(compressed_block_header))    
         block_header_ends.append(block_header_end)
+        print(len(compressed_block))
+        
         # add to block ends
-        block_end += len(compressed_block)
+        try:
+            block_end = (block_header_ends[block_i]+len(compressed_block))
+        except IndexError:
+            block_end += (block_header_end+len(compressed_block))
         block_ends.append(block_end)
+        
         # block sizes
         curr_block_size = len(curr_block[0])
         if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
@@ -73,7 +84,7 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
-
+    print(header_second_half)
     return header_second_half
 
 def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes):
@@ -147,9 +158,11 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
             block_header.append(compressed_column_end_pos)
 
 
-
-    numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codec)
+    print(block_header)
+    numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
+    print('np header: ', numpy_compressed_block_header)
     serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
+    print('s header: ', serialized_compressed_block_header)
     # serialized_block_header = serialize_body.serialize_list(block_header, 1, 4)
     # compressed_block_header = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
 
