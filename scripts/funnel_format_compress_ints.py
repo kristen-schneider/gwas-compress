@@ -100,7 +100,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
 
     for column_i in range(len(curr_block)):
         # column data
-        column_compression_method = codecs_list[column_i]
+        column_codec = codecs_list[column_i]
         column_data_type = column_types[column_i]
         column_bytes = data_type_byte_sizes[column_data_type]
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
@@ -112,14 +112,14 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         codec = codecs_list[0]
         # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
         # If we need serialized data to compress (gzip = 1, zlib = 2, bz2 = 3)
-        if column_compression_method == 'gzip' \
-                or column_compression_method == 'zlib' \
-                or column_compression_method == 'bz2':
+        if column_codec == 'gzip' \
+                or column_codec == 'zlib' \
+                or column_codec == 'bz2':
             # compress column using compress serialized data methods
 
             compression_timer_start = datetime.now()
             compressed_column = compress_column.compress_single_column_standard(typed_column,
-                                                                                column_compression_method,
+                                                                                column_codec,
                                                                                 1,
                                                                                 data_type_byte_sizes[1])
                                                                                 # column_i,
@@ -132,17 +132,9 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
             block_header.append(compressed_column_end_pos)
 
         # If we need array data to compress (fastpfor128 = 4 and fastpfor256 = 5)
-        elif 'fastpfor' in column_compression_method:
-            # match dictionary value to proper codec for pyfastpfor compression
-            if column_compression_method == 'fastpfor128':
-                codec = 'fastpfor128'
-            elif column_compression_method == 'fastpfor256':
-                codec = 'fastpfor256'
-            else:
-                print('Unrecognized compression method. Value not found in compression method code book.')
-                return -1
+        else:
             numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
-                                                                                    codec)
+                                                                                    column_codec)
                                                                                     # column_i,
                                                                                     # all_column_compression_times,
                                                                                     # all_column_compression_size_ratios)
@@ -154,12 +146,11 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
             compressed_column_end_pos += len(serialized_compressed_column)
             block_header.append(compressed_column_end_pos)
 
-        else:
-            print('Unrecognized compression method. Value not found in compression method code book.')
-            return -1
+
 
     numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codec)
+    serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
     # serialized_block_header = serialize_body.serialize_list(block_header, 1, 4)
     # compressed_block_header = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
 
-    return compressed_block_header, compressed_block
+    return serialized_compressed_block_header, compressed_block
