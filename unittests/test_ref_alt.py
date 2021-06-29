@@ -1,8 +1,9 @@
 import unittest
 from scripts import packed_strings
+from scripts import hybrid_strings
 
 
-class TestEncodeRefAltToInt(unittest.TestCase):
+class TestPACKED(unittest.TestCase):
 
     def test_encode_SNVs(self):
         # 001101 00000000000000000000000000
@@ -90,6 +91,25 @@ class TestEncodeRefAltToInt(unittest.TestCase):
                                                                     2186280960, 926102320, 885837004, 67108867,
                                                                     930383338, 811016084, 2149580803, 671700245,
                                                                     2161549956, 201326634])
+
+
+class TestHYBRID(unittest.TestCase):
+
+    def test_encode_SNV(self):
+        # 0 0000000000000000000000000000000
+        self.assertEqual(hybrid_strings.encode_SNV('A', 1), 0)
+        # 0 0000000000000000000000000000001
+        self.assertEqual(hybrid_strings.encode_SNV('C', 1), 1)
+        # 0 0000000000000000000000000000010
+        self.assertEqual(hybrid_strings.encode_SNV('G', 1), 2)
+        # 0 0000000000000000000000000000011
+        self.assertEqual(hybrid_strings.encode_SNV('T', 1), 3)
+
+    def test_encode_column(self):
+        self.assertEqual(hybrid_strings.encode_column('ACGT'), [0,1,2,3])
+        self.assertEqual(hybrid_strings.encode_column('ACGTACGT'), [0, 1, 2, 3, 0, 1, 2, 3])
+        self.assertEqual(hybrid_strings.encode_column('A'*100), [0]*100)
+
 
 
 

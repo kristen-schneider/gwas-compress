@@ -45,21 +45,14 @@ def encode_column(column):
 
     all_ints = []   # to return at end
 
-    SNVs = []   # start collecting SNVs
     for row in column:
         # only SNV
         if len(row) == 1:
-            SNV_bitstring = encode_SNVs(row, 1, 0)
+            SNV_bitstring = encode_SNV(row, 1)
             all_ints.append(SNV_bitstring)
 
         # encountered an INDEL
         else:
-            # handle any SNVs we have collected
-            if len(SNVs) > 0:
-                all_ints.append(encode_SNVs(SNVs, len(SNVs),0))
-                SNVs = []
-
-            # handle INDEL we encountered
             INDEL = row
             INDEL_bitstring_list = encode_INDEL(INDEL)
             for i in INDEL_bitstring_list:
@@ -75,7 +68,7 @@ def shift_bit(bitstring, shift):
     return bitstring << shift
 
 
-def encode_SNVs(SNVs, length, INDEL_ten_flag):
+def encode_SNV(SNV, length):
     """
     given a list of SNVs, convert to int
     """
@@ -84,17 +77,11 @@ def encode_SNVs(SNVs, length, INDEL_ten_flag):
     # flag to specify SNVs
     SNV_flag = shift_bit(0, 31)
 
-    if INDEL_ten_flag:
-        SNV_length = shift_bit(length, 20)
-    else:
-        SNV_length = shift_bit(length, 26)
+    # encode a single SNV
+    snv = shift_bit(get_variant_number(SNV), 0) | SNV_bitstring
+    SNV_bitstring = SNV_bitstring | snv
 
-    for v in range(len(SNVs)):
-        # get proper bit representation for the variant
-        snv = shift_bit(get_variant_number(SNVs[v]), 2*v) | SNV_bitstring
-        SNV_bitstring = SNV_bitstring | snv
-
-    return SNV_flag | SNV_length | SNV_bitstring
+    return SNV_flag | SNV_bitstring
 
 def encode_INDEL(INDEL):
     """
