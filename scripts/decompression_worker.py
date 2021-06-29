@@ -3,6 +3,8 @@ import deserialize_header
 import deserialize_body
 import decompress_column
 import type_handling
+import packed_strings
+import hybrid_strings
 import string_int
 import numpy as np
 # import decompress_serialized_data
@@ -210,7 +212,7 @@ def decompress_single_column_int(compression_method, compressed_block,
             return float_column
         # convert ints back to string
         if col_type == 3:
-            s = string_int.decode_int_to_string(ds_dc_column_data) 
+            s = packed_strings.decode_int_to_string(ds_dc_column_data)
             #string_column = []
             #for i in ds_dc_column_data:
                 #s = type_handling.int_to_string(i)

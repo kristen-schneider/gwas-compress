@@ -110,6 +110,23 @@ class TestHYBRID(unittest.TestCase):
         self.assertEqual(hybrid_strings.encode_column('ACGTACGT'), [0, 1, 2, 3, 0, 1, 2, 3])
         self.assertEqual(hybrid_strings.encode_column('A'*100), [0]*100)
 
+    def test_decode_snv(self):
+        self.assertEqual(hybrid_strings.decode_snv(0), 'A')
+        self.assertEqual(hybrid_strings.decode_snv(1), 'C')
+        self.assertEqual(hybrid_strings.decode_snv(2), 'G')
+        self.assertEqual(hybrid_strings.decode_snv(3), 'T')
+
+    def test_decode_int_to_string(self):
+        self.assertEqual(hybrid_strings.decode_int_to_string([0]*23), ['A']*23)
+        self.assertEqual(hybrid_strings.decode_int_to_string([1]*23), ['C']*23)
+        self.assertEqual(hybrid_strings.decode_int_to_string([2]*23), ['G']*23)
+        self.assertEqual(hybrid_strings.decode_int_to_string([3]*23), ['T']*23)
+        self.assertEqual(hybrid_strings.decode_int_to_string([0, 1, 2, 3]), ['A', 'C', 'G', 'T'])
+        self.assertEqual(hybrid_strings.decode_int_to_string([0, 1, 2, 3]*23), ['A', 'C', 'G', 'T']*23)
+
+
+
+
 
 
 
