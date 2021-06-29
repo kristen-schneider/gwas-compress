@@ -151,6 +151,5 @@ class TestHYBRID(unittest.TestCase):
         # 1 00000011000 01001110010011100100, 001101 10010011100100111001001110, 000001 00000000000000000000000011
         self.assertEqual(hybrid_strings.encode_INDEL('ACGT' * 6), [2172970212, 911101518, 67108867])
 
-
 if __name__ == '__main__':
     unittest.main()
