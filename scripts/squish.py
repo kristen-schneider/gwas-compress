@@ -107,13 +107,17 @@ def main():
     serialized_header_data = serialized_header_tools[3]
 
     size_types = len(serialized_header_types)
-    bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
+    try: bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
+    except OverflowError: print(size_types)
     size_elements = len(serialized_header_num_elements)
-    bytes_size_num_elements = size_elements.to_bytes(2, byteorder='big', signed=False)
+    try: bytes_size_num_elements = size_elements.to_bytes(2, byteorder='big', signed=False)
+    except OverflowError: print(size_elements)
     size_ends = len(serialized_header_ends)
-    bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
+    try: bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
+    except OverflowError: print(bytes_size_ends)
     size_data = len(serialized_header_data)
-    bytes_size_data = size_data.to_bytes(2, byteorder='big', signed=False)
+    try: bytes_size_data = size_data.to_bytes(4, byteorder='big', signed=False)
+    except OverflowError: print(size_data)
     ############
     compress_header_END = datetime.now()
     compress_header_TIME = compress_header_END - compress_header_START

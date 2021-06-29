@@ -27,7 +27,7 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
     total_bytes_read = 0
     while not STOP_HEADER:
         # get 3 sizes first (2 bytes each)
-        if len(HEADER_TOOLS) < 4:
+        if len(HEADER_TOOLS) < 3:
             num_bytes_to_read = 2
 
             header_types_size = compressed_file.read(num_bytes_to_read)
@@ -44,12 +44,13 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
             ds_header_ends_size = deserialize_header.deserialize_int(header_ends_size, 1, 2, 0)[0]
             HEADER_TOOLS.append(ds_header_ends_size)
             total_bytes_read += num_bytes_to_read
-
+        
+        elif len(HEADER_TOOLS) == 3:
+            num_bytes_to_read = 4
             header_data_size = compressed_file.read(num_bytes_to_read)
-            ds_header_data_size = deserialize_header.deserialize_int(header_data_size, 1, 2, 0)[0]
+            ds_header_data_size = deserialize_header.deserialize_int(header_data_size, 1, 4, 0)[0]
             HEADER_TOOLS.append(ds_header_data_size)
             total_bytes_read += num_bytes_to_read
-
 
         elif HEADER_TYPES == None:
             num_bytes_to_read = HEADER_TOOLS[0]
