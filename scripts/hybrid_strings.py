@@ -100,32 +100,50 @@ def encode_INDEL(INDEL):
     """
     # list of integers which encode full indel
     indel_ints = []
-    # first ten
-    start_indel = 0
-    end_indel = 10
 
-    len_full_INDEL = len(INDEL)
+    full_indel_length = len(INDEL)
 
     num_ints = math.ceil(int(len(INDEL) - 10) / 13) + 1
     #print(INDEL, num_ints)
-    for i in range(num_ints):
-        # first 10 bases are encoded differently than rest
-        if i == 0:
-            first_ten_bases = INDEL[start_indel:end_indel]
-            INDEL_flag = shift_bit(1, 31)
-            first_ten_encoding = encode_SNV(first_ten_bases, len_full_INDEL, 1)
-            indel_ints.append(INDEL_flag | first_ten_encoding)
 
-        # all other bases are encoded with length in 6 bits and then room for 13 bases (26 bits)
-        else:
-            # next 13 bases
-            curr_segment = INDEL[start_indel:end_indel]
-            curr_segment_encode = encode_SNV(curr_segment, len(curr_segment), 0)
-            indel_ints.append(curr_segment_encode)
+    # first ten bases
+    first_ten = encode_first_ten_indel(full_indel_length, INDEL[0:10])
+    indel_ints.append(first_ten)
 
-        start_indel = end_indel
-        end_indel += 13
+    # remaining bases
+    start = 10
+    end = 23
+    if full_indel_length > 10:
+        curr_thirteen = INDEL[start:end]
+        curr_thirteen_encoded = encode_remaining_indel(len(curr_thirteen), curr_thirteen)
+        indel_ints.append(curr_thirteen_encoded)
+        start = end
+        end += 13
+
     return indel_ints
+
+def encode_first_ten_indel(full_indel_length, first_ten_bases):
+    SNV_bitstring = 0
+    INDEL_flag = shift_bit(1, 31)
+    SNV_length = shift_bit(full_indel_length, 20)
+
+    for v in range(len(first_ten_bases)):
+        # get proper bit representation for the variant
+        snv = shift_bit(get_variant_number(first_ten_bases[v]), 2 * v) | SNV_bitstring
+        SNV_bitstring = SNV_bitstring | snv
+
+    return INDEL_flag | SNV_length | SNV_bitstring
+
+def encode_remaining_indel(length_segment, segment):
+    SNV_bitstring = 0
+    SNV_length = shift_bit(length_segment, 26)
+
+    for b in range(len(segment)):
+        # get proper bit representation for the variant
+        snv = shift_bit(get_variant_number(segment[b]), 2 * b) | SNV_bitstring
+        SNV_bitstring = SNV_bitstring | snv
+
+    return SNV_length | SNV_bitstring
 
 
 def get_variant_number(base):

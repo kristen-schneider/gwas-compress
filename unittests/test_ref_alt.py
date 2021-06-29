@@ -124,6 +124,15 @@ class TestHYBRID(unittest.TestCase):
         self.assertEqual(hybrid_strings.decode_int_to_string([0, 1, 2, 3]), ['A', 'C', 'G', 'T'])
         self.assertEqual(hybrid_strings.decode_int_to_string([0, 1, 2, 3]*23), ['A', 'C', 'G', 'T']*23)
 
+    def test_encode_ten_indel(self):
+        # 1 00000001010 00000000000000000000
+        self.assertEqual(hybrid_strings.encode_INDEL('A'*10), [2157969408])
+        # 1 00000001010 01010101010101010101
+        self.assertEqual(hybrid_strings.encode_INDEL('C' * 10), [2158318933])
+        # 1 00000001010 10101010101010101010
+        self.assertEqual(hybrid_strings.encode_INDEL('G' * 10), [2158668458])
+        # 1 00000001010 11111111111111111111
+        self.assertEqual(hybrid_strings.encode_INDEL('T' * 10), [2159017983])
 
 
 
