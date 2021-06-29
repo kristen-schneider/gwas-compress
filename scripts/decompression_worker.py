@@ -212,7 +212,8 @@ def decompress_single_column_int(compression_method, compressed_block,
             return float_column
         # convert ints back to string
         if col_type == 3:
-            s = packed_strings.decode_int_to_string(ds_dc_column_data)
+            #s = packed_strings.decode_int_to_string(ds_dc_column_data)
+            s = hybrid_strings.decode_int_to_string(ds_dc_column_data)
             #string_column = []
             #for i in ds_dc_column_data:
                 #s = type_handling.int_to_string(i)
