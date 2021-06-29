@@ -113,7 +113,7 @@ def encode_INDEL(INDEL):
         if i == 0:
             first_ten_bases = INDEL[start_indel:end_indel]
             INDEL_flag = shift_bit(1, 31)
-            first_ten_encoding = encode_SNV(first_ten_bases, len_full_INDEL, 1)
+            first_ten_encoding = encode_SNV(first_ten_bases, len_full_INDEL)
             indel_ints.append(INDEL_flag | first_ten_encoding)
 
         # all other bases are encoded with length in 6 bits and then room for 13 bases (26 bits)
