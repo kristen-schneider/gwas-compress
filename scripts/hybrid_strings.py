@@ -114,11 +114,13 @@ def encode_INDEL(INDEL):
     start = 10
     end = 23
     if full_indel_length > 10:
-        curr_thirteen = INDEL[start:end]
-        curr_thirteen_encoded = encode_remaining_indel(len(curr_thirteen), curr_thirteen)
-        indel_ints.append(curr_thirteen_encoded)
-        start = end
-        end += 13
+        num_ints = math.ceil((full_indel_length-10)/13)
+        for i in range(num_ints):
+            curr_thirteen = INDEL[start:end]
+            curr_thirteen_encoded = encode_remaining_indel(len(curr_thirteen), curr_thirteen)
+            indel_ints.append(curr_thirteen_encoded)
+            start = end
+            end += 13
 
     return indel_ints
 

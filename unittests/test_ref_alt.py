@@ -126,7 +126,7 @@ class TestHYBRID(unittest.TestCase):
 
     def test_encode_ten_indel(self):
         # 1 00000001010 00000000000000000000
-        self.assertEqual(hybrid_strings.encode_INDEL('A'*10), [2157969408])
+        self.assertEqual(hybrid_strings.encode_INDEL('A' * 10), [2157969408])
         # 1 00000001010 01010101010101010101
         self.assertEqual(hybrid_strings.encode_INDEL('C' * 10), [2158318933])
         # 1 00000001010 10101010101010101010
@@ -134,11 +134,22 @@ class TestHYBRID(unittest.TestCase):
         # 1 00000001010 11111111111111111111
         self.assertEqual(hybrid_strings.encode_INDEL('T' * 10), [2159017983])
 
-
-
-
-
-
+    def test_encode_indel(self):
+        # 1 00000010111 00000000000000000000, 001101 00000000000000000000000000
+        self.assertEqual(hybrid_strings.encode_INDEL('A'* 23), [2171600896, 872415232])
+        # 1 00000010111 01010101010101010101, 001101 01010101010101010101010101
+        self.assertEqual(hybrid_strings.encode_INDEL('C' * 23), [2171950421, 894784853])
+        # 1 00000010111 10101010101010101010, 001101 10101010101010101010101010
+        self.assertEqual(hybrid_strings.encode_INDEL('G' * 23), [2172299946, 917154474])
+        # 1 00000010111 11111111111111111111, 001101 11111111111111111111111111
+        self.assertEqual(hybrid_strings.encode_INDEL('T' * 23), [2172649471, 939524095])
+        # 1 00000000100 00000000000011100100
+        self.assertEqual(hybrid_strings.encode_INDEL('ACGT'), [2151678180])
+        # 1 00000010000 01001110010011100100, 000110 00000000000000111001001110
+        self.assertEqual(hybrid_strings.encode_INDEL('ACGT'*4), [2164581604, 402656846])
+        #ACGTACGTAC GTACGTACGTACG T
+        # 1 00000011000 01001110010011100100, 001101 10010011100100111001001110, 000001 00000000000000000000000011
+        self.assertEqual(hybrid_strings.encode_INDEL('ACGT' * 6), [2172970212, 911101518, 67108867])
 
 
 if __name__ == '__main__':
