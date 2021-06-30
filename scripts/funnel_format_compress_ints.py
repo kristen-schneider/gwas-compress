@@ -114,15 +114,15 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
 
         before_int_size = sys.getsizeof(curr_block[column_i])
-        print('before: ', curr_block[column_i], before_int_size)
+        #print('before: ', before_int_size)
         to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(curr_block[column_i], column_data_type, column_i)
 
         #print(typed_column)
         to_int_END = datetime.now()
         to_int_TIME = to_int_END - to_int_START
-        after_int_size = sys.getsizeof(curr_block[column_i])
-        print('after: ', typed_column, after_int_size)
+        #after_int_size = sys.getsizeof(typed_column)
+        #print('after: ', after_int_size)
 
         # codec = codecs_list[0]
         # # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
