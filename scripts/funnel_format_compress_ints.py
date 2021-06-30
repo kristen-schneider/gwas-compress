@@ -23,7 +23,10 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     OUTPUT
         second half of header
     """
-    f = open('testing_write.txt', 'ab')
+    b = open('testing_write.txt', 'ab')
+    b.truncate(0)
+    b.close()
+    f = open('reg_write.txt', 'a')
     f.truncate(0)
     f.close()
 
@@ -45,7 +48,7 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     block_sizes = []
     # go through funnel format, and compress each block
     for block_i in range(len(funnel_format_data)):
-        print(block_i)
+        #print(block_i)
         # current block from funnel format
         curr_block = funnel_format_data[block_i]
 
@@ -71,18 +74,19 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         # block sizes
         curr_block_size = len(curr_block[0])
         if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
+    
+
+        print(compressed_block.itemsize*compressed_block.size)
+        print(compressed_block_header.itemsize*compressed_block_header.size)
+               
 
         # WRITE DATA
-        f = open('testing_write.txt', 'ab')
-        f.write(compressed_block_header)
+        b = open('testing_write.txt', 'ab')
+        b.write(compressed_block_header)
         #print(compressed_block_header) 
-        x = np.array([1,2,3], dtype=np.uint32, order = 'C')
-        print(type(x))
-        f.write(x)
-        print(type(compressed_block))    
-        f.write(compressed_block)
+        b.write(compressed_block)
         #print(compressed_block)
-        f.close()
+        b.close()
 
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
@@ -162,7 +166,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
             block_header.append(compressed_column_end_pos)
 
         
-        print('np compressed column: ', numpy_compressed_column.itemsize*numpy_compressed_column.size)
+        #print('np compressed column: ', numpy_compressed_column.itemsize*numpy_compressed_column.size)
     numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
     serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
 
@@ -171,7 +175,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
 
     # serialized_block_header = serialize_body.serialize_list(block_header, 1, 4)
     # compressed_block_header = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
-    print(compressed_block.itemsize*compressed_block.size)
+    #print(compressed_block.itemsize*compressed_block.size)
     #print(compressed_block.tobytes(order='C'))
     #print(compressed_block)
     return numpy_compressed_block_header, compressed_block
