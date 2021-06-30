@@ -113,6 +113,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
         to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(curr_block[column_i], column_data_type, column_i)
+        #print(typed_column)
         to_int_END = datetime.now()
         to_int_TIME = to_int_END - to_int_START
 
