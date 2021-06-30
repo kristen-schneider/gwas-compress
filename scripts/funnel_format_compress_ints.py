@@ -1,6 +1,7 @@
 # python imports
 from datetime import datetime
 import sys
+import numpy as np
 
 # personal imports
 import type_handling
@@ -44,6 +45,7 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     block_sizes = []
     # go through funnel format, and compress each block
     for block_i in range(len(funnel_format_data)):
+        print(block_i)
         # current block from funnel format
         curr_block = funnel_format_data[block_i]
 
@@ -51,7 +53,6 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         block_header_and_data = compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes)
         compressed_block_header = block_header_and_data[0]
         compressed_block = block_header_and_data[1]
-
         # HEADER END DATA
         # add to block header ends
         try:
@@ -74,7 +75,11 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         # WRITE DATA
         f = open('testing_write.txt', 'ab')
         f.write(compressed_block_header)
-        #print(compressed_block_header)
+        #print(compressed_block_header) 
+        x = np.array([1,2,3], dtype=np.uint32, order = 'C')
+        print(type(x))
+        f.write(x)
+        print(type(compressed_block))    
         f.write(compressed_block)
         #print(compressed_block)
         f.close()
@@ -99,7 +104,8 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         compressed_block = serialized, compressed bitstring for block data
 
     """
-    compressed_block = b''
+    #compressed_block = b''
+    compressed_block = np.empty(0, dtype=np.uint32, order='C')    
 
     block_header_compression_method = 'gzip'
 
@@ -113,15 +119,12 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         column_bytes = data_type_byte_sizes[column_data_type]
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
 
-        before_int_size = sys.getsizeof(curr_block[column_i])
         to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(curr_block[column_i], column_data_type, column_i)
 
         #print(typed_column)
         to_int_END = datetime.now()
         to_int_TIME = to_int_END - to_int_START
-        after_int_size = sys.getsizeof(typed_column)
-        print(before_int_size, after_int_size)
 
         codec = codecs_list[0]
         # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
@@ -153,20 +156,22 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
                                                                                     # all_column_compression_size_ratios)
 
             serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
-            compressed_block += serialized_compressed_column
-
+            #compressed_block += serialized_compressed_column
+            compressed_block = np.append(compressed_block, numpy_compressed_column)
             compressed_column_end_pos += len(serialized_compressed_column)
             block_header.append(compressed_column_end_pos)
 
+        
+        print('np compressed column: ', numpy_compressed_column.itemsize*numpy_compressed_column.size)
+    numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
+    serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
 
-    # numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
-    # serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
-
-    gzip_compressed_block_header = compress_column.compress_single_column_standard(block_header, 'gzip',
-                                                                                    1, data_type_byte_sizes[1])
+    #gzip_compressed_block_header = compress_column.compress_single_column_standard(block_header, 'gzip', 1, data_type_byte_sizes[1])
     # serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
 
     # serialized_block_header = serialize_body.serialize_list(block_header, 1, 4)
     # compressed_block_header = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
-
-    return gzip_compressed_block_header, compressed_block
+    print(compressed_block.itemsize*compressed_block.size)
+    #print(compressed_block.tobytes(order='C'))
+    #print(compressed_block)
+    return numpy_compressed_block_header, compressed_block

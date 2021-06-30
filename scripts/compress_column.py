@@ -3,7 +3,7 @@ import compress
 import numpy as np
 from datetime import datetime
 import sys
-# from pyfastpfor import *
+from pyfastpfor import *
 
 def compress_single_column_standard(column, column_codec, column_data_type, column_num_bytes):
     #column_i, all_column_compression_times, all_column_compression_size_ratios):
@@ -91,5 +91,4 @@ def compress_single_column_pyfast(typed_column, codec):
     #     all_column_compression_size_ratios[column_i][codec].append(column_i_RATIO)
     # except KeyError:
     #     all_column_compression_size_ratios[column_i] = {codec: [column_i_RATIO]}
-    
     return comp_arr[0:comp_arr_size]
