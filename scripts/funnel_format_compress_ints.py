@@ -1,5 +1,6 @@
 # python imports
 from datetime import datetime
+import sys
 
 # personal imports
 import type_handling
@@ -111,52 +112,61 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         column_data_type = column_types[column_i]
         column_bytes = data_type_byte_sizes[column_data_type]
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
+
+        before_int_size = sys.getsizeof(curr_block[column_i])
+        print('before: ', curr_block[column_i], before_int_size)
         to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(curr_block[column_i], column_data_type, column_i)
+
         #print(typed_column)
         to_int_END = datetime.now()
         to_int_TIME = to_int_END - to_int_START
+        after_int_size = sys.getsizeof(curr_block[column_i])
+        print('after: ', typed_column, after_int_size)
 
-        codec = codecs_list[0]
-        # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
-        # If we need serialized data to compress (gzip = 1, zlib = 2, bz2 = 3)
-        if column_codec == 'gzip' \
-                or column_codec == 'zlib' \
-                or column_codec == 'bz2':
-            # compress column using compress serialized data methods
+        # codec = codecs_list[0]
+        # # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
+        # # If we need serialized data to compress (gzip = 1, zlib = 2, bz2 = 3)
+        # if column_codec == 'gzip' \
+        #         or column_codec == 'zlib' \
+        #         or column_codec == 'bz2':
+        #     # compress column using compress serialized data methods
+        #
+        #     compression_timer_start = datetime.now()
+        #     compressed_column = compress_column.compress_single_column_standard(typed_column,
+        #                                                                         column_codec,
+        #                                                                         1,
+        #                                                                         data_type_byte_sizes[1])
+        #                                                                         # column_i,
+        #                                                                         # all_column_compression_times,
+        #                                                                         # all_column_compression_size_ratios)
+        #     # print(column_i, datetime.now()-compression_timer_start)
+        #     compressed_block += compressed_column
+        #
+        #     compressed_column_end_pos += len(compressed_column)
+        #     block_header.append(compressed_column_end_pos)
+        #
+        # else:
+        #     numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
+        #                                                                             column_codec)
+        #                                                                             # column_i,
+        #                                                                             # all_column_compression_times,
+        #                                                                             # all_column_compression_size_ratios)
+        #
+        #     serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
+        #     compressed_block += serialized_compressed_column
+        #
+        #     compressed_column_end_pos += len(serialized_compressed_column)
+        #     block_header.append(compressed_column_end_pos)
 
-            compression_timer_start = datetime.now()
-            compressed_column = compress_column.compress_single_column_standard(typed_column,
-                                                                                column_codec,
-                                                                                1,
-                                                                                data_type_byte_sizes[1])
-                                                                                # column_i,
-                                                                                # all_column_compression_times,
-                                                                                # all_column_compression_size_ratios)
-            # print(column_i, datetime.now()-compression_timer_start)
-            compressed_block += compressed_column
 
-            compressed_column_end_pos += len(compressed_column)
-            block_header.append(compressed_column_end_pos)
+    # numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
+    # serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
+    gzip_compressed_block_header = compress_column.compress_single_column_standard(block_header, 'gzip',
+                                                                                    1, data_type_byte_sizes[1])
+    # serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
 
-        # If we need array data to compress (fastpfor128 = 4 and fastpfor256 = 5)
-        else:
-            numpy_compressed_column = compress_column.compress_single_column_pyfast(typed_column,
-                                                                                    column_codec)
-                                                                                    # column_i,
-                                                                                    # all_column_compression_times,
-                                                                                    # all_column_compression_size_ratios)
-
-            serialized_compressed_column = numpy_compressed_column.tobytes(order='C')
-            compressed_block += serialized_compressed_column
-
-            compressed_column_end_pos += len(serialized_compressed_column)
-            block_header.append(compressed_column_end_pos)
-
-
-    numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
-    serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
     # serialized_block_header = serialize_body.serialize_list(block_header, 1, 4)
     # compressed_block_header = compress.compress_bitstring(block_header_compression_method, serialized_block_header)
 
-    return serialized_compressed_block_header, compressed_block
+    return gzip_compressed_block_header, compressed_block
