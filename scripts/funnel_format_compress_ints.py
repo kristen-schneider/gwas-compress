@@ -169,7 +169,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
     numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
     serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
 
-    print('block without fastpfor compression: ', sys.getsizeof(compressed_block_no_compression))
+    print('block without fastpfor compression: ', print(compressed_block_no_compression), len(compressed_block_no_compression)*4)
     print('block numpy array: ', compressed_block.itemsize*compressed_block.size)
     print('block numpy array serialized: ', sys.getsizeof(compressed_block_serialized))
     print('block header numpy array: ', numpy_compressed_block_header.itemsize*numpy_compressed_block_header.size)
