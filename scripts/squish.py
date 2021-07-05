@@ -80,11 +80,14 @@ def main():
     print('3. compressing data...')
     compress_data_START = datetime.now()
     ### work ###
-    header_second_half = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
+    compression_info = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
                                                                          header_first_half,
                                                                          funnel_format_data,
                                                                          DATA_TYPE_BYTE_SIZES,
                                                                          OUT_DIR)
+    header_second_half = compression_info[0]
+    col_byte_info = compression_info[1]
+    print(header_second_half, col_byte_info) 
 
     ############
     compress_data_END = datetime.now()
