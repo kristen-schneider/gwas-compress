@@ -8,6 +8,7 @@ import generate_header_first_half
 import generate_funnel_format
 import funnel_format_compress_ints
 import header_compress
+from plotting import boxplot
 
 #### CONSTANTS ####
 # code book for easier type identification
@@ -87,8 +88,9 @@ def main():
                                                                          OUT_DIR)
     header_second_half = compression_info[0]
     col_byte_info = compression_info[1]
-    print(header_second_half, col_byte_info) 
-
+    boxplot.boxplot_bytes_storage(col_byte_info[0], col_byte_info[1], col_byte_info[2]) 
+    
+    
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START

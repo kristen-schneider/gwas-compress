@@ -97,13 +97,14 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
 
-    print(string_block_storage)
-    print(int_block_storage)
-    print(compressed_block_storage)
+    #print(string_block_storage)
+    #print(int_block_storage)
+    #print(compressed_block_storage)
     
     
     header_second_half = [block_header_ends, block_ends, block_sizes]
-    return header_second_half
+    col_byte_info = [string_block_storage, int_block_storage, compressed_block_storage]
+    return header_second_half, col_byte_info
 
 def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes, string_block_storage, int_block_storage, compressed_block_storage):
     """
@@ -139,17 +140,18 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         # fill size of string block (bytes)
         string_byte_storage = 0
         for data in curr_block[column_i]:
-            #print(data)
-            string_byte_storage += len(data.encode("utf8"))
+            #string_byte_storage += len(data.encode("utf8"))
+            string_byte_storage += sys.getsizeof(data)
         string_block_storage[column_i].append(string_byte_storage)
 
         to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(curr_block[column_i], column_data_type, column_i)
         
-        # fill size of string block (bytes)
+        # fill size of typed block (bytes)
         int_byte_storage = 0
         for data in typed_column:
-            int_byte_storage += len(data.encode("utf8"))
+            int_byte_storage += sys.getsizeof(data)
+            #int_byte_storage += len(data.encode("utf8"))
         int_block_storage[column_i].append(int_byte_storage)
 
         to_int_START = datetime.now()
@@ -194,6 +196,13 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
             compressed_block = np.append(compressed_block, numpy_compressed_column)
             compressed_column_end_pos += len(serialized_compressed_column)
             block_header.append(compressed_column_end_pos)
+
+            # fill size of compressed block (bytes)
+            compressed_byte_storage = 0
+            for data in numpy_compressed_column:
+                compressed_byte_storage += sys.getsizeof(data)
+                #compressed_byte_storage += len(data.encode("utf8"))
+            compressed_block_storage[column_i].append(compressed_byte_storage)
 
         
         #print('np compressed column: ', numpy_compressed_column.itemsize*numpy_compressed_column.size)
