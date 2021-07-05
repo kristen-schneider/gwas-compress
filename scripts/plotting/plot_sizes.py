@@ -29,9 +29,9 @@ def plot_data(data):
         x.append(d)
         y.append(data[d])
 
-    plt.figure(figsize=(15,20))
+    plt.figure(figsize=(15, 20))
     plt.bar(pos, y)
-    plt.xticks(pos,x, rotation=70)
+    plt.xticks(pos, x, rotation=70)
     plt.xlabel('file name')
     plt.ylabel('file size (bytes)')
     plt.savefig('/scratch/Users/krsc0813/gwas-compress/sizes.png')      
