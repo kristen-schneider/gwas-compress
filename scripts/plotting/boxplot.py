@@ -10,6 +10,7 @@ def boxplot_bytes_storage(strings_data, ints_data, compressed_data):
 
     cols_data = make_cols_data(strings_data, ints_data, compressed_data)
     
+    plt.figure(figsize=(15,20))
     for col in cols_data:
         p = [pos1, pos2, pos3]
         plt.boxplot(col, positions = p, notch=None, vert=None, patch_artist=None, widths=None)
