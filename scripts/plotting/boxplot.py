@@ -10,7 +10,7 @@ def boxplot_bytes_storage(strings_data, ints_data, compressed_data):
 
     cols_data = make_cols_data(strings_data, ints_data, compressed_data)
 
-    plt.figure(figsize=(80, 20))
+    plt.figure(figsize=(50, 20))
     for col in cols_data:
         p = [pos1, pos2, pos3]
         print(p)
@@ -22,14 +22,17 @@ def boxplot_bytes_storage(strings_data, ints_data, compressed_data):
                     widths=1)
 
         # fill with colors
-        colors = ['red', 'blue', 'green']
+        colors = ['lightcoral', 'lightblue', 'lightgreen']
         for patch, color in zip(x['boxes'], colors):
             patch.set_facecolor(color)
 
         plt.xticks(ticks= np.arange(2, 100, gap).tolist(),
                    labels=['col1', 'col2', 'col3', 'col4',
                            'col5', 'col6', 'col7', 'col8',
-                           'col9', 'col10'], rotation=70)
+                           'col9', 'col10'], fontsize=38)
+        plt.yticks(fontsize=38)
+        plt.title('Bytes of each column at different points in compression (string, int, compressed)', fontsize=58)
+        plt.legend(['string data', 'int data', 'compressed data'], fontsize=38, labelcolor=['lightcoral', 'lightblue', 'lightgreen'])
 
         pos1 += gap
         pos2 += gap
