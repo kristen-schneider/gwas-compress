@@ -13,7 +13,6 @@ def boxplot_bytes_storage(strings_data, ints_data, compressed_data):
     plt.figure(figsize=(50, 20))
     for col in cols_data:
         p = [pos1, pos2, pos3]
-        print(p)
         x = plt.boxplot(col, positions=p,
                     labels=['','',''],
                     # labels=['string', 'int', 'comp'],
@@ -46,7 +45,6 @@ def boxplot_bytes_storage(strings_data, ints_data, compressed_data):
 # indata = 0: [
 # [[col1: s, i, c][col2, s, i, c][col3, s, i, c]...]
 def make_cols_data(strings_data, ints_data, compressed_data):
-    print(strings_data, ints_data, compressed_data)
 
     num_columns = len(strings_data)
     cols_data = [[] for i in range(num_columns)]
@@ -55,7 +53,6 @@ def make_cols_data(strings_data, ints_data, compressed_data):
         cols_data[col].append(ints_data[col])
         cols_data[col].append(compressed_data[col])
 
-    print(cols_data)
 
     return cols_data
 
