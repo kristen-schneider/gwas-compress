@@ -138,19 +138,21 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
         
         # fill size of string block (bytes)
-        string_byte_storage = 0
+        # string = 1 byte per character = 1 x len(string)
+        string_byte_storage = sys.getsizeof([])
         for data in curr_block[column_i]:
-            #string_byte_storage += len(data.encode("utf8"))
-            string_byte_storage += sys.getsizeof(data)
+            string_byte_storage += len(data)
+            #string_byte_storage += sys.getsizeof(data)
         string_block_storage[column_i].append(string_byte_storage)
 
         to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(curr_block[column_i], column_data_type, column_i)
         
         # fill size of typed block (bytes)
+        # int is 4 bytes
         int_byte_storage = 0
         for data in typed_column:
-            int_byte_storage += sys.getsizeof(data)
+            int_byte_storage += 4
             #int_byte_storage += len(data.encode("utf8"))
         int_block_storage[column_i].append(int_byte_storage)
 
@@ -200,7 +202,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
             # fill size of compressed block (bytes)
             compressed_byte_storage = 0
             for data in numpy_compressed_column:
-                compressed_byte_storage += sys.getsizeof(data)
+                compressed_byte_storage += 4
                 #compressed_byte_storage += len(data.encode("utf8"))
             compressed_block_storage[column_i].append(compressed_byte_storage)
 
