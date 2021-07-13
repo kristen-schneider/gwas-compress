@@ -89,5 +89,5 @@ c = {0: [46, 56, 66], 1: [84, 112, 122], 2: [46, 56, 66], 3: [46, 56, 66], 4: [1
      6: [140, 122, 112], 7: [140, 112, 122], 8: [140, 112, 122], 9: [46, 56, 66]}
 
 # boxplot_bytes_storage(s, i, c)
-s, i, c = boxplot_read_fastp_file('/Users/kristen/PycharmProjects/gwas-compress/scripts/plotting/fastpfor.tsv', 10)
-boxplot_bytes_storage(s, i, c)
+#s, i, c = boxplot_read_fastp_file('/Users/kristen/PycharmProjects/gwas-compress/scripts/plotting/fastpfor.tsv', 10)
+#boxplot_bytes_storage(s, i, c)
