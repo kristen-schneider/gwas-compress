@@ -1,6 +1,30 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+def boxplot_read_fastp_file(fastp_file, num_columns):
+    f = open(fastp_file, 'r')
+    delimiter = '\t'
+
+    strings_data = {col:[] for col in range(10)}
+    int_data = {col:[] for col in range(10)}
+    comp_data = {col:[] for col in range(10)}
+
+    block = 0
+    for line in f:
+        curr_block = line.split(delimiter)
+        d = 0
+        for data in range(num_columns):
+            strings_data[data].append(int(curr_block[d]))
+            int_data[data].append(int(curr_block[d+1]))
+            comp_data[data].append(int(curr_block[d+2]))
+
+            d += 3
+
+
+        block += 1
+
+    return strings_data, int_data, comp_data
+
 
 def boxplot_bytes_storage(strings_data, ints_data, compressed_data):
     pos1 = 1
@@ -64,4 +88,6 @@ i = {0: [84, 94, 74], 1: [84, 94, 74], 2: [18, 28, 38], 3: [38, 28, 18], 4: [84,
 c = {0: [46, 56, 66], 1: [84, 112, 122], 2: [46, 56, 66], 3: [46, 56, 66], 4: [140, 112, 84], 5: [140, 112, 122],
      6: [140, 122, 112], 7: [140, 112, 122], 8: [140, 112, 122], 9: [46, 56, 66]}
 
+# boxplot_bytes_storage(s, i, c)
+s, i, c = boxplot_read_fastp_file('/Users/kristen/PycharmProjects/gwas-compress/scripts/plotting/fastpfor.tsv', 10)
 boxplot_bytes_storage(s, i, c)
