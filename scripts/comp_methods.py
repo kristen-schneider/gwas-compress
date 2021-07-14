@@ -17,16 +17,13 @@ def main():
     take in string ff data and test different
     compression methods on each column to see what is going on.
     '''
-    print('funnel format computing...')
-    ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/ten_thousand.tsv',
-                                                 10000, 10, '\t')
-    print('funnel format complete.')
-    
+    ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/thousand.tsv',
+                                                 500, 10, '\t')
     out_f_dir = '/home/krsc0813/projects/gwas-compress/plot_data/compression_methods/'    
 
     all_f = open(out_f_dir+'all_methods_test.tsv', 'a')
     all_f.truncate(0)
-    all_f.write('gzip(int)\tgzip(string)\tfpzip\tzfpy\tfastpfor128\t')
+    all_f.write('gzip(int)\tfpzip\tzfpy\tfastpfor128\t')
     all_f.write('\n')
     
     # for each block
@@ -37,7 +34,6 @@ def main():
         for c in range(len(ff[0])):
             str_column = ff[block][c]  # column as string data
                         
-            print('integer conversion...')
             int_column = []     # column as int data
             # int columns
             if c < 2:
@@ -54,11 +50,10 @@ def main():
             # ref/alt columns
             else:
                 int_column = packed_strings.encode_column(str_column)
-            print('integer conversion complete.')
             
             #fastp_np = fastp_compression(int_column)
+            
             all_f.write(str(len(gzip_compression(int_column, 1)))+'\t')
-            all_f.write(str(len(gzip_compression(str_column, 3)))+'\t') 
             all_f.write(str(len(fpzip_compression(int_column)))+'\t')
             all_f.write(str(len(zfpy_compression(int_column)))+'\t')
             all_f.write(str(len(fastp_compression(int_column).tobytes(order='C')))+'\n')
