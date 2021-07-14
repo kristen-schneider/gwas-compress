@@ -18,7 +18,7 @@ def main():
     compression methods on each column to see what is going on.
     '''
     ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/thousand.tsv',
-                                                 500, 10, '\t')
+                                                 1000, 10, '\t')
     out_f_dir = '/home/krsc0813/projects/gwas-compress/plot_data/compression_methods/'    
 
     all_f = open(out_f_dir+'all_methods_test.tsv', 'a')
