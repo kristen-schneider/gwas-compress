@@ -17,24 +17,39 @@ def main():
     ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/ten.tsv',
                                                  3, 10, '\t')
     
+    out_f_dir = '/home/krsc0813/projects/gwas-compress/plot_data/compression_methods/'    
+
+    all_f = open(out_f_dir+'all_methods_test.tsv', 'a')
+    all_f.truncate(0)
+    all_f.close
+        
+    # for each block
     for block in range(len(ff)):
         print('BLOCK ', block+1)
-        for fc in range(4, 9):
-            print('column ', fc)
-            str_float_column = ff[block][fc]
-            int_list = []
-            for d in str_float_column:
-                int_list.append(float_to_int(d))
+        
+        # for each column
+        for c in range(len(ff[0])):
+            print('\tcolumn: ', fc)
+            str_column = ff[block][fc]  # column as string data
+                        
             
-            print('gzip: ', len(gzip_copression(int_list)))
-            print('fpzip: ', len(fpzip_compression(int_list)))
-            print('zfpy: ', len(zfpy_compression(int_list)))
-            fastp_np = int_fastp_compression(int_list)
+            int_column = []     # column as int data
+            for d in str_column:
+                int_columm.append(float_to_int(d))
+    
+            
+            print('gzip: ', len(gzip_copression(int_column)))
+            print('fpzip: ', len(fpzip_compression(int_column)))
+            print('zfpy: ', len(zfpy_compression(int_column)))
+            fastp_np = int_fastp_compression(int_column)
             # print('fastp fpzip: ', len(fpzip_compression(fastp_np)))
             # print('fastp zfpy: ', len(zfpy_compression(fastp_np)))
             # print('int/fastpfor: ', len(int_fastp_compression(int_list)))
             print('int to bytes: ', len(int_fastp_compression(int_list).tobytes(order='C')))
-    str_data = ['4.213e-05', '2.984e-05', '7.127e-04']
+        
+        print('\n')
+    
+    #str_data = ['4.213e-05', '2.984e-05', '7.127e-04']
     #data = [4.213e-05, 2.984e-05, 7.127e-04]
     #print('gzip: ', gzip_copression(data))
     #print('fpzip: ', fpzip_compression(data))
