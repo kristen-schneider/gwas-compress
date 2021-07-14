@@ -10,12 +10,12 @@ import serialize_body
 
 
 def main():
-'''
-take in string ff data and test differnt compression methods on each column to see what is going on.
-
-'''
-    ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/ten_thousand.tsv',
-                                                 10000, 10, '\t')
+    '''
+    take in string ff data and test different
+    compression methods on each column to see what is going on.
+    '''
+    ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/ten.tsv',
+                                                 3, 10, '\t')
     
     for block in range(len(ff)):
         print('BLOCK ', block+1)
@@ -30,11 +30,11 @@ take in string ff data and test differnt compression methods on each column to s
             print('fpzip: ', len(fpzip_compression(int_list)))
             print('zfpy: ', len(zfpy_compression(int_list)))
             fastp_np = int_fastp_compression(int_list)
-            print('fastp fpzip: ', len(fpzip_compression(fastp_np)))
-            print('fastp zfpy: ', len(zfpy_compression(fastp_np)))
-            print('int/fastpfor: ', len(int_fastp_compression(int_list)))       
+            # print('fastp fpzip: ', len(fpzip_compression(fastp_np)))
+            # print('fastp zfpy: ', len(zfpy_compression(fastp_np)))
+            # print('int/fastpfor: ', len(int_fastp_compression(int_list)))
             print('int to bytes: ', len(int_fastp_compression(int_list).tobytes(order='C')))
-    #str_data = ['4.213e-05', '2.984e-05', '7.127e-04']
+    str_data = ['4.213e-05', '2.984e-05', '7.127e-04']
     #data = [4.213e-05, 2.984e-05, 7.127e-04]
     #print('gzip: ', gzip_copression(data))
     #print('fpzip: ', fpzip_compression(data))
