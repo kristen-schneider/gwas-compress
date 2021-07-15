@@ -7,7 +7,7 @@ import packed_strings
 import struct
 import gzip
 import fpzip
-# import zfpy
+import zfpy
 import numpy as np
 
 
@@ -17,17 +17,15 @@ def main():
     take in string ff data and test different
     compression methods on each column to see what is going on.
     '''
-    ff = generate_funnel_format.make_all_blocks('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ten_thousand.tsv',
-                                                3, 10, '\t')
-    # ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/thousand.tsv',
-    #                                              1000, 10, '\t')
-    out_f_dir = '/Users/kristen/Desktop/compression_sandbox/toy_data_out/comp_methods.tsv'
-    # out_f_dir = '/home/krsc0813/projects/gwas-compress/plot_data/compression_methods/'
+    ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/ten_thousand.tsv',
+                                                  10000, 10, '\t')
+    out_f_dir = '/home/krsc0813/projects/gwas-compress/plot_data/compression_methods/'
 
-
+    data_types = [1,1,3,3,2,2,2,2,2,3]
+    
     all_f = open(out_f_dir+'all_methods_test.tsv', 'a')
     all_f.truncate(0)
-    all_f.write('gzip(int)\tfpzip\tzfpy\tfastpfor128\t')
+    all_f.write('fpzip\tzfpy\tfastpfor128\t')
     all_f.write('\n')
     
     # for each block
@@ -55,12 +53,14 @@ def main():
             else:
                 int_column = packed_strings.encode_column(str_column)
             
-            #fastp_np = fastp_compression(int_column)
-            
+            fastp_np = fastp_compression(int_column)
+            print(len(int_column), len(fastp_np))
+           
+            all_f.write(str(len(gzip_compression(str_column, data_types[c]))) + '\t')     
             all_f.write(str(len(gzip_compression(int_column, 1)))+'\t')
             all_f.write(str(len(fpzip_compression(int_column)))+'\t')
-            # all_f.write(str(len(zfpy_compression(int_column)))+'\t')
-            # all_f.write(str(len(fastp_compression(int_column).tobytes(order='C')))+'\n')
+            all_f.write(str(len(zfpy_compression(int_column)))+'\t')
+            all_f.write(str(len(fastp_compression(int_column).tobytes(order='C')))+'\n')
             #print('gzip: ', len(gzip_copression(int_column)))
             #print('fpzip: ', len(fpzip_compression(int_column)))
             #print('zfpy: ', len(zfpy_compression(int_column)))
