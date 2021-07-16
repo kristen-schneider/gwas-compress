@@ -31,7 +31,7 @@ def main():
 
     # user should edit config.ini to reflect proper parameters
     # args = config_arguments.get_args_from_config('LOCAL')
-    args = config_arguments.get_args_from_config('MENDEL', 'fastpfor')
+    args = config_arguments.get_args_from_config('MENDEL')#, 'fastpfor')
 
     # included in config file
     IN_FILE = args['in_file']

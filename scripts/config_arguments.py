@@ -4,8 +4,8 @@ def main():
     config_to_args()
     #get_args_from_config()
 
-def get_args_from_config(machine, comp_method):
-    c = config_to_args(comp_method)
+def get_args_from_config(machine):
+    c = config_to_args()
 
     args = dict()
     for arg in c[machine]:
@@ -13,9 +13,9 @@ def get_args_from_config(machine, comp_method):
     # print(args)
     return args
 
-def config_to_args(comp_method):
+def config_to_args():
     config = configparser.ConfigParser()
-    config.read(comp_method+'_config.ini')
+    config.read('config.ini')
 
     return config
 
