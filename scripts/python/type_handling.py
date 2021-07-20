@@ -65,8 +65,6 @@ def string_list_to_int(data_list, data_type, column_i):
     OUTPUT
         typed_list: list of ints
     """
-    f = open('col_comp_times.txt', 'a')
-    start = datetime.now()
     typed_list = []
     if column_i == 2 or column_i == 3:
         # typed_list = hybrid_strings.encode_column(data_list)
@@ -75,7 +73,6 @@ def string_list_to_int(data_list, data_type, column_i):
         for data in data_list:
             typed_data = convert_to_int(data, data_type)
             typed_list.append(typed_data)
-    f.write(str(datetime.now()-start) + '\n')
     return typed_list
 
 
