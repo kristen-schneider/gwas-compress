@@ -15,7 +15,7 @@ def get_args_from_config(machine):
 
 def config_to_args():
     config = configparser.ConfigParser()
-    config.read('/home/krsc0813/projects/gwas-compress/scripts/config_files/config.ini')
+    config.read('/home/krsc0813/projects/gwas-compress/config_files/config.ini')
 
     return config
 
