@@ -1,6 +1,7 @@
 #### IMPORTS ####
 # python imports
 from datetime import datetime
+import sys
 
 # kristen imports
 import config_arguments
@@ -14,6 +15,10 @@ from plotting import boxplot
 # code book for easier type identification
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
+
+### System Arguments ### (clean this up)
+config_file = sys.argv[1]#'/home/krsc0813/projects/gwas-compress/config_files/config.ini'
+
 
 def main():
     """
@@ -31,7 +36,7 @@ def main():
 
     # user should edit config.ini to reflect proper parameters
     # args = config_arguments.get_args_from_config('LOCAL')
-    args = config_arguments.get_args_from_config('MENDEL')#, 'fastpfor')
+    args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
 
     # included in config file
     IN_FILE = args['in_file']

@@ -4,8 +4,8 @@ def main():
     config_to_args()
     #get_args_from_config()
 
-def get_args_from_config(machine):
-    c = config_to_args()
+def get_args_from_config(machine, config_file):
+    c = config_to_args(config_file)
 
     args = dict()
     for arg in c[machine]:
@@ -13,9 +13,10 @@ def get_args_from_config(machine):
     # print(args)
     return args
 
-def config_to_args():
+def config_to_args(config_file):
     config = configparser.ConfigParser()
-    config.read('/home/krsc0813/projects/gwas-compress/config_files/config.ini')
+    config.read(config_file)
+    #config.read('/home/krsc0813/projects/gwas-compress/config_files/config.ini')
 
     return config
 
