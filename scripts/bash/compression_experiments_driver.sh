@@ -20,9 +20,10 @@ for config_file in `ls $config_files_dir`
 do
     if [[ $config_file == *.ini ]];then
         echo "running experimetns for $config_file"
+        python /home/krsc0813/projects/gwas-compress/scripts/python/squish.py $config_files_dir$config_file
+        #basic_config
     fi
 done        
-python /home/krsc0813/projects/gwas-compress/scripts/python/squish.py $config_files_dir$basic_config
 #for method in "${comp_methods[@]}"
 #do
 #    echo $method

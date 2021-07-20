@@ -10,7 +10,7 @@ import compress_column
 import serialize_body
 
 
-def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data_type_byte_sizes, out_dir):
+def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data_type_byte_sizes):
     """
     returns end of header: [end of block headers, end of blocks, sizes of blocks]
 
@@ -23,12 +23,6 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     OUTPUT
         second half of header
     """
-    b = open('testing_write.txt', 'ab')
-    b.truncate(0)
-    b.close()
-    f = open('reg_write.txt', 'a')
-    f.truncate(0)
-    f.close()
 
     # full header break down
     magic_number = header_first_half[0]
@@ -54,14 +48,6 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     int_block_storage = {column_list: [] for column_list in range(number_columns)}
     compressed_block_storage = {column_list: [] for column_list in range(number_columns)}
 
-    gzip_out_file = '/home/krsc0813/projects/gwas-compress/plot_data/boxplot_data/gzip.tsv'
-    gzip_of = open(gzip_out_file, 'a')
-    gzip_of.truncate(0)
-    gzip_of.close()
-    fastp_out_file = '/home/krsc0813/projects/gwas-compress/plot_data/boxplot_data/fastpfor.tsv'
-    fastp_of = open(fastp_out_file, 'a')
-    fastp_of.truncate(0)
-    fastp_of.close()
 
     for block_i in range(len(funnel_format_data)):
         #print(block_i)
@@ -70,8 +56,7 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
 
         # compress block
         block_header_and_data = compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes,
-                                                        string_block_storage, int_block_storage, compressed_block_storage, 
-                                                        gzip_out_file, fastp_out_file)
+                                                        string_block_storage, int_block_storage, compressed_block_storage)
         compressed_block_header = block_header_and_data[0]
         compressed_block = block_header_and_data[1]
         # HEADER END DATA
@@ -94,15 +79,6 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
     
 
-               
-
-        # WRITE DATA
-        b = open('testing_write.txt', 'ab')
-        b.write(compressed_block_header)
-        #print(compressed_block_header) 
-        b.write(compressed_block)
-        #print(compressed_block)
-        b.close()
 
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
@@ -116,7 +92,7 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
     col_byte_info = [string_block_storage, int_block_storage, compressed_block_storage]
     return header_second_half, col_byte_info
 
-def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes, string_block_storage, int_block_storage, compressed_block_storage, gzip_out_file, fastp_out_file):
+def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes, string_block_storage, int_block_storage, compressed_block_storage):
     """
     compresses a single block of data, includes a block header which is a list of end positions of all columns
 
@@ -131,9 +107,6 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         compressed_block = serialized, compressed bitstring for block data
 
     """
-    
-    gzip_of = open(gzip_out_file, 'a')
-    fastp_of = open(fastp_out_file, 'a')
     
     compressed_block_serialized = b''
     compressed_block = np.empty(0, dtype=np.uint32, order='C')    
@@ -221,11 +194,7 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
                 #compressed_byte_storage += len(data.encode("utf8"))
             compressed_block_storage[column_i].append(compressed_byte_storage)
 
-        gzip_of.write(str(string_byte_storage)+'\t')
-        fastp_of.write(str(string_byte_storage)+'\t'+str(int_byte_storage)+'\t'+str(compressed_byte_storage)+'\t')
         #print('np compressed column: ', numpy_compressed_column.itemsize*numpy_compressed_column.size)    
-    gzip_of.write('\n')
-    fastp_of.write('\n')
     numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
     serialized_compressed_block_header = numpy_compressed_block_header.tobytes(order='C')
 
