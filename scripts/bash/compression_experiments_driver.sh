@@ -12,9 +12,17 @@
 
 
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
+config_files_dir='/home/krsc0813/projects/gwas-compress/config_files/'
+basic_config='config.ini' 
 
 echo "starting experiments calculation"
-python squish.py
+for config_file in `ls $config_files_dir`
+do
+    if [[ $config_file == *.ini ]];then
+        echo "running experimetns for $config_file"
+    fi
+done        
+python /home/krsc0813/projects/gwas-compress/scripts/python/squish.py $config_files_dir$basic_config
 #for method in "${comp_methods[@]}"
 #do
 #    echo $method
