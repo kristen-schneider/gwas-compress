@@ -55,8 +55,13 @@ def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data
         curr_block = funnel_format_data[block_i]
 
         # compress block
-        block_header_and_data = compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes,
-                                                        string_block_storage, int_block_storage, compressed_block_storage)
+        block_header_and_data = compress_single_block(curr_block,
+                                                      codecs_list,
+                                                      column_types,
+                                                      data_type_byte_sizes,
+                                                      string_block_storage,
+                                                      int_block_storage,
+                                                      compressed_block_storage)
         compressed_block_header = block_header_and_data[0]
         compressed_block = block_header_and_data[1]
         # HEADER END DATA
