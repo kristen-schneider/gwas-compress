@@ -1,4 +1,4 @@
-import type_handling
+from scripts.python.utils import type_handling
 
 def get_header_first_half(in_file, data_type_code_book):
     """

@@ -9,7 +9,7 @@ import generate_header_first_half
 import generate_funnel_format
 import funnel_format_compress_ints
 import header_compress
-from plotting import boxplot
+from scripts.python.plotting import boxplot
 
 #### CONSTANTS ####
 # code book for easier type identification
