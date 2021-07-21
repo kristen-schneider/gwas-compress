@@ -1,5 +1,5 @@
-import packed_strings
-import hybrid_strings
+from scripts.python import packed_strings
+from scripts.python import hybrid_strings
 
 from datetime import datetime
 

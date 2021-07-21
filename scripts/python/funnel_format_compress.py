@@ -1,6 +1,6 @@
 from datetime import datetime
-import type_handling
-import serialize_body
+from scripts.python.utils import type_handling
+from scripts.python.compression import serialize_body
 from scripts import compress, compress_column
 import read_write_compression_times
 import read_write_compression_ratios

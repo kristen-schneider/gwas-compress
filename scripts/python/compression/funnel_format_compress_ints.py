@@ -1,13 +1,10 @@
 # python imports
 from datetime import datetime
-import sys
 import numpy as np
 
 # personal imports
 import type_handling
-import compress
 import compress_column
-import serialize_body
 
 
 def compress_all_blocks(codecs_list, header_first_half, funnel_format_data, data_type_byte_sizes):

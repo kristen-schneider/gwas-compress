@@ -1,10 +1,5 @@
 from datetime import datetime
-import type_handling
-import serialize_body
-from scripts.python import compress, compress_column
-import read_write_compression_times
-import read_write_compression_ratios
-import plot_bar
+from scripts.python.compression import serialize_body, compress
 
 
 def compress_all_blocks(CODECS_LIST,
@@ -110,9 +105,8 @@ def compress_all_blocks(CODECS_LIST,
     return header_second_half, compressed_content
 
 
-def compress_single_block(all_column_compression_times, all_column_compression_size_ratios,
-                          data_type_code_book, data_type_byte_sizes,
-                          compression_method_list, column_types, block):
+def compress_single_block(curr_block, CODECS_LIST, column_types,
+                          DATA_TYPE_BYTE_SIZES, INPUT_DATA_TYPE, COMPRESSION_DATA_TYPE):
     """
     compresses a single block of data, includes a block header which is a list of end positions of all columns
 
@@ -129,21 +123,21 @@ def compress_single_block(all_column_compression_times, all_column_compression_s
         compressed_block_bitstring = serialized, compressed bitstring for block data
 
     """
-    compressed_block_bitstring = b''
-
-    block_header_type = data_type_code_book[int]
-    block_header_bytes = data_type_byte_sizes[block_header_type]
-    block_header_compression_method = 'gzip'
-
-    compressed_column_ends_list = []
-    compressed_column_end_pos = 0
-    for column_i in range(len(block)):
-        # column data
-        curr_column = block[column_i]
-        column_compression_method = compression_method_list[column_i]
-        column_data_type = column_types[column_i]
-        column_num_bytes = data_type_byte_sizes[column_i]
-        typed_column = type_handling.convert_to_type(curr_column, column_data_type)
+    # compressed_block_bitstring = b''
+    #
+    # block_header_type = data_type_code_book[int]
+    # block_header_bytes = data_type_byte_sizes[block_header_type]
+    # block_header_compression_method = 'gzip'
+    #
+    # compressed_column_ends_list = []
+    # compressed_column_end_pos = 0
+    # for column_i in range(len(block)):
+    #     # column data
+    #     curr_column = block[column_i]
+    #     column_compression_method = compression_method_list[column_i]
+    #     column_data_type = column_types[column_i]
+    #     column_num_bytes = data_type_byte_sizes[column_i]
+    #     typed_column = type_handling.convert_to_type(curr_column, column_data_type)
 
         # # SPLIT ON COMPRESSION INPUT TYPES (serialized data vs array)
         # # print(column_compression_method)

@@ -1,10 +1,7 @@
-import generate_funnel_format
-import type_handling
-import compress_column
-import serialize_body
+from scripts.python.utils import type_handling
+from scripts.python.compression import serialize_body, generate_funnel_format, compress_column
 import packed_strings
 
-import struct
 import gzip
 import fpzip
 import zfpy
@@ -18,7 +15,7 @@ def main():
     compression methods on each column to see what is going on.
     '''
     ff = generate_funnel_format.make_all_blocks('/home/krsc0813/projects/gwas-compress/data/in/ten_thousand.tsv',
-                                                  10000, 10, '\t')
+                                                10000, 10, '\t')
     out_f_dir = '/home/krsc0813/projects/gwas-compress/plot_data/compression_methods/'
 
     data_types = [1,1,3,3,2,2,2,2,2,3]
@@ -81,7 +78,7 @@ def main():
 def gzip_compression(data, data_type):
     serialized_bytes = b''
     for d in data:
-        serialized_bytes+=serialize_body.serialize_list(data, data_type, 4)
+        serialized_bytes+= serialize_body.serialize_list(data, data_type, 4)
     compressed_bytes = gzip.compress(serialized_bytes)
     return compressed_bytes
 
