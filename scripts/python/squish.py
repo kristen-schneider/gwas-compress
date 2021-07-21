@@ -15,6 +15,8 @@ from plotting import boxplot
 # code book for easier type identification
 DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
+INT_INPUT_BUCKET = ['gzip','zfpy','zlib','bz2','fastpfor']
+FLOAT_INPUT_BUCKET = []
 
 ### System Arguments ### (clean this up)
 config_file = sys.argv[1]#'/home/krsc0813/projects/gwas-compress/config_files/config.ini'
@@ -25,7 +27,7 @@ def main():
     0. get arguments from user to run compression according to their preferences
     1. gets beginning of header (magic number, version, delimiter, column labels, column types, num columns, gzip header)
     2. generates funnel format (list of blocks)
-    3. compress data and get second half of header
+    3. compress data and get second half of header *depends on input data type and compression data type
     4. compress full header
     5. write compressed header
     6. write compressed data
