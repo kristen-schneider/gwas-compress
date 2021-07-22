@@ -3,7 +3,7 @@ from datetime import datetime
 import numpy as np
 
 # personal imports
-import type_handling
+from scripts.python.utils import type_handling
 import compress_column
 
 
