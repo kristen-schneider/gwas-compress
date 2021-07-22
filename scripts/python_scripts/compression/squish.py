@@ -1,5 +1,5 @@
 #### IMPORTS ####
-# python imports
+# python_scripts imports
 from datetime import datetime
 import sys
 
@@ -9,7 +9,7 @@ import generate_header_first_half
 import generate_funnel_format
 import funnel_format_compress_ints
 import header_compress
-from scripts.python.plotting import boxplot
+from scripts.python_scripts.plotting import boxplot
 
 #### CONSTANTS ####
 # code book for easier type identification

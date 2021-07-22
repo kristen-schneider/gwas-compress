@@ -34,14 +34,14 @@ def compress_bitstring(compression_method, s_bitstring):
 
 def gzip_compress(s_bitstring, time):
     '''
-    uses python's gzip.compress to compress a serialized bitstring
+    uses python_scripts's gzip.compress to compress a serialized bitstring
 
     INPUT
         s_bitstring = serialized bitstring from the serialize_data method in serialize_body.py
         time = mtime argument for gzip.compress
 
     OUTPUT
-        c_bitstring = compressed bitstring (using python's gzip.compress() function)
+        c_bitstring = compressed bitstring (using python_scripts's gzip.compress() function)
 
     '''
 
@@ -51,13 +51,13 @@ def gzip_compress(s_bitstring, time):
 
 def zlib_compress(s_bitstring):
     '''
-    uses python's zlib.compress to compress a serialized bitstring
+    uses python_scripts's zlib.compress to compress a serialized bitstring
 
     INPUT
         s_bitstring = serialized bitstring from the serialize_data method in serialize_body.py
 
     OUTPUT
-        c_bitstring = compressed bitstring (using python's zlib.compress() function)
+        c_bitstring = compressed bitstring (using python_scripts's zlib.compress() function)
 
     '''
 
@@ -67,13 +67,13 @@ def zlib_compress(s_bitstring):
 
 def bz2_compress(s_bitstring):
     '''
-    uses python's zlib.compress to compress a serialized bitstring
+    uses python_scripts's zlib.compress to compress a serialized bitstring
 
     INPUT
         s_bitstring = serialized bitstring from the serialize_data method in serialize_body.py
 
     OUTPUT
-        c_bitstring = compressed bitstring (using python's zlib.compress() function)
+        c_bitstring = compressed bitstring (using python_scripts's zlib.compress() function)
 
     '''
 

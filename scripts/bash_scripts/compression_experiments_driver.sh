@@ -1,12 +1,12 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash_scripts
 #
 #SBATCH -p long
 #SBATCH --job-name=compression_experiments_driver
 #SBATCH --ntasks=1
 #SBATCH --time=23:00:00
 #SBATCH --mem-per-cpu=10G
-#SBATCH --output=/home/krsc0813/projects/gwas-compress/scripts/bash/compression_experiments_driver.out
-#SBATCH --error=/home/krsc0813/projects/gwas-compress/scripts/bash/compression_experiments_driver.err
+#SBATCH --output=/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/compression_experiments_driver.out
+#SBATCH --error=/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/compression_experiments_driver.err
 
 # PURPOSE: run multiple experiments for differnt setups of the compression
 
@@ -28,7 +28,7 @@ done
 #do
 #    echo $method
 #    config_file="${method}_config.ini"
-#    python squish.py
+#    python_scripts squish.py
 #    echo
 #done
 

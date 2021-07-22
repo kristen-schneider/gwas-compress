@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#!/usr/bin/env bash_scripts
 #
 #SBATCH -p short
 #SBATCH --job-name=query
@@ -10,7 +10,7 @@
 
 # PURPOSE: run squish compression script on bigger data
 
-#module load python/3.6.3/numpy/1.14.1
+#module load python_scripts/3.6.3/numpy/1.14.1
 
 source ~/.bashrc
 conda init bash

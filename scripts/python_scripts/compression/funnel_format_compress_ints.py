@@ -1,9 +1,9 @@
-# python imports
+# python_scripts imports
 from datetime import datetime
 import numpy as np
 
 # personal imports
-from scripts.python.utils import type_handling
+from scripts.python_scripts.utils import type_handling
 import compress_column
 
 

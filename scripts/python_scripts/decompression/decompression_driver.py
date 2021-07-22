@@ -1,4 +1,4 @@
-from scripts.python.compression import config_arguments
+from scripts.python_scripts.compression import config_arguments
 from datetime import datetime
 import header_decompress
 import decompression_worker

@@ -26,7 +26,7 @@ def float_to_int(float_data):
         # BASE
         # base number gets proper space (e.g. 4.213 --> 42130)
         # have to do this in two steps because
-        # rounding is lossy with python multiplication
+        # rounding is lossy with python_scripts multiplication
         # if we just did *100000000 we would get junk in the last 4 digits
         float_as_int += abs(int(base*10000))
         float_as_int *= 10000

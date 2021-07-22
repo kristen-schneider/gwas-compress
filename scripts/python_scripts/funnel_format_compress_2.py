@@ -1,5 +1,5 @@
 from datetime import datetime
-from scripts.python.compression import serialize_body, compress
+from scripts.python_scripts.compression import serialize_body, compress
 
 
 def compress_all_blocks(CODECS_LIST,

@@ -27,10 +27,10 @@ def decompress_data(compression_method, c_bitstring):
 
 def gzip_decompress(c_bitstring):
     """
-    uses python's gzip.decompress to decompressed a compressed, serialized bitstring
+    uses python_scripts's gzip.decompress to decompressed a compressed, serialized bitstring
 
     INPUT
-        c_bitstring = compressed bitstring (using python's gzip.compress)
+        c_bitstring = compressed bitstring (using python_scripts's gzip.compress)
 
     OUTPUT
         dc_bitstring = decompressed bitstring (original bitstring from serialize function)
@@ -42,10 +42,10 @@ def gzip_decompress(c_bitstring):
 
 def zlib_decompress(c_bitstring):
     """
-    uses python's zlib.decompress to decompressed a compressed, serialized bitstring
+    uses python_scripts's zlib.decompress to decompressed a compressed, serialized bitstring
 
     INPUT
-        c_bitstring = compressed bitstring (using python's gzip.compress)
+        c_bitstring = compressed bitstring (using python_scripts's gzip.compress)
 
     OUTPUT
         dc_bitstring = decompressed bitstring (original bitstring from serialize function)
@@ -56,10 +56,10 @@ def zlib_decompress(c_bitstring):
 
 def bz2_decompress(c_bitstring):
     """
-    uses python's bz2.decompress to decompressed a compressed, serialized bitstring
+    uses python_scripts's bz2.decompress to decompressed a compressed, serialized bitstring
 
     INPUT
-        c_bitstring = compressed bitstring (using python's bz2.compress)
+        c_bitstring = compressed bitstring (using python_scripts's bz2.compress)
 
     OUTPUT
         dc_bitstring = decompressed bitstring (original bitstring from serialize function)

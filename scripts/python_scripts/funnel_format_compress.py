@@ -1,10 +1,10 @@
 from datetime import datetime
-from scripts.python.utils import type_handling
-from scripts.python.compression import serialize_body
+from scripts.python_scripts.utils import type_handling
+from scripts.python_scripts.compression import serialize_body
 from scripts import compress, compress_column
 import read_write_compression_times
 import read_write_compression_ratios
-from scripts.python.plotting import plot_bar
+from scripts.python_scripts.plotting import plot_bar
 
 
 def compress_all_blocks(data_type_code_book,
