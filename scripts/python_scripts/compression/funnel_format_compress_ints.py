@@ -7,7 +7,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 # personal imports
-from scripts.python_scripts.utils import type_handling
+from utils import type_handling
 import compress_column
 
 
