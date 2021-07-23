@@ -1,13 +1,13 @@
 # python_scripts imports
 from datetime import datetime
 import numpy as np
-import os, sys
-currentdir = os.path.dirname(os.path.realpath(__file__))
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
 parentdir = os.path.dirname(currentdir)
-sys.path.append(parentdir)
+sys.path.insert(0, parentdir)
 
 # personal imports
-from scripts.python_scripts.utils import type_handling
+from utils import type_handling
 import compress_column
 
 
