@@ -12,7 +12,7 @@ import generate_header_first_half
 import generate_funnel_format
 import funnel_format_compress_ints
 import header_compress
-from scripts.python_scripts.plotting import boxplot
+from plotting import boxplot
 
 #### CONSTANTS ####
 # code book for easier type identification
@@ -40,9 +40,9 @@ def main():
     get_arguments_start_time = datetime.now()
 
     # user should edit config.ini to reflect proper parameters
-    args = config_arguments.get_args_from_config('LOCAL', config_file)
+    # args = config_arguments.get_args_from_config('LOCAL', config_file)
 
-    # args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
+    args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
 
     # included in config file
     IN_FILE = args['in_file']
@@ -97,9 +97,9 @@ def main():
     compression_info = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
                                                                        header_first_half,
                                                                        funnel_format_data,
-                                                                       DATA_TYPE_BYTE_SIZES,
-                                                                       INPUT_DATA_TYPE,
-                                                                       COMPRESSION_DATA_TYPE)
+                                                                       DATA_TYPE_BYTE_SIZES)
+                                                                       #INPUT_DATA_TYPE,
+                                                                       #COMPRESSION_DATA_TYPE)
     header_second_half = compression_info[0]
     col_byte_info = compression_info[1]
     boxplot.boxplot_bytes_storage(col_byte_info[0], col_byte_info[1], col_byte_info[2]) 
