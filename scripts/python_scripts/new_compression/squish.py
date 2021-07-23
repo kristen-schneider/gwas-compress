@@ -100,9 +100,7 @@ def main():
                                                                        DATA_TYPE_BYTE_SIZES)
                                                                        #INPUT_DATA_TYPE,
                                                                        #COMPRESSION_DATA_TYPE)
-    header_second_half = compression_info[0]
-    col_byte_info = compression_info[1]
-    boxplot.boxplot_bytes_storage(col_byte_info[0], col_byte_info[1], col_byte_info[2]) 
+    header_second_half = compression_info
     
     
     ############
