@@ -1,3 +1,8 @@
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
 from scripts.python_scripts.utils import type_handling
 
 def get_header_first_half(in_file, data_type_code_book):

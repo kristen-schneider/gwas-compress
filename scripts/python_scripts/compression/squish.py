@@ -1,7 +1,10 @@
 #### IMPORTS ####
 # python_scripts imports
 from datetime import datetime
-import sys
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
 
 # kristen imports
 import config_arguments
