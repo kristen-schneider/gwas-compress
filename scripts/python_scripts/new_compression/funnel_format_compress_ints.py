@@ -118,25 +118,6 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
         column_bytes = data_type_byte_sizes[column_data_type]
         # typed_column = type_handling.convert_to_type(block[column_i], column_data_type)
         
-        # fill size of string block (bytes)
-        # string = 1 byte per character = 1 x len(string)
-        #string_byte_storage = sys.getsizeof([])
-        string_byte_storage = 0
-        for data in curr_block[column_i]:
-            string_byte_storage += len(data)
-            #string_byte_storage += sys.getsizeof(data)
-        string_block_storage[column_i].append(string_byte_storage)
-
-        to_int_START = datetime.now()
-        typed_column = type_handling.string_list_to_int(curr_block[column_i], column_data_type, column_i)
-        
-        # fill size of typed block (bytes)
-        # int is 4 bytes
-        int_byte_storage = 0
-        for data in typed_column:
-            int_byte_storage += 4
-            #int_byte_storage += len(data.encode("utf8"))
-        int_block_storage[column_i].append(int_byte_storage)
 
         to_int_START = datetime.now()
         typed_column = type_handling.string_list_to_int(curr_block[column_i], column_data_type, column_i)
@@ -181,12 +162,6 @@ def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_
             compressed_column_end_pos += len(serialized_compressed_column)
             block_header.append(compressed_column_end_pos)
 
-            # fill size of compressed block (bytes)
-            compressed_byte_storage = 0
-            for data in numpy_compressed_column:
-                compressed_byte_storage += 4
-                #compressed_byte_storage += len(data.encode("utf8"))
-            compressed_block_storage[column_i].append(compressed_byte_storage)
 
         #print('np compressed column: ', numpy_compressed_column.itemsize*numpy_compressed_column.size)    
     numpy_compressed_block_header = compress_column.compress_single_column_pyfast(block_header, codecs_list[-1])
