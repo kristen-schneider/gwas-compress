@@ -1,6 +1,5 @@
-from scripts.python_scripts.utils import type_handling
+from scripts.python_scripts.utils import type_handling, packed_strings
 from scripts.python_scripts.compression import serialize_body, generate_funnel_format, compress_column
-import packed_strings
 
 import gzip
 import fpzip

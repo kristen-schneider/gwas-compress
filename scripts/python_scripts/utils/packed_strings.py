@@ -3,7 +3,6 @@
 import math
 def main():
     #assumption1('/Users/kristen/Desktop/compression_sandbox/toy_data_in/ref-alt.tsv')
-    assumption1('/home/krsc0813/projects/gwas-compress/scripts/ref-alt-cols.txt')
     # data = ['T', 'G', 'G', 'C', 'T', 'T', 'T', 'C', 'G', 'A',
     #          'CT',
     #          'A', 'G', 'T', 'T', 'T', 'T', 'G', 'G', 'G', 'C', 'G', 'T', 'C', 'A', 'A',
@@ -14,9 +13,9 @@ def main():
     #          'TA',
     #          'C', 'C', 'C', 'A', 'C', 'C', 'C', 'C', 'C', 'G',
     #          'ACAGGAGGGCGGG']
-    # # data = ['A', 'A', 'A', 'AAAAA']
-    # x = encode_column(data)
-    # print(x)
+    # data = ['A', 'A', 'A', 'AAAAA']
+    x = encode_column(data)
+    print(x)
 
 def encode_column(column):
     """
@@ -289,33 +288,3 @@ def get_base_from_binary(binary):
         print('not a proper binary value', binary)
         return -1
 
-
-ref_alt_txt = ''
-def assumption1(ref_alt_txt):
-    # 1. 1 bit: fifteen consecutive snps
-    # 2. 1 bit: snv or indel
-    # 3.a. 30 bits: snvs (up to 15)
-    # 3.b.i 10 bits: length of indel OR SNVs
-    # 3.b.ii 20 bits: snvs (up to 10)
-
-    # assumptions for round 1 is that we pack 16 snvs into one int.
-    f = open(ref_alt_txt, 'r')
-    all_refs = []
-    all_alts = []
-    for line in f:
-        A = line.rstrip().split()
-        ref = A[0]
-        all_refs.append(ref)
-        alt = A[1]
-        all_alts.append(alt)
-    int_refs = encode_column(all_refs)
-    int_alts = encode_column(all_alts)
-    print('reference as str: ', len(all_refs), all_refs)
-    print('reference as int: ', len(int_refs), int_refs)
-    print('alternate as str: ', len(all_alts), all_alts)
-    print('alternate as int: ', len(int_alts), int_alts)
-
-
-
-if __name__ == '__main__':
-        main()

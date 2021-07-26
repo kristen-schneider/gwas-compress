@@ -1,11 +1,19 @@
 import serialize_body
 import compress
+from utils import type_handling
+
 import numpy as np
 from datetime import datetime
 import sys
 from pyfastpfor import *
 
-def compress_single_column_standard(column, column_codec, column_data_type, column_num_bytes):
+def column_compression_main(column, column_data_type, column_codec, column_num_bytes, input_data_type):
+    # 1. type column according to desired input type
+
+    # 2. compress column according to compression method (serialized vs numpy)
+    serialized_column = serialize_body.serialize_list()
+
+def compress_serialized(column, column_codec, column_data_type, column_num_bytes):
     """
     compresses a single column of data using methods that take in serialized data (e.g. gzip, zlib, bz2)
 
