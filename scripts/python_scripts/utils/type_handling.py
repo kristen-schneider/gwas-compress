@@ -1,13 +1,13 @@
-import packed_strings
-import hybrid_strings
-import convert_to_int
+# import packed_strings
+# import hybrid_strings
+# import convert_to_int
 
 from datetime import datetime
 
 
 #import ref_alt_smaller_ints
 
-def get_column_types(row, data_type_code_book):
+def get_column_types(row):
     """
     Given a row of data, returns all the types of data in that row
     Data types are according to code_book
@@ -21,12 +21,12 @@ def get_column_types(row, data_type_code_book):
 
     data_types_list = []
     for r in row:
-        data_type = get_data_type(r, data_type_code_book)
+        data_type = get_data_type(r)
         data_types_list.append(data_type)
     return data_types_list
 
 
-def get_data_type(str_data, data_type_code_book):
+def get_data_type(str_data):
     """
     Returns proper data type of incoming data. This is used only once for a the first row.
     Most data is read in as a string. this will try and discern if it is actually an integer/float.
@@ -41,27 +41,39 @@ def get_data_type(str_data, data_type_code_book):
     # hierarchy: int, float, string
     try:
         int(str_data)
-        return data_type_code_book[int]
+        # all integers are of type 1.
+        # chromosomes which are non numeric need further breakdown in conversion step
+        return 1
     except ValueError:
         try:
             float(str_data)
-            return data_type_code_book[float]
+            # all floats are of type 2
+            return 2
         except ValueError:
             try:
                 str(str_data)
-                return data_type_code_book[str]
+                # string data for true / false values are of type 3
+                if 'false' in str_data.lower() or 'true' in str_data.lower() or 'na' in str_data.lower():
+                    return 3
+                # string data for SNP and INDELs are of type 4
+                else:
+                    return 4
             except ValueError:
                 print('could not detect data type as int, float, or string')
                 return type(str_data)
 
-def convert_to_input_data_type(input_data, input_data_type):
-    # 1 = int
-    # 2 = float
-    # 3 = string
-
-    if input_data_type == 1:
-
-
+# def convert_to_input_data_type(input_data, original_data_type, compression_data_type):
+#     # 1 = int
+#     # 2 = float
+#     # 3 = string
+#
+#     data = None
+#
+#     if compression_data_type == 1:
+#         data = convert_to_int.convert_data_type_to_int(input_data, original_data_type)
+#
+#
+#
 
 # def string_list_to_int(data_list, data_type, column_i):
 #     """

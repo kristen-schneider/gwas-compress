@@ -1,9 +1,9 @@
-def convert_any_data_to_int(data, data_type):
+def convert_data_type_to_int(data, data_type):
     """
     given any data in string format ('int', 'float', 'string', 'bytes'), converts to integer
     INPUT
-        data = itput data
-        data_type = original data type
+        data = input data, single valu
+        data_type = original data type ('1' = int, '1.234e-05' = float, 'true' = string)
 
     OUTPUT
         integer version of data
@@ -13,8 +13,8 @@ def convert_any_data_to_int(data, data_type):
     elif data_type == 2:
         return float_to_int(data)
     elif data_type == 3:
-        #return data
-        return string_to_int(data)
+        try: return true_false_to_int(data)
+        return true_false_to_int(data)
     elif data_type == 4:
         return bytes_to_int(data)
 
@@ -26,6 +26,7 @@ def int_to_int(in_data):
         in_data: input data (string representation of integer data)
 
     OUTPUT
+        ** must make room for non human genomes **
         out_data: integer value representing in_data (X = 23, Y = 24)
     """
     int_data = None
@@ -41,7 +42,7 @@ def int_to_int(in_data):
 
 def float_to_int(float_data):
     """
-    converts a data type of float to a list of integers which can reconstruct the float
+    converts a data type of float to an integer which can reconstruct the float
 
     INPUT
         float_data: data in float form (e.g. 4.213e-05)
@@ -89,12 +90,11 @@ def float_to_int(float_data):
     return float_as_int
 
 
-def string_to_int(string_data):
+def true_false_to_int(tf_data):
     """
     takes string input and converts to integer.
         false = 0
         true = 1
-        #A, C, G, T = 2, 3, 4, 5
         NA = -1
 
     INPUT
@@ -103,51 +103,18 @@ def string_to_int(string_data):
     OUTPUT
         int_data = string data converted to integer value according to mapping above.
     """
-    # A,C,T,G = 2,3,4,5
-    # -2 flags start of indel
+    int_data = None
 
-    int_data = []
-
-    if len(string_data) > 1:
-        if string_data == 'false':
-            int_data = 0
-        elif string_data == 'true':
-            int_data = 1
-        elif string_data == 'NA':
-            int_data = 2
-        else:
-            return string_data
-        return int_data
-        #else:
-            #for s in string_data:
-            #    int_data.append(single_string_to_int(s))
+    if tf_data.tolower() == 'false':
+        int_data = 0
+    elif tf_data.tolower() == 'true':
+        int_data = 1
+    elif tf_data.tolower() == 'NA':
+        int_data = -1
     else:
-        return string_data
-        #int_data = single_string_to_int(string_data)
-    return string_data
-
-def single_string_to_int(string_data):
-    """
-    one single string value
-
-    """
-    if string_data == 'A':
-        int_data = 2
-    elif string_data == 'C':
-        int_data = 3
-    elif string_data == 'G':
-        int_data = 4
-    elif string_data == 'T':
-        int_data = 5
-    else:
-        try:
-            int_data = int(string_data)
-        except ValueError:
-            print('cannot convert string to int')
-            return int_data
+        print('cannot covert true/false data to int.')
+        return None
     return int_data
-
-
 
 i1 = '3'
 i2 = 'X'
@@ -158,4 +125,4 @@ s3 = 'AAA'
 
 print(int_to_int(i1), int_to_int(i2))
 print(float_to_int(f))
-print(string_to_int(s1), string_to_int(s2), string_to_int(s3))
+print(true_false_to_int(s1), true_false_to_int(s2), true_false_to_int(s3))

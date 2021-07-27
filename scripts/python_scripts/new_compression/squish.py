@@ -10,9 +10,9 @@ sys.path.append(parentdir)
 import config_arguments
 import generate_header_first_half
 import generate_funnel_format
-import funnel_format_compress_ints
+# import funnel_format_compress_ints
 import header_compress
-from plotting import boxplot
+# from plotting import boxplot
 
 #### CONSTANTS ####
 # code book for easier type identification
@@ -40,9 +40,9 @@ def main():
     get_arguments_start_time = datetime.now()
 
     # user should edit config.ini to reflect proper parameters
-    # args = config_arguments.get_args_from_config('LOCAL', config_file)
+    args = config_arguments.get_args_from_config('LOCAL', config_file)
 
-    args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
+    # args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
 
     # included in config file
     IN_FILE = args['in_file']
@@ -72,73 +72,73 @@ def main():
     header_first_half_TIME = header_first_half_END - header_first_half_START
     print(str(header_first_half_TIME) + ' for header start to compute...\n')
 
-    magic_number = header_first_half[0]
-    version = header_first_half[1]
-    delimiter = header_first_half[2]
-    column_labels = header_first_half[3]
-    column_types = header_first_half[4]
-    number_columns = header_first_half[5]
-
-
-    # 2. GET FUNNEL FORMAT
-    print('2. generating funnel format...')
-    funnel_format_START = datetime.now()
-    ### work ###
-    funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, number_columns, delimiter)
-    ############
-    funnel_format_END = datetime.now()
-    funnel_format_TIME = funnel_format_END - funnel_format_START
-    print(str(funnel_format_TIME) + ' for funnel format to compute...\n')
-
-    # 3. COMPRESS DATA, GET SECOND HALF OF HEADER
-    print('3. compressing data...')
-    compress_data_START = datetime.now()
-    ### work ###
-    compression_info = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
-                                                                       header_first_half,
-                                                                       funnel_format_data,
-                                                                       DATA_TYPE_BYTE_SIZES)
-                                                                       #INPUT_DATA_TYPE,
-                                                                       #COMPRESSION_DATA_TYPE)
-    header_second_half = compression_info
-    
-    
-    ############
-    compress_data_END = datetime.now()
-    compress_data_TIME = compress_data_END - compress_data_START
-    print(str(compress_data_TIME) + ' for compression to complete...\n')
-
-    # 4. COMPRESS HEADER
-    print('4. compressing header...')
-    compress_header_START = datetime.now()
-    ### work ###
-    full_header = header_first_half+header_second_half
-    #print(full_header)
-    # header types, number of elements in each header
-    serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_CODE_BOOK,
-                                                                DATA_TYPE_BYTE_SIZES,
-                                                                full_header)
-    serialized_header_types = serialized_header_tools[0]
-    serialized_header_num_elements = serialized_header_tools[1]
-    serialized_header_ends = serialized_header_tools[2]
-    serialized_header_data = serialized_header_tools[3]
-
-    size_types = len(serialized_header_types)
-    try: bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
-    except OverflowError: print(size_types)
-    size_elements = len(serialized_header_num_elements)
-    try: bytes_size_num_elements = size_elements.to_bytes(2, byteorder='big', signed=False)
-    except OverflowError: print(size_elements)
-    size_ends = len(serialized_header_ends)
-    try: bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
-    except OverflowError: print(bytes_size_ends)
-    size_data = len(serialized_header_data)
-    try: bytes_size_data = size_data.to_bytes(4, byteorder='big', signed=False)
-    except OverflowError: print(size_data)
-    ############
-    compress_header_END = datetime.now()
-    compress_header_TIME = compress_header_END - compress_header_START
-    print(str(compress_header_TIME) + ' for header to compress...\n')
+    # magic_number = header_first_half[0]
+    # version = header_first_half[1]
+    # delimiter = header_first_half[2]
+    # column_labels = header_first_half[3]
+    # column_types = header_first_half[4]
+    # number_columns = header_first_half[5]
+    #
+    #
+    # # 2. GET FUNNEL FORMAT
+    # print('2. generating funnel format...')
+    # funnel_format_START = datetime.now()
+    # ### work ###
+    # funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, number_columns, delimiter)
+    # ############
+    # funnel_format_END = datetime.now()
+    # funnel_format_TIME = funnel_format_END - funnel_format_START
+    # print(str(funnel_format_TIME) + ' for funnel format to compute...\n')
+    #
+    # # 3. COMPRESS DATA, GET SECOND HALF OF HEADER
+    # print('3. compressing data...')
+    # compress_data_START = datetime.now()
+    # ### work ###
+    # compression_info = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
+    #                                                                    header_first_half,
+    #                                                                    funnel_format_data,
+    #                                                                    DATA_TYPE_BYTE_SIZES)
+    #                                                                    #INPUT_DATA_TYPE,
+    #                                                                    #COMPRESSION_DATA_TYPE)
+    # header_second_half = compression_info
+    #
+    #
+    # ############
+    # compress_data_END = datetime.now()
+    # compress_data_TIME = compress_data_END - compress_data_START
+    # print(str(compress_data_TIME) + ' for compression to complete...\n')
+    #
+    # # 4. COMPRESS HEADER
+    # print('4. compressing header...')
+    # compress_header_START = datetime.now()
+    # ### work ###
+    # full_header = header_first_half+header_second_half
+    # #print(full_header)
+    # # header types, number of elements in each header
+    # serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_CODE_BOOK,
+    #                                                             DATA_TYPE_BYTE_SIZES,
+    #                                                             full_header)
+    # serialized_header_types = serialized_header_tools[0]
+    # serialized_header_num_elements = serialized_header_tools[1]
+    # serialized_header_ends = serialized_header_tools[2]
+    # serialized_header_data = serialized_header_tools[3]
+    #
+    # size_types = len(serialized_header_types)
+    # try: bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
+    # except OverflowError: print(size_types)
+    # size_elements = len(serialized_header_num_elements)
+    # try: bytes_size_num_elements = size_elements.to_bytes(2, byteorder='big', signed=False)
+    # except OverflowError: print(size_elements)
+    # size_ends = len(serialized_header_ends)
+    # try: bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
+    # except OverflowError: print(bytes_size_ends)
+    # size_data = len(serialized_header_data)
+    # try: bytes_size_data = size_data.to_bytes(4, byteorder='big', signed=False)
+    # except OverflowError: print(size_data)
+    # ############
+    # compress_header_END = datetime.now()
+    # compress_header_TIME = compress_header_END - compress_header_START
+    # print(str(compress_header_TIME) + ' for header to compress...\n')
 
     # ######################################################
     # ## OLD WRITE METHOD WHERE EVERYTHING WRITTEN AT END ##

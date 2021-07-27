@@ -40,11 +40,11 @@ def get_header_first_half(in_file, data_type_code_book):
     # assign proper data to the pieces of the header
     delimiter = get_delimiter(row1_string)
     column_names_list = get_column_names(row1_string, delimiter)
-    column_types_list = type_handling.get_column_types(row2_string.rstrip().split(delimiter), data_type_code_book)
+    column_types_list = type_handling.get_column_types(row2_string.rstrip().split(delimiter))
     num_columns = get_num_columns(column_names_list, column_types_list)
-    gzip_header = get_compression_method_header('gzip')
-    zlib_header = get_compression_method_header('zlib')
-    bz2_header = get_compression_method_header('bz2')
+    # gzip_header = get_compression_method_header('gzip')
+    # zlib_header = get_compression_method_header('zlib')
+    # bz2_header = get_compression_method_header('bz2')
 
     header_first_half.append(magic_number)
     header_first_half.append(version_number)
@@ -52,8 +52,8 @@ def get_header_first_half(in_file, data_type_code_book):
     header_first_half.append(column_names_list)
     header_first_half.append(column_types_list)
     header_first_half.append(num_columns)
-    header_first_half.append(gzip_header)
-    header_first_half.append(bz2_header)
+    # header_first_half.append(gzip_header)
+    # header_first_half.append(bz2_header)
 
     return header_first_half
 
