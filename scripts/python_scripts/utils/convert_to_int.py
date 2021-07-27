@@ -1,3 +1,5 @@
+from utils import packed_strings
+from utils import hybrid_strings
 def convert_data_type_to_int(data, data_type):
     """
     given any data in string format ('int', 'float', 'string', 'bytes'), converts to integer
@@ -12,11 +14,13 @@ def convert_data_type_to_int(data, data_type):
         return int_to_int(data)
     elif data_type == 2:
         return float_to_int(data)
-    elif data_type == 3:
-        try: return true_false_to_int(data)
+    elif data_type == 3: # true/false strings
         return true_false_to_int(data)
-    elif data_type == 4:
-        return bytes_to_int(data)
+    elif data_type == 4: # SNP/INDEL
+        return packed_strings.
+    else:
+        return None
+        # return bytes_to_int(data)
 
 def int_to_int(in_data):
     """

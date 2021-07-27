@@ -14,10 +14,11 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
         curr_column = block[column_i]
         curr_codec = codecs_list[column_i]
         curr_data_type = column_types[column_i]
-        curr_compression_data_type = input_data_type_list[column_i]
-        curr_data_type_byte_sizes =
+        curr_compression_data_type = int(input_data_type_list[column_i])
+        curr_data_type_byte_sizes = data_type_byte_sizes[curr_compression_data_type]
 
 
         
-        compress_column.compress_column(curr_column, curr_codec)
+        compress_column.column_compression_main(curr_column, curr_codec, curr_data_type,
+                                                curr_compression_data_type, curr_data_type_byte_sizes)
 
