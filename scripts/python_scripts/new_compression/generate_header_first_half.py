@@ -5,7 +5,7 @@ sys.path.insert(0, parentdir)
 
 from utils import type_handling
 
-def get_header_first_half(in_file, data_type_code_book):
+def get_header_first_half(in_file):
     """
     retrieves some basic header information that should be stored in header up to this point.
         (delimiter, columns names, column types, and column number from the input file)
@@ -28,9 +28,6 @@ def get_header_first_half(in_file, data_type_code_book):
     column_names_list = None
     column_types_list = None
     num_columns = None
-    gzip_header = None
-    zlib_header = None
-    bz2_header = None
 
     # get first two rows which will inform our header data
     row1_row2 = get_first_two_rows(in_file)
@@ -42,18 +39,14 @@ def get_header_first_half(in_file, data_type_code_book):
     column_names_list = get_column_names(row1_string, delimiter)
     column_types_list = type_handling.get_column_types(row2_string.rstrip().split(delimiter))
     num_columns = get_num_columns(column_names_list, column_types_list)
-    # gzip_header = get_compression_method_header('gzip')
-    # zlib_header = get_compression_method_header('zlib')
-    # bz2_header = get_compression_method_header('bz2')
 
+    # put everything together
     header_first_half.append(magic_number)
     header_first_half.append(version_number)
     header_first_half.append(delimiter)
     header_first_half.append(column_names_list)
     header_first_half.append(column_types_list)
     header_first_half.append(num_columns)
-    # header_first_half.append(gzip_header)
-    # header_first_half.append(bz2_header)
 
     return header_first_half
 

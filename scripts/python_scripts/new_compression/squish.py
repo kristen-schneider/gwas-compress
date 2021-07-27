@@ -10,16 +10,13 @@ sys.path.append(parentdir)
 import config_arguments
 import generate_header_first_half
 import generate_funnel_format
-# import funnel_format_compress_ints
+import compress_funnel_format
 import header_compress
 # from plotting import boxplot
 
 #### CONSTANTS ####
-# code book for easier type identification
-DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
-AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
-INT_INPUT_BUCKET = ['gzip','zfpy','zlib','bz2','fastpfor']
-FLOAT_INPUT_BUCKET = []
+# DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+# AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
 
 ### System Arguments ### (clean this up)
 config_file = sys.argv[1]#'/home/krsc0813/projects/gwas-compress/config_files/config.ini'
@@ -48,52 +45,60 @@ def main():
     IN_FILE = args['in_file']
     OUT_DIR = args['out_dir']
     BLOCK_SIZE = int(args['block_size'])
-    #COMPRESSION_STYLE = args['compression_style']
     CODECS_LIST = list(args['compression_method'].split(','))
-    INPUT_DATA_TYPE=list(args['input_data_type'].split(','))
-    COMPRESSION_DATA_TYPE=args['compression_data_type']
+    INPUT_DATA_TYPE_LIST=list(args['input_data_type'].split(','))
+    # COMPRESSION_DATA_TYPE_=args['compression_data_type']
     DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
                             2: int(args['float_byte_size']),
                             3: int(args['string_byte_size']),
-                            4: args['bytes_byte_size']}
+                            5: args['bytes_byte_size']}
     # output file made from combining user specified params
     base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
     COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
     COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
     print(datetime.now()-get_arguments_start_time, ' to get arguments.\n')
+
     # 1. GET FIRST HALF OF HEADER
-    ### Magic number, version number, delimiter, column labels, column types, number columns, gzip header
+    ### Magic number, version number, delimiter, column labels, column types, number columns
     print('1. generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
-    header_first_half = generate_header_first_half.get_header_first_half(IN_FILE, DATA_TYPE_CODE_BOOK)
+    header_first_half = generate_header_first_half.get_header_first_half(IN_FILE)
     ############
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
+    print('header: ', header_first_half)
     print(str(header_first_half_TIME) + ' for header start to compute...\n')
 
-    # magic_number = header_first_half[0]
-    # version = header_first_half[1]
-    # delimiter = header_first_half[2]
-    # column_labels = header_first_half[3]
-    # column_types = header_first_half[4]
-    # number_columns = header_first_half[5]
-    #
-    #
-    # # 2. GET FUNNEL FORMAT
-    # print('2. generating funnel format...')
-    # funnel_format_START = datetime.now()
+    magic_number = header_first_half[0]
+    version = header_first_half[1]
+    delimiter = header_first_half[2]
+    column_labels = header_first_half[3]
+    column_types = header_first_half[4]
+    number_columns = header_first_half[5]
+
+
+    # 2. GET FUNNEL FORMAT
+    print('2. generating funnel format...')
+    funnel_format_START = datetime.now()
+    ### work ###
+    funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE,
+                                                                number_columns, delimiter)
+    print('funnel format: ', funnel_format_data)
+    ############
+    funnel_format_END = datetime.now()
+    funnel_format_TIME = funnel_format_END - funnel_format_START
+    print(str(funnel_format_TIME) + ' for funnel format to compute...\n')
+
+    # 3. COMPRESS DATA, GET SECOND HALF OF HEADER
+    print('3. compressing data...')
+    compress_data_START = datetime.now()
     # ### work ###
-    # funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE, number_columns, delimiter)
-    # ############
-    # funnel_format_END = datetime.now()
-    # funnel_format_TIME = funnel_format_END - funnel_format_START
-    # print(str(funnel_format_TIME) + ' for funnel format to compute...\n')
-    #
-    # # 3. COMPRESS DATA, GET SECOND HALF OF HEADER
-    # print('3. compressing data...')
-    # compress_data_START = datetime.now()
-    # ### work ###
+    header_second_half = compress_funnel_format.compress_all_blocks(CODECS_LIST,
+                                                                    INPUT_DATA_TYPE_LIST,
+                                                                    DATA_TYPE_BYTE_SIZES,
+                                                                    header_first_half,
+                                                                    funnel_format_data)
     # compression_info = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
     #                                                                    header_first_half,
     #                                                                    funnel_format_data,
@@ -102,12 +107,12 @@ def main():
     #                                                                    #COMPRESSION_DATA_TYPE)
     # header_second_half = compression_info
     #
-    #
-    # ############
-    # compress_data_END = datetime.now()
-    # compress_data_TIME = compress_data_END - compress_data_START
-    # print(str(compress_data_TIME) + ' for compression to complete...\n')
-    #
+
+    ############
+    compress_data_END = datetime.now()
+    compress_data_TIME = compress_data_END - compress_data_START
+    print(str(compress_data_TIME) + ' for compression to complete...\n')
+
     # # 4. COMPRESS HEADER
     # print('4. compressing header...')
     # compress_header_START = datetime.now()
