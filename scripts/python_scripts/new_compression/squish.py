@@ -51,6 +51,7 @@ def main():
     DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
                             2: int(args['float_byte_size']),
                             3: int(args['string_byte_size']),
+                            4: int(args['string_byte_size']),
                             5: args['bytes_byte_size']}
     # output file made from combining user specified params
     base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
