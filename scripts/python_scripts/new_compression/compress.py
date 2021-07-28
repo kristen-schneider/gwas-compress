@@ -53,6 +53,7 @@ def compress_numpy_array(typed_column, codec):
     # PYFAST
     if codec in getCodecList():
         compressed_numpy_array = pyfast_compress(typed_column, codec)
+        compressed_bitstring = compressed_numpy_array.tobytes(order='C')
     elif codec == 'fpzip':
         compressed_bitstring = fpzip_compress(typed_column)
     elif codec == 'zfpy':
@@ -117,6 +118,7 @@ def pyfast_compress(typed_column, codec):
     OUTPUT
         compressed_column = compressed data
     """
+    column_i_BEFORE = sys.getsizeof(typed_column)
     column_i_START = datetime.now()
     ### work ###
     # convert input array to numpy array
@@ -127,7 +129,7 @@ def pyfast_compress(typed_column, codec):
     comp_arr = np.zeros(np_arr_size + buffer_size, dtype=np.uint32, order='C')
     # get codec method from pyfastpfor and use it for compression
     codec_method = getCodec(codec)
-    comp_arr_size = codec_method.encodeArray(np_arr, np_arr_size, comp_arr, len(comp_arr))
+    comp_arr_size = codec_method.encodeArray(numpy_array, np_arr_size, comp_arr, len(comp_arr))
     ############
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
@@ -155,3 +157,5 @@ def zfpy_compress(typed_column):
 
 print(compress_numpy_array([1,2,3,4], 'zfpy'))
 print(compress_numpy_array([1,2,3,4], 'fpzip'))
+print(compress_numpy_array([1,2,3,4], 'fastpfor128'))
+
