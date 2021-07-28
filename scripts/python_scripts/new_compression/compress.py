@@ -1,7 +1,7 @@
 import gzip
 import zlib
 import bz2
-# from pyfastpfor import *
+from pyfastpfor import *
 import fpzip
 import zfpy
 import numpy as np
@@ -149,4 +149,4 @@ def zfpy_compress(numpy_array):
     compressed_numpy_array = zfpy.compress(numpy_array)
 
 
-compress_numpy_array(np.array([1,2,3,4], dtype=np.uint32, order='C'), 'fpzip')
+compress_numpy_array(np.array([1.,2.,3.,4.], dtype=np.uint32, order='C'), 'fpzip')
