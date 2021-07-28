@@ -100,15 +100,7 @@ def main():
                                                                     DATA_TYPE_BYTE_SIZES,
                                                                     header_first_half,
                                                                     funnel_format_data)
-    # compression_info = funnel_format_compress_ints.compress_all_blocks(CODECS_LIST,
-    #                                                                    header_first_half,
-    #                                                                    funnel_format_data,
-    #                                                                    DATA_TYPE_BYTE_SIZES)
-    #                                                                    #INPUT_DATA_TYPE,
-    #                                                                    #COMPRESSION_DATA_TYPE)
-    # header_second_half = compression_info
-    #
-
+    print(header_second_half)
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START

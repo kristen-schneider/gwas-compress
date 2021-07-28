@@ -136,14 +136,3 @@ def true_false_to_int(tf_data):
         print('cannot covert true/false data to int.')
         return None
     return int_data
-
-i1 = '3'
-i2 = 'X'
-f = '1.234e-05'
-s1 = 'true'
-s2 = 'A'
-s3 = 'AAA'
-
-print(int_to_int(i1), int_to_int(i2))
-print(float_to_int(f))
-print(true_false_to_int(s1), true_false_to_int(s2), true_false_to_int(s3))
