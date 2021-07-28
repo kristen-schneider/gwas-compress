@@ -130,7 +130,7 @@ def true_false_to_int(tf_data):
         int_data = 0
     elif tf_data.lower() == 'true':
         int_data = 1
-    elif tf_data.lower() == 'NA':
+    elif tf_data.lower() == 'na':
         int_data = -1
     else:
         print('cannot covert true/false data to int.')

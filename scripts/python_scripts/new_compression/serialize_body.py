@@ -53,8 +53,6 @@ def serialize_data(data, data_type, num_bytes):
 
 def serialize_int(data, num_bytes):
     """
-    integer columns are 1 and 2: chrm and pos
-    special cases with X and Y values.
 
     INPUT
         data: incoming data value

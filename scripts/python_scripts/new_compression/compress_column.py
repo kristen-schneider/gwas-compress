@@ -19,7 +19,8 @@ def column_compression_main(column, column_codec, column_data_type,
 
     # 2. compress column according to compression method (serialized vs numpy)
     if column_codec in serialized_codecs:
-        serialized_column = serialize_body.serialize_list(typed_column, column_data_type, column_data_type_byte_sizes)
+        serialized_column = serialize_body.serialize_list(typed_column, curr_compression_data_type, column_data_type_byte_sizes)
+        print(serialized_column)
 
 def compress_serialized(column, column_codec, column_data_type, column_num_bytes):
     """
