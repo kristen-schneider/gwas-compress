@@ -22,9 +22,10 @@ def column_compression_main(column, column_codec, column_data_type,
 
     # 2. compress column according to compression method (serialized vs numpy)
     if column_codec in serialized_codecs:
-        compressed_column = compress_serialized(column, column_codec, column_data_type, column_data_type_byte_sizes)
+        compressed_column_bitstring = compress_serialized(column, column_codec, column_data_type, column_data_type_byte_sizes)
     else:
-        numpy_column = np.array(typed_column, dtype=np.uint32, order='C')
+        compressed_column_bitstring = compress_numpy(typed_column, column_codec)
+    return compressed_column_bitstring
 
 def compress_serialized(typed_column, column_codec, column_data_type, column_num_bytes):
     """
@@ -54,5 +55,6 @@ def compress_serialized(typed_column, column_codec, column_data_type, column_num
 
     return compressed_column
 
-def compress_numpy(typed_column, column_codec, column_data_type, column_num_bytes):
+def compress_numpy(typed_column, column_codec):
     compressed_column = compress.compress_numpy_array(typed_column, column_codec)
+    return compressed_column
