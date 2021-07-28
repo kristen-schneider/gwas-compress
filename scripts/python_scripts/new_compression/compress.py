@@ -21,6 +21,7 @@ def compress_bitstring(serialized_bitstring, codec):
         c_bitstring = compressed bitstring
 
     """
+
     # GZIP
     if codec == 'gzip':
         compressed_bitstring = gzip_compress(serialized_bitstring, 0)
@@ -35,7 +36,7 @@ def compress_bitstring(serialized_bitstring, codec):
     elif codec == 'bz2':
         compressed_bitstring = bz2_compress(serialized_bitstring)
         header_size = 4
-
+    else: return None
     return compressed_bitstring[header_size:]
 
 def compress_numpy_array(typed_column, codec):
