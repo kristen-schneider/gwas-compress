@@ -56,5 +56,19 @@ def compress_serialized(typed_column, column_codec, column_data_type, column_num
     return compressed_column
 
 def compress_numpy(typed_column, column_codec):
+    """
+    compresses a single column of data using methods that take in numpy data (e.g. pyfast)
+
+    INPUT
+        typed_column = column as proper type (list of whatever data type is specified by config file)
+        column_codec = method of compression for given column
+
+    OUTPUT
+        compressed_column = compressed data in bitstring form
+    """
+
+    column_i_START = datetime.now()
+    column_i_BEFORE = sys.getsizeof(typed_column)
+    ### work ###
     compressed_column = compress.compress_numpy_array(typed_column, column_codec)
     return compressed_column
