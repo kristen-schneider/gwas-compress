@@ -55,5 +55,4 @@ def compress_serialized(typed_column, column_codec, column_data_type, column_num
     return compressed_column
 
 def compress_numpy(typed_column, column_codec, column_data_type, column_num_bytes):
-    numpy_array = np.array(typed_column, dtype=np.uint32, order='C')
-    compressed_column = compress.compress_numpy_array(numpy_array, column_codec)
+    compressed_column = compress.compress_numpy_array(typed_column, column_codec)
