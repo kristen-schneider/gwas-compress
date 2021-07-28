@@ -1,10 +1,12 @@
 import gzip
 import zlib
 import bz2
+# from pyfastpfor import *
+import fpzip
+import zfpy
 import numpy as np
 from datetime import datetime
 import sys
-# from pyfastpfor import *
 
 
 def compress_bitstring(serialized_bitstring, codec):
@@ -51,6 +53,11 @@ def compress_numpy_array(numpy_array, codec):
     # PYFAST
     if codec in getCodecList():
         compressed_numpy_array = pyfast_compress(numpy_array, codec)
+    elif codec == 'fpzip':
+        compressed_numpy_array = fpzip_compress(numpy_array)
+    elif codec == 'zfpy':
+        compressed_numpy_array = zfpy_compress(numpy_array)
+
 
 def gzip_compress(s_bitstring, time):
     '''
@@ -128,3 +135,18 @@ def pyfast_compress(numpy_array, codec):
     column_i_RATIO = float(column_i_BEFORE / column_i_AFTER)
 
     return comp_arr[0:comp_arr_size]
+
+def fpzip_compress(numpy_array):
+    """
+    compresses floats and integers with fpzip codec.
+    """
+    compressed_numpy_array = fpzip.compress(numpy_array, precision=0, order='C')
+
+def zfpy_compress(numpy_array):
+    """
+    compresses floats and integers with fpzip codec.
+    """
+    compressed_numpy_array = zfpy.compress(numpy_array)
+
+
+compress_numpy_array(np.array([1,2,3,4], dtype=np.uint32, order='C'), 'fpzip')
