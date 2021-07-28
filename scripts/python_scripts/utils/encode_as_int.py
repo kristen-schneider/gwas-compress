@@ -1,5 +1,23 @@
 from utils import packed_strings
 from utils import hybrid_strings
+
+def encode_column_as_int(column, column_data_type):
+    """
+    converts a whole column to data type integer.
+    """
+    column_as_int = []
+    # for SNPs and INDELs we pack data so we encode a full column
+    if column_data_type == 4:
+        column_as_int = packed_strings.encode_column(column)
+
+    # for all others we encode each data point individually as int
+    else:
+        for data in column:
+            int_data = convert_data_type_to_int(data, column_data_type)
+            column_as_int.append(int_data)
+    return column_as_int
+
+
 def convert_data_type_to_int(data, data_type):
     """
     given any data in string format ('int', 'float', 'string', 'bytes'), converts to integer
@@ -16,9 +34,8 @@ def convert_data_type_to_int(data, data_type):
         return float_to_int(data)
     elif data_type == 3: # true/false strings
         return true_false_to_int(data)
-    elif data_type == 4: # SNP/INDEL
-        return packed_strings.
     else:
+        print('cannot convert ', data, ' to integer')
         return None
         # return bytes_to_int(data)
 
@@ -109,11 +126,11 @@ def true_false_to_int(tf_data):
     """
     int_data = None
 
-    if tf_data.tolower() == 'false':
+    if tf_data.lower() == 'false':
         int_data = 0
-    elif tf_data.tolower() == 'true':
+    elif tf_data.lower() == 'true':
         int_data = 1
-    elif tf_data.tolower() == 'NA':
+    elif tf_data.lower() == 'NA':
         int_data = -1
     else:
         print('cannot covert true/false data to int.')

@@ -1,21 +1,25 @@
 import serialize_body
 import compress
 from utils import type_handling
-from utils import convert_to_int
+from utils import encode_as_int
 
 import numpy as np
 from datetime import datetime
 import sys
 # from pyfastpfor import *
 
+serialized_codecs = ['gzip', 'zlib', 'bz2']
+
+
 def column_compression_main(column, column_codec, column_data_type,
-                            curr_compression_data_type, curr_data_type_byte_sizes):
+                            curr_compression_data_type, column_data_type_byte_sizes):
     # 1. type column according to desired input type
     if curr_compression_data_type == 1:
-        typed_column = convert_to_int.
+        typed_column = encode_as_int.encode_column_as_int(column, column_data_type)
 
     # 2. compress column according to compression method (serialized vs numpy)
-    serialized_column = serialize_body.serialize_list()
+    if column_codec in serialized_codecs:
+        serialized_column = serialize_body.serialize_list(typed_column, column_data_type, column_data_type_byte_sizes)
 
 def compress_serialized(column, column_codec, column_data_type, column_num_bytes):
     """
