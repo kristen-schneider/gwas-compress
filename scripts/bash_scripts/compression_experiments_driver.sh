@@ -28,7 +28,7 @@ done
 #do
 #    echo $method
 #    config_file="${method}_config.ini"
-#    python_scripts squish.py
+#    python_scripts driver.py
 #    echo
 #done
 
