@@ -38,7 +38,7 @@ def compress_bitstring(serialized_bitstring, codec):
 
     return compressed_bitstring[header_size:]
 
-def compress_numpy_array(numpy_array, codec):
+def compress_numpy_array(normal_array, codec):
     """
     compress a serialized bitstring using specified compression method
 
@@ -52,11 +52,11 @@ def compress_numpy_array(numpy_array, codec):
     """
     # PYFAST
     if codec in getCodecList():
-        compressed_numpy_array = pyfast_compress(numpy_array, codec)
+        compressed_numpy_array = pyfast_compress(normal_array, codec)
     elif codec == 'fpzip':
-        compressed_numpy_array = fpzip_compress(numpy_array)
+        compressed_numpy_array = fpzip_compress(normal_array)
     elif codec == 'zfpy':
-        compressed_numpy_array = zfpy_compress(numpy_array)
+        compressed_numpy_array = zfpy_compress(normal_array)
 
 
 def gzip_compress(s_bitstring, time):
