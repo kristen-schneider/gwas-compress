@@ -37,9 +37,9 @@ def main():
     get_arguments_start_time = datetime.now()
 
     # user should edit config.ini to reflect proper parameters
-    args = config_arguments.get_args_from_config('LOCAL', config_file)
+    # args = config_arguments.get_args_from_config('LOCAL', config_file)
 
-    # args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
+    args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
 
     # included in config file
     IN_FILE = args['in_file']
