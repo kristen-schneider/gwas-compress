@@ -9,6 +9,7 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
    
     block_header_codec = 'gzip'
 
+    column_end = 0
     block_header_list = []
     block_header_bitstring = b''
     block_bitstring = b''
@@ -24,7 +25,8 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
 
         compressed_column_bitstring = compress_column.column_compression_main(curr_column, curr_codec, curr_data_type,
                                                 curr_compression_data_type, curr_data_type_byte_sizes)
-        block_header_list.append(len(compressed_column_bitstring))
+        column_end += len(compressed_column_bitstring)
+        block_header_list.append(column_end)
         block_bitstring += compressed_column_bitstring
 
     print(block_header_list)
