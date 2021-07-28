@@ -61,6 +61,7 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
                                                               column_types,
                                                               INPUT_DATA_TYPE_LIST,
                                                               DATA_TYPE_BYTE_SIZES)
+        return block_header_and_data
     #     compressed_block_header = block_header_and_data[0]
     #     compressed_block = block_header_and_data[1]
     #     # HEADER END DATA

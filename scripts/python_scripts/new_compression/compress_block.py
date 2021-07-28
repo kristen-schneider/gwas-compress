@@ -29,10 +29,8 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
         block_header_list.append(column_end)
         block_bitstring += compressed_column_bitstring
 
-    #print(block_header_list)
-    #print(block_bitstring)
     block_header_bitstring = compress_column.column_compression_main(block_header_list, block_header_codec,
-                                                                     1, 1, data_type_byte_sizes[1])
+                                                                 1, 1, data_type_byte_sizes[1])
     
     return block_header_bitstring, block_bitstring
 
