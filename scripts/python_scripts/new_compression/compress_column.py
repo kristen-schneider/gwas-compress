@@ -19,9 +19,10 @@ def column_compression_main(column, column_codec, column_data_type,
     # 1. type column according to desired input type
     if curr_compression_data_type == 1:
         typed_column = encode_as_int.encode_column_as_int(column, column_data_type)
+    
     # 2. compress column according to compression method (serialized vs numpy)
     if column_codec in serialized_codecs:
-        compressed_column_bitstring = compress_serialized(column, column_codec, column_data_type, column_data_type_byte_sizes)
+        compressed_column_bitstring = compress_serialized(typed_column, column_codec, curr_compression_data_type, column_data_type_byte_sizes)
     else:
         compressed_column_bitstring = compress_numpy(typed_column, column_codec)
     return compressed_column_bitstring

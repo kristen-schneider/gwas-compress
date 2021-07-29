@@ -85,7 +85,6 @@ def main():
     ### work ###
     funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE,
                                                                 number_columns, delimiter)
-    print('funnel format: ', funnel_format_data)
     ############
     funnel_format_END = datetime.now()
     funnel_format_TIME = funnel_format_END - funnel_format_START
@@ -100,7 +99,6 @@ def main():
                                                                     DATA_TYPE_BYTE_SIZES,
                                                                     header_first_half,
                                                                     funnel_format_data)
-    print(header_second_half)
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START

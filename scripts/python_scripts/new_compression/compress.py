@@ -61,6 +61,9 @@ def compress_numpy_array(typed_column, codec):
     # zfpy-floating point or integer compression
     elif codec == 'zfpy':
         compressed_bitstring = zfpy_compress(typed_column)
+    else:
+        print('cannot identify numpy-based codec: ', codec)
+        compressed_bitstring = None
     return compressed_bitstring
 
 def gzip_compress(s_bitstring, time):
@@ -144,8 +147,9 @@ def pyfast_compress(typed_column, codec):
 
 def fpzip_compress(typed_column):
     """
-    compresses floats and integers with fpzip codec.
+    compresses floats with fpzip codec.
     """
+    # converts all data to floats (can take in integers, but will convert).
     numpy_array = np.array(typed_column, dtype=np.float32, order='C')
     compressed_bitstring = fpzip.compress(numpy_array, precision=0, order='C')
     return compressed_bitstring
@@ -154,6 +158,7 @@ def zfpy_compress(typed_column):
     """
     compresses floats and integers with fpzip codec.
     """
+    # converts all data to floats (can take in integers, but will convert).
     numpy_array = np.array(typed_column, dtype=np.float32, order='C')
     compressed_bitstring = zfpy.compress_numpy(numpy_array)
     return compressed_bitstring
