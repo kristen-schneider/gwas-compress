@@ -151,8 +151,7 @@ def fpzip_compress(typed_column):
     """
     # converts all data to floats (can take in integers, but will convert).
     numpy_array = np.array(typed_column, dtype=np.float32, order='C')
-    print(typed_column, numpy_array)
-    compressed_bitstring = fpzip.compress(numpy_array, precision=0, order='C')
+    compressed_bitstring = fpzip.compress(numpy_array, precision=10, order='C')
     return compressed_bitstring
 
 def zfpy_compress(typed_column):
