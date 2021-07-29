@@ -14,7 +14,11 @@ def convert_data_type_to_float(data, column_data_type):
     if column_data_type == 1:
         return float(data)
     elif column_data_type == 2:
-        return float(data)
+        try: return float(data)
+        except ValueError:
+            # NA values return value not seen in data (999)
+            if data.lower() == 'NA':
+                return float(999)
     else:
         print('cannot convert ', data, ' to float')
         return None
