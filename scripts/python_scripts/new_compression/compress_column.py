@@ -31,6 +31,7 @@ def column_compression_main(column, column_codec, column_data_type,
         compressed_column_bitstring = compress_serialized(typed_column, column_codec, curr_compression_data_type, column_data_type_byte_sizes)
     else:
         compressed_column_bitstring = compress_numpy(typed_column, column_codec)
+    
     return compressed_column_bitstring
 
 def compress_serialized(typed_column, column_codec, column_data_type, column_num_bytes):
