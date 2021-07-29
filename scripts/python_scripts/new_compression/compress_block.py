@@ -1,5 +1,6 @@
 import compress_column
 import serialize_body
+import compress
 
 def compress_block(block, codecs_list, column_types, input_data_type_list, data_type_byte_sizes):
     # serialized block info:
@@ -29,8 +30,10 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
         block_header_list.append(column_end)
         block_bitstring += compressed_column_bitstring
 
-    block_header_bitstring = compress_column.column_compression_main(block_header_list, block_header_codec,
-                                                                 1, 1, data_type_byte_sizes[1])
+    # block_header_bitstring = compress_column.column_compression_main(block_header_list, block_header_codec,
+    #                                                              1, 1, data_type_byte_sizes[1])
+    block_header_serialized = serialize_body.serialize_list(block_header_list, 1, data_type_byte_sizes[1])
+    block_header_bitstring = compress.compress_bitstring(block_header_serialized, 'gzip')
     
     return block_header_bitstring, block_bitstring
 
