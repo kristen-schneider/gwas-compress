@@ -56,36 +56,8 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
                                                               column_types,
                                                               INPUT_DATA_TYPE_LIST,
                                                               DATA_TYPE_BYTE_SIZES)
-    return block_header_and_data
-    #     compressed_block_header = block_header_and_data[0]
-    #     compressed_block = block_header_and_data[1]
-    #     # HEADER END DATA
-    #     # add to block header ends
-    #     try:
-    #         block_header_end = (block_ends[block_i-1]+len(compressed_block_header))
-    #     except IndexError:
-    #         block_header_end += (0+len(compressed_block_header))
-    #     block_header_ends.append(block_header_end)
-    #
-    #     # add to block ends
-    #     try:
-    #         block_end = (block_header_ends[block_i]+len(compressed_block))
-    #     except IndexError:
-    #         block_end += (block_header_end+len(compressed_block))
-    #     block_ends.append(block_end)
-    #
-    #     # block sizes
-    #     curr_block_size = len(curr_block[0])
-    #     if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
-    #
-    #
-    #
-    # if len(block_sizes) < 2: block_sizes.append(curr_block_size)
-    #
-    #
-    #
-    # header_second_half = [block_header_ends, block_ends, block_sizes]
-    # return header_second_half
+        # return block_header_and_data
+
         compressed_block_header = block_header_and_block_data[0]
         compressed_block = block_header_and_block_data[1]
 
@@ -110,11 +82,8 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
 
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
-
-
     header_second_half = [block_header_ends, block_ends, block_sizes]
     return header_second_half
->>>>>>> 3560a29ef80903fcd4c478a6982bec873c86eae8
 #
 # def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes):
 #     """
