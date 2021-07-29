@@ -60,7 +60,6 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
 
         compressed_block_header = block_header_and_block_data[0]
         compressed_block = block_header_and_block_data[1]
-        print(len(compressed_block_header), len(compressed_block))
 
         # HEADER END DATA
         # add to block header ends
