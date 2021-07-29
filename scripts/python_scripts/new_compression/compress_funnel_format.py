@@ -36,15 +36,10 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
     number_columns = header_first_half[5]
 
     # ends of block headers
-    # block header = [10, 20, 30, 40, ...] where each number is the end of a compressed column bitstring
-    # block header ends = [10, 100, ...] where each number is the end of a bitstring which represents a block header
     block_header_ends = []
-    # block ends = [90, 190, ...] where each number is the end of a bitstring which represents a full block
+
     # ends of blocks
     block_ends = []
-
-    block_header_end = 0
-    block_end = 0
 
     block_sizes = []
     # go through funnel format, and compress each block
@@ -56,11 +51,12 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
         curr_block = funnel_format_data[block_i]
 
         # compress block
-        block_header_and_data = compress_block.compress_block(curr_block,
+        block_header_and_block_data = compress_block.compress_block(curr_block,
                                                               CODECS_LIST,
                                                               column_types,
                                                               INPUT_DATA_TYPE_LIST,
                                                               DATA_TYPE_BYTE_SIZES)
+<<<<<<< HEAD
     return block_header_and_data
     #     compressed_block_header = block_header_and_data[0]
     #     compressed_block = block_header_and_data[1]
@@ -91,6 +87,36 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
     #
     # header_second_half = [block_header_ends, block_ends, block_sizes]
     # return header_second_half
+=======
+        compressed_block_header = block_header_and_block_data[0]
+        compressed_block = block_header_and_block_data[1]
+
+        # HEADER END DATA
+        # add to block header ends
+        try:
+            block_header_end = (block_ends[block_i-1]+len(compressed_block_header))
+        except IndexError:
+            block_header_end += (0+len(compressed_block_header))
+        block_header_ends.append(block_header_end)
+
+        # add to block ends
+        try:
+            block_end = (block_header_ends[block_i]+len(compressed_block))
+        except IndexError:
+            block_end += (block_header_end+len(compressed_block))
+        block_ends.append(block_end)
+
+        # block sizes
+        curr_block_size = len(curr_block[0])
+        if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
+
+    if len(block_sizes) < 2: block_sizes.append(curr_block_size)
+
+
+
+    header_second_half = [block_header_ends, block_ends, block_sizes]
+    return header_second_half
+>>>>>>> 3560a29ef80903fcd4c478a6982bec873c86eae8
 #
 # def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes):
 #     """
