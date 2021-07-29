@@ -10,17 +10,18 @@
 
 # PURPOSE: run multiple experiments for differnt setups of the compression
 
-
-declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
+scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/new_compression/'
 config_files_dir='/home/krsc0813/projects/gwas-compress/config_files/'
 basic_config='config.ini' 
+declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 
 echo "starting experiments calculation"
 for config_file in `ls $config_files_dir`
 do
-    if [[ $config_file == *.ini ]];then
+    config_root=${config_file%%_*}
+    if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]];then
         echo "running experimetns for $config_file"
-        python /home/krsc0813/projects/gwas-compress/scripts/python/squish.py $config_files_dir$config_file
+        python $scripts_dir/driver.py $config_files_dir$config_file
         #basic_config
     fi
 done        
