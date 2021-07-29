@@ -23,7 +23,8 @@ def column_compression_main(column, column_codec, column_data_type,
     elif curr_compression_data_type == 2:
         typed_column = encode_as_float.encode_column_as_float(column, column_data_type)
     elif curr_compression_data_type == 3:
-        typed_column = encode_as_string.encode_column_as_string(column, column_data_type)
+        # funnel format data is read in as a string. all columns are strings by default.
+        typed_column = column
 
     else:
         print('unrecognized input data type for type conversion: ', curr_compression_data_type)
