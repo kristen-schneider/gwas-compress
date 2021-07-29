@@ -40,14 +40,15 @@ def serialize_data(data, data_type, num_bytes):
     # floats
     elif data_type == 2:
         s_value = serialize_float(data, num_bytes)
-    # strings
-    elif data_type == 3:
+    # strings (true/false and INDELs/SNPs)
+    elif data_type == 3 or data_type == 4:
         s_value = serialize_string(data)
-        # string value converted to int
         if s_value == -1:
             s_value = serialize_int(data, num_bytes)
     else:
         s_value = data
+     
+    
     return s_value
 
 
@@ -65,8 +66,10 @@ def serialize_int(data, num_bytes):
         s_value = data.to_bytes(num_bytes, byteorder='big', signed=True)
     # numpy data is not integer
     except AttributeError: 
+        print('Attribute error, likely numpy data input.')
         s_value = data.tobytes(order='C')
     except OverflowError:
+        print('Overflow error.')
         return -1
     return s_value
 
