@@ -78,8 +78,6 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
         curr_block_size = len(curr_block[0])
         if curr_block_size not in block_sizes: block_sizes.append(curr_block_size)
 
-
-
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
 
