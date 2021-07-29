@@ -100,7 +100,6 @@ def main():
                                                                     DATA_TYPE_BYTE_SIZES,
                                                                     header_first_half,
                                                                     funnel_format_data)
-    print(len(header_second_half))
     print(header_second_half)
     ############
     compress_data_END = datetime.now()

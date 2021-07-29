@@ -66,7 +66,7 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
         try:
             block_header_end = (block_ends[block_i-1]+len(compressed_block_header))
         except IndexError:
-            block_header_end += (0+len(compressed_block_header))
+            block_header_end = (0+len(compressed_block_header))
         block_header_ends.append(block_header_end)
 
         # add to block ends
