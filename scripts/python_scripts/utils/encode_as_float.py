@@ -16,9 +16,9 @@ def convert_data_type_to_float(data, column_data_type):
     elif column_data_type == 2:
         try: return float(data)
         except ValueError:
-            # NA values return value not seen in data (999)
-            if data.lower() == 'NA':
-                return float(999)
+            # NA values return value not seen in data (99)
+            if data.lower() == 'na':
+                return float('nan')
     else:
         print('cannot convert ', data, ' to float')
         return None
