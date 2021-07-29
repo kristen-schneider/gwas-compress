@@ -6,6 +6,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 from utils import type_handling
 from utils import encode_as_int
+from utils import encode_as_float
 import serialize_body
 import compress
 
@@ -19,6 +20,11 @@ def column_compression_main(column, column_codec, column_data_type,
     # 1. type column according to desired input type
     if curr_compression_data_type == 1:
         typed_column = encode_as_int.encode_column_as_int(column, column_data_type)
+    elif curr_compression_data_type == 2:
+        typed_column = encode_as_float.ecode_column_as_float(column, column_data_type)
+
+    else:
+        print('unrecognized input data type for type conversion: ', curr_compression_data_type)
     
     # 2. compress column according to compression method (serialized vs numpy)
     if column_codec in serialized_codecs:
