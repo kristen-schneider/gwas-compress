@@ -17,6 +17,10 @@ serialized_codecs = ['gzip', 'zlib', 'bz2']
 
 def column_compression_main(column, column_codec, column_data_type,
                             curr_compression_data_type, column_data_type_byte_sizes):
+
+    column_i_START = datetime.now()
+    column_i_STRING_SIZE = sys.getsizeof(column)
+
     # 1. type column according to desired input type
     if curr_compression_data_type == 1:
         typed_column = encode_as_int.encode_column_as_int(column, column_data_type)
@@ -25,17 +29,23 @@ def column_compression_main(column, column_codec, column_data_type,
     elif curr_compression_data_type == 3:
         # funnel format data is read in as a string. all columns are strings by default.
         typed_column = column
-
     else:
         print('unrecognized input data type for type conversion: ', curr_compression_data_type)
-    
+    column_i_TYPED_SIZE = sys.getsizeof(typed_column)
+
     # 2. compress column according to compression method (serialized vs numpy)
     if column_codec in serialized_codecs:
         compressed_column_bitstring = compress_serialized(typed_column, column_codec, curr_compression_data_type, column_data_type_byte_sizes)
     else:
         compressed_column_bitstring = compress_numpy(typed_column, column_codec)
-    
-    print(column_codec)
+
+    column_i_END = datetime.now()
+    column_i_TIME = column_i_END - column_i_START
+    column_i_COMPRESSED_SIZE = sys.getsizeof(compressed_column_bitstring)
+    column_i_SIZE_RATIO = float(column_i_STRING_SIZE/column_i_COMPRESSED_SIZE)
+    print('compression_time_', column_i_TIME)
+    print('compression_ratio_', column_i_SIZE_RATIO)
+
     return compressed_column_bitstring
 
 def compress_serialized(typed_column, column_codec, column_data_type, column_num_bytes):
@@ -51,17 +61,8 @@ def compress_serialized(typed_column, column_codec, column_data_type, column_num
     OUTPUT
         compressed_column_info = compressed data and length of header which would help decompress data
     """
-
-    column_i_START = datetime.now()
-    column_i_BEFORE = sys.getsizeof(typed_column)
-    ### work ###
     serialized_column = serialize_body.serialize_list(typed_column, column_data_type, column_num_bytes)
     compressed_column = compress.compress_bitstring(serialized_column, column_codec)
-    ############    
-    column_i_END = datetime.now()
-    column_i_TIME = column_i_END - column_i_START
-    #column_i_AFTER = sys.getsizeof(compressed_column_info[0])
-    #column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
     return compressed_column
 
 def compress_numpy(typed_column, column_codec):
@@ -75,14 +76,5 @@ def compress_numpy(typed_column, column_codec):
     OUTPUT
         compressed_column = compressed data in bitstring form
     """
-
-    column_i_START = datetime.now()
-    column_i_BEFORE = sys.getsizeof(typed_column)
-    ### work ###
     compressed_column = compress.compress_numpy_array(typed_column, column_codec)
-    ############
-    column_i_END = datetime.now()
-    column_i_TIME = column_i_END - column_i_START
-    #column_i_AFTER = sys.getsizeof(compressed_column_info[0])
-    #column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
     return compressed_column
