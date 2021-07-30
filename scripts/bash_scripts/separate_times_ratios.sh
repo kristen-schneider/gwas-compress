@@ -20,7 +20,8 @@ do
     if [[ $out_file == *.out ]]; then
         echo "reading data for $out_file"
         echo $root_data_dir"out/"$out_file
-        grep "time" $root_data_dir"out/"$out_file | awk '{print $1" "$3}' > $root_data_dir"times/"$config_base_name".out"
+        grep "time" $root_data_dir"out/"$out_file | awk '{print $1" "$3}' > $root_data_dir"times/"$config_base_name".times"
+        grep "ratio" $root_data_dir"out/"$out_file | awk '{print $1" "$3}' > $root_data_dir"ratios/"$config_base_name".ratios"
     fi
 done
 
