@@ -76,17 +76,8 @@ def make_cols_data(strings_data, ints_data, compressed_data):
         cols_data[col].append(strings_data[col])
         cols_data[col].append(ints_data[col])
         cols_data[col].append(compressed_data[col])
-
-
+        
     return cols_data
-
-
-s = {0: [150, 100, 110], 1: [160, 165, 170], 2: [150, 100, 110], 3: [150, 100, 110], 4: [174, 160, 167],
-     5: [174, 160, 167], 6: [177, 160, 169], 7: [174, 160, 167], 8: [174, 160, 167], 9: [159, 155, 157]}
-i = {0: [84, 94, 74], 1: [84, 94, 74], 2: [18, 28, 38], 3: [38, 28, 18], 4: [84, 94, 74], 5: [84, 94, 74],
-     6: [84, 94, 74], 7: [84, 94, 74], 8: [84, 94, 74], 9: [84, 94, 74]}
-c = {0: [46, 56, 66], 1: [84, 112, 122], 2: [46, 56, 66], 3: [46, 56, 66], 4: [140, 112, 84], 5: [140, 112, 122],
-     6: [140, 122, 112], 7: [140, 112, 122], 8: [140, 112, 122], 9: [46, 56, 66]}
 
 # boxplot_bytes_storage(s, i, c)
 #s, i, c = boxplot_read_fastp_file('/Users/kristen/PycharmProjects/gwas-compress/scripts/plotting/fastpfor.tsv', 10)
