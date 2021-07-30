@@ -35,6 +35,7 @@ def column_compression_main(column, column_codec, column_data_type,
     else:
         compressed_column_bitstring = compress_numpy(typed_column, column_codec)
     
+    print(column_codec)
     return compressed_column_bitstring
 
 def compress_serialized(typed_column, column_codec, column_data_type, column_num_bytes):
@@ -59,7 +60,6 @@ def compress_serialized(typed_column, column_codec, column_data_type, column_num
     ############    
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
-    print(typed_column, column_i_TIME)#, 'for column with compression method ', column_codec, ' to compress')
     #column_i_AFTER = sys.getsizeof(compressed_column_info[0])
     #column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
     return compressed_column
@@ -83,7 +83,6 @@ def compress_numpy(typed_column, column_codec):
     ############
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
-    print(typed_column, column_i_TIME)#, 'for column with compression method ', column_codec, ' to compress')
     #column_i_AFTER = sys.getsizeof(compressed_column_info[0])
     #column_i_RATIO = float(column_i_BEFORE/column_i_AFTER)
     return compressed_column
