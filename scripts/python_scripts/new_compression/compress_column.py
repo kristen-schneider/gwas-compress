@@ -15,7 +15,7 @@ import compress
 serialized_codecs = ['gzip', 'zlib', 'bz2']
 
 
-def column_compression_main(column, column_codec, column_data_type,
+def column_compression_main(column_i, column, column_codec, column_data_type,
                             curr_compression_data_type, column_data_type_byte_sizes):
 
     column_i_START = datetime.now()
@@ -43,8 +43,8 @@ def column_compression_main(column, column_codec, column_data_type,
     column_i_TIME = column_i_END - column_i_START
     column_i_COMPRESSED_SIZE = sys.getsizeof(compressed_column_bitstring)
     column_i_SIZE_RATIO = float(column_i_STRING_SIZE/column_i_COMPRESSED_SIZE)
-    print('compression_time_', column_i_TIME)
-    print('compression_ratio_', column_i_SIZE_RATIO)
+    print(column_i, 'compression_time', column_i_TIME)
+    print(column_i, 'compression_ratio', column_i_SIZE_RATIO)
 
     return compressed_column_bitstring
 
