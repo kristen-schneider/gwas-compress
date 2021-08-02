@@ -1,12 +1,12 @@
 #!/usr/bin/env bash_scripts
 #
 #SBATCH -p long
-#SBATCH --job-name=compression_experiments_driver
+#SBATCH --job-name=compression_experiments
 #SBATCH --ntasks=1
 #SBATCH --time=23:00:00
 #SBATCH --mem-per-cpu=10G
-#SBATCH --output=/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/compression_experiments_driver.out
-#SBATCH --error=/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/compression_experiments_driver.err
+#SBATCH --output=/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/compression_experiments.out
+#SBATCH --error=/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/compression_experiments.err
 
 # PURPOSE: run multiple experiments for differnt setups of the compression
 

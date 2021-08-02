@@ -18,7 +18,7 @@ for out_file in `ls $root_data_dir"out/"`
 do
     config_base_name=${out_file%%.*}
     if [[ $out_file == *.out ]]; then
-        echo "reading data for $out_file"
+        echo "reading data for $out_file and writing column compression time and ratio data to $root_data_dir"
         echo $root_data_dir"out/"$out_file
         grep "time" $root_data_dir"out/"$out_file | awk '{print $1" "$3}' > $root_data_dir"times/"$config_base_name".times"
         grep "ratio" $root_data_dir"out/"$out_file | awk '{print $1" "$3}' > $root_data_dir"ratios/"$config_base_name".ratios"
