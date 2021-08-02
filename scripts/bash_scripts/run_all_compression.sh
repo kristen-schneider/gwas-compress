@@ -22,6 +22,8 @@ out_dir='/home/krsc0813/projects/gwas-compress/plot_data/out/'
 ratios_dir='/home/krsc0813/projects/gwas-compress/plot_data/ratios/'
 times_dir='/home/krsc0813/projects/gwas-compress/plot_data/times/'
 
+plots_dir='/home/krsc0813/projects/gwas-compress/plots/'
+
 basic_config='config.ini'
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 #declare -a block_size=
@@ -53,6 +55,16 @@ do
     fi
 done
 
+# 3. plot from .ratios and .times files
+echo "starting plotting ratios"
+for ratios_data_file in `ls ratios_dir`
+do
+    config_root=${ratios_data_file%%.*}
+    if [[ $ratios_data_file == *.ratios ]] && [[ $ratios_data_file != $basic_config ]];then
+        echo "plotting ratios for $ratios_data_file"
+        python $python_scripts_dir"plot_ratios.py" $ratios_dir$ratios_data_file $plots_dir$config_root".png"
+    fi
+done
 
 #
 #echo "starting experiments calculation"
