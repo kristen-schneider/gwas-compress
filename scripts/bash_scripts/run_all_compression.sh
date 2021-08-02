@@ -11,7 +11,7 @@
 # PURPOSE: run multiple experiments for different setups of the compression
 
 
-in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/million.tsv'
+in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/hundred_thousand.tsv'
 
 python_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/'
 bash_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/'
