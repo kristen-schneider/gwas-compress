@@ -48,8 +48,8 @@ def main():
     # BLOCK_SIZE = int(args['block_size'])
     BLOCK_SIZE = int(sys.argv[3])
     CODECS_LIST = list(args['compression_method'].split(','))
-    #INPUT_DATA_TYPE_LIST=list(args['input_data_type'].split(','))
-    INPUT_DATA_TYPE_LIST = sys.argv[4].split(',')
+    INPUT_DATA_TYPE_LIST=list(args['input_data_type'].split(','))
+    #INPUT_DATA_TYPE_LIST = sys.argv[4].split(',')
     # COMPRESSION_DATA_TYPE_=args['compression_data_type']
     DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
                             2: int(args['float_byte_size']),
