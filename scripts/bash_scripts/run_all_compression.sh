@@ -29,11 +29,11 @@ block_size=10000
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
 echo "starting all experiments"
+# 1. do compression and write to .out files
 for config_file in `ls $config_files_dir`
 do
     config_root=${config_file%%_*}
     if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]];then
-        # 1. do compression and write to .out files
         bash $bash_scripts_dir"compression_experiments.sh" \
             $python_scripts_dir \
             $in_file \
@@ -41,12 +41,18 @@ do
             $block_size \
             $input_data_type \
             $out_dir$config_root.out
-
-        # 2. split .out files in to .ratio and .time intermediate files
-
-        # 3. plot boxplots for intermediate files
     fi
 done
+# 2. split data from .out files to .ratios and .times files
+for out_file in `ls $out_dir`
+do
+    config_base_name=${out_file%%.*}
+    if [[ $out_file == *.out ]]; then
+        grep "ratio" $out_dir$out_file | awk '{print $1" "$3}' > $ratios_dir$config_base_name".ratios"
+        grep "time" $out_dir$out_file | awk '{print $1" "$3}' > $timess_dir$config_base_name".times"
+    fi
+done
+
 
 #
 #echo "starting experiments calculation"

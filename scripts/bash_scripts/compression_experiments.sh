@@ -27,7 +27,6 @@ out_file=$6
 #block_size=3
 #declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
-echo "starting experiments calculation"
 #for config_file in `ls $config_files_dir`
 #do
     #config_root=${config_file%%_*}
