@@ -30,7 +30,7 @@ declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 block_size=10000
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
-echo "starting all experiments"
+echo "**starting all experiments**"
 # 1. do compression and write to .out files
 for config_file in `ls $config_files_dir`
 do
@@ -45,24 +45,25 @@ do
             $out_dir$config_root.out
     fi
 done
+
 # 2. split data from .out files to .ratios and .times files
 for out_file in `ls $out_dir`
 do
     config_base_name=${out_file%%.*}
     if [[ $out_file == *.out ]]; then
+        echo "making intermediate files for $out_file"
         grep "ratio" $out_dir$out_file | awk '{print $1" "$3}' > $ratios_dir$config_base_name".ratios"
         grep "time" $out_dir$out_file | awk '{print $1" "$3}' > $times_dir$config_base_name".times"
     fi
 done
 
 # 3. plot from .ratios and .times files
-echo "starting plotting ratios"
-for ratios_data_file in `ls ratios_dir`
+for ratios_data_file in `ls $ratios_dir`
 do
     config_root=${ratios_data_file%%.*}
     if [[ $ratios_data_file == *.ratios ]] && [[ $ratios_data_file != $basic_config ]];then
         echo "plotting ratios for $ratios_data_file"
-        python $python_scripts_dir"plot_ratios.py" $ratios_dir$ratios_data_file $plots_dir$config_root".png"
+        python $python_scripts_dir"plotting/plot_ratios.py" $ratios_dir$ratios_data_file $plots_dir"/ratios/"$config_root".png"
     fi
 done
 
