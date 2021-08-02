@@ -8,13 +8,16 @@
 #SBATCH --output=/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/compression_experiments.out
 #SBATCH --error=/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/compression_experiments.err
 
-# PURPOSE: run multiple experiments for differnt setups of the compression
+# PURPOSE: run multiple experiments for different setups of the compression
 
 scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/new_compression/'
 out_dir='/home/krsc0813/projects/gwas-compress/plot_data/'
 config_files_dir='/home/krsc0813/projects/gwas-compress/config_files/'
 basic_config='config.ini' 
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
+#declare -a block_size=
+block_size=3
+declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
 echo "starting experiments calculation"
 for config_file in `ls $config_files_dir`
@@ -22,7 +25,11 @@ do
     config_root=${config_file%%_*}
     if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]];then
         echo "running experiments for $config_file"
-        python $scripts_dir/driver.py $config_files_dir$config_file > $out_dir/out/$config_root.out
+        python $scripts_dir/driver.py \
+          $config_files_dir$config_file \
+          $block_size \
+          $input_data_type \
+          > $out_dir/out/$config_root.out
         #basic_config
     fi
 done        
