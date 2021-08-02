@@ -24,6 +24,11 @@ echo "starting all experiments"
 for config_file in `ls $config_files_dir`
 do
     config_root=${config_file%%_*}
+    # 1. do compression and write to .out files
+    
+    # 2. split .out files in to .ratio and .time intermediate files
+    # 3. plot boxplots for intermediate files
+
 done
 
 
