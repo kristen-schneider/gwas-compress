@@ -1,4 +1,5 @@
 from matplotlib import pyplot as plt
+import numpy as np
 import sys
 
 def main():
@@ -22,6 +23,12 @@ def read_ratio_data(data_file):
 def plot_boxplot(ratio_data_dict, png_file_name):#, num_columns):
     # plt.boxplot([[1,2,3,4],[10,11,12,13,14],[21,22,23,24]])
     plt.boxplot([d for d in ratio_data_dict.values()])
+    plt.xticks(ticks=np.arange(2, 100, 10).tolist(),
+               labels=['col1', 'col2', 'col3', 'col4',
+                       'col5', 'col6', 'col7', 'col8',
+                       'col9', 'col10'], fontsize=38)
+    plt.yticks(fontsize=38)
+    plt.title('title', fontsize=58)
     plt.savefig(png_file_name)
 
 if __name__ == "__main__":
