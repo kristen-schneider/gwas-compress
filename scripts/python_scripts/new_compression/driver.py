@@ -19,7 +19,7 @@ import header_compress
 # AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
 
 ### System Arguments ### (clean this up)
-config_file = sys.argv[1]#'/home/krsc0813/projects/gwas-compress/config_files/config.ini'
+config_file = sys.argv[2]#'/home/krsc0813/projects/gwas-compress/config_files/config.ini'
 
 
 def main():
@@ -42,19 +42,22 @@ def main():
     args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
 
     # included in config file
-    IN_FILE = args['in_file']
+    #IN_FILE = args['in_file']
+    IN_FILE = sys.argv[1]
     OUT_DIR = args['out_dir']
     # BLOCK_SIZE = int(args['block_size'])
-    BLOCK_SIZE = sys.argv[2]
+    BLOCK_SIZE = int(sys.argv[3])
     CODECS_LIST = list(args['compression_method'].split(','))
-    # INPUT_DATA_TYPE_LIST=list(args['input_data_type'].split(','))
-    INPUT_DATA_TYPE_LIST = sys.argv[3]
+    #INPUT_DATA_TYPE_LIST=list(args['input_data_type'].split(','))
+    INPUT_DATA_TYPE_LIST = sys.argv[4].split(',')
     # COMPRESSION_DATA_TYPE_=args['compression_data_type']
     DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
                             2: int(args['float_byte_size']),
                             3: int(args['string_byte_size']),
                             4: int(args['string_byte_size']),
                             5: args['bytes_byte_size']}
+    
+    print(BLOCK_SIZE, INPUT_DATA_TYPE_LIST)
     # output file made from combining user specified params
     base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
     COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'

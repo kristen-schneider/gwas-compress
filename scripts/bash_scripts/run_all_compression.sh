@@ -10,15 +10,22 @@
 
 # PURPOSE: run multiple experiments for different setups of the compression
 
-in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/hundred.tsv'
+in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/hundred_thousand.tsv'
 scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/new_compression/'
 out_dir='/home/krsc0813/projects/gwas-compress/plot_data/'
 config_files_dir='/home/krsc0813/projects/gwas-compress/config_files/'
 basic_config='config.ini' 
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 #declare -a block_size=
-block_size=3
+block_size=10000
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
+
+echo "starting all experiments"
+for config_file in `ls $config_files_dir`
+do
+    config_root=${config_file%%_*}
+done
+
 
 echo "starting experiments calculation"
 for config_file in `ls $config_files_dir`
