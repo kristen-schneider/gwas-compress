@@ -49,7 +49,7 @@ do
     config_base_name=${out_file%%.*}
     if [[ $out_file == *.out ]]; then
         grep "ratio" $out_dir$out_file | awk '{print $1" "$3}' > $ratios_dir$config_base_name".ratios"
-        grep "time" $out_dir$out_file | awk '{print $1" "$3}' > $timess_dir$config_base_name".times"
+        grep "time" $out_dir$out_file | awk '{print $1" "$3}' > $times_dir$config_base_name".times"
     fi
 done
 

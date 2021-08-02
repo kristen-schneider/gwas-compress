@@ -57,7 +57,6 @@ def main():
                             4: int(args['string_byte_size']),
                             5: args['bytes_byte_size']}
     
-    print(BLOCK_SIZE, INPUT_DATA_TYPE_LIST)
     # output file made from combining user specified params
     base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
     COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
