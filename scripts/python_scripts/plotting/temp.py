@@ -1,3 +1,6 @@
+from matplotlib import pyplot as plt
+
+
 def read_ratio_data(data_file):
     ratio_data_dict = dict()
     f = open(data_file, 'r')
@@ -10,5 +13,10 @@ def read_ratio_data(data_file):
 
     return ratio_data_dict
 
+def plot_boxplot(ratio_data_dict, num_columns):
+    # plt.boxplot([[1,2,3,4],[10,11,12,13,14],[21,22,23,24]])
+    plt.boxplot([d for d in ratio_data_dict.values()])
+    plt.savefig('/Users/kristen/PycharmProjects/gwas-compress/plots/boxplot.png')
 x = read_ratio_data("/Users/kristen/PycharmProjects/gwas-compress/plot_data/fastpfor.ratios")
-print(x)
+
+plot_boxplot(x, 10)
