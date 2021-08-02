@@ -33,7 +33,7 @@ def main():
     6. write compressed data
     """
     # 1. GET ARGUMENTS
-    print('0. getting arguments...')
+    #print('0. getting arguments...')
     get_arguments_start_time = datetime.now()
 
     # user should edit config.ini to reflect proper parameters
@@ -57,19 +57,19 @@ def main():
     base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
     COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-blocksize-' + str(BLOCK_SIZE) + '.tsv'
     COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
-    print(datetime.now()-get_arguments_start_time, ' to get arguments.\n')
+    #print(datetime.now()-get_arguments_start_time, ' to get arguments.\n')
 
     # 1. GET FIRST HALF OF HEADER
     ### Magic number, version number, delimiter, column labels, column types, number columns
-    print('1. generating start of header...')
+    #print('1. generating start of header...')
     header_first_half_START = datetime.now()
     ### work ###
     header_first_half = generate_header_first_half.get_header_first_half(IN_FILE)
     ############
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
-    print('header: ', header_first_half)
-    print(str(header_first_half_TIME) + ' for header start to compute...\n')
+    #print('header: ', header_first_half)
+    #print(str(header_first_half_TIME) + ' for header start to compute...\n')
 
     magic_number = header_first_half[0]
     version = header_first_half[1]
@@ -80,7 +80,7 @@ def main():
 
 
     # 2. GET FUNNEL FORMAT
-    print('2. generating funnel format...')
+    #print('2. generating funnel format...')
     funnel_format_START = datetime.now()
     ### work ###
     funnel_format_data = generate_funnel_format.make_all_blocks(IN_FILE, BLOCK_SIZE,
@@ -88,10 +88,10 @@ def main():
     ############
     funnel_format_END = datetime.now()
     funnel_format_TIME = funnel_format_END - funnel_format_START
-    print(str(funnel_format_TIME) + ' for funnel format to compute...\n')
+    #print(str(funnel_format_TIME) + ' for funnel format to compute...\n')
 
     # 3. COMPRESS DATA, GET SECOND HALF OF HEADER
-    print('3. compressing data...')
+    #print('3. compressing data...')
     compress_data_START = datetime.now()
     # ### work ###
     header_second_half = compress_funnel_format.compress_all_blocks(CODECS_LIST,
@@ -102,7 +102,7 @@ def main():
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START
-    print(str(compress_data_TIME) + ' for compression to complete...\n')
+    #print(str(compress_data_TIME) + ' for compression to complete...\n')
 
     # # 4. COMPRESS HEADER
     # print('4. compressing header...')
