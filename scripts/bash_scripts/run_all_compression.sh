@@ -14,7 +14,7 @@
 in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/hundred_thousand.tsv'
 
 python_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/'
-bash_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/bash_scripts'
+bash_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/'
 
 config_files_dir='/home/krsc0813/projects/gwas-compress/config_files/'
 
@@ -32,18 +32,20 @@ echo "starting all experiments"
 for config_file in `ls $config_files_dir`
 do
     config_root=${config_file%%_*}
-    # 1. do compression and write to .out files
-    bash $bash_scripts_dir"compression_experiments.sh" \
-      $in_file \
-      $config_files_dir$config_file \
-      $block_size \
-      $input_data_type \
-      $out_dir$config_root.out
+    if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]];then
+        # 1. do compression and write to .out files
+        bash $bash_scripts_dir"compression_experiments.sh" \
+            $python_scripts_dir \
+            $in_file \
+            $config_files_dir$config_file \
+            $block_size \
+            $input_data_type \
+            $out_dir$config_root.out
 
-    # 2. split .out files in to .ratio and .time intermediate files
+        # 2. split .out files in to .ratio and .time intermediate files
 
-    # 3. plot boxplots for intermediate files
-
+        # 3. plot boxplots for intermediate files
+    fi
 done
 
 #
