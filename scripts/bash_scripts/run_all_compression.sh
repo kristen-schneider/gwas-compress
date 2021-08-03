@@ -26,7 +26,7 @@ plots_dir='/home/krsc0813/projects/gwas-compress/plots/'
 basic_config='config.ini'
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 declare -a block_size_list=(5000,10000,15000,20000,25000,30000,35000,40000,45000,50000,60000,70000,80000,90000)
-block_size=5000
+block_size=10000
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
 echo "** starting all experiments **"
@@ -63,7 +63,11 @@ do
     if [[ ! -d $ratios_intermediate_dir$block_size ]]; then
         mkdir $ratios_intermediate_dir$block_size
     fi
-    experiment_dir=$ratios_intermediate_dir$block_size"/"
+    if [[ ! -d $times_intermediate_dir$block_size ]]; then
+        mkdir $times_intermediate_dir$block_size
+    fi
+    experiment_ratios_dir=$ratios_intermediate_dir$block_size"/"
+    experiment_times_dir=$times_intermediate_dir$block_size"/"
     experiment_name=${out_file%%.*}
     
     if [[ $out_file == *$block_size".out" ]]; then
@@ -71,33 +75,37 @@ do
         
         # making intermediate_files
         grep "ratio" $out_dir$block_size"/"$out_file | awk '{print $1" "$3}' \
-        > $experiment_dir$experiment_name".ratios"
+        > $experiment_ratios_dir$experiment_name".ratios"
 
         grep "time" $out_dir$block_size"/"$out_file | awk '{print $1" "$3}' \
-        > $experiment_dir$experiment_name".times"
+        > $experiment_times_dir$experiment_name".times"
     fi
 done
 
 # 3. plot from .ratios files
-for ratios_data_file in `ls $ratios_intermediate_dir$block_size`
-do
-    # each experiment is a block size
-    # all out files should be containted in a sub directory named by block size
-    if [[ ! -d $plots_dir"/ratios/"$block_size ]]; then
-        mkdir $plots_dir"/ratios/"$block_size
-    fi
-    experiment_dir=$plots_dir"/ratios/"$block_size"/"
-    experiment_name=${ratios_data_file%%.*}
-    
-    if [[ $ratios_data_file == *$block_size".ratios" ]] && [[ $ratios_data_file != $basic_config$block_size ]];then
-        echo "plotting ratios for $ratios_data_file"
-        
-        # running plotting script on full directory
-        python $python_scripts_dir"plotting/plot_ratios.py" \
-            $ratios_intermediate_dir$block_size"/"$ratios_data_file \
-            $experiment_dir$experiment_name".png"
-    fi
-done
+experiment_dir=$plots_dir"/ratios/"$block_size"/"
+python $python_scripts_dir"plotting/plot_ratios.py" \
+        $ratios_intermediate_dir$block_size"/" \
+        $plots_dir"/ratios/"$block_size".png"
+#for ratios_data_file in `ls $ratios_intermediate_dir$block_size`
+#do
+#    # each experiment is a block size
+#    # all out files should be containted in a sub directory named by block size
+#    if [[ ! -d $plots_dir"/ratios/"$block_size ]]; then
+#        mkdir $plots_dir"/ratios/"$block_size
+#    fi
+#    experiment_dir=$plots_dir"/ratios/"$block_size"/"
+#    experiment_name=${ratios_data_file%%.*}
+#    
+#    if [[ $ratios_data_file == *$block_size".ratios" ]] && [[ $ratios_data_file != $basic_config$block_size ]];then
+#        echo "plotting ratios for $ratios_data_file"
+#        
+#        # running plotting script on full directory
+#        python $python_scripts_dir"plotting/plot_ratios.py" \
+#            $ratios_intermediate_dir$block_size"/"$ratios_data_file \
+#            $experiment_dir$experiment_name".png"
+#    fi
+#done
 
 # 4. plot from .times files
 #for times_data_file in `ls $times_intermediate_dir`

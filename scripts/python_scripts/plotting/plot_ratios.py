@@ -1,12 +1,19 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import sys
+import os
 
 def main():
-    ratio_data_file = sys.argv[1]
+    experiment_dir = sys.argv[1]
+    #ratio_data_file = sys.argv[1]
     png_file_name = sys.argv[2]
-    ratio_data_dict = read_ratio_data(ratio_data_file)
-    plot_boxplot(ratio_data_dict, png_file_name)
+    experiment(experiment_dir)
+    #ratio_data_dict = read_ratio_data(ratio_data_file)
+    #plot_boxplot(ratio_data_dict, png_file_name)
+
+def experiment(experiment_dir):
+    for ratio_file in os.listdir(experiment_dir):
+        print(ratio_file)
 
 def read_ratio_data(data_file):
     ratio_data_dict = dict()
