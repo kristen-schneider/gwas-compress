@@ -38,6 +38,11 @@ do
     experiment_name=${config_file%%_*}$block_size
     if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]]; then
       echo "running experiments for $config_file"
+
+      # each experiment is a block size
+      if [[ ! -d $out_dir$block_size ]]; then
+        echo $out_dir$block_size "does not exist"
+
       python $python_scripts_dir"/new_compression/driver.py" \
         $in_file \
         $config_files_dir$config_file \
