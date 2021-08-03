@@ -42,7 +42,7 @@ do
         $config_files_dir$config_file \
         $block_size \
         $input_data_type \
-        > $out_dir$experiment_name.out
+        > $out_dir$experiment_name$block_size".out"
     fi
 done
 
@@ -52,8 +52,12 @@ do
     experiment_name=${out_file%%.*}
     if [[ $out_file == *.out ]]; then
         echo "making intermediate files for $out_file"
-        grep "ratio" $out_dir$out_file | awk '{print $1" "$3}' > $ratios_intermediate_dir$experiment_name".ratios"
-        grep "time" $out_dir$out_file | awk '{print $1" "$3}' > $times_intermediate_dir$experiment_name".times"
+
+        grep "ratio" $out_dir$out_file | awk '{print $1" "$3}' \
+        > $ratios_intermediate_dir$experiment_name$block_size".ratios"
+
+        grep "time" $out_dir$out_file | awk '{print $1" "$3}' \
+        > $times_intermediate_dir$experiment_name$block_size".times"
     fi
 done
 
@@ -65,7 +69,7 @@ do
         echo "plotting ratios for $ratios_data_file"
         python $python_scripts_dir"plotting/plot_ratios.py" \
             $ratios_intermediate_dir$ratios_data_file \
-            $plots_dir"/ratios/"$experiment_name".png"
+            $plots_dir"/ratios/"$experiment_name$block_size".png"
     fi
 done
 
@@ -77,6 +81,6 @@ do
         echo "plotting times for $times_data_file"
         python $python_scripts_dir"plotting/plot_times.py" \
             $times_intermediate_dir$times_data_file \
-            $plots_dir"/times/"$experiment_name".png"
+            $plots_dir"/times/"$experiment_name$block_size".png"
     fi 
 done
