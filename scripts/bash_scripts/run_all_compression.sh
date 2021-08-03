@@ -35,7 +35,7 @@ echo ""
 # 1. do compression and write to .out files
 for config_file in `ls $config_files_dir`
 do
-    experiment_name=${config_file%%_*}
+    experiment_name=${config_file%%_*}$block_size
     if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]]; then
       echo "running experiments for $config_file"
       python $python_scripts_dir"/new_compression/driver.py" \
@@ -43,7 +43,7 @@ do
         $config_files_dir$config_file \
         $block_size \
         $input_data_type \
-        > $out_dir$experiment_name$block_size".out"
+        > $out_dir$experiment_name".out"
     fi
 done
 
@@ -51,14 +51,14 @@ done
 for out_file in `ls $out_dir`
 do
     experiment_name=${out_file%%.*}
-    if [[ $out_file == *.out ]]; then
+    if [[ $out_file == *$block_size".out" ]]; then
         echo "making intermediate files for $out_file"
 
         grep "ratio" $out_dir$out_file | awk '{print $1" "$3}' \
-        > $ratios_intermediate_dir$experiment_name$block_size".ratios"
+        > $ratios_intermediate_dir$experiment_name".ratios"
 
         grep "time" $out_dir$out_file | awk '{print $1" "$3}' \
-        > $times_intermediate_dir$experiment_name$block_size".times"
+        > $times_intermediate_dir$experiment_name".times"
     fi
 done
 
@@ -66,22 +66,22 @@ done
 for ratios_data_file in `ls $ratios_intermediate_dir`
 do
     experiment_name=${ratios_data_file%%.*}
-    if [[ $ratios_data_file == *.ratios ]] && [[ $ratios_data_file != $basic_config ]];then
+    if [[ $ratios_data_file == *$block_size".ratios" ]] && [[ $ratios_data_file != $basic_config$block_size ]];then
         echo "plotting ratios for $ratios_data_file"
         python $python_scripts_dir"plotting/plot_ratios.py" \
             $ratios_intermediate_dir$ratios_data_file \
-            $plots_dir"/ratios/"$experiment_name$block_size".png"
+            $plots_dir"/ratios/"$experiment_name".png"
     fi
 done
 
 # 4. plot from .times files
-for times_data_file in `ls $times_intermediate_dir`
-do
-    experiment_name=${times_data_file%%.*}
-    if [[ $times_data_file == *.times ]] && [[ $times_data_file != $basic_config ]];then
-        echo "plotting times for $times_data_file"
-        python $python_scripts_dir"plotting/plot_times.py" \
-            $times_intermediate_dir$times_data_file \
-            $plots_dir"/times/"$experiment_name$block_size".png"
-    fi 
-done
+#for times_data_file in `ls $times_intermediate_dir`
+#do
+#    experiment_name=${times_data_file%%.*}
+#    if [[ $times_data_file == *.times ]] && [[ $times_data_file != $basic_config ]];then
+#        echo "plotting times for $times_data_file"
+#        python $python_scripts_dir"plotting/plot_times.py" \
+#            $times_intermediate_dir$times_data_file \
+#            $plots_dir"/times/"$experiment_name".png"
+#    fi 
+#done
