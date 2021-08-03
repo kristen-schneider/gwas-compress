@@ -10,7 +10,6 @@
 
 # PURPOSE: run multiple experiments for different setups of the compression
 
-
 in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/hundred_thousand.tsv'
 
 python_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/'
@@ -30,19 +29,28 @@ declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 block_size=10000
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
-echo "**starting all experiments**"
+echo "** starting all experiments **"
+echo ""
+
 # 1. do compression and write to .out files
 for config_file in `ls $config_files_dir`
 do
     config_root=${config_file%%_*}
-    if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]];then
-        bash $bash_scripts_dir"compression_experiments.sh" \
-            $python_scripts_dir \
-            $in_file \
-            $config_files_dir$config_file \
-            $block_size \
-            $input_data_type \
-            $out_dir$config_root.out
+    if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]]; then
+      echo "running experiments for $config_file"
+      python $python_scripts"/new_compression/driver.py" \
+        $in_file \
+        $config_files_dir$config_file \
+        $block_size \
+        $input_data_type >
+        $out_dir$config_root.out
+#        bash $bash_scripts_dir"compression_experiments.sh" \
+#            $python_scripts_dir \
+#            $in_file \
+#            $config_files_dir$config_file \
+#            $block_size \
+#            $input_data_type \
+#            $out_dir$config_root.out
     fi
 done
 
