@@ -15,8 +15,8 @@ def main():
 def experiment(experiment_dir):
     """
     uses read_ratios_data() method on each file in an experiment directory to make dictionaries out of all ratio data
-    INPUT
-    OUTPUT    
+    INPUT: experiments directory
+    OUTPUT: list of dictionaries
     """
     all_dicts = []
     for ratio_file in os.listdir(experiment_dir):
@@ -35,6 +35,8 @@ def read_ratio_data(data_file):
         except KeyError: ratio_data_dict[col_number] = [ratio_data]
 
     return ratio_data_dict
+
+def plot_all_boxplot(ratio_data_dict):
 
 def plot_boxplot(ratio_data_dict, png_file_name):#, num_columns):
     # plt.boxplot([[1,2,3,4],[10,11,12,13,14],[21,22,23,24]])
