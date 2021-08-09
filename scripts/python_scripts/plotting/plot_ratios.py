@@ -7,13 +7,22 @@ def main():
     experiment_dir = sys.argv[1]
     #ratio_data_file = sys.argv[1]
     png_file_name = sys.argv[2]
-    experiment(experiment_dir)
+    all_dicts = experiment(experiment_dir)
+    print(len(all_dicts))
     #ratio_data_dict = read_ratio_data(ratio_data_file)
     #plot_boxplot(ratio_data_dict, png_file_name)
 
 def experiment(experiment_dir):
+    """
+    uses read_ratios_data() method on each file in an experiment directory to make dictionaries out of all ratio data
+    INPUT
+    OUTPUT    
+    """
+    all_dicts = []
     for ratio_file in os.listdir(experiment_dir):
-        print(ratio_file)
+        current_dict = read_ratio_data(experiment_dir+ratio_file)
+        all_dicts.append(current_dict)
+    return all_dicts
 
 def read_ratio_data(data_file):
     ratio_data_dict = dict()
