@@ -8,7 +8,8 @@ def main():
     #ratio_data_file = sys.argv[1]
     png_file_name = sys.argv[2]
     all_dicts = experiment(experiment_dir)
-    print(len(all_dicts))
+    plot_all_boxplot(all_dicts, png_file_name)
+    # print(len(all_dicts))
     #ratio_data_dict = read_ratio_data(ratio_data_file)
     #plot_boxplot(ratio_data_dict, png_file_name)
 
@@ -36,7 +37,43 @@ def read_ratio_data(data_file):
 
     return ratio_data_dict
 
-def plot_all_boxplot(ratio_data_dict):
+def plot_all_boxplot(ratio_data_dict, png_file_name):
+    gap = 10
+
+
+    plt.figure(figsize=(50, 20))
+    pos = list(range(0, 6 * 10, 6))
+    for i in range(len(ratio_data_dict)):
+        curr_experiment = ratio_data_dict[i]
+        curr_p = [p+i for p in pos]
+        # col, positions = p,
+        # labels = ['', '', ''],
+        # # labels=['string', 'int', 'comp'],
+        # notch = None, vert = None,
+        # patch_artist = True,
+        # widths = 1)
+        plt.boxplot([d for d in curr_experiment.values()], positions=curr_p)
+
+        # # fill with colors
+        # colors = ['lightcoral', 'lightblue', 'lightgreen',
+        #           'lightcoral', 'lightblue', 'lightgreen',
+        #           'lightcoral', 'lightblue', 'lightgreen', 'lightcoral']
+        # for patch, color in zip(x['boxes'], colors):
+        #     patch.set_facecolor(color)
+        #
+        # plt.xticks(ticks=np.arange(2, 100, gap).tolist(),
+        #            labels=['col1', 'col2', 'col3', 'col4',
+        #                    'col5', 'col6', 'col7', 'col8',
+        #                    'col9', 'col10'], fontsize=38)
+        # plt.yticks(fontsize=38)
+        # plt.title('Bytes of each column at different points in compression (string, int, compressed)', fontsize=58)
+        # plt.legend(['string data', 'int data', 'compressed data'], fontsize=38,
+        #            labelcolor=colors)
+
+    # plt.boxplot(data1, positions = [1, 2, 3], notch=None, vert=None, patch_artist=None, widths=None)
+    # plt.boxplot(data2, positions = [5, 6, 7], notch=None, vert=None, patch_artist=None, widths=None)
+    # plt.boxplot(data3, positions = [9, 10, 11], notch=None, vert=None, patch_artist=None, widths=None)
+    plt.savefig(png_file_name+'aug921.png')
 
 def plot_boxplot(ratio_data_dict, png_file_name):#, num_columns):
     # plt.boxplot([[1,2,3,4],[10,11,12,13,14],[21,22,23,24]])
