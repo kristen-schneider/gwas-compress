@@ -41,8 +41,8 @@ def plot_all_boxplot(ratio_data_dict, png_file_name):
     gap = 10
 
 
-    plt.figure(figsize=(50, 20))
-    pos = list(range(0, 6 * 10, 6))
+    plt.figure(figsize=(50, 50))
+    pos = list(range(0,gap * 10, gap))
     for i in range(len(ratio_data_dict)):
         curr_experiment = ratio_data_dict[i]
         curr_p = [p+i for p in pos]
@@ -52,7 +52,9 @@ def plot_all_boxplot(ratio_data_dict, png_file_name):
         # notch = None, vert = None,
         # patch_artist = True,
         # widths = 1)
-        plt.boxplot([d for d in curr_experiment.values()], positions=curr_p)
+        plt.boxplot([d for d in curr_experiment.values()],
+                    positions=curr_p,
+                    labels=['1','2','3','4','5','6','7','8','9','10'])
 
         # # fill with colors
         # colors = ['lightcoral', 'lightblue', 'lightgreen',
