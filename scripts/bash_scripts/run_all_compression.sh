@@ -84,9 +84,11 @@ done
 
 # 3. plot from .ratios files
 experiment_dir=$plots_dir"/ratios/"$block_size"/"
+echo "plotting expiriment"
 python $python_scripts_dir"plotting/plot_ratios.py" \
         $ratios_intermediate_dir$block_size"/" \
-        $plots_dir"/ratios/"$block_size".png"
+        $plots_dir"ratios/"$block_size"/"$block_size".png"
+echo $plots_dir"ratios/"$block_size"/"$block_size".png"
 #for ratios_data_file in `ls $ratios_intermediate_dir$block_size`
 #do
 #    # each experiment is a block size
