@@ -1,5 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
+from datetime import datetime
 import sys
 import os
 
@@ -32,7 +33,7 @@ def read_time_data(data_file):
     for line in f:
         A = line.split()
         col_number = int(A[0])
-        time_data = float(A[1])
+        time_data = datetime.strptime(A[1], '%H:%M:%S.%f')
         try: time_data_dict[col_number].append(time_data)
         except KeyError: time_data_dict[col_number] = [time_data]
 
@@ -97,5 +98,5 @@ def plot_boxplot(time_data_dict, png_file_name):#, num_columns):
 if __name__ == "__main__":
     main() 
 
-x = read_time_data("/Users/kristen/PycharmProjects/gwas-compress/plot_data/fastpfor.times")
+#x = read_time_data("/Users/kristen/PycharmProjects/gwas-compress/plot_data/fastpfor.times")
 #plot_boxplot(x)#, 10)
