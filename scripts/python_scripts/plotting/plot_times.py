@@ -8,8 +8,8 @@ def main():
     experiment_dir = sys.argv[1]
     #time_data_file = sys.argv[1]
     png_file_name = sys.argv[2]
-    print(png_file_name)
     all_dicts = experiment(experiment_dir)
+    print(all_dicts)
     plot_all_boxplot(all_dicts, png_file_name)
     # print(len(all_dicts))
     #time_data_dict = read_time_data(time_data_file)
@@ -34,8 +34,10 @@ def read_time_data(data_file):
         A = line.split()
         col_number = int(A[0])
         time_data = datetime.strptime(A[1], '%H:%M:%S.%f')
-        try: time_data_dict[col_number].append(time_data)
-        except KeyError: time_data_dict[col_number] = [time_data]
+        seconds_microseconds=time_data.second + time_data.microsecond
+        try:
+            time_data_dict[col_number].append(seconds_microseconds)
+        except KeyError: time_data_dict[col_number] = [seconds_microseconds]
 
     return time_data_dict
 
