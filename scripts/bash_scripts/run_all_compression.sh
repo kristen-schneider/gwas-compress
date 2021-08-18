@@ -85,6 +85,10 @@ done
 # 3. plot from .ratios files
 experiment_dir=$plots_dir"/ratios/"$block_size"/"
 echo "plotting expiriment: ratios"
+    # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"ratios/"$block_size ]]; then
+        mkdir $plots_dir"ratios/"$block_size
+    fi
 python $python_scripts_dir"plotting/plot_ratios.py" \
         $ratios_intermediate_dir$block_size"/" \
         $plots_dir"ratios/"$block_size"/"$block_size".png"
@@ -93,7 +97,11 @@ echo $plots_dir"ratios/"$block_size"/"$block_size".png"
 # 4. plot from .times files
 experiment_dir=$plots_dir"/times/"$block_size"/"
 echo "plotting expiriment: times"
-python $python_scripts_dir"plotting/plot_timess.py" \
+    # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"times/"$block_size ]]; then
+        mkdir $plots_dir"times/"$block_size
+    fi
+python $python_scripts_dir"plotting/plot_times.py" \
         $times_intermediate_dir$block_size"/" \
         $plots_dir"times/"$block_size"/"$block_size".png"
 echo $plots_dir"times/"$block_size"/"$block_size".png"

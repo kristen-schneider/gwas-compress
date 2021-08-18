@@ -8,8 +8,8 @@ def main():
     experiment_dir = sys.argv[1]
     #time_data_file = sys.argv[1]
     png_file_name = sys.argv[2]
+    print(png_file_name)
     all_dicts = experiment(experiment_dir)
-    print(all_dicts)
     plot_all_boxplot(all_dicts, png_file_name)
     # print(len(all_dicts))
     #time_data_dict = read_time_data(time_data_file)
@@ -34,11 +34,13 @@ def read_time_data(data_file):
         A = line.split()
         col_number = int(A[0])
         time_data = datetime.strptime(A[1], '%H:%M:%S.%f')
-        seconds_microseconds=time_data.second + time_data.microsecond
+        seconds = time_data.second
+        microseconds = time_data.microsecond
+        total_seconds = (seconds + microseconds/1e6)
+        #print(time_data, total_seconds)
         try:
-            time_data_dict[col_number].append(seconds_microseconds)
-        except KeyError: time_data_dict[col_number] = [seconds_microseconds]
-
+            time_data_dict[col_number].append(total_seconds)
+        except KeyError: time_data_dict[col_number] = [total_seconds]
     return time_data_dict
 
 def plot_all_boxplot(time_data_dict, png_file_name):
@@ -60,22 +62,23 @@ def plot_all_boxplot(time_data_dict, png_file_name):
         # notch = None, vert = None,
         # patch_artist = True,
         # widths = 10
-        plt.boxplot([d for d in curr_experiment.values()],
-                    positions=curr_p)
+        x = plt.boxplot([d for d in curr_experiment.values()],
+                    positions=curr_p,
+                    notch = None, vert = None, patch_artist = True)
                     #labels=)
 
-        # # fill with colors
-        # colors = ['lightcoral', 'lightblue', 'lightgreen',
+        # fill with colors
+        #colors = ['lightcoral', 'lightblue', 'lightgreen',
         #           'lightcoral', 'lightblue', 'lightgreen',
         #           'lightcoral', 'lightblue', 'lightgreen', 'lightcoral']
-        # for patch, color in zip(x['boxes'], colors):
-        #     patch.set_facecolor(color)
-        #
-        # plt.xticks(ticks=np.arange(2, 100, gap).tolist(),
-        #            labels=['col1', 'col2', 'col3', 'col4',
-        #                    'col5', 'col6', 'col7', 'col8',
-        #                    'col9', 'col10'], fontsize=38)
-        # plt.yticks(fontsize=38)
+        for patch, color in zip(x['boxes'], colors):
+            patch.set_facecolor(color)
+        
+        plt.xticks(ticks=np.arange(2, 100, gap).tolist(),
+                   labels=['col1', 'col2', 'col3', 'col4',
+                           'col5', 'col6', 'col7', 'col8',
+                           'col9', 'col10'], fontsize=38)
+        plt.yticks(fontsize=38)
         # plt.title('Bytes of each column at different points in compression (string, int, compressed)', fontsize=58)
         # plt.legend(['string data', 'int data', 'compressed data'], fontsize=38,
         #            labelcolor=colors)
