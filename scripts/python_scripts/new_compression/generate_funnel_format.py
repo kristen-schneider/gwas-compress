@@ -1,3 +1,29 @@
+from datetime import datetime
+
+def make_all_blocks(f, block_size, num_columns, delimeter):
+    """
+    take a list of strings and makes each string a list of columns, where each column is a list of values
+
+    INPUTS
+        f = file path to input file
+        block_size = number of lines in a block
+
+    OUTPUTS
+        all_blocks_list = [[[1,1,1,1,1],[100,200,300,400,500]...],[[2,2,2,2,2],[100,200,300,400,500]...]]]
+
+    """
+    string_block_START = datetime.now()
+    all_blocks_string = split_into_blocks(f, block_size)
+    string_block_END = datetime.now()
+    string_block_TIME = string_block_END - string_block_START
+    print('file', 'string_block', string_block_TIME)
+
+    all_blocks_list = []
+    for b in all_blocks_string:
+        curr_block = make_one_block(b, num_columns, delimeter)
+        all_blocks_list.append(curr_block)
+    return all_blocks_list
+
 def split_into_blocks(f, block_size):
     """
     takes a file and splits into blocks.
@@ -10,6 +36,7 @@ def split_into_blocks(f, block_size):
     OUTPUT
     blocks = list of strings [block1, block2, ..., blockn]
     """
+    reading_data_START = datetime.now()
     all_blocks = []
     header = None
     curr_block = ''
@@ -30,6 +57,9 @@ def split_into_blocks(f, block_size):
     all_blocks.append(curr_block)
     
     f_open.close()
+    reading_data_END = datetime.now()
+    # reading_data_TIME = 
+    # print('file', 'making_blocks'
     return all_blocks
 
 def make_one_block(block_string, num_columns, delimiter):
@@ -55,65 +85,4 @@ def make_one_block(block_string, num_columns, delimiter):
         for v in range(num_columns):
             one_block[v].append(curr_line[v])
     return one_block
-
-def make_all_blocks(f, block_size, num_columns, delimeter):
-    """
-    take a list of strings and makes each string a list of columns, where each column is a list of values
-
-    INPUTS
-        f = file path to input file
-        block_size = number of lines in a block
-
-    OUTPUTS
-        all_blocks_list = [[[1,1,1,1,1],[100,200,300,400,500]...],[[2,2,2,2,2],[100,200,300,400,500]...]]]
-
-    """
-    all_blocks_string = split_into_blocks(f, block_size)
-
-    all_blocks_list = []
-    for b in all_blocks_string:
-        curr_block = make_one_block(b, num_columns, delimeter)
-        all_blocks_list.append(curr_block)
-    return all_blocks_list
-
-
-def get_chr_format(f, header, delimeter):
-    """
-    looking to see how the first column (chr) is formatted
-
-    INPUTS
-    f = path to uncompressed input file
-    OUTPUTS
-    1 if chr is in front of the chromosomee number/character
-    0 if only the chromosome number/character is present
-    None otherwise
-
-    """
-
-    chr_flag = None
-    with open(f, 'r') as f_open:
-        # reads one line for header and one to get to data
-        h = f_open.readline()
-        first_data = f_open.readline().rstrip().split(delimeter)
-        try:
-            chr_index = header.index('chr')
-            chr_format = first_data[chr_index]
-            if 'chr' in chr_format or 'chrm' in chr_format:
-                chr_flag = 1
-            else:
-                chr_flag = 0
-        except ValueError:
-            try:
-                chr_index = header.index('chrm')
-                chr_format = first_data[chr_index]
-                if 'chr' in chr_format or 'chrm' in chr_format:
-                    chr_flag = 1
-                else:
-                    chr_flag = 0
-            except ValueError:
-                chr_flag = None
-                print('VAL_ERROR: cannot find chromosome column to determine format of entries')
-
-    f_open.close()
-    return chr_flag
 
