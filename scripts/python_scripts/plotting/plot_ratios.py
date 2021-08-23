@@ -42,17 +42,12 @@ def plot_all_boxplot(ratio_data_dict, png_file_name):
     gap = 10
 
 
-<<<<<<< HEAD
     plt.figure(figsize=(50, 50))
     pos = list(range(0,gap * 10, gap))
-=======
-    plt.figure(figsize=(50, 20))
-    pos = list(range(0, 6 * 10, 6))
     colors = ['lightcoral', 'lightblue', 'lightgreen',
               'lightcoral', 'lightblue', 'lightgreen',
               'lightcoral', 'lightblue', 'lightgreen', 'lightcoral']
     
->>>>>>> 3863b4596bd2fc5d54e4bedce32504184ad6e5fc
     for i in range(len(ratio_data_dict)):
         curr_experiment = ratio_data_dict[i]
         curr_p = [p+i for p in pos]
@@ -61,17 +56,10 @@ def plot_all_boxplot(ratio_data_dict, png_file_name):
         # # labels=['string', 'int', 'comp'],
         # notch = None, vert = None,
         # patch_artist = True,
-<<<<<<< HEAD
         # widths = 1)
         plt.boxplot([d for d in curr_experiment.values()],
                     positions=curr_p,
                     labels=['1','2','3','4','5','6','7','8','9','10'])
-=======
-        # widths = 10
-        plt.boxplot([d for d in curr_experiment.values()],
-                    positions=curr_p)
-                    #labels=)
->>>>>>> 3863b4596bd2fc5d54e4bedce32504184ad6e5fc
 
         # # fill with colors
         # colors = ['lightcoral', 'lightblue', 'lightgreen',
