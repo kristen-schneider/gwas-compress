@@ -7,6 +7,7 @@ def main():
     experiment_dir = sys.argv[1]
     #ratio_data_file = sys.argv[1]
     png_file_name = sys.argv[2]
+    print(png_file_name)
     all_dicts = experiment(experiment_dir)
     plot_all_boxplot(all_dicts, png_file_name)
     # print(len(all_dicts))
@@ -41,8 +42,17 @@ def plot_all_boxplot(ratio_data_dict, png_file_name):
     gap = 10
 
 
+<<<<<<< HEAD
     plt.figure(figsize=(50, 50))
     pos = list(range(0,gap * 10, gap))
+=======
+    plt.figure(figsize=(50, 20))
+    pos = list(range(0, 6 * 10, 6))
+    colors = ['lightcoral', 'lightblue', 'lightgreen',
+              'lightcoral', 'lightblue', 'lightgreen',
+              'lightcoral', 'lightblue', 'lightgreen', 'lightcoral']
+    
+>>>>>>> 3863b4596bd2fc5d54e4bedce32504184ad6e5fc
     for i in range(len(ratio_data_dict)):
         curr_experiment = ratio_data_dict[i]
         curr_p = [p+i for p in pos]
@@ -51,10 +61,17 @@ def plot_all_boxplot(ratio_data_dict, png_file_name):
         # # labels=['string', 'int', 'comp'],
         # notch = None, vert = None,
         # patch_artist = True,
+<<<<<<< HEAD
         # widths = 1)
         plt.boxplot([d for d in curr_experiment.values()],
                     positions=curr_p,
                     labels=['1','2','3','4','5','6','7','8','9','10'])
+=======
+        # widths = 10
+        plt.boxplot([d for d in curr_experiment.values()],
+                    positions=curr_p)
+                    #labels=)
+>>>>>>> 3863b4596bd2fc5d54e4bedce32504184ad6e5fc
 
         # # fill with colors
         # colors = ['lightcoral', 'lightblue', 'lightgreen',
@@ -75,7 +92,7 @@ def plot_all_boxplot(ratio_data_dict, png_file_name):
     # plt.boxplot(data1, positions = [1, 2, 3], notch=None, vert=None, patch_artist=None, widths=None)
     # plt.boxplot(data2, positions = [5, 6, 7], notch=None, vert=None, patch_artist=None, widths=None)
     # plt.boxplot(data3, positions = [9, 10, 11], notch=None, vert=None, patch_artist=None, widths=None)
-    plt.savefig(png_file_name+'aug921.png')
+    plt.savefig(png_file_name)
 
 def plot_boxplot(ratio_data_dict, png_file_name):#, num_columns):
     # plt.boxplot([[1,2,3,4],[10,11,12,13,14],[21,22,23,24]])
