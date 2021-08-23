@@ -104,8 +104,8 @@ echo "plotting expiriment: times"
     fi
 python $python_scripts_dir"plotting/plot_times.py" \
         $times_intermediate_dir$block_size"/" \
-        $plots_dir"times/"$block_size"/"$block_size".png"
-echo $plots_dir"times/"$block_size"/"$block_size".png"
+        $plots_dir"times/"$block_size"/"
+echo $plots_dir"times/"$block_size"/"
 
 
 #for times_data_file in `ls $times_intermediate_dir`
