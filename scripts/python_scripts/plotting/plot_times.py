@@ -41,7 +41,7 @@ def read_time_data(data_file):
         try:
             time_data_dict[col_number].append(total_seconds)
         except KeyError: time_data_dict[col_number] = [total_seconds]
-    print(time_data_dict)
+    #print(time_data_dict)
     return time_data_dict
 
 def plot_all_boxplot(time_data_dict, png_file_name):
