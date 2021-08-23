@@ -41,6 +41,7 @@ def read_time_data(data_file):
         try:
             time_data_dict[col_number].append(total_seconds)
         except KeyError: time_data_dict[col_number] = [total_seconds]
+    print(time_data_dict)
     return time_data_dict
 
 def plot_all_boxplot(time_data_dict, png_file_name):
@@ -49,9 +50,10 @@ def plot_all_boxplot(time_data_dict, png_file_name):
 
     plt.figure(figsize=(50, 20))
     pos = list(range(0, 6 * 10, 6))
-    colors = ['lightcoral', 'peru', 'gold',
-                'olivedrab', 'steelblue', 'mediumpurple',] * 10
-            # 'palevioletred', 'black', 'silver', 'white']
+    colors = ['lightcoral', 'black', 'white']
+            #['lightcoral', 'peru', 'gold']
+            #'olivedrab', 'steelblue', 'mediumpurple',
+            #'palevioletred', 'black', 'silver', 'white']
     
     for i in range(len(time_data_dict)):
         curr_experiment = time_data_dict[i]
