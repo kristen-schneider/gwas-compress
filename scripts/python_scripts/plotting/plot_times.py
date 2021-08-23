@@ -64,9 +64,9 @@ def plot_all_boxplot(time_data_dict, png_file_name):
         # notch = None, vert = None,
         # patch_artist = True,
         # widths = 10
-        x = plt.boxplot([d for d in curr_experiment.values()],
-                    positions=curr_p,
-                    notch = None, vert = None, patch_artist = True)
+        #x = plt.boxplot([d for d in curr_experiment.values()],
+        #            positions=curr_p,
+        #            notch = None, vert = None, patch_artist = True)
                     #labels=)
 
         for patch, color in zip(x['boxes'], colors):
