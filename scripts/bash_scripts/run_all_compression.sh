@@ -11,6 +11,7 @@
 # PURPOSE: run multiple experiments for different setups of the compression
 
 in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/hundred_thousand.tsv'
+#in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/hundred_thousand.tsv'
 
 python_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/'
 bash_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/'
@@ -84,11 +85,40 @@ done
 
 # 3. plot from .ratios files
 experiment_dir=$plots_dir"/ratios/"$block_size"/"
-echo "plotting expiriment"
+echo "plotting expiriment: ratios"
+    # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"ratios/"$block_size ]]; then
+        mkdir $plots_dir"ratios/"$block_size
+    fi
 python $python_scripts_dir"plotting/plot_ratios.py" \
         $ratios_intermediate_dir$block_size"/" \
         $plots_dir"ratios/"$block_size"/"$block_size".png"
 echo $plots_dir"ratios/"$block_size"/"$block_size".png"
+
+# 4. plot from .times files
+experiment_dir=$plots_dir"/times/"$block_size"/"
+echo "plotting expiriment: times"
+    # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"times/"$block_size ]]; then
+        mkdir $plots_dir"times/"$block_size
+    fi
+python $python_scripts_dir"plotting/plot_times.py" \
+        $times_intermediate_dir$block_size"/" \
+        $plots_dir"times/"$block_size"/"$block_size".png"
+echo $plots_dir"times/"$block_size"/"$block_size".png"
+
+
+#for times_data_file in `ls $times_intermediate_dir`
+#do
+#    experiment_name=${times_data_file%%.*}
+#    if [[ $times_data_file == *.times ]] && [[ $times_data_file != $basic_config ]];then
+#        echo "plotting times for $times_data_file"
+#        python $python_scripts_dir"plotting/plot_times.py" \
+#            $times_intermediate_dir$times_data_file \
+#            $plots_dir"/times/"$experiment_name".png"
+#    fi 
+#done
+
 #for ratios_data_file in `ls $ratios_intermediate_dir$block_size`
 #do
 #    # each experiment is a block size
@@ -107,16 +137,4 @@ echo $plots_dir"ratios/"$block_size"/"$block_size".png"
 #            $ratios_intermediate_dir$block_size"/"$ratios_data_file \
 #            $experiment_dir$experiment_name".png"
 #    fi
-#done
-
-# 4. plot from .times files
-#for times_data_file in `ls $times_intermediate_dir`
-#do
-#    experiment_name=${times_data_file%%.*}
-#    if [[ $times_data_file == *.times ]] && [[ $times_data_file != $basic_config ]];then
-#        echo "plotting times for $times_data_file"
-#        python $python_scripts_dir"plotting/plot_times.py" \
-#            $times_intermediate_dir$times_data_file \
-#            $plots_dir"/times/"$experiment_name".png"
-#    fi 
 #done

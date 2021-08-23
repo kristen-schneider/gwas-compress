@@ -73,7 +73,7 @@ def main():
     header_first_half_END = datetime.now()
     header_first_half_TIME = header_first_half_END - header_first_half_START
     #print('header: ', header_first_half)
-    #print(str(header_first_half_TIME) + ' for header start to compute...\n')
+    print('file','header_first_half',header_first_half_TIME)
 
     magic_number = header_first_half[0]
     version = header_first_half[1]
@@ -92,7 +92,7 @@ def main():
     ############
     funnel_format_END = datetime.now()
     funnel_format_TIME = funnel_format_END - funnel_format_START
-    #print(str(funnel_format_TIME) + ' for funnel format to compute...\n')
+    print('file', 'funnel_format', funnel_format_TIME)
 
     # 3. COMPRESS DATA, GET SECOND HALF OF HEADER
     #print('3. compressing data...')
@@ -106,7 +106,7 @@ def main():
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START
-    #print(str(compress_data_TIME) + ' for compression to complete...\n')
+    print('file', 'compress data', compress_data_TIME)
 
     # # 4. COMPRESS HEADER
     # print('4. compressing header...')
