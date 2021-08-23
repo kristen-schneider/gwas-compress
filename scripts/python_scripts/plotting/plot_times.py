@@ -15,8 +15,17 @@ def main():
         plot_one_config(config_ordered_list_data, plot_dir, config_file_name)
 
 def data_one_config(config_file):
+    """
+    creates a dictionary of column data for one config file
 
+    INPUT
+        one config file (path to config file)
 
+    OUTPUT
+        dictionary of time data.
+        each column is a key and the value for a column is a list of times.
+        time values are converted from datetime objects to total number of seconds.
+    """
     cf = open(config_file, 'r')
     config_column_data = dict()
 
@@ -32,16 +41,39 @@ def data_one_config(config_file):
     return config_column_data, config_file.split('/')[-1]
 
 def dict_to_ordered_list(config_data_dict):
+    """
+    converts a dictionary of time data for each column to an ordered list. 
+    this is so that column 1 always is first, then column 2, etc. 
+
+    INPUT
+        dictionary of time data.
+        
+    OUTPUT
+        ordered list of list of times.
+        order is dictated by the order of columns (numerical order)
+    """
     ordered_list = []
     for x in range(len(config_data_dict)):
         ordered_list.append(config_data_dict[x])
     return ordered_list
 
 def plot_one_config(config_ordered_list, plot_dir, config_file_name):
+    """
+    plots boxplots (1 per column) of all time data)
+
+    
+    """    
     plt.figure(figsize=(10,10))
-    plt.ylim([0,0.1])
-    plt.xlim([0,10])
     plt.boxplot(config_ordered_list)
+    plt.xlabel('Column Name')
+    plt.xticks(ticks=np.arange(1, 11, 1).tolist(),
+                labels=['chrm', 'pos', 'ref', 'alt',
+                           'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR',
+                           'se_EUR', 'low_confidence_EUR'],
+                rotation=70,
+                fontsize=14)
+    plt.xlim([0,10])
+    plt.ylim([0,0.001])
     plot_name = config_file_name.split('.')[0]
     plt.title(plot_name)
     plt.savefig(plot_dir+plot_name+'.png')
