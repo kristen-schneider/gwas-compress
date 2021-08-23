@@ -106,7 +106,7 @@ def main():
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START
-    #print(str(compress_data_TIME) + ' for compression to complete...\n')
+    print('file', 'compress data', compress_data_TIME)
 
     # # 4. COMPRESS HEADER
     # print('4. compressing header...')

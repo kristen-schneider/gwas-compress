@@ -16,13 +16,19 @@ def make_all_blocks(f, block_size, num_columns, delimeter):
     all_blocks_string = split_into_blocks(f, block_size)
     string_block_END = datetime.now()
     string_block_TIME = string_block_END - string_block_START
-    print('file', 'string_block', string_block_TIME)
+    print('file', 'read_string_block', string_block_TIME)
 
     all_blocks_list = []
+    block_ff_START = datetime.now()
     for b in all_blocks_string:
         curr_block = make_one_block(b, num_columns, delimeter)
         all_blocks_list.append(curr_block)
+    block_ff_END = datetime.now()
+    block_ff_TIME = block_ff_END - block_ff_START
+    print('file', 'string_block_ff', block_ff_TIME)
     return all_blocks_list
+
+
 
 def split_into_blocks(f, block_size):
     """
@@ -36,7 +42,6 @@ def split_into_blocks(f, block_size):
     OUTPUT
     blocks = list of strings [block1, block2, ..., blockn]
     """
-    reading_data_START = datetime.now()
     all_blocks = []
     header = None
     curr_block = ''
@@ -57,9 +62,6 @@ def split_into_blocks(f, block_size):
     all_blocks.append(curr_block)
     
     f_open.close()
-    reading_data_END = datetime.now()
-    # reading_data_TIME = 
-    # print('file', 'making_blocks'
     return all_blocks
 
 def make_one_block(block_string, num_columns, delimiter):
