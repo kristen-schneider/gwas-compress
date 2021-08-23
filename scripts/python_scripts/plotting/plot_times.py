@@ -38,9 +38,21 @@ def data_one_config(config_file):
         seconds = time_data.second
         microseconds = time_data.microsecond
         total_seconds = (seconds + microseconds/1e6)
+<<<<<<< HEAD
         try: config_column_data[col].append(total_seconds)
         except KeyError: config_column_data[col] = [total_seconds]
     return config_column_data, config_file.split('/')[-1]
+=======
+        #print(time_data, total_seconds)
+        try:
+            time_data_dict[col_number].append(total_seconds)
+        except KeyError: time_data_dict[col_number] = [total_seconds]
+    #print(time_data_dict)
+    return time_data_dict
+
+def plot_all_boxplot(time_data_dict, png_file_name):
+    gap = 6
+>>>>>>> 1715ae7b3b23fc36c0f133ce87ba7cf5512863e3
 
 def dict_to_ordered_list(config_data_dict):
     ordered_list = []
@@ -48,6 +60,7 @@ def dict_to_ordered_list(config_data_dict):
         ordered_list.append(config_data_dict[x])
     return ordered_list
 
+<<<<<<< HEAD
 def plot_one_config(config_ordered_list, config_file_name):
     plt.figure(figsize=(10,10))
     plt.ylim([0,0.02])
@@ -56,6 +69,28 @@ def plot_one_config(config_ordered_list, config_file_name):
     plot_name = config_file_name.split('.')[0]
     plt.title(plot_name)
     plt.savefig('/Users/kristen/PycharmProjects/gwas-compress/plots/'+plot_name+'.png')
+=======
+    plt.figure(figsize=(50, 20))
+    pos = list(range(0, 6 * 10, 6))
+    colors = ['lightcoral', 'black', 'white']
+            #['lightcoral', 'peru', 'gold']
+            #'olivedrab', 'steelblue', 'mediumpurple',
+            #'palevioletred', 'black', 'silver', 'white']
+    
+    for i in range(len(time_data_dict)):
+        curr_experiment = time_data_dict[i]
+        curr_p = [p+i for p in pos]
+        # col, positions = p,
+        # labels = ['', '', ''],
+        # # labels=['string', 'int', 'comp'],
+        # notch = None, vert = None,
+        # patch_artist = True,
+        # widths = 10
+        #x = plt.boxplot([d for d in curr_experiment.values()],
+        #            positions=curr_p,
+        #            notch = None, vert = None, patch_artist = True)
+                    #labels=)
+>>>>>>> 1715ae7b3b23fc36c0f133ce87ba7cf5512863e3
 
 #
 # def experiment(experiment_dir):
