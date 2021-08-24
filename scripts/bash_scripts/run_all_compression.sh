@@ -37,6 +37,9 @@ echo ""
 filename="$(basename -s .tsv $in_file)"
 
 # 1. do compression and write to .out files
+echo "compressing files and writing to $out_dir$filename"
+echo ""
+
 for config_file in `ls $config_files_dir`
 do
     # each experiment is a block size
@@ -63,28 +66,39 @@ do
 done
 
 # 2. split data from .out files to .ratios and .times files
-for out_file in `ls $out_dir$filename$block_size"/"`
+echo "splitting out files by ratio and time"
+echo ""
+
+for out_file in `ls $out_dir$filename"/"$block_size"/"`
 do
     # each experiment is a block size
     # all out files should be containted in a sub directory named by block size
-    if [[ ! -d $ratios_intermediate_dir$filename$block_size ]]; then
-        mkdir $ratios_intermediate_dir$filename$block_size
+    if [[ ! -d $ratios_intermediate_dir$filename ]]; then
+        mkdir $ratios_intermediate_dir$filename
     fi
-    if [[ ! -d $times_intermediate_dir$filename$block_size ]]; then
-        mkdir $times_intermediate_dir$filename$block_size
+    if [[ ! -d $ratios_intermediate_dir$filename"/"$block_size ]]; then
+        mkdir $ratios_intermediate_dir$filename"/"$block_size
     fi
-    experiment_ratios_dir=$ratios_intermediate_dir$filename$block_size"/"
-    experiment_times_dir=$times_intermediate_dir$filename$block_size"/"
+    
+
+    if [[ ! -d $times_intermediate_dir$filename ]]; then
+        mkdir $times_intermediate_dir$filename
+    fi
+    if [[ ! -d $times_intermediate_dir$filename"/"$block_size ]]; then
+        mkdir $times_intermediate_dir$filename"/"$block_size
+    fi
+    experiment_ratios_dir=$ratios_intermediate_dir$filename"/"$block_size"/"
+    experiment_times_dir=$times_intermediate_dir$filename"/"$block_size"/"
     experiment_name=${out_file%%.*}
     
     if [[ $out_file == *$block_size".out" ]]; then
         echo "making intermediate files for $out_file"
         
         # making intermediate_files
-        grep "ratio" $out_dir$filename$block_size"/"$out_file | awk '{print $1" "$3}' \
+        grep "ratio" $out_dir$filename"/"$block_size"/"$out_file | awk '{print $1" "$3}' \
         > $experiment_ratios_dir$experiment_name".ratios"
 
-        grep "time" $out_dir$filename$block_size"/"$out_file | awk '{print $1" "$3}' \
+        grep "time" $out_dir$filename"/"$block_size"/"$out_file | awk '{print $1" "$3}' \
         > $experiment_times_dir$experiment_name".times"
     fi
 done
@@ -93,6 +107,9 @@ done
 experiment_dir=$plots_dir"/ratios/"$block_size"/"
 echo "plotting expiriment: ratios"
     # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"ratios/"$filename ]]; then
+        mkdir $plots_dir"ratios/"$filename
+    fi
     if [[ ! -d $plots_dir"ratios/"$filename"/"$block_size ]]; then
         mkdir $plots_dir"ratios/"$filename"/"$block_size
     fi
@@ -106,6 +123,9 @@ echo $plots_dir"ratios/"$filename"/"$block_size"/"
 experiment_dir=$plots_dir"/times/"$filename"/"$block_size"/"
 echo "plotting expiriment: times"
     # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"times/"$filename ]]; then
+        mkdir $plots_dir"times/"$filename
+    fi
     if [[ ! -d $plots_dir"times/"$filename"/"$block_size ]]; then
         mkdir $plots_dir"times/"$filename"/"$block_size
     fi
