@@ -32,9 +32,10 @@ def full_header_tools(data_type_byte_sizes, full_header):
     # can pass 1 as data type because data types are all integers (1, 2, 3, 4)
     serialized_header_num_elements = serialize_header.serialize_list(header_num_elements, 1, data_type_byte_sizes[1])
 
-    ## get full serialized header as a list
-    #serialized_header_list = get_serialized_header_as_list(header_types, data_type_byte_sizes, full_header)
-    ## get full serialized header as a bitstring
+    # get full serialized header as a list
+    serialized_header_list = get_serialized_header_as_list(header_types, data_type_byte_sizes, full_header)
+    print(serialized_header_list)
+    # get full serialized header as a bitstring
     #serialized_header = join_serialized_list(serialized_header_list)
 
     ## get ends of each serialized element in column
