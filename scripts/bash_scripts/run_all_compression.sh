@@ -11,7 +11,7 @@
 # PURPOSE: run multiple experiments for different setups of the compression
 
 #in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/prescriptions-thiamine-both_sexes_copy.tsv'
-in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/ten.tsv'
+in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/million.tsv'
 
 python_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/'
 bash_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/'
@@ -27,7 +27,7 @@ plots_dir='/home/krsc0813/projects/gwas-compress/plots/'
 basic_config='config.ini'
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 declare -a block_size_list=(5000,10000,15000,20000,25000,30000,35000,40000,45000,50000,60000,70000,80000,90000)
-block_size=3
+block_size=10000
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
 # 0. do some work before the work...

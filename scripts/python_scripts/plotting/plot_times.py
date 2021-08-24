@@ -5,14 +5,22 @@ import sys
 import os
 
 def main():
+    max_time = 0
     experiment_dir = sys.argv[1]
     plot_dir = sys.argv[2]
+
+    for config_file in os.listdir(experiment_dir):
+        config_data = data_one_config(experiment_dir + config_file)
+        config_data_dict = config_data[0]
+        config_file_name = config_data[1]
+        config_max_time = max(i for v in config_data_dict.values() for i in v)
+        if config_max_time > max_time: max_time = config_max_time
     for config_file in os.listdir(experiment_dir):
         config_data = data_one_config(experiment_dir + config_file)
         config_data_dict = config_data[0]
         config_file_name = config_data[1]
         config_ordered_list_data = dict_to_ordered_list(config_data_dict)
-        plot_one_config(config_ordered_list_data, plot_dir, config_file_name)
+        plot_one_config(config_ordered_list_data, plot_dir, config_file_name, max_time)
 
 def data_one_config(config_file):
     """
@@ -57,7 +65,7 @@ def dict_to_ordered_list(config_data_dict):
         ordered_list.append(config_data_dict[x])
     return ordered_list
 
-def plot_one_config(config_ordered_list, plot_dir, config_file_name):
+def plot_one_config(config_ordered_list, plot_dir, config_file_name, max_time):
     """
     plots boxplots (1 per column) of all time data)
 
@@ -75,7 +83,7 @@ def plot_one_config(config_ordered_list, plot_dir, config_file_name):
     plt.xlim([0, 10])
 
     plt.ylabel('Total Seconds')
-    plt.ylim([0,0.001])
+    plt.ylim([0,max_time+0.001])
     plot_name = config_file_name.split('.')[0]
     plt.title('Column Compression Times for ' + plot_name)
     plt.savefig(plot_dir+plot_name+'.png')
