@@ -5,11 +5,19 @@ import os
 
 def main():
     experiment_dir = sys.argv[1]
+    plot_dir = sys.argv[2]
+    for config_file in os.listdir(experiment_dir):
+        config_data = data_one_config(experiment_dir + config_file)
+        config_data_dict = config_data[0]
+        config_file_name = config_data[1]
+        config_ordered_list_data = dict_to_ordered_list(config_data_dict)
+        plot_one_config(config_ordered_list_data, plot_dir, config_file_name)
+    #experiment_dir = sys.argv[1]
     #ratio_data_file = sys.argv[1]
-    png_file_name = sys.argv[2]
-    print(png_file_name)
-    all_dicts = experiment(experiment_dir)
-    plot_all_boxplot(all_dicts, png_file_name)
+    #png_file_name = sys.argv[2]
+    #print(png_file_name)
+    #all_dicts = experiment(experiment_dir)
+    #plot_all_boxplot(all_dicts, png_file_name)
     # print(len(all_dicts))
     #ratio_data_dict = read_ratio_data(ratio_data_file)
     #plot_boxplot(ratio_data_dict, png_file_name)
