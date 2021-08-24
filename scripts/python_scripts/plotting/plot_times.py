@@ -63,21 +63,21 @@ def plot_one_config(config_ordered_list, plot_dir, config_file_name):
 
     
     """    
-    plt.figure(figsize=(10,10))
+    plt.figure(figsize=(10, 10))
     plt.boxplot(config_ordered_list)
     plt.xlabel('Column Name')
     plt.xticks(ticks=np.arange(1, 11, 1).tolist(),
                 labels=['chrm', 'pos', 'ref', 'alt',
-                           'af_cases_EUR', 'af_controls_EUR', 'beta_EUR', 'se_EUR',
-                           'se_EUR', 'low_confidence_EUR'],
+                        'af_cases_EUR', 'af_controls_EUR',
+                        'beta_EUR', 'se_EUR', 'se_EUR', 'low_confidence_EUR'],
                 rotation=70,
                 fontsize=14)
-    plt.xlim([0,10])
+    plt.xlim([0, 10])
 
     plt.ylabel('Total Seconds')
     plt.ylim([0,0.001])
     plot_name = config_file_name.split('.')[0]
-    plt.title('Column Compression Times for ', plot_name)
+    plt.title('Column Compression Times for ' + plot_name)
     plt.savefig(plot_dir+plot_name+'.png')
 
 

@@ -90,10 +90,11 @@ echo "plotting expiriment: ratios"
     if [[ ! -d $plots_dir"ratios/"$block_size ]]; then
         mkdir $plots_dir"ratios/"$block_size
     fi
+
 python $python_scripts_dir"plotting/plot_ratios.py" \
         $ratios_intermediate_dir$block_size"/" \
-        $plots_dir"ratios/"$block_size"/""
-echo $plots_dir"ratios/"$block_size"/""
+        $plots_dir"ratios/"$block_size"/"
+echo $plots_dir"ratios/"$block_size"/"
 
 # 4. plot from .times files
 experiment_dir=$plots_dir"/times/"$block_size"/"
