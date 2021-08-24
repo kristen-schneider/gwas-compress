@@ -1,6 +1,13 @@
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+
+# personal imports
+from utils import type_handling
 import serialize_header
 
-def full_header_tools(data_type_code_book, data_type_byte_sizes, full_header):
+def full_header_tools(data_type_byte_sizes, full_header):
     """
     works to serialize the header as well as any pertinent tools which will aide to reconstruct the header
 
@@ -16,32 +23,29 @@ def full_header_tools(data_type_code_book, data_type_byte_sizes, full_header):
         serialized_header_data: serialized header]
     """
     # get header types and serialize
-    header_types = get_header_types(full_header, data_type_code_book)
-    serialized_header_types = serialize_header.serialize_list(header_types,
-                                                              data_type_code_book[int],
-                                                              data_type_byte_sizes[data_type_code_book[int]])
+    header_types = get_header_types(full_header)
+    # can pass 1 as data type because data types are all integers (1, 2, 3, 4)
+    serialized_header_types = serialize_header.serialize_list(header_types, 1, data_type_byte_sizes[1])
 
-    # get number of elements in each header item
+    ## get number of elements in each header item
     header_num_elements = get_header_lengths(full_header)
-    serialized_header_num_elements = serialize_header.serialize_list(header_num_elements,
-                                                                     data_type_code_book[int],
-                                                                     data_type_byte_sizes[data_type_code_book[int]])
+    # can pass 1 as data type because data types are all integers (1, 2, 3, 4)
+    serialized_header_num_elements = serialize_header.serialize_list(header_num_elements, 1, data_type_byte_sizes[1])
 
-    # get full serialized header as a list
-    serialized_header_list = get_serialized_header_as_list(header_types, data_type_byte_sizes, full_header)
-    # get full serialized header as a bitstring
-    serialized_header = join_serialized_list(serialized_header_list)
+    ## get full serialized header as a list
+    #serialized_header_list = get_serialized_header_as_list(header_types, data_type_byte_sizes, full_header)
+    ## get full serialized header as a bitstring
+    #serialized_header = join_serialized_list(serialized_header_list)
 
-    # get ends of each serialized element in column
-    header_ends = get_header_ends(serialized_header_list)
-    serialized_header_ends = serialize_header.serialize_list(header_ends,
-                                                             data_type_code_book[int],
-                                                             data_type_byte_sizes[data_type_code_book[int]])
+    ## get ends of each serialized element in column
+    #header_ends = get_header_ends(serialized_header_list)
+    #serialized_header_ends = serialize_header.serialize_list(header_ends,
+    #                                                         data_type_byte_sizes[data_type_code_book[int]])
 
-    return [serialized_header_types, serialized_header_num_elements, serialized_header_ends,
-            serialized_header]
+    #return [serialized_header_types, serialized_header_num_elements, serialized_header_ends,
+    #        serialized_header]
 
-def get_header_types(full_header, data_type_code_book):
+def get_header_types(full_header):
     """
     returns the types of each element in the header
 
@@ -54,11 +58,13 @@ def get_header_types(full_header, data_type_code_book):
     """
     header_types = []
     for h in full_header:
-        if type(h) == list :h_type = type(h[0])
-        else: h_type = type(h)
-
-        try: header_types.append(data_type_code_book[h_type])
-        except KeyError: print('no type for this data: ', h)
+        try: header_types.append(type_handling.get_data_type(h))
+        except TypeError: header_types.append(type_handling.get_data_type(h[0]))
+        #if type(h) == list :h_type = type(h[0])
+        #else: h_type = type(h)
+    
+        #try: header_types.append(data_type_code_book[h_type])
+        #except KeyError: print('no type for this data: ', h)
 
     return header_types
 
@@ -67,7 +73,7 @@ def get_header_lengths(full_header):
     returns the lengths of each element in the header
 
     INPUT
-        full_header = full header (12 elements)
+        full_header = full header
 
     OUTPUT
         header_lengths = lengths of each element in the header
