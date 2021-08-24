@@ -83,12 +83,13 @@ def plot_one_config(config_ordered_list, plot_dir, config_file_name):
                rotation=70,
                fontsize=14)
     plt.xlim([0, 10])
-
-    plt.ylabel('Compression Ratio')
-    plt.ylim([0, 0.001])
+    #plt.ylabel('Compression Ratio')
+    #plt.ylim([0, 0.001])
     plot_name = config_file_name.split('.')[0]
-    plt.title('Column Compression Ratio for ', plot_name)
-    plt.savefig(plot_dir + plot_name + '.png')
+    print(plot_dir, plot_name, '.png')
+    #print(plot_name)
+    #plt.title('Column Compression Ratio for ', plot_name)
+    #plt.savefig(plot_dir + plot_name + '.png')
 
 
 if __name__ == "__main__":

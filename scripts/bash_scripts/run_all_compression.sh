@@ -92,8 +92,8 @@ echo "plotting expiriment: ratios"
     fi
 python $python_scripts_dir"plotting/plot_ratios.py" \
         $ratios_intermediate_dir$block_size"/" \
-        $plots_dir"ratios/"$block_size"/"$block_size".png"
-echo $plots_dir"ratios/"$block_size"/"$block_size".png"
+        $plots_dir"ratios/"$block_size"/""
+echo $plots_dir"ratios/"$block_size"/""
 
 # 4. plot from .times files
 experiment_dir=$plots_dir"/times/"$block_size"/"
