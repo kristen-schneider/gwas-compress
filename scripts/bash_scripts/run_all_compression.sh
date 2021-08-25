@@ -42,11 +42,13 @@ filename="$(basename -s .tsv $in_file)"
 # 1. do compression and write to .out files
 bash $bash_scripts_dir"compression.sh" \
                           $out_dir \
-                          $file_name \
+                          $filename \
                           $config_files_dir \
                           $block_size \
                           $basic_config \
-                          $filename
+                          $python_scripts_dir \
+                          $in_file \
+                          $input_data_type
 #echo "compressing files and writing to $out_dir$filename"
 #echo ""
 #
