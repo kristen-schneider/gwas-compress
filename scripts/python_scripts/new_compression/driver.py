@@ -103,7 +103,7 @@ def main():
                                                                     DATA_TYPE_BYTE_SIZES,
                                                                     header_first_half,
                                                                     funnel_format_data,
-                                                                    config_file)
+                                                                    config_file.split('/')[-1].split('_')[0])
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START

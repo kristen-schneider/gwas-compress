@@ -34,10 +34,10 @@ do
 
         # making intermediate_files
         echo "writing ratio file for $config_name"
-        grep "ratio" $1$2"/"$3"/"$out_file | awk '{print $1" "$3}' \
+        grep "ratio" $1$2"/"$3"/"$out_file | awk '{print $2" "$4}' \
         > $experiment_ratios_dir$experiment_name".config.ratios"
         echo "writing time file for $config_name"
-        grep "time" $1$2"/"$3"/"$out_file | awk '{print $1" "$3}' \
+        grep "time" $1$2"/"$3"/"$out_file | awk '{print $2" "$4}' \
         > $experiment_times_dir$experiment_name".config.times"
     fi
 done
