@@ -32,6 +32,7 @@ basic_config='config.ini'
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 declare -a block_size_list=(5000,10000,15000,20000,25000,30000,35000,40000,45000,50000,60000,70000,80000,90000)
 block_size=3
+num_fields=10 ##### TO CHANGE #####
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
 # 0. preparing for compression...
@@ -52,6 +53,14 @@ bash $bash_scripts_dir"compression.sh" \
 
 ## 2. split data from .out files to .ratios and .times files
 bash $bash_scripts_dir"split_by_config.sh" \
+                          $out_dir \
+                          $in_filename \
+                          $block_size \
+                          $ratios_intermediate_dir \
+                          $times_intermediate_dir
+
+## 2. split data from .out files to .ratios and .times files
+bash $bash_scripts_dir"split_by_field.sh" \
                           $out_dir \
                           $in_filename \
                           $block_size \
