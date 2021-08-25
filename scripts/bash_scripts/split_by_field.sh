@@ -41,3 +41,15 @@ do
         > $experiment_times_dir$experiment_name".config.times"
     fi
 done
+
+#        # making intermediate_files
+#        echo "writing out to intermediate files by field"
+#        echo ""
+#        for f in $6
+#        do
+#          grep "col"$f $1$2"/"$3"/"$out_file | awk '{print $config_name" "$3}' \
+#          >> $experiment_ratios_dir$experiment_name".field.ratios"
+#
+#          grep "col"$f $1$2"/"$3"/"$out_file | awk '{print $config_name" "$3}' \
+#          >> $experiment_times_dir$experiment_name".field.times"
+#        done
