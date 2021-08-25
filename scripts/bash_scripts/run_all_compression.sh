@@ -10,60 +10,69 @@
 
 # PURPOSE: run multiple experiments for different setups of the compression
 
+# input files directories
 #in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/prescriptions-thiamine-both_sexes_copy.tsv'
 in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/ten.tsv'
+config_files_dir='/home/krsc0813/projects/gwas-compress/config_files/'
 
+# scripts directories
 python_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/'
 bash_scripts_dir='/home/krsc0813/projects/gwas-compress/scripts/bash_scripts/'
 
-config_files_dir='/home/krsc0813/projects/gwas-compress/config_files/'
-
+# output files directories
 out_dir='/home/krsc0813/projects/gwas-compress/plot_data/out/'
 ratios_intermediate_dir='/home/krsc0813/projects/gwas-compress/plot_data/ratios/'
 times_intermediate_dir='/home/krsc0813/projects/gwas-compress/plot_data/times/'
 
+# output plots directories
 plots_dir='/home/krsc0813/projects/gwas-compress/plots/'
 
+# input params (to change)
 basic_config='config.ini'
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 declare -a block_size_list=(5000,10000,15000,20000,25000,30000,35000,40000,45000,50000,60000,70000,80000,90000)
 block_size=3
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 
-# 0. do some work before the work...
+# 0. preparing for compression...
 echo "** starting all experiments **"
 echo ""
-
 filename="$(basename -s .tsv $in_file)"
 
 # 1. do compression and write to .out files
-echo "compressing files and writing to $out_dir$filename"
-echo ""
-
-for config_file in `ls $config_files_dir`
-do
-    # each experiment is a block size
-    # all out files should be containted in a sub directory named by block size
-    if [[ ! -d $out_dir$filename ]]; then
-        mkdir $out_dir$filename
-    fi
-    if [[ ! -d $out_dir$filename"/"$block_size ]]; then
-        mkdir $out_dir$filename"/"$block_size
-    fi
-    experiment_dir=$out_dir$filename"/"$block_size"/"
-    experiment_name=${config_file%%_*}$block_size
-    
-    if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]]; then
-        echo "running experiments for $config_file"
-        # run compression script
-        python $python_scripts_dir"/new_compression/driver.py" \
-            $in_file \
-            $config_files_dir$config_file \
-            $block_size \
-            $input_data_type \
-            > $experiment_dir$experiment_name".out"
-    fi
-done
+bash $bash_scripts_dir"/compress.sh" \
+                          $out_dir \
+                          $file_name \
+                          $config_files_dir \
+                          $block_size \
+                          $basic_config \
+#echo "compressing files and writing to $out_dir$filename"
+#echo ""
+#
+#for config_file in `ls $config_files_dir`
+#do
+#    # each experiment is a block size
+#    # all out files should be containted in a sub directory named by block size
+#    if [[ ! -d $out_dir$filename ]]; then
+#        mkdir $out_dir$filename
+#    fi
+#    if [[ ! -d $out_dir$filename"/"$block_size ]]; then
+#        mkdir $out_dir$filename"/"$block_size
+#    fi
+#    experiment_dir=$out_dir$filename"/"$block_size"/"
+#    experiment_name=${config_file%%_*}$block_size
+#
+#    if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]]; then
+#        echo "running experiments for $config_file"
+#        # run compression script
+#        python $python_scripts_dir"/new_compression/driver.py" \
+#            $in_file \
+#            $config_files_dir$config_file \
+#            $block_size \
+#            $input_data_type \
+#            > $experiment_dir$experiment_name".out"
+#    fi
+#done
 
 # 2. split data from .out files to .ratios and .times files
 echo "splitting out files by ratio and time"
