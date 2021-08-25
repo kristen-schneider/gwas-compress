@@ -3,7 +3,7 @@ file_name=$2
 config_files_dir=$3
 block_size=$4
 basic_config=$5
-file_name=$6
+filename=$6
 
 
 echo "compressing files and writing to $out_dir$filename"

@@ -46,7 +46,7 @@ bash $bash_scripts_dir"compression.sh" \
                           $config_files_dir \
                           $block_size \
                           $basic_config \
-                          $file_name
+                          $filename
 #echo "compressing files and writing to $out_dir$filename"
 #echo ""
 #
