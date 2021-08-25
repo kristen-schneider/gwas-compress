@@ -16,7 +16,8 @@ serialized_codecs = ['gzip', 'zlib', 'bz2']
 
 
 def column_compression_main(column_i, column, column_codec, column_data_type,
-                            curr_compression_data_type, column_data_type_byte_sizes):
+                            curr_compression_data_type, column_data_type_byte_sizes,
+                            config_file_name):
 
     column_i_START = datetime.now()
     column_i_STRING_SIZE = sys.getsizeof(column)

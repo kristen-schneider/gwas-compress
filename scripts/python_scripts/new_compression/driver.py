@@ -102,7 +102,8 @@ def main():
                                                                     INPUT_DATA_TYPE_LIST,
                                                                     DATA_TYPE_BYTE_SIZES,
                                                                     header_first_half,
-                                                                    funnel_format_data)
+                                                                    funnel_format_data,
+                                                                    config_file)
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START
