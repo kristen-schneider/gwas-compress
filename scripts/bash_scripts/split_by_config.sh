@@ -10,13 +10,14 @@ echo ""
 
 for out_file in `ls $1$2"/"$3"/"`
 do
+    # ratios intermediate directories
     if [[ ! -d $4$2 ]]; then
         mkdir $4$2
     fi
     if [[ ! -d $4$2"/"$3 ]]; then
         mkdir $4$2"/"$3
     fi
-
+    # times intermediate directories
     if [[ ! -d $5$2 ]]; then
         mkdir $5$2
     fi
@@ -27,15 +28,15 @@ do
     experiment_times_dir=$5$2"/"$3"/"
     experiment_name=${out_file%%.*}
 
+    # for all out files, make time and ratio intermediate files by config
     if [[ $out_file == *".out" ]]; then
-
         config_name="$(basename -s .out $out_file)"
+
         # making intermediate_files
-        echo "writing out to intermediate files by config"
-        echo ""
+        echo "writing ratio file for $config_name"
         grep "ratio" $1$2"/"$3"/"$out_file | awk '{print $1" "$3}' \
         > $experiment_ratios_dir$experiment_name".config.ratios"
-
+        echo "writing time file for $config_name"
         grep "time" $1$2"/"$3"/"$out_file | awk '{print $1" "$3}' \
         > $experiment_times_dir$experiment_name".config.times"
 
