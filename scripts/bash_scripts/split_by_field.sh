@@ -5,8 +5,12 @@ ratios_intermediate_dir=$4
 times_intermediate_dir=$5
 num_fields=$6
 
+echo ""
 echo "splitting out files by ratio and time"
 echo ""
+
+rm  $4$2"/"$3"/*.field.*" 
+rm  $5$2"/"$3"/*.field.*" 
 
 for out_file in `ls $1$2"/"$3"/"`
 do
@@ -26,7 +30,7 @@ do
     fi
     experiment_ratios_dir=$4$2"/"$3"/"
     experiment_times_dir=$5$2"/"$3"/"
-
+    
     # for all out files, make time and ratio intermediate files by config
     if [[ $out_file == *".out" ]]; then
         config_name="$(basename -s .out $out_file)"
@@ -41,15 +45,3 @@ do
         done
     fi
 done
-
-#        # making intermediate_files
-#        echo "writing out to intermediate files by field"
-#        echo ""
-#        for f in $6
-#        do
-#          grep "col"$f $1$2"/"$3"/"$out_file | awk '{print $config_name" "$3}' \
-#          >> $experiment_ratios_dir$experiment_name".field.ratios"
-#
-#          grep "col"$f $1$2"/"$3"/"$out_file | awk '{print $config_name" "$3}' \
-#          >> $experiment_times_dir$experiment_name".field.times"
-#        done
