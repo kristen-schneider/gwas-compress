@@ -31,14 +31,14 @@ do
     # for all out files, make time and ratio intermediate files by config
     if [[ $out_file == *".out" ]]; then
         config_name="$(basename -s .out $out_file)"
-
-        # making intermediate_files
-        echo "writing ratio file for $config_name"
-        grep "ratio" $1$2"/"$3"/"$out_file | awk '{print $1" "$3}' \
-        > $experiment_ratios_dir$experiment_name".config.ratios"
-        echo "writing time file for $config_name"
-        grep "time" $1$2"/"$3"/"$out_file | awk '{print $1" "$3}' \
-        > $experiment_times_dir$experiment_name".config.times"
+        for field in $num_fields
+        do
+          # making intermediate_files
+          grep "col"field $1$2"/"$3"/"$out_file | awk '{print $config_name" "$3}' \
+          > $experiment_ratios_dir$experiment_name".config.ratios"
+          grep "col"$field $1$2"/"$3"/"$out_file | awk '{print $config_name" "$3}' \
+          > $experiment_times_dir$experiment_name".config.times"
+        done
     fi
 done
 
