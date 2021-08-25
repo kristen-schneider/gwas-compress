@@ -40,7 +40,7 @@ echo ""
 filename="$(basename -s .tsv $in_file)"
 
 # 1. do compression and write to .out files
-bash $bash_scripts_dir"compress.sh" \
+bash $bash_scripts_dir"compression.sh" \
                           $out_dir \
                           $file_name \
                           $config_files_dir \
