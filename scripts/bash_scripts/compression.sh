@@ -1,5 +1,5 @@
 out_dir=$1
-filename=$2
+in_filename=$2
 config_files_dir=$3
 block_size=$4
 basic_config=$5

@@ -37,112 +37,50 @@ declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 # 0. preparing for compression...
 echo "** starting all experiments **"
 echo ""
-filename="$(basename -s .tsv $in_file)"
+in_filename="$(basename -s .tsv $in_file)"
 
 # 1. do compression and write to .out files
 bash $bash_scripts_dir"compression.sh" \
                           $out_dir \
-                          $filename \
+                          $in_filename \
                           $config_files_dir \
                           $block_size \
                           $basic_config \
                           $python_scripts_dir \
                           $in_file \
                           $input_data_type
-#echo "compressing files and writing to $out_dir$filename"
-#echo ""
-#
-#for config_file in `ls $config_files_dir`
-#do
-#    # each experiment is a block size
-#    # all out files should be containted in a sub directory named by block size
-#    if [[ ! -d $out_dir$filename ]]; then
-#        mkdir $out_dir$filename
-#    fi
-#    if [[ ! -d $out_dir$filename"/"$block_size ]]; then
-#        mkdir $out_dir$filename"/"$block_size
-#    fi
-#    experiment_dir=$out_dir$filename"/"$block_size"/"
-#    experiment_name=${config_file%%_*}$block_size
-#
-#    if [[ $config_file == *.ini ]] && [[ $config_file != $basic_config ]]; then
-#        echo "running experiments for $config_file"
-#        # run compression script
-#        python $python_scripts_dir"/new_compression/driver.py" \
-#            $in_file \
-#            $config_files_dir$config_file \
-#            $block_size \
-#            $input_data_type \
-#            > $experiment_dir$experiment_name".out"
-#    fi
-#done
 
 ## 2. split data from .out files to .ratios and .times files
-#echo "splitting out files by ratio and time"
-#echo ""
-#
-#for out_file in `ls $out_dir$filename"/"$block_size"/"`
-#do
-#    # each experiment is a block size
-#    # all out files should be containted in a sub directory named by block size
-#    if [[ ! -d $ratios_intermediate_dir$filename ]]; then
-#        mkdir $ratios_intermediate_dir$filename
-#    fi
-#    if [[ ! -d $ratios_intermediate_dir$filename"/"$block_size ]]; then
-#        mkdir $ratios_intermediate_dir$filename"/"$block_size
-#    fi
-#
-#
-#    if [[ ! -d $times_intermediate_dir$filename ]]; then
-#        mkdir $times_intermediate_dir$filename
-#    fi
-#    if [[ ! -d $times_intermediate_dir$filename"/"$block_size ]]; then
-#        mkdir $times_intermediate_dir$filename"/"$block_size
-#    fi
-#    experiment_ratios_dir=$ratios_intermediate_dir$filename"/"$block_size"/"
-#    experiment_times_dir=$times_intermediate_dir$filename"/"$block_size"/"
-#    experiment_name=${out_file%%.*}
-#
-#    if [[ $out_file == *$block_size".out" ]]; then
-#        echo "making intermediate files for $out_file"
-#
-#        # making intermediate_files
-#        grep "ratio" $out_dir$filename"/"$block_size"/"$out_file | awk '{print $1" "$3}' \
-#        > $experiment_ratios_dir$experiment_name".ratios"
-#
-#        grep "time" $out_dir$filename"/"$block_size"/"$out_file | awk '{print $1" "$3}' \
-#        > $experiment_times_dir$experiment_name".times"
-#    fi
-#done
-#
+bash $bash_scripts_dir"split_by_config.sh"
+
 ## 3. plot from .ratios files
 #experiment_dir=$plots_dir"/ratios/"$block_size"/"
 #echo "plotting expiriment: ratios"
 #    # all plots should be containted in a sub directory named by block size
-#    if [[ ! -d $plots_dir"ratios/"$filename ]]; then
-#        mkdir $plots_dir"ratios/"$filename
+#    if [[ ! -d $plots_dir"ratios/"$in_filename ]]; then
+#        mkdir $plots_dir"ratios/"$in_filename
 #    fi
-#    if [[ ! -d $plots_dir"ratios/"$filename"/"$block_size ]]; then
-#        mkdir $plots_dir"ratios/"$filename"/"$block_size
+#    if [[ ! -d $plots_dir"ratios/"$in_filename"/"$block_size ]]; then
+#        mkdir $plots_dir"ratios/"$in_filename"/"$block_size
 #    fi
 #
 #python $python_scripts_dir"plotting/plot_ratios.py" \
-#        $ratios_intermediate_dir$filename"/"$block_size"/" \
-#        $plots_dir"ratios/"$filename"/"$block_size"/"
-#echo $plots_dir"ratios/"$filename"/"$block_size"/"
+#        $ratios_intermediate_dir$in_filename"/"$block_size"/" \
+#        $plots_dir"ratios/"$in_filename"/"$block_size"/"
+#echo $plots_dir"ratios/"$in_filename"/"$block_size"/"
 #
 ## 4. plot from .times files
-#experiment_dir=$plots_dir"/times/"$filename"/"$block_size"/"
+#experiment_dir=$plots_dir"/times/"$in_filename"/"$block_size"/"
 #echo "plotting expiriment: times"
 #    # all plots should be containted in a sub directory named by block size
-#    if [[ ! -d $plots_dir"times/"$filename ]]; then
-#        mkdir $plots_dir"times/"$filename
+#    if [[ ! -d $plots_dir"times/"$in_filename ]]; then
+#        mkdir $plots_dir"times/"$in_filename
 #    fi
-#    if [[ ! -d $plots_dir"times/"$filename"/"$block_size ]]; then
-#        mkdir $plots_dir"times/"$filename"/"$block_size
+#    if [[ ! -d $plots_dir"times/"$in_filename"/"$block_size ]]; then
+#        mkdir $plots_dir"times/"$in_filename"/"$block_size
 #    fi
 #python $python_scripts_dir"plotting/plot_times.py" \
-#        $times_intermediate_dir$filename"/"$block_size"/" \
-#        $plots_dir"times/"$filename"/"$block_size"/"
-#echo $plots_dir"times/"$filename"/"$block_size"/"
+#        $times_intermediate_dir$in_filename"/"$block_size"/" \
+#        $plots_dir"times/"$in_filename"/"$block_size"/"
+#echo $plots_dir"times/"$in_filename"/"$block_size"/"
 #

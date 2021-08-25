@@ -44,8 +44,8 @@ def column_compression_main(column_i, column, column_codec, column_data_type,
     column_i_COMPRESSED_SIZE = sys.getsizeof(compressed_column_bitstring)
     column_i_SIZE_RATIO = float(column_i_STRING_SIZE/column_i_COMPRESSED_SIZE)
     #print(column_i_STRING_SIZE)
-    print(column_i, 'compression_time', column_i_TIME)
-    print(column_i, 'compression_ratio', column_i_SIZE_RATIO)
+    print("col"+str(column_i), 'compression_time', column_i_TIME)
+    print("col"+str(column_i), 'compression_ratio', column_i_SIZE_RATIO)
 
     return compressed_column_bitstring
 
