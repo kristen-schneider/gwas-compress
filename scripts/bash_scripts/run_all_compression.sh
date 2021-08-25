@@ -52,12 +52,12 @@ bash $bash_scripts_dir"compression.sh" \
 
 ## 2. split data from .out files to .ratios and .times files
 bash $bash_scripts_dir"split_by_config.sh" \
-                          out_dir \
-                          in_filename \
-                          block_size \
-                          ratios_intermediate_dir \
-                          times_intermediate_dir \
-                          num_fields
+                          $out_dir \
+                          $in_filename \
+                          $block_size \
+                          $ratios_intermediate_dir \
+                          $times_intermediate_dir \
+                          $num_fields
 
 ## 3. plot from .ratios files
 #experiment_dir=$plots_dir"/ratios/"$block_size"/"
