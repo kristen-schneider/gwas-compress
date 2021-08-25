@@ -26,18 +26,18 @@ do
     fi
     experiment_ratios_dir=$4$2"/"$3"/"
     experiment_times_dir=$5$2"/"$3"/"
-    experiment_name=${out_file%%.*}
 
     # for all out files, make time and ratio intermediate files by config
     if [[ $out_file == *".out" ]]; then
         config_name="$(basename -s .out $out_file)"
-        for field in $num_fields
+        for (( field=0; field<$num_fields; field++ ))
         do
-          # making intermediate_files
-          grep "col"field $1$2"/"$3"/"$out_file | awk '{print $config_name" "$3}' \
-          > $experiment_ratios_dir$experiment_name".config.ratios"
-          grep "col"$field $1$2"/"$3"/"$out_file | awk '{print $config_name" "$3}' \
-          > $experiment_times_dir$experiment_name".config.times"
+            experiment_name=$field
+            # making intermediate_files
+            egrep "col"$field"|ratio" $1$2"/"$3"/"$out_file | awk '{print $1,$3}' \
+            > $experiment_ratios_dir$experiment_name".field.ratios"
+            egrep "col"$field"|ratio" $1$2"/"$3"/"$out_file | awk '{print "$experiment_name "$3}' \
+            > $experiment_times_dir$experiment_name".field.times"
         done
     fi
 done

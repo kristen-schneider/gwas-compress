@@ -4,6 +4,7 @@ block_size=$3
 ratios_intermediate_dir=$4
 times_intermediate_dir=$5
 
+echo ""
 echo "splitting out files by ratio and time"
 echo ""
 
