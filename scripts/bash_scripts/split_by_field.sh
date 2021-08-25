@@ -34,10 +34,10 @@ do
         do
             experiment_name=$field
             # making intermediate_files
-            egrep "col"$field"|ratio" $1$2"/"$3"/"$out_file | awk '{print $1,$3}' \
-            > $experiment_ratios_dir$experiment_name".field.ratios"
-            egrep "col"$field"|ratio" $1$2"/"$3"/"$out_file | awk '{print "$experiment_name "$3}' \
-            > $experiment_times_dir$experiment_name".field.times"
+            grep "col"$field $1$2"/"$3"/"$out_file | grep "ratio" | awk '{print $1,$4}' \
+            >> $experiment_ratios_dir$experiment_name".field.ratios"
+            grep "col"$field $1$2"/"$3"/"$out_file | grep "ratio" | awk '{print $1,$4}' \
+            >> $experiment_times_dir$experiment_name".field.times"
         done
     fi
 done
