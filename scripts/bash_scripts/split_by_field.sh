@@ -43,7 +43,7 @@ do
             # making intermediate_files
             grep "col"$field $1$2"/"$3"/"$out_file | grep "ratio" | awk '{print $1,$4}' \
             >> $experiment_ratios_dir$experiment_name".field.ratios"
-            grep "col"$field $1$2"/"$3"/"$out_file | grep "ratio" | awk '{print $1,$4}' \
+            grep "col"$field $1$2"/"$3"/"$out_file | grep "time" | awk '{print $1,$4}' \
             >> $experiment_times_dir$experiment_name".field.times"
         done
     fi
