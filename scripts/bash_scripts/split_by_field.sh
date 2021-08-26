@@ -36,7 +36,7 @@ do
         config_name="$(basename -s .out $out_file)"
         for (( field=0; field<$num_fields; field++ ))
         do
-            experiment_name=$field
+            experiment_name="col"$field
             # making intermediate_files
             grep "col"$field $1$2"/"$3"/"$out_file | grep "ratio" | awk '{print $1,$4}' \
             >> $experiment_ratios_dir$experiment_name".field.ratios"
