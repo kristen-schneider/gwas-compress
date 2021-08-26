@@ -9,8 +9,11 @@ echo ""
 echo "splitting out files by ratio and time"
 echo ""
 
-rm  $4$2"/"$3"/*.field.*" 
-rm  $5$2"/"$3"/*.field.*" 
+# remove existing field files because we append to them
+ratio_rm_dir=$4$2"/"$3"/"
+rm "$ratio_rm_dir"*.field.*
+time_rm_dir=$5$2"/"$3"/"
+rm  "$time_rm_dir"*.field.*
 
 for out_file in `ls $1$2"/"$3"/"`
 do
