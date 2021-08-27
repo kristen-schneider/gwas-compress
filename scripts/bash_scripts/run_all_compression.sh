@@ -12,7 +12,7 @@
 
 # input files directories
 #in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/prescriptions-thiamine-both_sexes_copy.tsv'
-in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/ten.tsv'
+in_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/million.tsv'
 config_files_dir='/home/krsc0813/projects/gwas-compress/config_files/'
 
 # scripts directories
@@ -31,7 +31,7 @@ plots_dir='/home/krsc0813/projects/gwas-compress/plots/'
 basic_config='config.ini'
 declare -a comp_methods=("bz2" "fastpfor" "fpzip" "gzip" "zfpy" "zlib")
 declare -a block_size_list=(5000,10000,15000,20000,25000,30000,35000,40000,45000,50000,60000,70000,80000,90000)
-block_size=3
+block_size=10000
 num_fields=10 ##### TO CHANGE #####
 declare -a input_data_type=(1,1,1,1,1,1,1,1,1,1)
 

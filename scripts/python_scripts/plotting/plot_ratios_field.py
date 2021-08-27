@@ -7,56 +7,46 @@ def main():
     max_ratio = 0 
     experiment_dir = sys.argv[1]
     plot_dir = sys.argv[2]
-    for config_file in os.listdir(experiment_dir):
-        config_data = data_one_config(experiment_dir + config_file)
-        config_data_dict = config_data[0]
-        config_file_name = config_data[1]
-        config_max_ratio = max(i for v in config_data_dict.values() for i in v)
-        if config_max_ratio > max_ratio: max_ratio = config_max_ratio
-    for config_file in os.listdir(experiment_dir):
-        config_data = data_one_config(experiment_dir + config_file)
-        config_data_dict = config_data[0]
-        config_file_name = config_data[1]
-        config_ordered_list_data = dict_to_ordered_list(config_data_dict)
-        plot_one_config(config_ordered_list_data, plot_dir, config_file_name, max_ratio)
-    #experiment_dir = sys.argv[1]
-    #ratio_data_file = sys.argv[1]
-    #png_file_name = sys.argv[2]
-    #print(png_file_name)
-    #all_dicts = experiment(experiment_dir)
-    #plot_all_boxplot(all_dicts, png_file_name)
-    # print(len(all_dicts))
-    #ratio_data_dict = read_ratio_data(ratio_data_file)
-    #plot_boxplot(ratio_data_dict, png_file_name)
+    for field_file in os.listdir(experiment_dir):
+        field_data = data_one_field(experiment_dir + field_file)
+        field_data_dict = field_data[0]
+        field_file_name = field_data[1]
+        field_max_ratio = max(i for v in field_data_dict.values() for i in v)
+        if field_max_ratio > max_ratio: max_ratio = field_max_ratio
+    for field_file in os.listdir(experiment_dir):
+        field_data = data_one_field(experiment_dir + field_file)
+        field_data_dict = field_data[0]
+        field_file_name = field_data[1]
+        field_ordered_list_data = dict_to_ordered_list(field_data_dict)
+        plot_one_field(field_ordered_list_data, plot_dir, field_file_name, max_ratio)
 
-
-def data_one_config(config_file):
+def data_one_field(field_file):
     """
-    creates a dictionary of column data for one config file
+    creates a dictionary of column data for one field file
 
     INPUT
-        one config file (path to config file)
+        one field file (path to field file)
 
     OUTPUT
         dictionary of time data.
         each column is a key and the value for a column is a list of times.
         time values are converted from datetime objects to total number of seconds.
     """
-    cf = open(config_file, 'r')
-    config_column_data = dict()
+    cf = open(field_file, 'r')
+    field_column_data = dict()
 
     for line in cf:
         A = line.split()
         col = int(A[0])
         data = float(A[1])
         try:
-            config_column_data[col].append(data)
+            field_column_data[col].append(data)
         except KeyError:
-            config_column_data[col] = [data]
-    return config_column_data, config_file.split('/')[-1]
+            field_column_data[col] = [data]
+    return field_column_data, field_file.split('/')[-1]
 
 
-def dict_to_ordered_list(config_data_dict):
+def dict_to_ordered_list(field_data_dict):
     """
     converts a dictionary of time data for each column to an ordered list.
     this is so that column 1 always is first, then column 2, etc.
@@ -69,19 +59,19 @@ def dict_to_ordered_list(config_data_dict):
         order is dictated by the order of columns (numerical order)
     """
     ordered_list = []
-    for x in range(len(config_data_dict)):
-        ordered_list.append(config_data_dict[x])
+    for x in range(len(field_data_dict)):
+        ordered_list.append(field_data_dict[x])
     return ordered_list
 
 
-def plot_one_config(config_ordered_list, plot_dir, config_file_name, max_ratio):
+def plot_one_field(field_ordered_list, plot_dir, field_file_name, max_ratio):
     """
     plots boxplots (1 per column) of all time data)
 
 
     """
     plt.figure(figsize=(10, 10))
-    plt.boxplot(config_ordered_list)
+    plt.boxplot(field_ordered_list)
     plt.xlabel('Column Name')
     plt.xticks(ticks=np.arange(1, 11, 1).tolist(),
                 labels=['chrm', 'pos', 'ref', 'alt', 
@@ -93,7 +83,7 @@ def plot_one_config(config_ordered_list, plot_dir, config_file_name, max_ratio):
     
     plt.ylabel('Compression Ratio ()')
     plt.ylim([0,max_ratio])
-    plot_name = config_file_name.split('.')[0]
+    plot_name = field_file_name.split('.')[0]
     plt.title('Column Compression Ratios for ' + plot_name)
     plt.savefig(plot_dir+plot_name+'.png')
 
