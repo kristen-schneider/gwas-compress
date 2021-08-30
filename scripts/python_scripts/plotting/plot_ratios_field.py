@@ -4,16 +4,17 @@ import sys
 import os
 
 def main():
-    max_ratio = 0 
     experiment_dir = sys.argv[1]
     plot_dir = sys.argv[2]
     for field_file in os.listdir(experiment_dir):
+        max_ratio = 0 
         if 'field' in field_file:
             field_data = data_one_field(experiment_dir + field_file)
             field_data_dict = field_data[0]
             field_file_name = field_data[1]
             field_max_ratio = max(i for v in field_data_dict.values() for i in v)
             if field_max_ratio > max_ratio: max_ratio = field_max_ratio
+            #print(max_ratio)
     for field_file in os.listdir(experiment_dir):
         if 'field' in field_file:
             field_data = data_one_field(experiment_dir + field_file)
@@ -44,6 +45,7 @@ def data_one_field(field_file):
             field_config_data[config].append(data)
         except KeyError:
             field_config_data[config] = [data]
+    #print(field_config_data)
     return field_config_data, field_file.split('/')[-1]
 
 

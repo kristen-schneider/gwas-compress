@@ -5,11 +5,11 @@ import sys
 import os
 
 def main():
-    max_time = 0
     experiment_dir = sys.argv[1]
     plot_dir = sys.argv[2]
 
     for field_file in os.listdir(experiment_dir):
+        max_time = 0
         if 'field' in field_file:
             field_data = data_one_field(experiment_dir + field_file)
             field_data_dict = field_data[0]

@@ -41,7 +41,6 @@ def column_compression_main(column_i, column, column_codec, column_data_type,
         compressed_column_bitstring = compress_serialized(typed_column, column_codec, curr_compression_data_type, column_data_type_byte_sizes)
     else:
         compressed_column_bitstring = compress_numpy(typed_column, column_codec)
-
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
     column_i_COMPRESSED_SIZE = sys.getsizeof(compressed_column_bitstring)
@@ -50,7 +49,7 @@ def column_compression_main(column_i, column, column_codec, column_data_type,
     column_i_mn = float(m/n)
     #print(column_i_STRING_SIZE)
     print(config_file_name, "col"+str(column_i), 'compression_time', column_i_TIME)
-    print(config_file_name, "col"+str(column_i), 'compression_ratio', column_i_SIZE_RATIO)#column_i_mn)#column_i_SIZE_RATIO, m, n)
+    print(config_file_name, "col"+str(column_i), 'compression_ratio', column_i_mn)
 
     return compressed_column_bitstring
 
