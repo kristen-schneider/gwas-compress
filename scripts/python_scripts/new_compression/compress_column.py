@@ -5,6 +5,7 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 from utils import type_handling
+from utils import calculate_size
 from utils import encode_as_int
 from utils import encode_as_float
 import serialize_body
@@ -20,7 +21,8 @@ def column_compression_main(column_i, column, column_codec, column_data_type,
                             config_file_name):
 
     column_i_START = datetime.now()
-    column_i_STRING_SIZE = sys.getsizeof(column)
+    column_i_STRING_SIZE = sys.getsizeof(column_i)
+    m = calculate_size.get_ff_column_size(column)
 
     # 1. type column according to desired input type
     if curr_compression_data_type == 1:
@@ -43,10 +45,11 @@ def column_compression_main(column_i, column, column_codec, column_data_type,
     column_i_END = datetime.now()
     column_i_TIME = column_i_END - column_i_START
     column_i_COMPRESSED_SIZE = sys.getsizeof(compressed_column_bitstring)
+    n = calculate_size.get_bitstring_column_size(compressed_column_bitstring) 
     column_i_SIZE_RATIO = float(column_i_STRING_SIZE/column_i_COMPRESSED_SIZE)
     #print(column_i_STRING_SIZE)
     print(config_file_name, "col"+str(column_i), 'compression_time', column_i_TIME)
-    print(config_file_name, "col"+str(column_i), 'compression_ratio', column_i_SIZE_RATIO)
+    print(config_file_name, "col"+str(column_i), 'compression_ratio', column_i_SIZE_RATIO, column, m, compressed_column_bitstring, n)
 
     return compressed_column_bitstring
 
