@@ -10,17 +10,19 @@ def main():
     plot_dir = sys.argv[2]
 
     for config_file in os.listdir(experiment_dir):
-        config_data = data_one_config(experiment_dir + config_file)
-        config_data_dict = config_data[0]
-        config_file_name = config_data[1]
-        config_max_time = max(i for v in config_data_dict.values() for i in v)
-        if config_max_time > max_time: max_time = config_max_time
+        if 'config' in config_file:
+            config_data = data_one_config(experiment_dir + config_file)
+            config_data_dict = config_data[0]
+            config_file_name = config_data[1]
+            config_max_time = max(i for v in config_data_dict.values() for i in v)
+            if config_max_time > max_time: max_time = config_max_time
     for config_file in os.listdir(experiment_dir):
-        config_data = data_one_config(experiment_dir + config_file)
-        config_data_dict = config_data[0]
-        config_file_name = config_data[1]
-        config_ordered_list_data = dict_to_ordered_list(config_data_dict)
-        plot_one_config(config_ordered_list_data, plot_dir, config_file_name, max_time)
+        if 'config' in config_file:
+            config_data = data_one_config(experiment_dir + config_file)
+            config_data_dict = config_data[0]
+            config_file_name = config_data[1]
+            config_ordered_list_data = dict_to_ordered_list(config_data_dict)
+            plot_one_config(config_ordered_list_data, plot_dir, config_file_name, max_time)
 
 def data_one_config(config_file):
     """
