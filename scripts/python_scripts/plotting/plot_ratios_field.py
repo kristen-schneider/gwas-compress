@@ -74,8 +74,9 @@ def plot_one_field(field_ordered_list, plot_dir, field_file_name, max_ratio):
     """
     plt.figure(figsize=(10, 10))
     plt.boxplot(field_ordered_list)
-    plt.xlabel('Column Name')
+    plt.xlabel('Configuration')
     plt.xticks(ticks=np.arange(1, 7, 1).tolist(),
+                labels=['bz2','fastpfor','fpzip','gzip','zfpy','zlib'],
                 rotation=70,
                 fontsize=14)
     plt.xlim([0, 6])

@@ -70,7 +70,7 @@ bash $bash_scripts_dir"split_by_field.sh" \
 
 # 3. plot from .ratios files
 experiment_dir=$plots_dir"/ratios/"$block_size"/"
-echo "plotting expiriment: ratios"
+echo "plotting expiriment: ratios by config file"
     # all plots should be containted in a sub directory named by block size
     if [[ ! -d $plots_dir"ratios/"$in_filename ]]; then
         mkdir $plots_dir"ratios/"$in_filename
@@ -79,23 +79,47 @@ echo "plotting expiriment: ratios"
         mkdir $plots_dir"ratios/"$in_filename"/"$block_size
     fi
 
-python $python_scripts_dir"plotting/plot_ratios.py" \
+python $python_scripts_dir"plotting/plot_ratios_config.py" \
         $ratios_intermediate_dir$in_filename"/"$block_size"/" \
         $plots_dir"ratios/"$in_filename"/"$block_size"/"
-echo $plots_dir"ratios/"$in_filename"/"$block_size"/"
 
-## 4. plot from .times files
-#experiment_dir=$plots_dir"/times/"$in_filename"/"$block_size"/"
-#echo "plotting expiriment: times"
-#    # all plots should be containted in a sub directory named by block size
-#    if [[ ! -d $plots_dir"times/"$in_filename ]]; then
-#        mkdir $plots_dir"times/"$in_filename
-#    fi
-#    if [[ ! -d $plots_dir"times/"$in_filename"/"$block_size ]]; then
-#        mkdir $plots_dir"times/"$in_filename"/"$block_size
-#    fi
-#python $python_scripts_dir"plotting/plot_times.py" \
-#        $times_intermediate_dir$in_filename"/"$block_size"/" \
-#        $plots_dir"times/"$in_filename"/"$block_size"/"
-#echo $plots_dir"times/"$in_filename"/"$block_size"/"
-#
+echo "plotting expiriment: ratios by field file"
+    # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"ratios/"$in_filename ]]; then
+        mkdir $plots_dir"ratios/"$in_filename
+    fi
+    if [[ ! -d $plots_dir"ratios/"$in_filename"/"$block_size ]]; then
+        mkdir $plots_dir"ratios/"$in_filename"/"$block_size
+    fi
+
+python $python_scripts_dir"plotting/plot_ratios_field.py" \
+        $ratios_intermediate_dir$in_filename"/"$block_size"/" \
+        $plots_dir"ratios/"$in_filename"/"$block_size"/"
+
+
+
+# 4. plot from .times files
+experiment_dir=$plots_dir"/times/"$in_filename"/"$block_size"/"
+echo "plotting expiriment: times by config file"
+    # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"times/"$in_filename ]]; then
+        mkdir $plots_dir"times/"$in_filename
+    fi
+    if [[ ! -d $plots_dir"times/"$in_filename"/"$block_size ]]; then
+        mkdir $plots_dir"times/"$in_filename"/"$block_size
+    fi
+python $python_scripts_dir"plotting/plot_times_config.py" \
+        $times_intermediate_dir$in_filename"/"$block_size"/" \
+        $plots_dir"times/"$in_filename"/"$block_size"/"
+
+echo "plotting expiriment: times by field file"
+    # all plots should be containted in a sub directory named by block size
+    if [[ ! -d $plots_dir"times/"$in_filename ]]; then
+        mkdir $plots_dir"times/"$in_filename
+    fi
+    if [[ ! -d $plots_dir"times/"$in_filename"/"$block_size ]]; then
+        mkdir $plots_dir"times/"$in_filename"/"$block_size
+    fi
+python $python_scripts_dir"plotting/plot_times_field.py" \
+        $times_intermediate_dir$in_filename"/"$block_size"/" \
+        $plots_dir"times/"$in_filename"/"$block_size"/"

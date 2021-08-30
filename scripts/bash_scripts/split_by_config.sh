@@ -27,7 +27,7 @@ do
     experiment_ratios_dir=$4$2"/"$3"/"
     experiment_times_dir=$5$2"/"$3"/"
     experiment_name=${out_file%%.*}
-
+    echo $experiment_name
     # for all out files, make time and ratio intermediate files by config
     if [[ $out_file == *".out" ]]; then
         config_name="$(basename -s .out $out_file)"

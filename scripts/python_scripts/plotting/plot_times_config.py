@@ -41,7 +41,7 @@ def data_one_config(config_file):
 
     for line in cf:
         A = line.split()
-        col = int(A[0])
+        col = int(A[0].replace('col',''))
         time_data = datetime.strptime(A[1], '%H:%M:%S.%f')
         seconds = time_data.second
         microseconds = time_data.microsecond
