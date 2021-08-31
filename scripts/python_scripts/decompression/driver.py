@@ -7,7 +7,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 # kristen imports
-from scripts.python_scripts.utils import config_arguments
+from utils import config_arguments
 import header_decompress
 import decompression_worker
 

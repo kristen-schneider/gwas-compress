@@ -7,7 +7,7 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 # kristen imports
-from scripts.python_scripts.utils import config_arguments
+from utils import config_arguments
 import generate_header_first_half
 import generate_funnel_format
 import compress_funnel_format
