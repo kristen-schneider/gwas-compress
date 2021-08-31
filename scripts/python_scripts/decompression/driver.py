@@ -18,8 +18,8 @@ OUT_DIR = args['out_dir']
 BLOCK_SIZE = int(args['block_size'])
 COMPRESSION_STYLE = args['compression_style']
 CODECS_LIST = list(args['compression_method'].split(','))
-BLOCK_TO_DECOMPRESS = int(args['block_to_decompress'])
-COLUMN_TO_DECOMPRESS = int(args['column_to_decompress'])
+DECOMPRESSION_START = int(args['decompression_start'])
+DECOMPRESSION_END = int(args['decompression_end'])
 DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
                         2:int(args['float_byte_size']),
                         3:int(args['string_byte_size']),
