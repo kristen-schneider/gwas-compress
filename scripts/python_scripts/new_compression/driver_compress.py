@@ -40,7 +40,7 @@ def main():
     # args = config_arguments.get_args_from_config('LOCAL', config_file)
 
     args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
-
+    config_basename = config_file.split('/')[-1].split('_')[0]
     # included in config file
     #IN_FILE = args['in_file']
     IN_FILE = sys.argv[1]
@@ -59,7 +59,7 @@ def main():
     
     # output file made from combining user specified params
     base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
-    COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-' + str(BLOCK_SIZE) + '.tsv'
+    COMPRESSED_FILE = OUT_DIR + 'kristen-' + config_basename + '-' + base_name_in_file + '-' + str(BLOCK_SIZE) + '.tsv'
     COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
     #print(datetime.now()-get_arguments_start_time, ' to get arguments.\n')
 
