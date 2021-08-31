@@ -44,6 +44,8 @@ def main():
     full_header = full_header_info[1]
     #print(full_header)
 
+    # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
+
     # # 2. RETRIEVING COMPRESSED BLOCK AND BLOCK HEADER
     # print('getting compressed block...')
     # compressed_block_START = datetime.now()
