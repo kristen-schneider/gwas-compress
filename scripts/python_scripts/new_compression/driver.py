@@ -118,27 +118,28 @@ def main():
     # header types, number of elements in each header
     serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_BYTE_SIZES,
                                                                  full_header)
-    # serialized_header_types = serialized_header_tools[0]
-    # serialized_header_num_elements = serialized_header_tools[1]
-    # serialized_header_ends = serialized_header_tools[2]
-    # serialized_header_data = serialized_header_tools[3]
-    #
-    # size_types = len(serialized_header_types)
-    # try: bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
-    # except OverflowError: print(size_types)
-    # size_elements = len(serialized_header_num_elements)
-    # try: bytes_size_num_elements = size_elements.to_bytes(2, byteorder='big', signed=False)
-    # except OverflowError: print(size_elements)
-    # size_ends = len(serialized_header_ends)
-    # try: bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
-    # except OverflowError: print(bytes_size_ends)
-    # size_data = len(serialized_header_data)
-    # try: bytes_size_data = size_data.to_bytes(4, byteorder='big', signed=False)
-    # except OverflowError: print(size_data)
-    # ############
-    # compress_header_END = datetime.now()
-    # compress_header_TIME = compress_header_END - compress_header_START
-    # print(str(compress_header_TIME) + ' for header to compress...\n')
+    serialized_header_types = serialized_header_tools[0]
+    serialized_header_num_elements = serialized_header_tools[1]
+    serialized_header_ends = serialized_header_tools[2]
+    serialized_header_data = serialized_header_tools[3]
+    
+    print(serialized_header_types, serialized_header_num_elements, serialized_header_ends, serialized_header_data)
+    size_types = len(serialized_header_types)
+    try: bytes_size_types = size_types.to_bytes(2, byteorder='big', signed=False)
+    except OverflowError: print(size_types)
+    size_elements = len(serialized_header_num_elements)
+    try: bytes_size_num_elements = size_elements.to_bytes(2, byteorder='big', signed=False)
+    except OverflowError: print(size_elements)
+    size_ends = len(serialized_header_ends)
+    try: bytes_size_ends = size_ends.to_bytes(2, byteorder='big', signed=False)
+    except OverflowError: print(bytes_size_ends)
+    size_data = len(serialized_header_data)
+    try: bytes_size_data = size_data.to_bytes(4, byteorder='big', signed=False)
+    except OverflowError: print(size_data)
+    ############
+    compress_header_END = datetime.now()
+    compress_header_TIME = compress_header_END - compress_header_START
+    print(str(compress_header_TIME) + ' for header to compress...\n')
 
     # ######################################################
     # ## OLD WRITE METHOD WHERE EVERYTHING WRITTEN AT END ##

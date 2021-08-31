@@ -34,17 +34,17 @@ def full_header_tools(data_type_byte_sizes, full_header):
 
     # get full serialized header as a list
     serialized_header_list = get_serialized_header_as_list(header_types, data_type_byte_sizes, full_header)
-    print(serialized_header_list)
     # get full serialized header as a bitstring
-    #serialized_header = join_serialized_list(serialized_header_list)
+    serialized_header = join_serialized_list(serialized_header_list)
 
-    ## get ends of each serialized element in column
-    #header_ends = get_header_ends(serialized_header_list)
-    #serialized_header_ends = serialize_header.serialize_list(header_ends,
-    #                                                         data_type_byte_sizes[data_type_code_book[int]])
+    # get ends of each serialized element in column
+    header_ends = get_header_ends(serialized_header_list)
+    serialized_header_ends = serialize_header.serialize_list(header_ends,
+                                                             1,
+                                                             data_type_byte_sizes[1])
 
-    #return [serialized_header_types, serialized_header_num_elements, serialized_header_ends,
-    #        serialized_header]
+    return [serialized_header_types, serialized_header_num_elements, serialized_header_ends,
+            serialized_header]
 
 def get_header_types(full_header):
     """

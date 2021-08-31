@@ -17,7 +17,6 @@ def serialize_list(in_list, data_type, num_bytes):
     """
     s_bitstring = b''
     s_value = None
-
     for i in in_list:
         s_value = serialize_data(i, data_type, num_bytes)
         try:
@@ -47,7 +46,7 @@ def serialize_data(data, data_type, num_bytes):
     elif data_type == 2:
         s_value = serialize_int_float(data, num_bytes)
     # strings
-    elif data_type == 3:
+    elif data_type == 3 or data_type == 4:
         s_value = serialize_string(data)
     else:
         s_value = data
