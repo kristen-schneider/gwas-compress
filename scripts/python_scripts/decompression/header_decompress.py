@@ -1,5 +1,6 @@
 # IMPORTS
 import deserialize_header
+from utils import type_handling
 
 #
 # DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
@@ -87,10 +88,14 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
 
 
         elif HEADER_DATA == None:
+            print('header types',HEADER_TYPES)
             num_bytes_to_read = HEADER_TOOLS[3]
             header_data = compressed_file.read(num_bytes_to_read)
-            ds_header_data = decompress_header(
-                data_type_byte_sizes, HEADER_TYPES, HEADER_NUM_ELEMENTS, HEADER_ENDS, header_data)
+            ds_header_data = decompress_header(data_type_byte_sizes,
+                                                HEADER_TYPES,
+                                                HEADER_NUM_ELEMENTS,
+                                                HEADER_ENDS,
+                                                header_data)
             HEADER_DATA = ds_header_data
             total_bytes_read += num_bytes_to_read
             #STOP_HEADER = True

@@ -36,8 +36,8 @@ DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
                         4:args['bytes_byte_size']}
 
 # output file made from combining user specified params
-base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
-COMPRESSED_FILE = OUT_DIR + 'kristen-' + base_name_in_file + '-' + str(BLOCK_SIZE) + '.tsv'
+basename_compressed_file = IN_FILE.split('/')[-1].split('.')[0]
+#COMPRESSED_FILE = OUT_DIR + 'kristen-' + basename_compressed_file + '-' + str(BLOCK_SIZE) + '.tsv'
 # COMPRESSED_FILE = '/Users/kristen/PycharmProjects/gwas-compress/scripts/testing_write_all.txt'
 
 # COMPRESSED_FILE = OUT_DIR + 'kristen-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.tsv'
@@ -51,7 +51,7 @@ def main():
     full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]
-    #print(full_header)
+    print(full_header)
 
     # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
 

@@ -58,8 +58,8 @@ def main():
                             5: args['bytes_byte_size']}
     
     # output file made from combining user specified params
-    base_name_in_file = IN_FILE.split('/')[-1].split('.')[0]
-    COMPRESSED_FILE = OUT_DIR + 'kristen-' + config_basename + '-' + base_name_in_file + '-' + str(BLOCK_SIZE) + '.tsv'
+    basename_in_file = IN_FILE.split('/')[-1].split('.')[0]
+    COMPRESSED_FILE = OUT_DIR + 'kristen-' + config_basename + '-' + basename_in_file + '-' + str(BLOCK_SIZE) + '.tsv'
     COMPRESSION_TIMES_FILE = OUT_DIR + 'times-' + str(BLOCK_SIZE) + '.csv'
     #print(datetime.now()-get_arguments_start_time, ' to get arguments.\n')
 
