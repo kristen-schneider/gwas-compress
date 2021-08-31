@@ -1,5 +1,5 @@
 **/__pycache__/
 *.png
 *.tsv
-*/gwas_files/
-*/plot_data/
+**/gwas_files/
+**/plot_data/
