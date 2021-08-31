@@ -44,44 +44,44 @@ def main():
     full_header = full_header_info[1]
     #print(full_header)
 
-    # 2. RETRIEVING COMPRESSED BLOCK AND BLOCK HEADER
-    print('getting compressed block...')
-    compressed_block_START = datetime.now()
-    ### work ###
-    compressed_block_info = decompression_worker.query_block(BLOCK_TO_DECOMPRESS,
-                                                             full_header, full_header_bytes,
-                                                             DATA_TYPE_BYTE_SIZES, OUT_FILE)
-    ############
-    compressed_block_END = datetime.now()
-    compressed_block_TIME = compressed_block_END - compressed_block_START
-    print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
-
-    # 3. DECOMPRESSING SINGLE BLOCK
-    print('decompressing single block...')
-    single_block_START = datetime.now()
-    ### work ###
-    if 'int' in COMPRESSION_STYLE:
-        dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
-                                                                           full_header, DATA_TYPE_BYTE_SIZES)
-    elif 'all' in COMPRESSION_STYLE:
-        print('all data types')
-    ############
-    for dc in dc_single_block: print(dc)
-    single_block_END = datetime.now()
-    single_block_TIME = single_block_END - single_block_START
-    print(str(single_block_TIME) + ' for decompressing single block to compute...\n')
-
-    print('decompressing single column...')
-    single_column_START = datetime.now()
-    ### work ###
-    dc_single_column = decompression_worker.decompress_single_column_int(CODECS_LIST[COLUMN_TO_DECOMPRESS],
-                                                                         compressed_block_info, COLUMN_TO_DECOMPRESS,
-                                                                         full_header, DATA_TYPE_BYTE_SIZES)
-    ############
-    print(dc_single_column)
-    single_column_END = datetime.now()
-    single_column_TIME = single_column_END - single_column_START
-    print(str(single_column_TIME) + ' for decompressing single column to compute...\n')
+    # # 2. RETRIEVING COMPRESSED BLOCK AND BLOCK HEADER
+    # print('getting compressed block...')
+    # compressed_block_START = datetime.now()
+    # ### work ###
+    # compressed_block_info = decompression_worker.query_block(BLOCK_TO_DECOMPRESS,
+    #                                                          full_header, full_header_bytes,
+    #                                                          DATA_TYPE_BYTE_SIZES, OUT_FILE)
+    # ############
+    # compressed_block_END = datetime.now()
+    # compressed_block_TIME = compressed_block_END - compressed_block_START
+    # print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
+    #
+    # # 3. DECOMPRESSING SINGLE BLOCK
+    # print('decompressing single block...')
+    # single_block_START = datetime.now()
+    # ### work ###
+    # if 'int' in COMPRESSION_STYLE:
+    #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
+    #                                                                        full_header, DATA_TYPE_BYTE_SIZES)
+    # elif 'all' in COMPRESSION_STYLE:
+    #     print('all data types')
+    # ############
+    # for dc in dc_single_block: print(dc)
+    # single_block_END = datetime.now()
+    # single_block_TIME = single_block_END - single_block_START
+    # print(str(single_block_TIME) + ' for decompressing single block to compute...\n')
+    #
+    # print('decompressing single column...')
+    # single_column_START = datetime.now()
+    # ### work ###
+    # dc_single_column = decompression_worker.decompress_single_column_int(CODECS_LIST[COLUMN_TO_DECOMPRESS],
+    #                                                                      compressed_block_info, COLUMN_TO_DECOMPRESS,
+    #                                                                      full_header, DATA_TYPE_BYTE_SIZES)
+    # ############
+    # print(dc_single_column)
+    # single_column_END = datetime.now()
+    # single_column_TIME = single_column_END - single_column_START
+    # print(str(single_column_TIME) + ' for decompressing single column to compute...\n')
 
 if __name__ == "__main__":
     main()
