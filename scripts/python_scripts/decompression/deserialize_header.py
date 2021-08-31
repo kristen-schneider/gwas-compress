@@ -1,4 +1,10 @@
-import type_handling
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
+
+from utils import type_handling
 import struct
 import numpy as np
 

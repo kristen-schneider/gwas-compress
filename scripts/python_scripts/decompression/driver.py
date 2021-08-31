@@ -8,6 +8,7 @@ sys.path.append(parentdir)
 
 # kristen imports
 from utils import config_arguments
+#from utils import type_handling
 import header_decompress
 import decompression_worker
 
@@ -19,6 +20,7 @@ DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 # USER-SPECIFIED PARAMETERS
 # user should edit config.ini to reflect proper parameters
 # args = config_arguments.get_args_from_config('LOCAL')
+config_file = sys.argv[2]#'/home/krsc0813/projects/gwas-compress/config_files/config.ini'
 args = config_arguments.get_args_from_config('MENDEL')
 # included in config file
 IN_FILE = args['in_file']
