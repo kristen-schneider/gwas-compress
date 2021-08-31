@@ -15,7 +15,7 @@ import decompression_worker
 # 0. GET ARGUMENTS
 
 # CONSTANTS
-DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
+#DATA_TYPE_CODE_BOOK = {int: 1, float: 2, str: 3, bytes:4}
 
 # USER-SPECIFIED PARAMETERS
 # user should edit config.ini to reflect proper parameters

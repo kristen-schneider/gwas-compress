@@ -30,9 +30,9 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
         ds_bitstring = deserialize_int(dc_bitstring, block_size, num_bytes, chrm)
     elif data_type == 2:
         ds_bitstring = deserialize_float(dc_bitstring, block_size, num_bytes)
-    elif data_type == 3:
+    elif data_type == 3 or data_type == 4:
         ds_bitstring = deserialize_string(dc_bitstring)
-    elif data_type == 4:
+    else:
         ds_bitstring = dc_bitstring
 
     return ds_bitstring
