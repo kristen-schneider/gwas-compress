@@ -1,5 +1,13 @@
-from scripts.python_scripts.compression import config_arguments
+#### IMPORTS ####
+# python_scripts imports
 from datetime import datetime
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+
+# kristen imports
+from scripts.python_scripts.utils import config_arguments
 import header_decompress
 import decompression_worker
 
