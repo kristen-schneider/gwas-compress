@@ -1,6 +1,12 @@
 import unittest
-from scripts import packed_strings
-from scripts import hybrid_strings
+
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+from new_compression import deserialize
+from utils import packed_strings
+from utils import hybrid_strings
 
 
 class TestPACKED(unittest.TestCase):

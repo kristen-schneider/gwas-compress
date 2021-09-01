@@ -1,13 +1,17 @@
 # imports
-import file_header
-import generate_funnel_format
-import serialize
-import compress
-import decompress
-import deserialize
-import driver
 import unittest
 import math
+
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+import file_header
+from new_compression import generate_funnel_format
+from new_compression import serialize_body
+from new_compression import compress
+from decompression import decompress
+from decompression import deserialize
 
 
 class TestFunnelFormat(unittest.TestCase):

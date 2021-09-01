@@ -1,11 +1,16 @@
 # imports
 import unittest
 import random
-import serialize
-import compress
-import decompress
-import deserialize
 import numpy as np
+
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+from new_compression import serialize
+from new_compression import compress
+from decompression import decompress
+from decompression import deserialize
 
 # DEFINED (should be same for all files)
 type_to_bytes_code_book = {1: 5, 2: 8, 3: 5}

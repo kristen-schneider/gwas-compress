@@ -1,6 +1,11 @@
-# imports
-import header_compress
 import unittest
+
+# imports
+import sys, os, inspect
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+parentdir = os.path.dirname(currentdir)
+sys.path.insert(0, parentdir)
+from new_compression import header_compress
 
 # Testing funnel format generation (where all incoming files can be split into the same format)
 class TestFileHeader(unittest.TestCase):
