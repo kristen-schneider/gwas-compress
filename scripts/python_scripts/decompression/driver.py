@@ -12,6 +12,7 @@ from utils import config_arguments
 import header_decompress
 import decompression_worker
 import search
+import decompress_block
 
 # 0. GET ARGUMENTS
 
@@ -61,14 +62,16 @@ def main():
     # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
     print('getting compressed block...')
     compressed_block_START = datetime.now()
-    ### work ###
-    compressed_block_info = decompression_worker.query_block(query_blocks[0],
-                                                             full_header, full_header_bytes,
-                                                             DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
-    ############
-    compressed_block_END = datetime.now()
-    compressed_block_TIME = compressed_block_END - compressed_block_START
-    print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
+    cbi = decompress_block.get_compressed_data(query_blocks[0], full_header,
+                            full_header_bytes, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
+    #### work ###
+    #compressed_block_info = decompression_worker.query_block(query_blocks[0],
+    #                                                         full_header, full_header_bytes,
+    #                                                         DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
+    #############
+    #compressed_block_END = datetime.now()
+    #compressed_block_TIME = compressed_block_END - compressed_block_START
+    #print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
     
     # # 3. DECOMPRESSING SINGLE BLOCK
     # print('decompressing single block...')
