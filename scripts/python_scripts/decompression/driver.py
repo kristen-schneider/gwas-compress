@@ -48,7 +48,6 @@ def main():
 
     # 1. GETTING FULL HEADER
     print('getting full header...')
-
     full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]
@@ -56,19 +55,21 @@ def main():
 
     # 2. RETRIVEING BLOCKS TO DECOMPRESS
     query_blocks = search.find_blocks(BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
-    print(query_blocks)
+    print('from row ', DECOMPRESSION_START, ' to row ', DECOMPRESSION_END,
+            '...decompression blocks ', query_blocks[0], 'to', query_blocks[1])
+    
     # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
-    # print('getting compressed block...')
-    # compressed_block_START = datetime.now()
-    # ### work ###
-    # compressed_block_info = decompression_worker.query_block(BLOCK_TO_DECOMPRESS,
-    #                                                          full_header, full_header_bytes,
-    #                                                          DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
-    # ############
-    # compressed_block_END = datetime.now()
-    # compressed_block_TIME = compressed_block_END - compressed_block_START
-    # print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
-    #
+    print('getting compressed block...')
+    compressed_block_START = datetime.now()
+    ### work ###
+    compressed_block_info = decompression_worker.query_block(query_blocks[0],
+                                                             full_header, full_header_bytes,
+                                                             DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
+    ############
+    compressed_block_END = datetime.now()
+    compressed_block_TIME = compressed_block_END - compressed_block_START
+    print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
+    
     # # 3. DECOMPRESSING SINGLE BLOCK
     # print('decompressing single block...')
     # single_block_START = datetime.now()

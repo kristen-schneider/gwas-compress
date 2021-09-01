@@ -39,11 +39,10 @@ def query_block(query_block_i, full_header,
     column_labels = full_header[3]
     column_data_types = full_header[4]
     num_columns = full_header[5]
-    gzip_header = full_header[6]
-    bz2_header = full_header[7]
-    block_header_ends = full_header[8]
-    end_positions = full_header[9]
-    block_sizes = full_header[10]
+    block_header_ends = full_header[6]
+    end_positions = full_header[7]
+    block_sizes = full_header[8]
+    
     # header is compressed with gzip
     header_compression_type = 'gzip'
 
@@ -109,11 +108,9 @@ def decompress_single_block_int(compression_method_list, compressed_block,
     column_labels = full_header[3]
     column_data_types = full_header[4]
     num_columns = full_header[5]
-    gzip_header = full_header[6]
-    bz2_header = full_header[7]
-    block_header_ends = full_header[8]
-    end_positions = full_header[9]
-    block_sizes = full_header[10]
+    block_header_ends = full_header[6]
+    end_positions = full_header[7]
+    block_sizes = full_header[8]
     compressed_block_header = compressed_block[0]
     compressed_block_data = compressed_block[1]
     num_rows = compressed_block[2]
@@ -152,11 +149,9 @@ def decompress_single_column_int(compression_method, compressed_block,
     column_labels = full_header[3]
     column_data_types = full_header[4]
     num_columns = full_header[5]
-    gzip_header = full_header[6]
-    bz2_header = full_header[7]
-    block_header_ends = full_header[8]
-    end_positions = full_header[9]
-    block_sizes = full_header[10]
+    block_header_ends = full_header[6]
+    end_positions = full_header[7]
+    block_sizes = full_header[8]
 
     if query_column_i == 0: chrm = 1
     else: chrm = 0
