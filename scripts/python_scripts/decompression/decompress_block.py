@@ -41,12 +41,11 @@ def get_compressed_data(query_block_i, full_header,
 
     with open(compressed_file, 'rb') as r_file:
         all_compressed_data = r_file.read()
-    # print(all_compressed_data)
+    print(all_compressed_data)
     r_file.close()
 
     header_data = all_compressed_data[0:full_header_bytes]
     content_compressed_data = all_compressed_data[full_header_bytes:]
-
 
     # get correct block header
     if query_block_i != 0:
@@ -57,18 +56,18 @@ def get_compressed_data(query_block_i, full_header,
     else:
         query_block_header_start = 0
 
-    query_block_header_end = block_header_ends[query_block_i]
-    query_block_header_bytes = content_compressed_data[query_block_header_start:query_block_header_end]
-    query_block_header_np_arr = deserialize_body.deserialize_list_fastpfor(query_block_header_bytes)
-    query_block_header_decomp_arr = decompress_column.decompress_np_arr(query_block_header_np_arr, num_columns, 'fastpfor128')
+#    query_block_header_end = block_header_ends[query_block_i]
+#    query_block_header_bytes = content_compressed_data[query_block_header_start:query_block_header_end]
+#    query_block_header_np_arr = deserialize_body.deserialize_list_fastpfor(query_block_header_bytes)
+#    query_block_header_decomp_arr = decompress_column.decompress_np_arr(query_block_header_np_arr, num_columns, 'fastpfor128')
     #dc_curr_block_header = np.array(query_block_header, dtype=np.uint32, order='C') 
     # print(dc_curr_block_header)
     #ds_dc_curr_block_header = deserialize_header.deserialize_list(
     #    dc_curr_block_header, num_columns, 1, data_type_byte_sizes[1], None)
     # print(ds_dc_curr_block_header)
-
-    return [query_block_header_decomp_arr,
-            content_compressed_data[query_block_header_end:end_positions[query_block_i]],
-            query_block_num_rows]
+##
+#    return [query_block_header_decomp_arr,
+#            content_compressed_data[query_block_header_end:end_positions[query_block_i]],
+#            query_block_num_rows]
 
 #def decompress_block():
