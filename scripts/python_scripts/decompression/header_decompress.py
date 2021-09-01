@@ -88,7 +88,6 @@ def get_full_header(data_type_byte_sizes, OUT_FILE):
 
 
         elif HEADER_DATA == None:
-            print('header types',HEADER_TYPES)
             num_bytes_to_read = HEADER_TOOLS[3]
             header_data = compressed_file.read(num_bytes_to_read)
             ds_header_data = decompress_header(data_type_byte_sizes,

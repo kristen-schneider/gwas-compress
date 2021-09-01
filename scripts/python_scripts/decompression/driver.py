@@ -11,6 +11,7 @@ from utils import config_arguments
 #from utils import type_handling
 import header_decompress
 import decompression_worker
+import search
 
 # 0. GET ARGUMENTS
 
@@ -53,6 +54,9 @@ def main():
     full_header = full_header_info[1]
     print(full_header)
 
+    # 2. RETRIVEING BLOCKS TO DECOMPRESS
+    query_blocks = search.find_blocks(BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
+    print(query_blocks)
     # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
     # print('getting compressed block...')
     # compressed_block_START = datetime.now()
