@@ -35,8 +35,8 @@ def gzip_decompress(c_bitstring):
     OUTPUT
         dc_bitstring = decompressed bitstring (original bitstring from serialize function)
     """
-
-    dc_bitstring = gzip.decompress(c_bitstring)
+    gzip_header=b'\x1f\x8b\x08\x00\x00\x00\x00\x00\x02\xff'
+    dc_bitstring = gzip.decompress(gzip_header+c_bitstring)
     return dc_bitstring
 
 

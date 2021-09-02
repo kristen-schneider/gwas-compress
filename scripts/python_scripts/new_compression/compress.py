@@ -24,7 +24,7 @@ def compress_bitstring(serialized_bitstring, codec):
 
     # GZIP
     if codec == 'gzip':
-        compressed_bitstring = gzip_compress(serialized_bitstring, 0)
+        compressed_bitstring = gzip_compress(serialized_bitstring, 0) 
         header_size = 10
 
     # ZLIB
