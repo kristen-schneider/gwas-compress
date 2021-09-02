@@ -43,7 +43,7 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
 
     block_sizes = []
     # go through funnel format, and compress each block
-
+    all_compressed_data = b''
 
     for block_i in range(len(funnel_format_data)):
 
@@ -61,7 +61,10 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
 
         compressed_block_header = block_header_and_block_data[0]
         compressed_block = block_header_and_block_data[1]
-
+        all_compressed_data+=compressed_block_header
+        all_compressed_data+=compressed_block
+        print(compressed_block_header)
+        print(compressed_block)
         # HEADER END DATA
         # add to block header ends
         try:
@@ -84,7 +87,7 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
-    return compressed_block_header,compressed_block,header_second_half
+    return all_compressed_data,header_second_half
 #
 # def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes):
 #     """
