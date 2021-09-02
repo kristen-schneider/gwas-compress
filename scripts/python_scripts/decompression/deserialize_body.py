@@ -11,7 +11,7 @@ import numpy as np
 # when float data is NA, int data is [0,-999]
 # when string data is NA, int data is -1
 
-def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm, query_column_i):
+def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
     """
     deserializes data for one column. incoming data is all in form of integers,
      but we must return values that match original data
@@ -31,7 +31,7 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm, query
     elif data_type == 2:
         ds_bitstring = deserialize_float(dc_bitstring, block_size, num_bytes)
     elif data_type == 3:
-        ds_bitstring = deserialize_string(dc_bitstring, query_column_i, num_bytes)
+        ds_bitstring = deserialize_string(dc_bitstring, num_bytes)
     elif data_type == 4:
         ds_bitstring = dc_bitstring
     else:
@@ -122,7 +122,7 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
     #     ds_bitstring.append(curr_ds_value)
 
 
-def deserialize_string(dc_bitstring, query_column_i, num_bytes):
+def deserialize_string(dc_bitstring, num_bytes):
     """
     strings can be SNPs, INDELs, or 'True'/'False'
     """

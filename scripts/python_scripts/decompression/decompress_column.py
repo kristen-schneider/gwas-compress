@@ -7,7 +7,7 @@ from pyfastpfor import *
 # when float data is NA, int data is [0,-999]
 # when string data is NA, int data is -1
 
-def decompress_single_column_standard(compressed_column, num_rows, col_type, num_bytes, chrm, compression_method, query_column_i):
+def decompress_single_column_standard(compressed_column, num_rows, col_type, num_bytes, chrm, compression_method):
     """
     decompresses a single column of data using gzip/zlib/bz2
 
@@ -20,7 +20,7 @@ def decompress_single_column_standard(compressed_column, num_rows, col_type, num
         decompressed_column = decompressed data (np array)
     """
     dc_column = decompress.decompress_data(compression_method, compressed_column)
-    ds_column = deserialize_body.deserialize_list(dc_column, num_rows, col_type, num_bytes, chrm, query_column_i)
+    ds_column = deserialize_body.deserialize_list(dc_column, num_rows, col_type, num_bytes, chrm)
     original_type_column = convert_from_int.convert_list_from_int(ds_column, col_type)
     return original_type_column
 

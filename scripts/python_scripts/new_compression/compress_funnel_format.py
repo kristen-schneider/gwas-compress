@@ -84,7 +84,7 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
     if len(block_sizes) < 2: block_sizes.append(curr_block_size)
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
-    return compressed_block,header_second_half
+    return compressed_block_header,compressed_block,header_second_half
 #
 # def compress_single_block(curr_block, codecs_list, column_types, data_type_byte_sizes):
 #     """

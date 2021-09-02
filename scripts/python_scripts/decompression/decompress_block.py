@@ -41,7 +41,6 @@ def get_compressed_data(query_block_i, full_header,
 
     with open(compressed_file, 'rb') as r_file:
         all_compressed_data = r_file.read()
-    print(all_compressed_data)
     r_file.close()
 
     header_data = all_compressed_data[0:full_header_bytes]
@@ -55,9 +54,13 @@ def get_compressed_data(query_block_i, full_header,
             print("Invalid query option.")
     else:
         query_block_header_start = 0
-
-#    query_block_header_end = block_header_ends[query_block_i]
-#    query_block_header_bytes = content_compressed_data[query_block_header_start:query_block_header_end]
+    query_block_header_end = block_header_ends[query_block_i]
+    query_block_header_bytes = content_compressed_data[query_block_header_start:query_block_header_end]
+    print(content_compressed_data, query_block_header_bytes)
+    query_block_header = decompress_column.decompress_single_column_standard(query_block_header_bytes,
+                                                                                query_block_num_rows,
+                                                                                1, data_type_byte_sizes[1], 0,
+                                                                                header_compression_type)
 #    query_block_header_np_arr = deserialize_body.deserialize_list_fastpfor(query_block_header_bytes)
 #    query_block_header_decomp_arr = decompress_column.decompress_np_arr(query_block_header_np_arr, num_columns, 'fastpfor128')
     #dc_curr_block_header = np.array(query_block_header, dtype=np.uint32, order='C') 
