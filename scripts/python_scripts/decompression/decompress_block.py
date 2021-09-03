@@ -1,7 +1,7 @@
 import deserialize_body
 import decompress_column
 
-def get_compressed_data(query_block_i, full_header,
+def get_compressed_block_data(query_block_i, full_header,
                 full_header_bytes, data_type_byte_sizes, compressed_file):
     """
     finds block to decompress and decompresses it's header, but keeps data in compressed form.
@@ -46,7 +46,7 @@ def get_compressed_data(query_block_i, full_header,
     header_data = all_compressed_data[0:full_header_bytes]
     content_compressed_data = all_compressed_data[full_header_bytes:]
 
-    # get correct block header
+    # get correct block header and decompress and deserialize
     if query_block_i != 0:
         try:
             query_block_header_start = end_positions[query_block_i - 1]
@@ -60,18 +60,23 @@ def get_compressed_data(query_block_i, full_header,
                                                                                 num_columns,
                                                                                 1, data_type_byte_sizes[1], 0,
                                                                                 header_compression_type)
-    print(query_block_header_bytes)
-    print(dc_query_block_header)
-    #query_block_header = deserialize_body.deserialize_list_fastpfor(query_block_header_bytes)
-#    query_block_header_decomp_arr = decompress_column.decompress_np_arr(query_block_header_np_arr, num_columns, 'fastpfor128')
-    #dc_curr_block_header = np.array(query_block_header, dtype=np.uint32, order='C') 
-    # print(dc_curr_block_header)
-    #ds_dc_curr_block_header = deserialize_header.deserialize_list(
-    #    dc_curr_block_header, num_columns, 1, data_type_byte_sizes[1], None)
-    # print(ds_dc_curr_block_header)
-##
-#    return [query_block_header_decomp_arr,
-#            content_compressed_data[query_block_header_end:end_positions[query_block_i]],
-#            query_block_num_rows]
 
-#def decompress_block():
+    compressed_block_content = content_compressed_data[query_block_header_end:end_positions[query_block_i]]
+    return [dc_query_block_header,
+            compressed_block_content,
+            query_block_num_rows]
+
+def decompress_single_block(dc_block_header, compessed_block, column_data_types, query_block_num_rows, data_type_byte_sizes, codecs_list):
+    num_columns = len(dc_block_header)
+
+    start = 0
+    for i in range(num_columns):
+        end = dc_block_header[i]
+        curr_column_data_type = column_data_types[i]
+        curr_column_codec = codecs_list[i] 
+        compressed_column = compessed_block[start:end]
+        print(curr_column_data_type, curr_column_codec, query_block_num_rows, compressed_column) 
+        dc_column = decompress_column.decompress_single_column_standard(compressed_column, query_block_num_rows, curr_column_data_type, data_type_byte_sizes[curr_column_data_type], 0, curr_column_codec)
+        print(dc_column)
+        start = end 
+
