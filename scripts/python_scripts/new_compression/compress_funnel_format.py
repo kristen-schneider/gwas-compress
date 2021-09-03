@@ -43,10 +43,7 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
 
     block_sizes = []
     # go through funnel format, and compress each block
-<<<<<<< HEAD
 
-=======
->>>>>>> decompression
     all_compressed_data = b''
 
     for block_i in range(len(funnel_format_data)):
