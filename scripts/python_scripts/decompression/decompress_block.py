@@ -62,6 +62,8 @@ def get_compressed_data(query_block_i, full_header,
                                                                                 header_compression_type)
     ds_query_block_header = deserialize_body.deserialize_list(dc_query_block_header,
                                                             query_block_num_rows, 1, data_type_byte_sizes[1], 0)
+    print(query_block_header_bytes)
+    print(dc_query_block_header)
     print(ds_query_block_header)
     #query_block_header = deserialize_body.deserialize_list_fastpfor(query_block_header_bytes)
 #    query_block_header_decomp_arr = decompress_column.decompress_np_arr(query_block_header_np_arr, num_columns, 'fastpfor128')

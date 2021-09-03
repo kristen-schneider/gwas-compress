@@ -68,6 +68,9 @@ def compress_serialized(typed_column, column_codec, column_data_type, column_num
     """
     serialized_column = serialize_body.serialize_list(typed_column, column_data_type, column_num_bytes)
     compressed_column = compress.compress_bitstring(serialized_column, column_codec)
+    print(typed_column)
+    print(serialized_column)
+    print(compressed_column)
     return compressed_column
 
 def compress_numpy(typed_column, column_codec):
