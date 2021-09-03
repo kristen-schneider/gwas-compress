@@ -34,5 +34,7 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
     #                                                              1, 1, data_type_byte_sizes[1])
     block_header_serialized = serialize_body.serialize_list(block_header_list, 1, data_type_byte_sizes[1])
     block_header_bitstring = compress.compress_bitstring(block_header_serialized, 'gzip')
+    print(block_header_list)
+    print(block_header_serialized)
+    print(block_header_bitstring)
     return block_header_bitstring, block_bitstring
-
