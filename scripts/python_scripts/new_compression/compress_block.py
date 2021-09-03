@@ -14,7 +14,6 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
     block_header_list = []
     block_header_bitstring = b''
     block_bitstring = b''
-    
     # compress one column at a time
     for column_i in range(len(block)):
         # current column info
