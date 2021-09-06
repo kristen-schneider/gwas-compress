@@ -26,6 +26,7 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
 
         compressed_column_bitstring = compress_column.column_compression_main(column_i, curr_column, curr_codec, curr_data_type,
                                                 curr_compression_data_type, curr_data_type_byte_sizes, config_file_name)
+        # append column info to block info
         column_end += len(compressed_column_bitstring)
         block_header_list.append(column_end)
         block_bitstring += compressed_column_bitstring
@@ -34,7 +35,4 @@ def compress_block(block, codecs_list, column_types, input_data_type_list, data_
     #                                                              1, 1, data_type_byte_sizes[1])
     block_header_serialized = serialize_body.serialize_list(block_header_list, 1, data_type_byte_sizes[1])
     block_header_bitstring = compress.compress_bitstring(block_header_serialized, 'gzip')
-    print(block_header_list)
-    print(block_header_serialized)
-    print(block_header_bitstring)
     return block_header_bitstring, block_bitstring
