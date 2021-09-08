@@ -19,13 +19,11 @@ def column_compression_main(column_i, column, column_codec, column_data_type,
                             curr_compression_data_type, column_data_type_byte_sizes,
                             config_file_name):
 
-    print(column_data_type, type(column_data_type))
     column_i_START = datetime.now()
     column_i_STRING_SIZE = sys.getsizeof(column_i)
     m = calculate_size.get_ff_column_size(column)
     # 1. type column according to desired input type
     if curr_compression_data_type == 1:
-        print("HERE")
         typed_column = encode_as_int.encode_column_as_int(column, column_data_type)
     elif curr_compression_data_type == 2:
         typed_column = encode_as_float.encode_column_as_float(column, column_data_type)

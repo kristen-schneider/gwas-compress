@@ -21,8 +21,9 @@ def decompress_single_column_standard(compressed_column, num_rows, col_type, num
     """
     dc_column = decompress.decompress_data(compression_method, compressed_column)
     ds_column = deserialize_body.deserialize_list(dc_column, num_rows, col_type, num_bytes, chrm)
-    original_type_column = convert_from_int.convert_list_from_int(ds_column, col_type)
-    return original_type_column
+    
+    og_column = finalize_row.serialized_to_row(ds_column)#original_type_column = convert_from_int.convert_list_from_int(ds_column, col_type)
+    return ds_column#original_type_column
 
 
 def decompress_single_column_pyfast(serialized_data, block_size, data_type, num_bytes, chrm, codec, column_i):

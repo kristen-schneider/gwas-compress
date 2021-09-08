@@ -66,17 +66,14 @@ def get_compressed_block_data(query_block_i, full_header,
             compressed_block_content,
             query_block_num_rows]
 
-def decompress_single_block(dc_block_header, compessed_block, column_data_types, query_block_num_rows, data_type_byte_sizes, codecs_list):
+def decompress_single_block(dc_block_header, compessed_block, column_data_types, query_block_num_rows, data_type_byte_sizes, codecs_list, input_dat_type_list):
     num_columns = len(dc_block_header)
-
     start = 0
     for i in range(num_columns):
         end = dc_block_header[i]
-        curr_column_data_type = column_data_types[i]
+        curr_column_data_type = int(input_dat_type_list[i])#column_data_types[i]
         curr_column_codec = codecs_list[i] 
         compressed_column = compessed_block[start:end]
-        print(curr_column_data_type, curr_column_codec, query_block_num_rows, compressed_column) 
         dc_column = decompress_column.decompress_single_column_standard(compressed_column, query_block_num_rows, curr_column_data_type, data_type_byte_sizes[curr_column_data_type], 0, curr_column_codec)
-        print(dc_column)
         start = end 
 
