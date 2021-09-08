@@ -80,6 +80,7 @@ def main():
     block_row_count = cbi[2]
     
     decompressed_block = decompress_block.decompress_single_block(dc_block_header, compressed_block, full_header[4], block_row_count, DATA_TYPE_BYTE_SIZES, CODECS_LIST, INPUT_DATA_TYPE_LIST)
+    print(decompressed_block)
     # if 'int' in COMPRESSION_STYLE:
     #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
     #                                                                        full_header, DATA_TYPE_BYTE_SIZES)
