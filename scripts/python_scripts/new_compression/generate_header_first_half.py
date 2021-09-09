@@ -26,7 +26,6 @@ def get_header_first_half(in_file):
     version_number = 1
     delimiter = None
     column_names_list = None
-    column_types_list = None
     num_columns = None
 
     # get first two rows which will inform our header data
@@ -37,15 +36,13 @@ def get_header_first_half(in_file):
     # assign proper data to the pieces of the header
     delimiter = get_delimiter(row1_string)
     column_names_list = get_column_names(row1_string, delimiter)
-    column_types_list = type_handling.get_column_types(row2_string.rstrip().split(delimiter))
-    num_columns = get_num_columns(column_names_list, column_types_list)
+    num_columns = get_num_columns(column_names_list)
 
     # put everything together
     header_first_half.append(magic_number)
     header_first_half.append(version_number)
     header_first_half.append(delimiter)
     header_first_half.append(column_names_list)
-    header_first_half.append(column_types_list)
     header_first_half.append(num_columns)
 
     return header_first_half
@@ -106,7 +103,7 @@ def get_column_names(row, delimiter):
     return column_names
 
 
-def get_num_columns(column_names_list, column_types_list):
+def get_num_columns(column_names_list):
     """
     checks that names and types are same length to return number of columns in a file
 
@@ -117,11 +114,6 @@ def get_num_columns(column_names_list, column_types_list):
     OUTPUT
         num_columns = number of columns
     """
-    if (len(column_names_list) == len(column_types_list)):
-        num_columns = len(column_names_list)
-    else:
-        print('row 1 and row 2 have different lengths, exiting.')
-        return -1
 
-    return num_columns
+    return len(column_names_list)
 

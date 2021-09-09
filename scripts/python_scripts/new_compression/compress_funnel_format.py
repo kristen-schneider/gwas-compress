@@ -32,8 +32,8 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
     version = header_first_half[1]
     delimiter = header_first_half[2]
     column_labels = header_first_half[3]
-    column_types = header_first_half[4]
-    number_columns = header_first_half[5]
+    column_types = INPUT_DATA_TYPE_LIST
+    number_columns = header_first_half[4]
 
     # ends of block headers
     block_header_ends = []
