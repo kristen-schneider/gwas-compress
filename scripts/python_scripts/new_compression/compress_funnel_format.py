@@ -54,7 +54,6 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
         # compress block
         block_header_and_block_data = compress_block.compress_block(curr_block,
                                                               CODECS_LIST,
-                                                              column_types,
                                                               INPUT_DATA_TYPE_LIST,
                                                               DATA_TYPE_BYTE_SIZES,
                                                               config_file_name)

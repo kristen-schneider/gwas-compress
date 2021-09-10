@@ -2,7 +2,7 @@ import deserialize_body
 import decompress_column
 
 def get_compressed_block_data(query_block_i, full_header,
-                full_header_bytes, data_type_byte_sizes, compressed_file):
+                full_header_bytes, data_type_byte_sizes, compressed_file, column_data_types):
     """
     finds block to decompress and decompresses it's header, but keeps data in compressed form.
     returns decompressed block header, compressed block, and num rows in block
@@ -24,11 +24,11 @@ def get_compressed_block_data(query_block_i, full_header,
     version = full_header[1]
     delimiter = full_header[2]
     column_labels = full_header[3]
-    column_data_types = full_header[4]
-    num_columns = full_header[5]
-    block_header_ends = full_header[6]
-    end_positions = full_header[7]
-    block_sizes = full_header[8]
+    #column_data_types = full_header[4]
+    num_columns = full_header[4]
+    block_header_ends = full_header[5]
+    end_positions = full_header[6]
+    block_sizes = full_header[7]
 
     # header is compressed with gzip
     header_compression_type = 'gzip'

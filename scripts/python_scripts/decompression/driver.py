@@ -65,7 +65,7 @@ def main():
     compressed_block_START = datetime.now()
     ### work ###
     cbi = decompress_block.get_compressed_block_data(query_blocks[0], full_header,
-                            full_header_bytes, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
+                            full_header_bytes, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE, INPUT_DATA_TYPE_LIST)
     #############
     compressed_block_END = datetime.now()
     compressed_block_TIME = compressed_block_END - compressed_block_START

@@ -5,7 +5,6 @@ def encode_column_as_int(column, column_data_type):
     """
     converts a whole column to data type integer.
     """
-    print("HERE")
     column_as_int = []
     # for SNPs and INDELs we pack data so we encode a full column
     if column_data_type == 4:
@@ -16,7 +15,6 @@ def encode_column_as_int(column, column_data_type):
         for data in column:
             int_data = convert_data_type_to_int(data, column_data_type)
             column_as_int.append(int_data)
-    print("HERE:",column, column_as_int)
     return column_as_int
 
 
@@ -52,6 +50,7 @@ def int_to_int(in_data):
         ** must make room for non human genomes **
         out_data: integer value representing in_data (X = 23, Y = 24)
     """
+    print(in_data)
     int_data = None
     try:
         return int(in_data)

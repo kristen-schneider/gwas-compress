@@ -15,7 +15,7 @@ import compress
 serialized_codecs = ['gzip', 'zlib', 'bz2']
 
 
-def column_compression_main(column_i, column, column_codec, column_data_type,
+def column_compression_main(column_i, column, column_codec,
                             curr_compression_data_type, column_data_type_byte_sizes,
                             config_file_name):
 
@@ -24,9 +24,9 @@ def column_compression_main(column_i, column, column_codec, column_data_type,
     m = calculate_size.get_ff_column_size(column)
     # 1. type column according to desired input type
     if curr_compression_data_type == 1:
-        typed_column = encode_as_int.encode_column_as_int(column, column_data_type)
+        typed_column = encode_as_int.encode_column_as_int(column, curr_compression_data_type)
     elif curr_compression_data_type == 2:
-        typed_column = encode_as_float.encode_column_as_float(column, column_data_type)
+        typed_column = encode_as_float.encode_column_as_float(column, curr_compression_data_type)
     elif curr_compression_data_type == 3:
         # funnel format data is read in as a string. all columns are strings by default.
         typed_column = column
