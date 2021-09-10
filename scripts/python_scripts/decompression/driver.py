@@ -30,7 +30,7 @@ IN_FILE = args['in_file']
 OUT_DIR = args['out_dir']
 BLOCK_SIZE = int(args['block_size'])
 CODECS_LIST = list(args['compression_method'].split(','))
-INPUT_DATA_TYPE_LIST=list(args['input_data_type'].split(','))
+COMPRESSION_DATA_TYPES=list(args['input_data_type'].split(','))
 DECOMPRESSION_START = int(args['decompression_start'])
 DECOMPRESSION_END = int(args['decompression_end'])
 DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
@@ -65,7 +65,7 @@ def main():
     compressed_block_START = datetime.now()
     ### work ###
     cbi = decompress_block.get_compressed_block_data(query_blocks[0], full_header,
-                            full_header_bytes, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE, INPUT_DATA_TYPE_LIST)
+                            full_header_bytes, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE, COMPRESSION_DATA_TYPES)
     #############
     compressed_block_END = datetime.now()
     compressed_block_TIME = compressed_block_END - compressed_block_START
@@ -79,7 +79,7 @@ def main():
     compressed_block = cbi[1]
     block_row_count = cbi[2]
     
-    decompressed_block = decompress_block.decompress_single_block(dc_block_header, compressed_block, full_header[4], block_row_count, DATA_TYPE_BYTE_SIZES, CODECS_LIST, INPUT_DATA_TYPE_LIST)
+    decompressed_block = decompress_block.decompress_single_block(dc_block_header, compressed_block, full_header[4], block_row_count, DATA_TYPE_BYTE_SIZES, CODECS_LIST, COMPRESSION_DATA_TYPES)
     print(decompressed_block)
     # if 'int' in COMPRESSION_STYLE:
     #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
