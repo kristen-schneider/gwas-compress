@@ -1,8 +1,8 @@
-def serialized_to_row(ds_bitstring, data_type):
+def serialized_to_row(ds_bitstring, compression_data_type, decompression_data_type):
     final_row = None
-    if data_type == 1:
+    if compression_data_type == 1:
         final_row = integer_row(ds_bitstring)
-    elif data_type == 3:
+    elif compression_data_type == 3:
         final_row = string_row(ds_bitstring)
     return final_row
 

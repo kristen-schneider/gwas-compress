@@ -24,11 +24,11 @@ def get_compressed_block_data(query_block_i, full_header,
     version = full_header[1]
     delimiter = full_header[2]
     column_labels = full_header[3]
-    #COMPRESSION_DATA_TYPES = full_header[4]
-    num_columns = full_header[4]
-    block_header_ends = full_header[5]
-    end_positions = full_header[6]
-    block_sizes = full_header[7]
+    decompression_data_tyoes = full_header[4]
+    num_columns = full_header[5]
+    block_header_ends = full_header[6]
+    end_positions = full_header[7]
+    block_sizes = full_header[8]
 
     # header is compressed with gzip
     header_compression_type = 'gzip'
@@ -58,7 +58,7 @@ def get_compressed_block_data(query_block_i, full_header,
     query_block_header_bytes = content_compressed_data[query_block_header_start:query_block_header_end]
     dc_query_block_header = decompress_column.decompress_single_column_standard(query_block_header_bytes,
                                                                                 num_columns,
-                                                                                1, data_type_byte_sizes[1], 0,
+                                                                                1, 1, data_type_byte_sizes[1], 0,
                                                                                 header_compression_type)
 
     compressed_block_content = content_compressed_data[query_block_header_end:end_positions[query_block_i]]
@@ -66,17 +66,17 @@ def get_compressed_block_data(query_block_i, full_header,
             compressed_block_content,
             query_block_num_rows]
 
-def decompress_single_block(dc_block_header, compessed_block, COMPRESSION_DATA_TYPES, query_block_num_rows, data_type_byte_sizes, codecs_list, input_dat_type_list):
-
+def decompress_single_block(dc_block_header, compessed_block, COMPRESSION_DATA_TYPES, decompression_data_types, query_block_num_rows, data_type_byte_sizes, codecs_list):
     num_columns = len(dc_block_header)
     dc_block = []
     start = 0
     for i in range(num_columns):
         end = dc_block_header[i]
-        curr_column_data_type = int(input_dat_type_list[i])#COMPRESSION_DATA_TYPES[i]
+        col_compression_data_type = int(COMPRESSION_DATA_TYPES[i])
+        col_decompression_data_type = int(decompression_data_types[i])
         curr_column_codec = codecs_list[i] 
         compressed_column = compessed_block[start:end]
-        dc_column = decompress_column.decompress_single_column_standard(compressed_column, query_block_num_rows, curr_column_data_type, data_type_byte_sizes[curr_column_data_type], 0, curr_column_codec)
+        dc_column = decompress_column.decompress_single_column_standard(compressed_column, query_block_num_rows, col_compression_data_type, col_decompression_data_type, data_type_byte_sizes[col_compression_data_type], 0, curr_column_codec)
         dc_block.append(dc_column)    
     
         start = end 

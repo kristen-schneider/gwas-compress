@@ -8,7 +8,7 @@ from pyfastpfor import *
 # when float data is NA, int data is [0,-999]
 # when string data is NA, int data is -1
 
-def decompress_single_column_standard(compressed_column, num_rows, col_type, num_bytes, chrm, compression_method):
+def decompress_single_column_standard(compressed_column, num_rows, compression_data_type, decompression_data_type, num_bytes, chrm, compression_method):
     """
     decompresses a single column of data using gzip/zlib/bz2
 
@@ -21,8 +21,8 @@ def decompress_single_column_standard(compressed_column, num_rows, col_type, num
         decompressed_column = decompressed data (np array)
     """
     dc_column = decompress.decompress_data(compression_method, compressed_column)
-    ds_column = deserialize_body.deserialize_list(dc_column, num_rows, col_type, num_bytes, chrm)
-    og_column = finalize_row.serialized_to_row(ds_column, col_type)
+    ds_column = deserialize_body.deserialize_list(dc_column, num_rows, compression_data_type, decompression_data_type, num_bytes, chrm)
+    og_column = finalize_row.serialized_to_row(ds_column, compression_data_type, decompression_data_type)
     #print(dc_column, ds_column, og_column)
     return og_column#original_type_column
 
