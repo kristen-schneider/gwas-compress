@@ -37,7 +37,6 @@ def deserialize_list(dc_bitstring, block_size, data_type, num_bytes, chrm):
     else:
         print('invalid data type: ', data_type)
         return -1
-   
     return ds_bitstring
 
 def deserialize_list_fastpfor(dc_bitstring):
@@ -94,4 +93,4 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
 def deserialize_string(dc_bitstring):
     return dc_bitstring.decode("utf-8")
 
-
+print(b'\x0011063\x00\x0013259\x00\x0017641\x00'.decode("utf-8"))

@@ -11,6 +11,20 @@ def integer_row(ds_bitstring):
 
 def string_row(ds_bitstring):
     string_list = []
-    for d in ds_bitstring:
-        string_list.append(d)
+    d = 0
+    
+    while d < len(ds_bitstring):
+        if ds_bitstring[d] == '\x00':
+            long_data_bool = True
+            long_data = ''
+            while long_data_bool:
+                if ds_bitstring[d] == '\x00':
+                    string_list.append(long_data)
+                    long_data_bool = False 
+                else:
+                    long_data += ds_bitstring[d]
+                d += 1
+        else:
+            string_list.append(ds_bitstring[d])
+            d += 1
     return string_list
