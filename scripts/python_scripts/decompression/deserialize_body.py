@@ -91,6 +91,7 @@ def deserialize_float(dc_bitstring, block_size, num_bytes):
 
 
 def deserialize_string(dc_bitstring):
+    split_string = dc_bitstring.decode("utf-8").replace('\x00\x00', '\x00').replace('\x00', ' ').strip().split(' ')
     return dc_bitstring.decode("utf-8")
 
-print(b'\x0011063\x00\x0013259\x00\x0017641\x00'.decode("utf-8"))
+#print(b'\x0011063\x00\x0013259\x00\x0017641\x00'.decode("utf-8").replace('\x00\x00', '\x00').replace('\x00', ' ').strip().split(' ')

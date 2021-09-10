@@ -45,8 +45,8 @@ def main():
     #IN_FILE = args['in_file']
     IN_FILE = sys.argv[1]
     OUT_DIR = args['out_dir']
-    # BLOCK_SIZE = int(args['block_size'])
-    BLOCK_SIZE = int(sys.argv[3])
+    BLOCK_SIZE = int(args['block_size'])
+    #BLOCK_SIZE = int(sys.argv[3])
     CODECS_LIST = list(args['compression_method'].split(','))
     INPUT_DATA_TYPE_LIST=list(args['input_data_type'].split(','))
     #INPUT_DATA_TYPE_LIST = sys.argv[4].split(',')

@@ -12,7 +12,8 @@ def integer_row(ds_bitstring):
 def string_row(ds_bitstring):
     string_list = []
     d = 0
-    
+
+    print(ds_bitstring.replace('\x00\x00', '\x00').replace('\x00', ' ').strip().split(' '))    
     while d < len(ds_bitstring):
         if ds_bitstring[d] == '\x00':
             long_data_bool = True
