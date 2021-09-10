@@ -10,22 +10,22 @@ def integer_row(ds_bitstring):
     return ds_bitstring
 
 def string_row(ds_bitstring):
-    string_list = []
+    row_of_string_data = []
     d = 0
-
-    print(ds_bitstring.replace('\x00\x00', '\x00').replace('\x00', ' ').strip().split(' '))    
+    long_string_bool = False
+    long_string_val = ''
+    
     while d < len(ds_bitstring):
         if ds_bitstring[d] == '\x00':
-            long_data_bool = True
-            long_data = ''
-            while long_data_bool:
-                if ds_bitstring[d] == '\x00':
-                    string_list.append(long_data)
-                    long_data_bool = False 
-                else:
-                    long_data += ds_bitstring[d]
-                d += 1
+            long_string_bool = not long_string_bool
+            if long_string_val != '':
+                row_of_string_data.append(long_string_val)
+                long_string_val = '' 
+        elif long_string_bool:
+            long_string_val += ds_bitstring[d] 
         else:
-            string_list.append(ds_bitstring[d])
-            d += 1
-    return string_list
+            row_of_string_data.append(ds_bitstring[d]) 
+        d += 1
+    
+    return row_of_string_data
+
