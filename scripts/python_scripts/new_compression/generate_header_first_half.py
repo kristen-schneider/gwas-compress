@@ -26,6 +26,7 @@ def get_header_first_half(in_file):
     version_number = 1
     delimiter = None
     column_names_list = None
+    decompression_column_types = None
     num_columns = None
 
     # get first two rows which will inform our header data
@@ -36,6 +37,7 @@ def get_header_first_half(in_file):
     # assign proper data to the pieces of the header
     delimiter = get_delimiter(row1_string)
     column_names_list = get_column_names(row1_string, delimiter)
+    decompression_column_types = type_handling.get_column_types(row2_string.split())
     num_columns = get_num_columns(column_names_list)
 
     # put everything together
@@ -43,6 +45,7 @@ def get_header_first_half(in_file):
     header_first_half.append(version_number)
     header_first_half.append(delimiter)
     header_first_half.append(column_names_list)
+    header_first_half.append(decompression_column_types)
     header_first_half.append(num_columns)
 
     return header_first_half

@@ -48,8 +48,8 @@ def main():
     BLOCK_SIZE = int(args['block_size'])
     #BLOCK_SIZE = int(sys.argv[3])
     CODECS_LIST = list(args['compression_method'].split(','))
-    INPUT_DATA_TYPE_LIST=list(args['input_data_type'].split(','))
-    #INPUT_DATA_TYPE_LIST = sys.argv[4].split(',')
+    COMPRESSION_DATA_TYPES=list(args['input_data_type'].split(','))
+    #COMPRESSION_DATA_TYPES = sys.argv[4].split(',')
     # COMPRESSION_DATA_TYPE_=args['compression_data_type']
     DATA_TYPE_BYTE_SIZES = {1: int(args['int_byte_size']),
                             2: int(args['float_byte_size']),
@@ -79,8 +79,8 @@ def main():
     version = header_first_half[1]
     delimiter = header_first_half[2]
     column_labels = header_first_half[3]
-    column_types = INPUT_DATA_TYPE_LIST
-    number_columns = header_first_half[4]
+    decompression_data_types = header_first_half[4]
+    number_columns = header_first_half[5]
 
 
     # 2. GET FUNNEL FORMAT
@@ -99,7 +99,7 @@ def main():
     compress_data_START = datetime.now()
     # ### work ###
     header_second_half_info = compress_funnel_format.compress_all_blocks(CODECS_LIST,
-                                                                    INPUT_DATA_TYPE_LIST,
+                                                                    COMPRESSION_DATA_TYPES,
                                                                     DATA_TYPE_BYTE_SIZES,
                                                                     header_first_half,
                                                                     funnel_format_data,

@@ -17,7 +17,6 @@ def get_column_types(row):
     OUTPUT
         data_types_list = list of data types witnessed in that row (e.g. [1, 2, 2, 1, 1...])
     """
-
     data_types_list = []
     for r in row:
         data_type = get_data_type(r)

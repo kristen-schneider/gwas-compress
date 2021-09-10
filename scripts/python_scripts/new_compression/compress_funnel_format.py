@@ -11,14 +11,14 @@ from utils import type_handling
 import compress_block
 
 
-def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
+def compress_all_blocks(CODECS_LIST, COMPRESSION_DATA_TYPES, DATA_TYPE_BYTE_SIZES,
                         header_first_half, funnel_format_data, config_file_name):
     """
     returns end of header: [end of block headers, end of blocks, sizes of blocks]
 
     INPUT
         CODECS_LIST: list of compression methods to use on columns
-        INPUT_DATA_TYPE_LIST: list of data types to convert each column
+        COMPRESSION_DATA_TYPES: list of data types to convert each column
         DATA_TYPE_BYTE_SIZES: byte sizes for each data type
         header_first_half: first half of header
         funnel_format_data: funnel format data (all data is in strings)
@@ -32,8 +32,8 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
     version = header_first_half[1]
     delimiter = header_first_half[2]
     column_labels = header_first_half[3]
-    column_types = INPUT_DATA_TYPE_LIST
-    number_columns = header_first_half[4]
+    decompression_data_types = header_first_half[4]
+    number_columns = header_first_half[5]
 
     # ends of block headers
     block_header_ends = []
@@ -54,7 +54,7 @@ def compress_all_blocks(CODECS_LIST, INPUT_DATA_TYPE_LIST, DATA_TYPE_BYTE_SIZES,
         # compress block
         block_header_and_block_data = compress_block.compress_block(curr_block,
                                                               CODECS_LIST,
-                                                              INPUT_DATA_TYPE_LIST,
+                                                              COMPRESSION_DATA_TYPES,
                                                               DATA_TYPE_BYTE_SIZES,
                                                               config_file_name)
         # return block_header_and_data

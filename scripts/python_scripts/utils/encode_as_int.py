@@ -1,3 +1,4 @@
+from utils import type_handling
 from utils import packed_strings
 from utils import hybrid_strings
 
@@ -13,12 +14,12 @@ def encode_column_as_int(column, column_data_type):
     # for all others we encode each data point individually as int
     else:
         for data in column:
-            int_data = convert_data_type_to_int(data, column_data_type)
+            int_data = convert_data_type_to_int(data)
             column_as_int.append(int_data)
     return column_as_int
 
 
-def convert_data_type_to_int(data, data_type):
+def convert_data_type_to_int(data):
     """
     given any data in string format ('int', 'float', 'string', 'bytes'), converts to integer
     INPUT
@@ -28,6 +29,7 @@ def convert_data_type_to_int(data, data_type):
     OUTPUT
         integer version of data
     """
+    data_type = type_handling.get_data_type(data)
     if data_type == 1:
         return int_to_int(data)
     elif data_type == 2:
@@ -50,7 +52,6 @@ def int_to_int(in_data):
         ** must make room for non human genomes **
         out_data: integer value representing in_data (X = 23, Y = 24)
     """
-    print(in_data)
     int_data = None
     try:
         return int(in_data)

@@ -22,7 +22,9 @@ def column_compression_main(column_i, column, column_codec,
     column_i_START = datetime.now()
     column_i_STRING_SIZE = sys.getsizeof(column_i)
     m = calculate_size.get_ff_column_size(column)
-    # 1. type column according to desired input type
+    
+    
+    # 1. convert column to compression data type
     if curr_compression_data_type == 1:
         typed_column = encode_as_int.encode_column_as_int(column, curr_compression_data_type)
     elif curr_compression_data_type == 2:
@@ -33,7 +35,7 @@ def column_compression_main(column_i, column, column_codec,
     else:
         print('unrecognized input data type for type conversion: ', curr_compression_data_type)
     column_i_TYPED_SIZE = sys.getsizeof(typed_column)
-
+    
     # 2. compress column according to compression method (serialized vs numpy)
     if column_codec in serialized_codecs:
         compressed_column_bitstring = compress_serialized(typed_column, column_codec, curr_compression_data_type, column_data_type_byte_sizes)
