@@ -2,6 +2,7 @@ import gzip
 import zlib
 import bz2
 import fpzip
+import zfpy
 
 def decompress_data(compression_method, c_bitstring):
     """
@@ -26,6 +27,9 @@ def decompress_data(compression_method, c_bitstring):
     # FPZIP
     elif compression_method == 'fpzip':
         c_bitstring = fpzip_decompress(c_bitstring)
+    # ZFPY
+    elif compression_method == 'zfpy':
+        c_bitstring = zfpy_decompress(c_bitstring)
     return c_bitstring
 
 def gzip_decompress(c_bitstring):
@@ -73,5 +77,20 @@ def bz2_decompress(c_bitstring):
 
 
 def fpzip_decompress(c_bitstring):
+    """
+    uses fpzip's decompress method to decompress a numpy array and return only the given array.
+
+    INPUT
+        c_bitstring: compressed bitstring
+    OUTPUT
+        np_arry = numpy array of data (converted to 1D list)
+    """
     np_arr = fpzip.decompress(c_bitstring)
     return np_arr.tolist()[0][0][0]
+
+
+def zfpy_decompress(c_bitstring):
+    """
+    """
+    np_arr = zfpy.decompress_numpy(c_bitstring)
+    return np_arr.tolist()
