@@ -1,3 +1,4 @@
+import decompress
 import deserialize_body
 import decompress_column
 
@@ -83,8 +84,7 @@ def decompress_single_block(dc_block_header, compessed_block, COMPRESSION_DATA_T
         if curr_column_codec in serialized_codecs:
             dc_column = decompress_column.decompress_single_column_standard(compressed_column, query_block_num_rows, col_compression_data_type, col_decompression_data_type, data_type_byte_sizes[col_compression_data_type], 0, curr_column_codec)
         elif curr_column_codec in numpy_codecs:
-            ds_column = deserialize_body.deserialize_list(compressed_column, 10, 3, 3, 4, 0)
-            dc_column = decompress_column.decompress_np_arr(compressed_column, 10, curr_column_codec)
+            dc_column = decompress.decompress_data(curr_column_codec, compressed_column)
         else:
             dc_column = decompress_column.decompress_single_column_pyfast()
 

@@ -1,6 +1,7 @@
 import gzip
 import zlib
 import bz2
+import fpzip
 
 def decompress_data(compression_method, c_bitstring):
     """
@@ -22,7 +23,9 @@ def decompress_data(compression_method, c_bitstring):
     # BZ2
     elif compression_method == 'bz2':
         c_bitstring = bz2_decompress(c_bitstring)
-
+    # FPZIP
+    elif compression_method == 'fpzip':
+        c_bitstring = fpzip_decompress(c_bitstring)
     return c_bitstring
 
 def gzip_decompress(c_bitstring):
@@ -67,3 +70,8 @@ def bz2_decompress(c_bitstring):
     bz2_header = b'BZh9'
     dc_bitstring = bz2.decompress(bz2_header+c_bitstring)
     return dc_bitstring
+
+
+def fpzip_decompress(c_bitstring):
+    np_arr = fpzip.decompress(c_bitstring)
+    return np_arr.tolist()[0][0][0]
