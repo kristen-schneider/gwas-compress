@@ -64,6 +64,6 @@ def bz2_decompress(c_bitstring):
     OUTPUT
         dc_bitstring = decompressed bitstring (original bitstring from serialize function)
     """
-
-    dc_bitstring = bz2.decompress(c_bitstring)
+    bz2_header = b'BZh9'
+    dc_bitstring = bz2.decompress(bz2_header+c_bitstring)
     return dc_bitstring

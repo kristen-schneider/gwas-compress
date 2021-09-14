@@ -7,7 +7,7 @@ def serialize_list(in_list, data_type, num_bytes):
     if data_type == 1:
         s_value = serialize_int_data(in_list, num_bytes)
     elif data_type == 2: 
-        s_value = serialize_data(in_list, data_type, num_bytes)
+        s_value = serialize_float_data(in_list, data_type, num_bytes)
     elif data_type == 3 or data_type == 4:
         s_value = serialize_string_data(in_list)
     else: print('cannot detect data_type')
@@ -17,7 +17,6 @@ def serialize_list(in_list, data_type, num_bytes):
     except TypeError:
         print('cannot concat s_value to bitstring: ', i, s_value)
    
-    print(s_bitstring)
     return s_bitstring
 
 def serialize_int_data(in_list, num_bytes):
