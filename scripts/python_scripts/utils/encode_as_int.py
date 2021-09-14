@@ -7,6 +7,8 @@ def encode_column_as_int(column, column_data_type):
     converts a whole column to data type integer.
     """
     column_as_int = []
+    print(column_data_type)
+    #data_type = type_handling.get_data_type(data)
     # for SNPs and INDELs we pack data so we encode a full column
     if column_data_type == 4:
         column_as_int = packed_strings.encode_column(column)

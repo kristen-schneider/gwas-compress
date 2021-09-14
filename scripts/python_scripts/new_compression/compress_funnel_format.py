@@ -55,6 +55,7 @@ def compress_all_blocks(CODECS_LIST, COMPRESSION_DATA_TYPES, DATA_TYPE_BYTE_SIZE
         block_header_and_block_data = compress_block.compress_block(curr_block,
                                                               CODECS_LIST,
                                                               COMPRESSION_DATA_TYPES,
+                                                              decompression_data_types,
                                                               DATA_TYPE_BYTE_SIZES,
                                                               config_file_name)
         # return block_header_and_data
