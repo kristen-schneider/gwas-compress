@@ -48,7 +48,6 @@ def get_compressed_block_data(query_block_i, full_header,
 
     header_data = all_compressed_data[0:full_header_bytes]
     content_compressed_data = all_compressed_data[full_header_bytes:]
-
     # get correct block header and decompress and deserialize
     if query_block_i != 0:
         try:
