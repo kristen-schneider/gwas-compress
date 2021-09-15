@@ -36,7 +36,6 @@ def get_compressed_block_data(query_block_i, full_header,
 
     # header is compressed with gzip
     header_compression_type = 'gzip'
-    print(end_positions)
     # getting proper number of rows (last block is often less than others)
     if query_block_i < len(end_positions) - 1:
         query_block_num_rows = block_sizes[0]

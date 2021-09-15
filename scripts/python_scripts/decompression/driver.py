@@ -53,7 +53,7 @@ def main():
     full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]
-    print(full_header)
+    #print(full_header)
 
     # 2. RETRIVEING BLOCKS TO DECOMPRESS
     query_blocks = search.find_blocks(BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
@@ -83,8 +83,9 @@ def main():
     print(decompressed_block)
     
     # 4. RETRIEVE NECESSARY ROWS FROM FULL BLOCK
-    rows = search.findrows(decompressed_block, DECOMPRESSION_START, DECOMPRESSION_END)
-    
+    reduced_columns = search.find_rows(decompressed_block, DECOMPRESSION_START, DECOMPRESSION_END)
+    reduced_rows = search.make_into_rows(reduced_columns)
+    #for r in reduced_rows: print(r)
     # if 'int' in COMPRESSION_STYLE:
     #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
     #                                                                        full_header, DATA_TYPE_BYTE_SIZES)
