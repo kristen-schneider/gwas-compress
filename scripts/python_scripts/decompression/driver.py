@@ -85,7 +85,7 @@ def main():
     # 4. RETRIEVE NECESSARY ROWS FROM FULL BLOCK
     reduced_columns = search.find_rows(decompressed_block, DECOMPRESSION_START, DECOMPRESSION_END)
     reduced_rows = search.make_into_rows(reduced_columns)
-    #for r in reduced_rows: print(r)
+    for r in reduced_rows: print(r)
     # if 'int' in COMPRESSION_STYLE:
     #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
     #                                                                        full_header, DATA_TYPE_BYTE_SIZES)

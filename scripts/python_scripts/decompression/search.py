@@ -34,7 +34,7 @@ def find_rows(decompressed_block, block_row_start, block_row_end):
     reduced_columns = []
     
     for column in decompressed_block:
-        reduced_columns.append(decompressed_block[block_row_start:block_row_end])
+        reduced_columns.append(column[block_row_start:block_row_end])
     
     return reduced_columns
 
@@ -48,7 +48,7 @@ def make_into_rows(reduced_columns):
     OUTPUT:
         reduced_rows: only row data from necessary rows in block
     """
-    print(reduced_columns)    
     reduced_rows = map(list, zip(*reduced_columns))
     return reduced_rows
+
 
