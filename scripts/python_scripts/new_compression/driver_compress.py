@@ -19,7 +19,7 @@ import header_compress
 # AVAILABLE_COMPRESSION_METHODS = ['gzip', 'zlib', 'bz2', 'fastpfor128', 'fastpfor256']
 
 ### System Arguments ### (clean this up)
-config_file = sys.argv[2]#'/home/krsc0813/projects/gwas-compress/config_files/config.ini'
+config_file = sys.argv[1]#'/home/krsc0813/projects/gwas-compress/config_files/config.ini'
 
 
 def main():
@@ -42,8 +42,8 @@ def main():
     args = config_arguments.get_args_from_config('MENDEL', config_file)#, 'fastpfor')
     config_basename = config_file.split('/')[-1].split('_')[0]
     # included in config file
-    #IN_FILE = args['in_file']
-    IN_FILE = sys.argv[1]
+    IN_FILE = args['in_file']
+    #IN_FILE = sys.argv[1]
     OUT_DIR = args['out_dir']
     BLOCK_SIZE = int(args['block_size'])
     #BLOCK_SIZE = int(sys.argv[3])

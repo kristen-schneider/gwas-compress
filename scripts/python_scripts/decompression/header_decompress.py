@@ -119,8 +119,9 @@ def decompress_header(data_type_byte_sizes, header_types, header_num_elements, h
         curr_h = header_data[curr_h_start:curr_h_end]
 
         ds_curr_h = deserialize_header.deserialize_list(curr_h, curr_h_num_elements, curr_h_type, data_type_byte_sizes[curr_h_type], h)
-        if len(ds_curr_h) == 1: full_ds_header.append(ds_curr_h[0])
-        else: full_ds_header.append(ds_curr_h)
+        #if len(ds_curr_h) == 1: full_ds_header.append(ds_curr_h[0])
+        #else: full_ds_header.append(ds_curr_h)
+        full_ds_header.append(ds_curr_h)
         curr_h_start = curr_h_end
 
 

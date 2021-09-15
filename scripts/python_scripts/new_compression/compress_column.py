@@ -24,7 +24,6 @@ def column_compression_main(column_i, column, column_codec,
     column_i_STRING_SIZE = sys.getsizeof(column_i)
     m = calculate_size.get_ff_column_size(column)
     
-    print(curr_compression_data_type, curr_decompression_data_type)   
     # 1. convert column to compression data type
     if curr_compression_data_type == 1:
         typed_column = encode_as_int.encode_column_as_int(column, curr_compression_data_type)
@@ -48,7 +47,6 @@ def column_compression_main(column_i, column, column_codec,
     n = calculate_size.get_bitstring_column_size(compressed_column_bitstring) 
     column_i_SIZE_RATIO = float(column_i_STRING_SIZE/column_i_COMPRESSED_SIZE)
     column_i_mn = float(m/n)
-    print(compressed_column_bitstring)
     print(config_file_name, "col"+str(column_i), 'compression_time', column_i_TIME)
     print(config_file_name, "col"+str(column_i), 'compression_ratio', column_i_mn)
     #print(column, typed_column, compressed_column_bitstring)

@@ -24,19 +24,19 @@ def get_compressed_block_data(query_block_i, full_header,
         query_block_num_rows: number of rows that are in this block (different for last block sometimes)]
     """
     # header info
-    magic_number = full_header[0]
-    version = full_header[1]
-    delimiter = full_header[2]
+    magic_number = full_header[0][0]
+    version = full_header[1][0]
+    delimiter = full_header[2][0]
     column_labels = full_header[3]
     decompression_data_tyoes = full_header[4]
-    num_columns = full_header[5]
+    num_columns = full_header[5][0]
     block_header_ends = full_header[6]
     end_positions = full_header[7]
     block_sizes = full_header[8]
 
     # header is compressed with gzip
     header_compression_type = 'gzip'
-
+    print(end_positions)
     # getting proper number of rows (last block is often less than others)
     if query_block_i < len(end_positions) - 1:
         query_block_num_rows = block_sizes[0]
