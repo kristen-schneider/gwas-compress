@@ -81,6 +81,10 @@ def main():
     
     decompressed_block = decompress_block.decompress_single_block(dc_block_header, compressed_block, COMPRESSION_DATA_TYPES, full_header[4], block_row_count, DATA_TYPE_BYTE_SIZES, CODECS_LIST)
     print(decompressed_block)
+    
+    # 4. RETRIEVE NECESSARY ROWS FROM FULL BLOCK
+    rows = search.findrows(decompressed_block, DECOMPRESSION_START, DECOMPRESSION_END)
+    
     # if 'int' in COMPRESSION_STYLE:
     #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
     #                                                                        full_header, DATA_TYPE_BYTE_SIZES)
