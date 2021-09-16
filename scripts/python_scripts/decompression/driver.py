@@ -61,7 +61,7 @@ def main():
             '...decompression blocks ', query_blocks[0], 'to', query_blocks[1])
     num_blocks_to_decompress = query_blocks[1]-query_blocks[0]+1
     start_end_index = search.block_row_mapping(query_blocks, BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
-    block_decomp_index = search.make_block_start_end_list(num_blocks_to_decompress, BLOCK_SIZE, start_end_index[0], start_end_index[1])
+    #block_decomp_index = search.make_block_start_end_list(num_blocks_to_decompress, BLOCK_SIZE, start_end_index[0], start_end_index[1])
 
     for b in range(num_blocks_to_decompress):
         # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
@@ -87,8 +87,25 @@ def main():
         decompressed_block = decompress_block.decompress_single_block(dc_block_header, compressed_block, COMPRESSION_DATA_TYPES, full_header[4], block_row_count, DATA_TYPE_BYTE_SIZES, CODECS_LIST)
     
         # 4. RETRIEVE NECESSARY ROWS FROM FULL BLOCK
-        reduced_columns = search.find_rows(decompressed_block, block_decomp_index[b][0], block_decomp_index[b][1])
-        print(reduced_columns, '\n')
+    
+        # if there is only one block, we already have start and end indices
+        if num_blocks_to_decompress == 1:
+            block_start_index = start_end_index[0]
+            block_end_index = start_end_index[1]
+        # if there is more than one block, we need to find the start and end indices for each block
+        else:
+            if b == 0: # first block is query_start to end of block
+                block_start_index = start_end_index[0]
+                block_end_index = BLOCK_SIZE-1
+            elif b == num_blocks_to_decompress-1: # last block is 0 to query_end
+                block_start_index = 0
+                block_end_index = start_end_index[1]
+            else: # want all rows from middle blocks 0 to end of block
+                block_start_index = 0
+                block_end_index = BLOCK_SIZE-1
+                        
+
+        reduced_columns = search.find_rows(decompressed_block, block_start_index, block_end_index)
         reduced_rows = search.make_into_rows(reduced_columns)
         for r in reduced_rows: print(r)
     # if 'int' in COMPRESSION_STYLE:

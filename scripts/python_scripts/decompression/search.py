@@ -39,23 +39,7 @@ def block_row_mapping(blocks, block_size, decompression_start, decompression_end
     
     start = decompression_start - (block_size * block_start_index)    
     end = decompression_end - (block_size * block_end_index)
-
     return [start, end] 
-
-def make_block_start_end_list(num_blocks, block_size, start_index, end_index):
-    """
-    makes a list of index values for each block to decompress and return as rows
-    """
-    block_indexes = []
-    
-    if num_blocks == 1:
-        return [[start_index, end_index]]
-    else:
-        for b in range(num_blocks-1):
-            block_indexes.append([0,block_size])
-    block_indexes.append([0,end_index])
-    return block_indexes
-    
 
 def find_rows(decompressed_block, block_row_start, block_row_end):
     """
@@ -69,7 +53,7 @@ def find_rows(decompressed_block, block_row_start, block_row_end):
     """
     reduced_columns = []
     for column in decompressed_block:
-        reduced_columns.append(column[block_row_start:block_row_end])
+        reduced_columns.append(column[block_row_start:block_row_end+1])
     
     return reduced_columns
 
