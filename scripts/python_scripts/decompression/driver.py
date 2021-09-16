@@ -107,7 +107,9 @@ def main():
 
         reduced_columns = search.find_rows(decompressed_block, block_start_index, block_end_index)
         reduced_rows = search.make_into_rows(reduced_columns)
-        for r in reduced_rows: print(r)
+        #print(reduced_columns)
+        print(list(reduced_rows))
+        #for r in reduced_rows: print(r)
     # if 'int' in COMPRESSION_STYLE:
     #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
     #                                                                        full_header, DATA_TYPE_BYTE_SIZES)

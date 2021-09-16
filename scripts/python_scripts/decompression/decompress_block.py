@@ -84,7 +84,14 @@ def decompress_single_block(dc_block_header, compessed_block, COMPRESSION_DATA_T
         elif curr_column_codec in numpy_codecs:
             dc_column = decompress.decompress_data(curr_column_codec, compressed_column)
         else:
-            dc_column = decompress_column.decompress_single_column_pyfast()
+            dc_column = decompress_column.decompress_single_column_pyfast(compressed_column,
+                                                                            query_block_num_rows,
+                                                                            col_compression_data_type,
+                                                                            col_decompression_data_type,  
+                                                                            data_type_byte_sizes[col_compression_data_type],
+                                                                            1,
+                                                                            curr_column_codec,
+                                                                            i)
 
         dc_block.append(dc_column)    
         start = end 
