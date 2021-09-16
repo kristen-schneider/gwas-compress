@@ -26,7 +26,7 @@ def column_compression_main(column_i, column, column_codec,
     
     # 1. convert column to compression data type
     if curr_compression_data_type == 1:
-        typed_column = encode_as_int.encode_column_as_int(column, curr_compression_data_type)
+        typed_column = encode_as_int.encode_column_as_int(column, curr_decompression_data_type)
     elif curr_compression_data_type == 2:
         typed_column = encode_as_float.encode_column_as_float(column, curr_compression_data_type)
     elif curr_compression_data_type == 3:
