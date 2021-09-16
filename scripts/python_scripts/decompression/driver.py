@@ -61,8 +61,7 @@ def main():
             '...decompression blocks ', query_blocks[0], 'to', query_blocks[1])
     num_blocks_to_decompress = query_blocks[1]-query_blocks[0]+1
     start_end_index = search.block_row_mapping(query_blocks, BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
-    block_decomp_index = search.make_block_start_end_list(num_blocks_to_decompress, start_end_index[0], start_end_index[1])
-    
+    block_decomp_index = search.make_block_start_end_list(num_blocks_to_decompress, BLOCK_SIZE, start_end_index[0], start_end_index[1])
 
     for b in range(num_blocks_to_decompress):
         # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END

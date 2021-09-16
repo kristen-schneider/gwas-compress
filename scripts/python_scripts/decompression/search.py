@@ -22,7 +22,7 @@ def find_blocks(block_size, decompression_start, decompression_end):
 
 def block_row_mapping(blocks, block_size, decompression_start, decompression_end):
     """
-    returns a list of starting and ending positions for each block
+    returns a list of starting and ending positions for start and end query block
     
     INPUT:
         
@@ -33,24 +33,29 @@ def block_row_mapping(blocks, block_size, decompression_start, decompression_end
     
     start = None
     end = None
-    
+   
+    print(decompression_start, decompression_end)
+     
     block_start_index = blocks[0]
-    start = decompression_start - (block_size * blocks_start_index)
-    end = decompression_end - (block_size * blocks_start_index)
     
+    start = decompression_start - (block_size * block_start_index)
+    end = decompression_end - (block_size * (block_start_index+1)) + 1 
+    print(start, end)
     return [start, end] 
 
-def make_block_start_end_list(num_blocks, start_index, end_index):
+def make_block_start_end_list(num_blocks, block_size, start_index, end_index):
     """
     makes a list of index values for each block to decompress and return as rows
     """
-    block_index_coverage = [[start_index,]]
-    all_rows = []    
-
-    for b in range(num_blocks-2):
-        block_index_coverage.append(all_rows)
-    block_index_coverage.append([0,end_index])
-    return block_index_coverage
+    block_indexes = []
+    
+    if num_blocks == 1:
+        return [[start_index, end_index]]
+    else:
+        for b in range(num_blocks-1):
+            block_indexes.append([0,block_size])
+    block_indexes.append([0,end_index])
+    return block_indexes
     
 
 def find_rows(decompressed_block, block_row_start, block_row_end):
