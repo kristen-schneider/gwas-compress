@@ -34,13 +34,12 @@ def block_row_mapping(blocks, block_size, decompression_start, decompression_end
     start = None
     end = None
    
-    print(decompression_start, decompression_end)
-     
     block_start_index = blocks[0]
+    block_end_index = blocks[1]
     
-    start = decompression_start - (block_size * block_start_index)
-    end = decompression_end - (block_size * (block_start_index+1)) + 1 
-    print(start, end)
+    start = decompression_start - (block_size * block_start_index)    
+    end = decompression_end - (block_size * block_end_index)
+
     return [start, end] 
 
 def make_block_start_end_list(num_blocks, block_size, start_index, end_index):
