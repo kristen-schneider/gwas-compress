@@ -1,3 +1,8 @@
+import os, sys
+currentdir = os.path.dirname(os.path.realpath(__file__))
+parentdir = os.path.dirname(currentdir)
+sys.path.append(parentdir)
+from utils import decode_from_int
 import decompress
 import deserialize_body
 import finalize_row
@@ -27,7 +32,7 @@ def decompress_single_column_standard(compressed_column, num_rows, compression_d
     return og_column#original_type_column
 
 
-def decompress_single_column_pyfast(serialized_data, block_size, data_type, num_bytes, chrm, codec, column_i):
+def decompress_single_column_pyfast(serialized_data, block_size, compression_data_type, decompression_data_type, num_bytes, chrm, codec, column_i):
     """
     takes a serialized array and deserializes it and converts it to a numpy array of dtype=numpy.uint32
     usually intput data represents some kind of compressed numpy array we are trying to decompress
@@ -46,7 +51,9 @@ def decompress_single_column_pyfast(serialized_data, block_size, data_type, num_
     except ValueError:
         print('ds data: ', ds_data, data_type)
     decomp_np_arr = decompress_np_arr(comp_np_arr, decomp_arr_size, codec)
-    return decomp_np_arr[0:block_size]
+    int_arr = decomp_np_arr[0:block_size]
+    original_list = decode_from_int.decode_column_from_int(int_arr, decompression_data_type)
+    return original_list
 
 def decompress_np_arr(comp_np_arr, np_arr_size, codec):
     """
@@ -68,7 +75,9 @@ def decompress_np_arr(comp_np_arr, np_arr_size, codec):
     # decompress data
     codec_method = getCodec(codec)
     decomp_arr_size = codec_method.decodeArray(comp_np_arr, comp_np_arr_size, decomp_np_arr, np_arr_size)
-
+    
+    int_array = decomp_np_arr[0:np_arr_size]
+     
     # print('decomp after: ', decomp_arr)
     #print(decomp_np_arr[0:np_arr_size])
-    return decomp_np_arr[0:np_arr_size]
+    return int_array
