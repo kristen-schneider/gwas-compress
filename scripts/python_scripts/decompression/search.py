@@ -40,6 +40,19 @@ def block_row_mapping(blocks, block_size, decompression_start, decompression_end
     
     return [start, end] 
 
+def make_block_start_end_list(num_blocks, start_index, end_index):
+    """
+    makes a list of index values for each block to decompress and return as rows
+    """
+    block_index_coverage = [[start_index,]]
+    all_rows = []    
+
+    for b in range(num_blocks-2):
+        block_index_coverage.append(all_rows)
+    block_index_coverage.append([0,end_index])
+    return block_index_coverage
+    
+
 def find_rows(decompressed_block, block_row_start, block_row_end):
     """
     reduces columns to just the necessary rows
@@ -51,7 +64,6 @@ def find_rows(decompressed_block, block_row_start, block_row_end):
         reduced_columns: only rows which were queried
     """
     reduced_columns = []
-    
     for column in decompressed_block:
         reduced_columns.append(column[block_row_start:block_row_end])
     
