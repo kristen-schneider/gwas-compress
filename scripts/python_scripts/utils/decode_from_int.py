@@ -27,8 +27,56 @@ def convert_data_type_from_int(data, decompression_data_type):
         print('Could not convert from type ', decompression_data_type, ' to int.')
     return og_data
 
-def int_to_float(data):
-    return(data)
+def int_to_float(int_data):
+    """
+    converts a data type of int to a float
+    (for decompressing float columns)
+
+    INPUT
+        int_data: data in int form (e.g. 42130050)
+
+    OUTPUT
+        int_as_float: data in float form (e.g. 4.213e-05)
+    """
+    # base, base_sign, exponent, exponent_sign
+    # 00000, 0, 00, 0,
+
+    int_as_float = 0
+    if int_data == 999:
+        # choose a value that is not seen in data
+        int_as_float = 'NA'
+    else:
+        int_as_float = get_float_parts(int_data)
+    return int_as_float
+
+def get_float_parts(int_data):
+    base = int(int_data/10000)
+    decimal_base = float(base/10000)
+
+    leftover = int(int_data-(base*10000))
+
+    base_sign = int(leftover/1000)
+    leftover -= base_sign*1000
+
+    exponent = int(leftover/10)
+    leftover -= exponent*10
+
+    exponent_sign = leftover
+
+    int_as_float = construct_float(decimal_base, base_sign, exponent, exponent_sign)
+
+    return int_as_float
+
+def construct_float(base, base_sign, exponent, exponent_sign):
+    f = round(base, 4)
+    if base_sign == 0:
+        f *= -1
+    if exponent_sign == 0:
+        exponent *= -1
+
+    f = base * pow(10, exponent)
+
+    return f
 
 
 def int_to_TF(data):
@@ -37,18 +85,6 @@ def int_to_TF(data):
     elif data == -1: return 'NA'
     else: return None
 
-# def convert_to_input_data_type(input_data, original_data_type, compression_data_type):
-#     # 1 = int
-#     # 2 = float
-#     # 3 = string
-#
-#     data = None
-#
-#     if compression_data_type == 1:
-#         data = convert_to_int.convert_data_type_to_int(input_data, original_data_type)
-#
-#
-#
 
 # def string_list_to_int(data_list, data_type, column_i):
 #     """
@@ -91,77 +127,6 @@ def int_to_TF(data):
 #         return string_to_int(data)
 #     elif data_type == 4:
 #         return bytes_to_int(data)
-#
-# def int_to_int(in_data):
-#     """
-#     converts to type int
-#
-#     INPUT
-#         in_data: input data (normal integer type or chrom x,y)
-#
-#     OUTPUT
-#         out_data: integer value representing in_data (X = 23, Y = 24)
-#     """
-#     int_data = None
-#     try:
-#         return int(in_data)
-#     except ValueError:
-#         if in_data == 'X':
-#             int_data = 23
-#         elif in_data == 'Y':
-#             int_data = 24
-#         else: print('cannot convert chromosome to int')
-#     return int_data
-#
-# def float_to_int(float_data):
-#     """
-#     converts a data type of float to a list of integers which can reconstruct the float
-#
-#     INPUT
-#         float_data: data in float form (e.g. 4.213e-05)
-#
-#     OUTPUT
-#         int_data: large integer with little endian formatting number:
-#         base  exp -/+
-#         00000 000 0
-#     """
-#     # 000000000 - little endian
-#     float_as_int = 0
-#     if float_data == 'NA':
-#         # choose a value that is not seen in data
-#         float_as_int = 999
-#     else:
-#         # base, base_sign, exponent, exponent_sign
-#         # 00000, 0, 00, 0,
-#
-#         base_exponent = float_data.split('e')
-#         base = float(base_exponent[0])
-#         exponent = int(base_exponent[1])
-#
-#         # BASE
-#         # base number gets proper space (e.g. 4.213 --> 42130)
-#         # have to do this in two steps because
-#         # rounding is lossy with python_scripts multiplication
-#         # if we just did *100000000 we would get junk in the last 4 digits
-#         float_as_int += abs(int(base*10000))
-#         float_as_int *= 10000
-#
-#         # BASE SIGN
-#         # is number negative or positive?
-#         base_sign = 1  # positive
-#         if float(base) < 0: base_sign = 0  # negative
-#         float_as_int += base_sign * 1000
-#
-#         # EXPONENT
-#         # exponents must be < 100
-#         # otherwise the placement of the exponent bleeds into the base/base sign
-#         float_as_int += abs(exponent) * 10
-#
-#         # EXPONENT SIGN
-#         if exponent > 0: float_as_int += 1
-#
-#     return float_as_int
-#
 #
 # def string_to_int(string_data):
 #     """
@@ -235,58 +200,7 @@ def int_to_TF(data):
 #     int_data = None
 #     int_data = int.from_bytes(bytes_data, byteorder='big', signed=False)
 #     return int_data
-#
-# def int_to_float(int_data):
-#     """
-#     converts a data type of int to a float
-#     (for decompressing float columns)
-#
-#     INPUT
-#         int_data: data in int form (e.g. 42130050)
-#
-#     OUTPUT
-#         int_as_float: data in float form (e.g. 4.213e-05)
-#     """
-#     # base, base_sign, exponent, exponent_sign
-#     # 00000, 0, 00, 0,
-#
-#     int_as_float = 0
-#     if int_data == 999:
-#         # choose a value that is not seen in data
-#         int_as_float = 'NA'
-#     else:
-#         int_as_float = get_float_parts(int_data)
-#     return int_as_float
-#
-# def get_float_parts(int_data):
-#     base = int(int_data/10000)
-#     decimal_base = float(base/10000)
-#
-#     leftover = int(int_data-(base*10000))
-#
-#     base_sign = int(leftover/1000)
-#     leftover -= base_sign*1000
-#
-#     exponent = int(leftover/10)
-#     leftover -= exponent*10
-#
-#     exponent_sign = leftover
-#
-#     int_as_float = construct_float(decimal_base, base_sign, exponent, exponent_sign)
-#
-#     return int_as_float
-#
-# def construct_float(base, base_sign, exponent, exponent_sign):
-#     f = round(base, 4)
-#     if base_sign == 0:
-#         f *= -1
-#     if exponent_sign == 0:
-#         exponent *= -1
-#
-#     f = base * pow(10, exponent)
-#
-#     return f
-#
+
 # def int_to_string(i):
 #     if i == 0: return 'False'
 #     elif i == 1: return 'True'
