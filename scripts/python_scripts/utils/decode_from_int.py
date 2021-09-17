@@ -1,3 +1,5 @@
+from utils import packed_strings
+
 def decode_column_from_int(column_data, decompression_data_type):
     """
     converts a column of type integer to original data type
@@ -6,7 +8,7 @@ def decode_column_from_int(column_data, decompression_data_type):
     
     if decompression_data_type == 4:
         print('packed strings')
-        #column_as_int = packed_strings.encode_column(column)
+        og_column = packed_strings.decode_int_to_string(column_data)
 
     # for all others we encode each data point individually as int
     else:
