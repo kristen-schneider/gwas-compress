@@ -116,7 +116,7 @@ def main():
     compress_header_START = datetime.now()
     ### work ###
     full_header = header_first_half+header_second_half
-    print(full_header)
+    #print(full_header)
     # header types, number of elements in each header
     serialized_header_tools = header_compress.full_header_tools(DATA_TYPE_BYTE_SIZES,
                                                                  full_header)
@@ -169,14 +169,15 @@ def main():
     print('file', 'write header', write_header_TIME)
     
     # 6. WRITE COMPRESSED DATA
-    print('writing data...')
+    #print('writing data...')
     write_data_START = datetime.now()
     ### work ###
     compressed_with_header.write(compressed_data)
     ############
     write_data_END = datetime.now()
     write_data_TIME = write_data_END - write_data_START
-    print(str(write_data_TIME) + ' for data to write...\n')
-
+    print('file', 'write data', write_data_TIME)
+    #print(str(write_data_TIME) + ' for data to write...\n')
+    
 if __name__ == '__main__':
     main()

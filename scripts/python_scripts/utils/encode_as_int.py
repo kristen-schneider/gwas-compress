@@ -2,26 +2,25 @@ from utils import type_handling
 from utils import packed_strings
 from utils import hybrid_strings
 
-def encode_column_as_int(column, column_data_type):
+def encode_column_as_int(column, decompression_data_type):
     """
     converts a whole column to data type integer.
     """
     column_as_int = []
-    print(column_data_type)
     #data_type = type_handling.get_data_type(data)
     # for SNPs and INDELs we pack data so we encode a full column
-    if column_data_type == 4:
+    if decompression_data_type == 4:
         column_as_int = packed_strings.encode_column(column)
 
     # for all others we encode each data point individually as int
     else:
         for data in column:
-            int_data = convert_data_type_to_int(data)
+            int_data = convert_data_type_to_int(data, decompression_data_type)
             column_as_int.append(int_data)
     return column_as_int
 
 
-def convert_data_type_to_int(data):
+def convert_data_type_to_int(data, decompression_data_type):
     """
     given any data in string format ('int', 'float', 'string', 'bytes'), converts to integer
     INPUT
@@ -31,12 +30,11 @@ def convert_data_type_to_int(data):
     OUTPUT
         integer version of data
     """
-    data_type = type_handling.get_data_type(data)
-    if data_type == 1:
+    if decompression_data_type == 1:
         return int_to_int(data)
-    elif data_type == 2:
+    elif decompression_data_type == 2:
         return float_to_int(data)
-    elif data_type == 3: # true/false strings
+    elif decompression_data_type == 3: # true/false strings
         return true_false_to_int(data)
     else:
         print('cannot convert ', data, ' to integer')

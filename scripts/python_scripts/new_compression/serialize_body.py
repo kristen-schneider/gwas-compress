@@ -1,14 +1,14 @@
-def serialize_list(in_list, data_type, num_bytes):
+def serialize_list(in_list, compression_data_type, num_bytes):
     s_bitstring = b''
     s_value = None
     
-    
+     
     # serialize a list of data depending on its data type
-    if data_type == 1:
+    if compression_data_type == 1:
         s_value = serialize_int_data(in_list, num_bytes)
-    elif data_type == 2: 
-        s_value = serialize_float_data(in_list, data_type, num_bytes)
-    elif data_type == 3 or data_type == 4:
+    elif compression_data_type == 2: 
+        s_value = serialize_float_data(in_list, compression_data_type, num_bytes)
+    elif compression_data_type == 3 or compression_data_type == 4:
         s_value = serialize_string_data(in_list)
     else: print('cannot detect data_type')
     
