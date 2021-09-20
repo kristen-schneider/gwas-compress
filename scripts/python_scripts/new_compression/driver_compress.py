@@ -1,5 +1,6 @@
 #### IMPORTS ####
 # python_scripts imports
+import cProfile
 from datetime import datetime
 import os, sys
 currentdir = os.path.dirname(os.path.realpath(__file__))
@@ -180,4 +181,13 @@ def main():
     #print(str(write_data_TIME) + ' for data to write...\n')
     
 if __name__ == '__main__':
+    import cProfile, pstats
+    profiler = cProfile.Profile()
+    profiler.enable()
     main()
+    profiler.disable()
+    stats = pstats.Stats(profiler).sort_stats('cumtime')
+    stats.print_stats()
+
+#%load_ext snakeviz
+#%snakeviz main() 

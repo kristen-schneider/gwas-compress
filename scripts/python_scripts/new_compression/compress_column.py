@@ -47,6 +47,8 @@ def column_compression_main(column_i, column, column_codec,
     column_i_mn = float(m/n)
     print(config_file_name, "col"+str(column_i), 'compression_time', column_i_TIME)
     print(config_file_name, "col"+str(column_i), 'compression_ratio', column_i_mn)
+    print(config_file_name, "col"+str(column_i), 'compressed_size', n)
+    print(config_file_name, "col"+str(column_i), 'uncompressed_string', m) 
     #print(column, typed_column, compressed_column_bitstring)
     return compressed_column_bitstring
 
