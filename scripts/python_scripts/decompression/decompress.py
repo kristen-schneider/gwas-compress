@@ -17,20 +17,21 @@ def decompress_data(compression_method, c_bitstring):
     """
     # GZIP
     if compression_method == 'gzip':
-        c_bitstring = gzip_decompress(c_bitstring)
+        dc_bitstring = gzip_decompress(c_bitstring)
     # ZLIB
     elif compression_method == 'zlib':
-        c_bitstring = zlib_decompress(c_bitstring)
+        dc_bitstring = zlib_decompress(c_bitstring)
     # BZ2
     elif compression_method == 'bz2':
-        c_bitstring = bz2_decompress(c_bitstring)
+        dc_bitstring = bz2_decompress(c_bitstring)
     # FPZIP
     elif compression_method == 'fpzip':
-        c_bitstring = fpzip_decompress(c_bitstring)
+        dc_bitstring = fpzip_decompress(c_bitstring)
+        print(c_bitstring, dc_bitstring)
     # ZFPY
     elif compression_method == 'zfpy':
-        c_bitstring = zfpy_decompress(c_bitstring)
-    return c_bitstring
+        dc_bitstring = zfpy_decompress(c_bitstring)
+    return dc_bitstring
 
 def gzip_decompress(c_bitstring):
     """

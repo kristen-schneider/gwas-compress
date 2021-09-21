@@ -181,13 +181,13 @@ def main():
     #print(str(write_data_TIME) + ' for data to write...\n')
     
 if __name__ == '__main__':
-    import cProfile, pstats
-    profiler = cProfile.Profile()
-    profiler.enable()
+    #import cProfile, pstats
+    #profiler = cProfile.Profile()
+    #profiler.enable()
     main()
-    profiler.disable()
-    stats = pstats.Stats(profiler).sort_stats('cumtime')
-    stats.print_stats()
+    #profiler.disable()
+    #stats = pstats.Stats(profiler).sort_stats('cumtime')
+    #stats.print_stats()
 
 #%load_ext snakeviz
 #%snakeviz main() 
