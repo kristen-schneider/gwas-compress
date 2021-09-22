@@ -4,6 +4,7 @@ import bz2
 from pyfastpfor import *
 import fpzip
 import zfpy
+import pyzfp
 import numpy as np
 from datetime import datetime
 import sys
@@ -61,6 +62,8 @@ def compress_numpy_array(typed_column, codec):
     # zfpy-floating point or integer compression
     elif codec == 'zfpy':
         compressed_bitstring = zfpy_compress(typed_column)
+    elif codec == 'pyzfp':
+        compressed_bitstring = pyzfp_compress(typed_column)
     else:
         print('cannot identify numpy-based codec: ', codec)
         compressed_bitstring = None
@@ -174,6 +177,14 @@ def zfpy_compress(typed_column):
     numpy_array = np.array(typed_column, dtype=np.float32, order='C')
     compressed_bitstring = zfpy.compress_numpy(numpy_array)
     return compressed_bitstring
+
+def pyzfp_compress(typed_column):
+    """
+    """
+    numpy_array = np.array(typed_column, dtype=np.float32, order='C')
+    compressed_bitstring = pyzfp.compress(numpy_array, tolerance=0.0, parallel=True)
+    return compressed_bitstring
+
 
 # print(compress_numpy_array([1,2,3,4], 'zfpy'))
 # print(compress_numpy_array([1,2,3,4], 'fpzip'))

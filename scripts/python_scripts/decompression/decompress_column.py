@@ -25,7 +25,7 @@ def decompress_single_column_standard(compressed_column, num_rows, compression_d
     OUTPUT
         decompressed_column = decompressed data (np array)
     """
-    dc_column = decompress.decompress_data(compression_method, compressed_column)
+    dc_column = decompress.decompress_data(compression_method, compressed_column, num_rows)
     ds_column = deserialize_body.deserialize_list(dc_column, num_rows, compression_data_type, decompression_data_type, num_bytes, chrm)
     og_column = finalize_row.serialized_to_row(ds_column, compression_data_type, decompression_data_type)
     #print(dc_column, ds_column, og_column)

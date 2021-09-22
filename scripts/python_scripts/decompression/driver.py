@@ -49,16 +49,21 @@ basename_compressed_file = IN_FILE.split('/')[-1].split('.')[0]
 def main():
 
     # 1. GETTING FULL HEADER
-    print('getting full header...')
+    full_header_start = datetime.now()
     full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
     full_header_bytes = full_header_info[0]
     full_header = full_header_info[1]
-    #print(full_header)
+    full_header_end = datetime.now()
+    full_header_TIME = full_header_end-full_header_start
+    print('file','full_header',full_header_TIME)
     
     # 2. RETRIVEING BLOCKS TO DECOMPRESS
+    query_blocks_start = datetime.now()
     query_blocks = search.find_blocks(BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
-    print('from row ', DECOMPRESSION_START, ' to row ', DECOMPRESSION_END,
-            '...decompression blocks ', query_blocks[0], 'to', query_blocks[1])
+    query_blocks_end = datetime.now()
+    query_blocks_TIME = query_blocks_end-query_blocks_start
+    #print('from row ', DECOMPRESSION_START, ' to row ', DECOMPRESSION_END,
+    #        '...decompression blocks ', query_blocks[0], 'to', query_blocks[1])
     num_blocks_to_decompress = query_blocks[1]-query_blocks[0]+1
     start_end_index = search.block_row_mapping(query_blocks, BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
     #block_decomp_index = search.make_block_start_end_list(num_blocks_to_decompress, BLOCK_SIZE, start_end_index[0], start_end_index[1])
@@ -66,7 +71,7 @@ def main():
     for b in range(num_blocks_to_decompress):
         # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
     
-        print('getting compressed block...', blocks[b])
+        #print('getting compressed block...', blocks[b])
 
         compressed_block_START = datetime.now()
         ### work ###
@@ -75,7 +80,7 @@ def main():
         #############
         compressed_block_END = datetime.now()
         compressed_block_TIME = compressed_block_END - compressed_block_START
-        print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
+        #print(str(compressed_block_TIME) + ' for grabbing a single block to decompress...\n')
     
         # # 3. DECOMPRESSING SINGLE BLOCK
         # print('decompressing single block...')
@@ -105,7 +110,6 @@ def main():
                 block_start_index = 0
                 block_end_index = BLOCK_SIZE
             
-        print(block_start_index, block_end_index)            
             
         reduced_columns = search.find_rows(decompressed_block, block_start_index, block_end_index)
         
@@ -120,7 +124,7 @@ def main():
         reduced_rows = search.make_into_rows(reduced_columns)
         #print(reduced_columns)
         #print(list(reduced_rows))
-        for r in list(reduced_rows): print(r)
+        #for r in list(reduced_rows): print(r)
         #for r in reduced_rows: print(r)
     # if 'int' in COMPRESSION_STYLE:
     #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,

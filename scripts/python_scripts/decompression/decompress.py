@@ -3,8 +3,9 @@ import zlib
 import bz2
 import fpzip
 import zfpy
+import pyzfp
 
-def decompress_data(compression_method, c_bitstring):
+def decompress_data(compression_method, c_bitstring, block_size):
     """
     decompress a compressed bitstring using specified compression method
 
@@ -30,8 +31,10 @@ def decompress_data(compression_method, c_bitstring):
     # ZFPY
     elif compression_method == 'zfpy':
         dc_bitstring = zfpy_decompress(c_bitstring)
+    # PYZFP
+    elif compression_method == 'pyzfp':
+        dc_bitstring = pyzfp_decompress(c_bitstring, block_size)
     return dc_bitstring
-
 def gzip_decompress(c_bitstring):
     """
     uses python_scripts's gzip.decompress to decompressed a compressed, serialized bitstring
@@ -94,3 +97,6 @@ def zfpy_decompress(c_bitstring):
     """
     np_arr = zfpy.decompress_numpy(c_bitstring)
     return np_arr.tolist()
+
+def pyzfp_decompress(c_bitstring, block_size):
+    pyzfp.decompress(c_bitstring, (block_size,), np.dtype(np.float32), precision=0.0)

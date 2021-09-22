@@ -1,9 +1,10 @@
+from datetime import datetime
 import decompress
 import deserialize_body
 import decompress_column
 
 serialized_codecs = ['gzip', 'zlib', 'bz2']
-numpy_codecs = ['fpzip', 'zfpy']
+numpy_codecs = ['fpzip', 'zfpy', 'pyzfp']
 
 def get_compressed_block_data(query_block_i, full_header,
                 full_header_bytes, data_type_byte_sizes, compressed_file, COMPRESSION_DATA_TYPES):
@@ -73,6 +74,7 @@ def decompress_single_block(dc_block_header, compessed_block, COMPRESSION_DATA_T
     dc_block = []
     start = 0
     for i in range(num_columns):
+        decompress_column_start = datetime.now()
         end = dc_block_header[i]
         col_compression_data_type = int(COMPRESSION_DATA_TYPES[i])
         col_decompression_data_type = int(decompression_data_types[i]) 
@@ -82,7 +84,7 @@ def decompress_single_block(dc_block_header, compessed_block, COMPRESSION_DATA_T
         if curr_column_codec in serialized_codecs:
             dc_column = decompress_column.decompress_single_column_standard(compressed_column, query_block_num_rows, col_compression_data_type, col_decompression_data_type, data_type_byte_sizes[col_compression_data_type], 0, curr_column_codec)
         elif curr_column_codec in numpy_codecs:
-            dc_column = decompress.decompress_data(curr_column_codec, compressed_column)
+            dc_column = decompress.decompress_data(curr_column_codec, compressed_column, query_block_num_rows)
         else:
             dc_column = decompress_column.decompress_single_column_pyfast(compressed_column,
                                                                             query_block_num_rows,
@@ -92,11 +94,13 @@ def decompress_single_block(dc_block_header, compessed_block, COMPRESSION_DATA_T
                                                                             1,
                                                                             curr_column_codec,
                                                                             i)
-
+        decompress_column_end = datetime.now()
+        decompress_column_TIME = decompress_column_end-decompress_column_start
+        print(curr_column_codec, "col"+str(i), 'decompression_time', decompress_column_TIME)
         dc_block.append(dc_column)    
         start = end 
         
-
+        
     return dc_block
 
 
