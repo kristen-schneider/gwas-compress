@@ -68,7 +68,18 @@ def make_into_rows(reduced_columns):
     OUTPUT:
         reduced_rows: only row data from necessary rows in block
     """
+    # quick way
     reduced_rows = map(list, zip(*reduced_columns))
+    
+    # manual transpose    
+    reduced_rows = [[] for r in reduced_columns[0]]
+    for c in range(len(reduced_columns)):
+        for r in range(len(reduced_columns[c])):
+            reduced_rows[c].append(reduced_columns[c][r])
+        
+    
+    
+    #print(reduced_columns, len(list(reduced_rows)))
     return reduced_rows
 
 

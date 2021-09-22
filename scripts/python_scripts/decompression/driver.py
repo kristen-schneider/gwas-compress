@@ -106,8 +106,18 @@ def main():
                         
 
         reduced_columns = search.find_rows(decompressed_block, block_start_index, block_end_index)
+        
+        # for packed strings
+        num_rows_to_decomp = len(reduced_columns[0])
+        for c in range(len(reduced_columns)):
+            for l in range(len(reduced_columns[c])):
+                if type(reduced_columns[c][l]) == list:
+                    reduced_columns[c][l] = reduced_columns[c][l][0:num_rows_to_decomp]
+                
+
         reduced_rows = search.make_into_rows(reduced_columns)
-        #print(reduced_columns)
+        print(reduced_columns)
+        print(list(reduced_rows))
         for r in list(reduced_rows): print(r)
         #for r in reduced_rows: print(r)
     # if 'int' in COMPRESSION_STYLE:
