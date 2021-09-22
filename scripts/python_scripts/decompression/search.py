@@ -14,6 +14,7 @@ def find_blocks(block_size, decompression_start, decompression_end):
     blocks = []
     start_block = math.floor(decompression_start/block_size)
     end_block = math.floor(decompression_end/block_size)-1
+    if end_block < start_block: end_block = start_block
     if decompression_start > decompression_end:
         print('start block is bigger than end block. please choose different query.')
         return [-1,-1]
