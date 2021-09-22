@@ -154,7 +154,7 @@ def fpzip_compress(typed_column):
     try:
         compressed_bitstring = fpzip.compress(numpy_array, precision=0, order='C')
     except fpzip.FpzipWriteError:
-        print("WHAT IS HAPPENING")
+        print('try a bigger block size')
         # replace problem value
         #for n in range(len(numpy_array)):
         #    if np.isnan(numpy_array[n]):

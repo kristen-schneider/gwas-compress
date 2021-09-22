@@ -62,14 +62,15 @@ def main():
     num_blocks_to_decompress = query_blocks[1]-query_blocks[0]+1
     start_end_index = search.block_row_mapping(query_blocks, BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
     #block_decomp_index = search.make_block_start_end_list(num_blocks_to_decompress, BLOCK_SIZE, start_end_index[0], start_end_index[1])
-
+    blocks = range(query_blocks[0], query_blocks[1]+1)
     for b in range(num_blocks_to_decompress):
         # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
-        print('getting compressed block...', b)
+    
+        print('getting compressed block...', blocks[b])
 
         compressed_block_START = datetime.now()
         ### work ###
-        cbi = decompress_block.get_compressed_block_data(b, full_header,
+        cbi = decompress_block.get_compressed_block_data(blocks[b], full_header,
                             full_header_bytes, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE, COMPRESSION_DATA_TYPES)
         #############
         compressed_block_END = datetime.now()
@@ -96,15 +97,16 @@ def main():
         else:
             if b == 0: # first block is query_start to end of block
                 block_start_index = start_end_index[0]
-                block_end_index = BLOCK_SIZE-1
+                block_end_index = BLOCK_SIZE
             elif b == num_blocks_to_decompress-1: # last block is 0 to query_end
                 block_start_index = 0
                 block_end_index = start_end_index[1]
             else: # want all rows from middle blocks 0 to end of block
                 block_start_index = 0
-                block_end_index = BLOCK_SIZE-1
-                        
-
+                block_end_index = BLOCK_SIZE
+            
+        print(block_start_index, block_end_index)            
+            
         reduced_columns = search.find_rows(decompressed_block, block_start_index, block_end_index)
         
         # for packed strings
@@ -112,12 +114,12 @@ def main():
         for c in range(len(reduced_columns)):
             for l in range(len(reduced_columns[c])):
                 if type(reduced_columns[c][l]) == list:
-                    reduced_columns[c][l] = reduced_columns[c][l][0:num_rows_to_decomp]
-                
+                    short_col = reduced_columns[c][l][0:num_rows_to_decomp]
+                    reduced_columns[c] = short_col
 
         reduced_rows = search.make_into_rows(reduced_columns)
-        print(reduced_columns)
-        print(list(reduced_rows))
+        #print(reduced_columns)
+        #print(list(reduced_rows))
         for r in list(reduced_rows): print(r)
         #for r in reduced_rows: print(r)
     # if 'int' in COMPRESSION_STYLE:
