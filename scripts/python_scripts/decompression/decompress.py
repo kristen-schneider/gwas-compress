@@ -27,7 +27,6 @@ def decompress_data(compression_method, c_bitstring):
     # FPZIP
     elif compression_method == 'fpzip':
         dc_bitstring = fpzip_decompress(c_bitstring)
-        print(c_bitstring, dc_bitstring)
     # ZFPY
     elif compression_method == 'zfpy':
         dc_bitstring = zfpy_decompress(c_bitstring)
