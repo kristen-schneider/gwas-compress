@@ -7,9 +7,8 @@ def decode_column_from_int(column_data, decompression_data_type):
     og_column = []
     
     if decompression_data_type == 4:
-        print('packed strings')
         og_column = packed_strings.decode_int_to_string(column_data)
-
+        print('packed strings', og_column) 
     # for all others we encode each data point individually as int
     else:
         for data in column_data:
