@@ -13,8 +13,8 @@ def find_blocks(block_size, decompression_start, decompression_end):
     """
     blocks = []
     start_block = math.floor(decompression_start/block_size)
-    end_block = math.floor(decompression_end/block_size)-1
-    if end_block < start_block: end_block = start_block
+    end_block = math.ceil(decompression_end/block_size)-1
+    #if end_block < start_block: end_block = start_block
     if decompression_start > decompression_end:
         print('start block is bigger than end block. please choose different query.')
         return [-1,-1]
@@ -69,14 +69,14 @@ def make_into_rows(reduced_columns):
         reduced_rows: only row data from necessary rows in block
     """
     # quick way
-    reduced_rows = map(list, zip(*reduced_columns))
+    #reduced_rows = map(list, zip(*reduced_columns))
     
     # manual transpose    
     reduced_rows = [[] for r in reduced_columns[0]]
     for c in range(len(reduced_columns)):
         for r in range(len(reduced_columns[c])):
-            reduced_rows[c].append(reduced_columns[c][r])
-        
+            reduced_rows[r].append(reduced_columns[c][r])
+            
     
     
     #print(reduced_columns, len(list(reduced_rows)))
