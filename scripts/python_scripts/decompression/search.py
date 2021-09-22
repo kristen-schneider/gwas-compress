@@ -13,7 +13,7 @@ def find_blocks(block_size, decompression_start, decompression_end):
     """
     blocks = []
     start_block = math.floor(decompression_start/block_size)
-    end_block = math.floor(decompression_end/block_size)
+    end_block = math.floor(decompression_end/block_size)-1
     if decompression_start > decompression_end:
         print('start block is bigger than end block. please choose different query.')
         return [-1,-1]
@@ -53,7 +53,7 @@ def find_rows(decompressed_block, block_row_start, block_row_end):
     """
     reduced_columns = []
     for column in decompressed_block:
-        reduced_columns.append(column[block_row_start:block_row_end+1])
+        reduced_columns.append(column[block_row_start:block_row_end])
     
     return reduced_columns
 
