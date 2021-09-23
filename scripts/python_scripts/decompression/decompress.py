@@ -4,6 +4,7 @@ import bz2
 import fpzip
 import zfpy
 import pyzfp
+import numpy as np
 
 def decompress_data(compression_method, c_bitstring, block_size):
     """
@@ -99,4 +100,5 @@ def zfpy_decompress(c_bitstring):
     return np_arr.tolist()
 
 def pyzfp_decompress(c_bitstring, block_size):
-    pyzfp.decompress(c_bitstring, (block_size,), np.dtype(np.float32), precision=0.0)
+    np_arr = pyzfp.decompress(c_bitstring, (block_size,), np.dtype(np.float32), tolerance=1e-5)
+    return np_arr

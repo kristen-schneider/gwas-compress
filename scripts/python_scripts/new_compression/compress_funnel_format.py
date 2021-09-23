@@ -47,7 +47,7 @@ def compress_all_blocks(CODECS_LIST, COMPRESSION_DATA_TYPES, DATA_TYPE_BYTE_SIZE
     all_compressed_data = b''
 
     for block_i in range(len(funnel_format_data)):
-
+        print("BLOCK ", block_i)
         # current block from funnel format
         curr_block = funnel_format_data[block_i]
 

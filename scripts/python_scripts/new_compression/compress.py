@@ -182,7 +182,7 @@ def pyzfp_compress(typed_column):
     """
     """
     numpy_array = np.array(typed_column, dtype=np.float32, order='C')
-    compressed_bitstring = pyzfp.compress(numpy_array, tolerance=0.0, parallel=True)
+    compressed_bitstring = pyzfp.compress(numpy_array, precision=100, parallel=True)
     return compressed_bitstring
 
 
