@@ -1,7 +1,7 @@
 config_dir='/home/krsc0813/projects/gwas-compress/config_files/'
 decompression_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/decompression/'
 compressed_out_data='/home/krsc0813/projects/gwas-compress/gwas_files/out/'
-decompression_times_data='/home/krsc0813/projects/gwas-compress/plot_data/out/random_ten_million_all_times/'
+decompression_times_data='/home/krsc0813/projects/gwas-compress/plot_data/out/decompression_data/random_ten_million_all_times/'
 
 
 # generate all output data
