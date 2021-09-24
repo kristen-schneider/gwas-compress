@@ -2,6 +2,7 @@ import os,sys
 import statistics
 from datetime import datetime
 import matplotlib.pyplot as plt
+import matplotlib.patches as mpatches
 
 data_dir = sys.argv[1]
 
@@ -43,21 +44,51 @@ def get_dict_data(data_dir, col_groupings):
     return col_groupings_data_sizes, col_groupings_data_times
     
 def plot_subplots(sizes_data, times_data):
+    codec_color_dict = {'bz2':'bo', 'fastpfor':'go', 'fpzip':'ro', 'gzip':'yo', 'pyzfp':'co',
+                         'uncompressed':'bX', 'zfpy':'ko', 'zlib':'mo'}
     fig, axs = plt.subplots(2, 3, figsize=(35,15))
+    i = 0
+    j = 0
+    # for type of data in big dictionary ('chr', 'pos', 'ref/alt', etc.)
     for column_plot in sizes_data.keys():
         print(column_plot)
+        x = []
+        y = []
+        # for config_type in list of all configs
         for config_type in sizes_data[column_plot]:
             try:
-                x = statistics.mean(sizes_data[column_plot][config_type])
+                x = (statistics.mean(sizes_data[column_plot][config_type]))
             except KeyError:
-                y = 0
+                x = None
+                y = None
+                print('no size value for ', column_plot, ' ', config_type)
             try:
-                y = statistics.mean(times_data[column_plot][config_type])
+                y = (statistics.mean(times_data[column_plot][config_type]))
             except KeyError:
-                y = 0
+                x = None
+                y = None 
+                print('no time value for ', column_plot, ' ', config_type)
             print(x,y)
-            axs[0,1].plot(x,y,'co',markersize=20,alpha=0.8)
+            if j == 6: j = 0
+            if j < 3: ax_x = 0
+            else: ax_x = 1 
+            ax_y = i%3
+            print(ax_x, ax_y)
+            print(codec_color_dict[config_type])
+            try: axs[ax_x,ax_y].plot(x,y,codec_color_dict[config_type],markersize=20,alpha=0.8)
+            except ValueError:
+                print('no values to plot')
+            i += 1
+            j += 1
 
+    blue_patch = mpatches.Patch(color='blue', label='bz2')
+    green_patch = mpatches.Patch(color='green', label='fastpfor')
+    red_patch = mpatches.Patch(color='red', label='fpzip')
+    yellow_patch = mpatches.Patch(color='gold', label='gzip')
+    cyan_patch = mpatches.Patch(color='cyan', label='pyzfp')
+    black_patch = mpatches.Patch(color='black', label='zfpy')
+    magenta_patch = mpatches.Patch(color='magenta', label='zlib')
+    plt.legend(handles=[blue_patch, green_patch, red_patch, yellow_patch, cyan_patch, black_patch, magenta_patch])
     plt.savefig('testing.png')
 
  
