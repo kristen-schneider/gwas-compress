@@ -46,9 +46,8 @@ def get_dict_data(data_dir, col_groupings):
 def plot_subplots(sizes_data, times_data):
     codec_color_dict = {'bz2':'bo', 'fastpfor':'go', 'fpzip':'ro', 'gzip':'yo', 'pyzfp':'co',
                          'uncompressed':'bX', 'zfpy':'ko', 'zlib':'mo'}
-    fig, axs = plt.subplots(2, 3, figsize=(35,15))
-    i = 0
-    j = 0
+    fig, axs = plt.subplots(2,3,sharey=True,figsize=(30,15))
+    i=ax_x=j=ax_y=0
     # for type of data in big dictionary ('chr', 'pos', 'ref/alt', etc.)
     for column_plot in sizes_data.keys():
         print(column_plot)
@@ -61,26 +60,48 @@ def plot_subplots(sizes_data, times_data):
             except KeyError:
                 x = None
                 y = None
-                print('no size value for ', column_plot, ' ', config_type)
+                #print('no size value for ', column_plot, ' ', config_type)
             try:
                 y = (statistics.mean(times_data[column_plot][config_type]))
             except KeyError:
                 x = None
                 y = None 
-                print('no time value for ', column_plot, ' ', config_type)
-            print(x,y)
-            if j == 6: j = 0
-            if j < 3: ax_x = 0
-            else: ax_x = 1 
-            ax_y = i%3
+                #print('no time value for ', column_plot, ' ', config_type)
+            print(config_type,x,y)
+            
             print(ax_x, ax_y)
-            print(codec_color_dict[config_type])
-            try: axs[ax_x,ax_y].plot(x,y,codec_color_dict[config_type],markersize=20,alpha=0.8)
+            # plot this single point
+            try:
+                axs[ax_x,ax_y].plot(x,y,codec_color_dict[config_type],markersize=20,alpha=0.8)
             except ValueError:
                 print('no values to plot')
-            i += 1
-            j += 1
+        i += 1
+        j += 1
+        # set x values: 0,0,0,1,1,0,0,0,1,1...
+        if i == 5: i = 0
+        if i < 3: ax_x = 0
+        else: ax_x = 1 
+    
+        # set y values: 0,1,2,0,1,0,1,2,0,1,0,1,2,0,...
+        if j == 5: j = 0
+        if ax_x == 0:
+            if j < 3:
+                ax_y = j
+            else: ax_y = 1
+        else:
+            ax_y = j%3
 
+
+    fig.delaxes(axs[1, 2])
+    # Set titles and things of individual plots
+    axs[0,0].set_title('Chromosome Data',fontsize=20)
+    axs[0,1].set_title('Pos Data',fontsize=20)
+    axs[0,2].set_title('Ref/Alt Data',fontsize=20)
+    axs[1,0].set_title('Float Data',fontsize=20)
+    axs[1,1].set_title('True/False Data',fontsize=20)
+        
+
+    # Legend
     blue_patch = mpatches.Patch(color='blue', label='bz2')
     green_patch = mpatches.Patch(color='green', label='fastpfor')
     red_patch = mpatches.Patch(color='red', label='fpzip')
@@ -88,8 +109,12 @@ def plot_subplots(sizes_data, times_data):
     cyan_patch = mpatches.Patch(color='cyan', label='pyzfp')
     black_patch = mpatches.Patch(color='black', label='zfpy')
     magenta_patch = mpatches.Patch(color='magenta', label='zlib')
-    plt.legend(handles=[blue_patch, green_patch, red_patch, yellow_patch, cyan_patch, black_patch, magenta_patch])
-    plt.savefig('testing.png')
+    
+    fig.legend(loc=[0.7,0.2],fontsize=30,handles=[blue_patch, green_patch, red_patch, yellow_patch, cyan_patch, black_patch, magenta_patch])
+    fig.text(0.08,0.4,'Decompression Time\n(seconds)',ha='center',rotation='vertical',fontsize=30)
+    fig.text(0.5,0.05,'Compressed Column Size',ha='center',rotation='horizontal',fontsize=30)
+    plt.setp(axs, xlim=(0,400000), ylim=(0,0.025))#, xlabel='Compressed Size', ylabel='Decompression Time (sec)')
+    plt.savefig('bycolumn.png')
 
  
 def get_size_data(f_path):
