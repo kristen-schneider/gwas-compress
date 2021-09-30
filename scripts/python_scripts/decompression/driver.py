@@ -47,7 +47,7 @@ basename_compressed_file = IN_FILE.split('/')[-1].split('.')[0]
 # DATA_FILE = OUT_DIR + 'plot-' + str(COMPRESSION_METHOD[0]) + '-' + str(BLOCK_SIZE) + '.csv'
 
 def main():
-
+    file_start = datetime.now()
     # 1. GETTING FULL HEADER
     full_header_start = datetime.now()
     full_header_info = header_decompress.get_full_header(DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE)
@@ -122,6 +122,9 @@ def main():
                     reduced_columns[c] = short_col
 
         reduced_rows = search.make_into_rows(reduced_columns)
+    file_end = datetime.now()
+    file_TIME = file_end-file_start
+    print('file', 'full_time',file_TIME)
         #print(reduced_columns)
         #print(list(reduced_rows))
         #for r in list(reduced_rows): print(r)
