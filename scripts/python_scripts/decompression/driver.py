@@ -31,8 +31,10 @@ OUT_DIR = args['out_dir']
 BLOCK_SIZE = int(args['block_size'])
 CODECS_LIST = list(args['compression_method'].split(','))
 COMPRESSION_DATA_TYPES=list(args['input_data_type'].split(','))
-DECOMPRESSION_START = int(args['decompression_start'])
-DECOMPRESSION_END = int(args['decompression_end'])
+DECOMPRESSION_START=0
+DECOMPRESSION_END=1000000
+#DECOMPRESSION_START = int(args['decompression_start'])
+#DECOMPRESSION_END = int(args['decompression_end'])
 DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
                         2:int(args['float_byte_size']),
                         3:int(args['string_byte_size']),
@@ -56,7 +58,7 @@ def main():
     full_header_end = datetime.now()
     full_header_TIME = full_header_end-full_header_start
     print('file','full_header',full_header_TIME)
-    
+    print(full_header_bytes) 
     # 2. RETRIVEING BLOCKS TO DECOMPRESS
     query_blocks_start = datetime.now()
     query_blocks = search.find_blocks(BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
@@ -75,8 +77,14 @@ def main():
 
         compressed_block_START = datetime.now()
         ### work ###
+        #print(f'block {b}')
+        GET_COMPRESSED_BLOCK_START = datetime.now()
         cbi = decompress_block.get_compressed_block_data(blocks[b], full_header,
                             full_header_bytes, DATA_TYPE_BYTE_SIZES, COMPRESSED_FILE, COMPRESSION_DATA_TYPES)
+        
+        GET_COMPRESSED_BLOCK_END = datetime.now()
+        GET_COMPRESSED_BLOCK_TIME = GET_COMPRESSED_BLOCK_END-GET_COMPRESSED_BLOCK_START
+        print(f"get_block {b}, {GET_COMPRESSED_BLOCK_TIME}")
         #############
         compressed_block_END = datetime.now()
         compressed_block_TIME = compressed_block_END - compressed_block_START
@@ -89,11 +97,14 @@ def main():
         dc_block_header = cbi[0]
         compressed_block = cbi[1]
         block_row_count = cbi[2]
-    
+        
+        DECOMPRESS_BLOCK_START = datetime.now()
         decompressed_block = decompress_block.decompress_single_block(dc_block_header, compressed_block, COMPRESSION_DATA_TYPES, full_header[4], block_row_count, DATA_TYPE_BYTE_SIZES, CODECS_LIST)
-    
+        DECOMPRESS_BLOCK_END = datetime.now()
+        DECOMPRESS_BLOCK_TIME = DECOMPRESS_BLOCK_END-DECOMPRESS_BLOCK_START
+        print(f"decompress_block {b}, {DECOMPRESS_BLOCK_TIME}")
+        
         # 4. RETRIEVE NECESSARY ROWS FROM FULL BLOCK
-    
         # if there is only one block, we already have start and end indices
         if num_blocks_to_decompress == 1:
             block_start_index = start_end_index[0]
@@ -153,4 +164,10 @@ def main():
     # print(str(single_column_TIME) + ' for decompressing single column to compute...\n')
 
 if __name__ == "__main__":
+    import cProfile, pstats
+    profiler = cProfile.Profile()
+    profiler.enable()
     main()
+    profiler.disable()
+    stats = pstats.Stats(profiler).sort_stats('cumtime')
+    stats.print_stats()

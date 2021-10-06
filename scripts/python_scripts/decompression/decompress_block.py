@@ -34,21 +34,23 @@ def get_compressed_block_data(query_block_i, full_header,
     block_header_ends = full_header[6]
     end_positions = full_header[7]
     block_sizes = full_header[8]
-
-    # header is compressed with gzip
-    header_compression_type = 'gzip'
+    # header is compressed with bz2 now bc i know it is the best
+    header_compression_type = 'gzip'#'bz2'
     # getting proper number of rows (last block is often less than others)
     if query_block_i < len(end_positions) - 1:
         query_block_num_rows = block_sizes[0]
     else:
         query_block_num_rows = block_sizes[1]
 
+    print(datetime.now())
     with open(compressed_file, 'rb') as r_file:
         all_compressed_data = r_file.read()
     r_file.close()
+    print(datetime.now())
 
     header_data = all_compressed_data[0:full_header_bytes]
     content_compressed_data = all_compressed_data[full_header_bytes:]
+    print(datetime.now())
     # get correct block header and decompress and deserialize
     if query_block_i != 0:
         try:
