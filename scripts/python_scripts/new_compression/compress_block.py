@@ -28,6 +28,7 @@ def compress_block(block, codecs_list, COMPRESSION_DATA_TYPES, DECOMPRESSION_DAT
 
     # block_header_bitstring = compress_column.column_compression_main(block_header_list, block_header_codec,
     #                                                              1, 1, data_type_byte_sizes[1])
+     
     block_header_serialized = serialize_body.serialize_list(block_header_list, 1, data_type_byte_sizes[1])
     block_header_bitstring = compress.compress_bitstring(block_header_serialized, block_header_codec)
     return block_header_bitstring, block_bitstring
