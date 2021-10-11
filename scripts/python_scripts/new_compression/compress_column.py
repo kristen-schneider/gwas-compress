@@ -10,6 +10,7 @@ from utils import encode_as_int
 from utils import encode_as_float
 import serialize_body
 import compress
+import offset_pos
 
 
 serialized_codecs = ['gzip', 'zlib', 'bz2']
@@ -23,9 +24,15 @@ def column_compression_main(column_i, column, column_codec,
     column_i_START = datetime.now()
     column_i_STRING_SIZE = sys.getsizeof(column_i)
     m = calculate_size.get_ff_column_size(column)
+    offset_value = None
     # 1. convert column to compression data type
     if curr_compression_data_type == 1:
         typed_column = encode_as_int.encode_column_as_int(column, curr_decompression_data_type)
+        # if columns are pos
+        if column_i == 1:
+            offset_info = offset_pos.make_offset_column(typed_column)
+            offset_value = offset_info[0] 
+            typed_column = offset_info[1]
     elif curr_compression_data_type == 2:
         typed_column = encode_as_float.encode_column_as_float(column, curr_decompression_data_type)
     elif curr_compression_data_type == 3:
@@ -34,6 +41,8 @@ def column_compression_main(column_i, column, column_codec,
     else:
         print('unrecognized input data type for type conversion: ', curr_compression_data_type)
     column_i_TYPED_SIZE = sys.getsizeof(typed_column)
+
+
     # 2. compress column according to compression method (serialized vs numpy)
     if column_codec in serialized_codecs:
         compressed_column_bitstring = compress_serialized(typed_column, column_codec, curr_compression_data_type, column_data_type_byte_sizes)
@@ -58,7 +67,7 @@ def column_compression_main(column_i, column, column_codec,
     print(column_codec, "col"+str(column_i), 'compressed_size', n)
     print(column_codec, "col"+str(column_i), 'uncompressed_string', m) 
     #print(column, typed_column, compressed_column_bitstring)
-    return compressed_column_bitstring
+    return offset_value, compressed_column_bitstring
 
 def compress_serialized(typed_column, column_codec, compression_data_type, column_num_bytes):
     """

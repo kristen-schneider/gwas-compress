@@ -31,10 +31,10 @@ OUT_DIR = args['out_dir']
 BLOCK_SIZE = int(args['block_size'])
 CODECS_LIST = list(args['compression_method'].split(','))
 COMPRESSION_DATA_TYPES=list(args['input_data_type'].split(','))
-DECOMPRESSION_START=0
-DECOMPRESSION_END=1000000
-#DECOMPRESSION_START = int(args['decompression_start'])
-#DECOMPRESSION_END = int(args['decompression_end'])
+#DECOMPRESSION_START=0
+#DECOMPRESSION_END=1000000
+DECOMPRESSION_START = int(args['decompression_start'])
+DECOMPRESSION_END = int(args['decompression_end'])
 DATA_TYPE_BYTE_SIZES = {1:int(args['int_byte_size']),
                         2:int(args['float_byte_size']),
                         3:int(args['string_byte_size']),
@@ -69,6 +69,7 @@ def main():
     num_blocks_to_decompress = query_blocks[1]-query_blocks[0]+1
     start_end_index = search.block_row_mapping(query_blocks, BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)
     #block_decomp_index = search.make_block_start_end_list(num_blocks_to_decompress, BLOCK_SIZE, start_end_index[0], start_end_index[1])
+    print(query_blocks)
     blocks = range(query_blocks[0], query_blocks[1]+1)
     for b in range(num_blocks_to_decompress):
         # 2. RETRIEVING COMPRESSED ROWS DECOMPRESSION_START to DECOMPRESSION_END
@@ -133,15 +134,15 @@ def main():
                     reduced_columns[c] = short_col
 
         reduced_rows = search.make_into_rows(reduced_columns)
+        print(reduced_columns)
+        #print(list(reduced_rows))
+        #for r in list(reduced_rows): print(r)
+        for r in reduced_rows: print(r)
+    # if 'int' in COMPRESSION_STYLE:
+    #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
     file_end = datetime.now()
     file_TIME = file_end-file_start
     print('file', 'full_time',file_TIME)
-        #print(reduced_columns)
-        #print(list(reduced_rows))
-        #for r in list(reduced_rows): print(r)
-        #for r in reduced_rows: print(r)
-    # if 'int' in COMPRESSION_STYLE:
-    #     dc_single_block = decompression_worker.decompress_single_block_int(CODECS_LIST, compressed_block_info,
     #                                                                        full_header, DATA_TYPE_BYTE_SIZES)
     # elif 'all' in COMPRESSION_STYLE:
     #     print('all data types')
@@ -164,10 +165,10 @@ def main():
     # print(str(single_column_TIME) + ' for decompressing single column to compute...\n')
 
 if __name__ == "__main__":
-    import cProfile, pstats
-    profiler = cProfile.Profile()
-    profiler.enable()
+    #import cProfile, pstats
+    #profiler = cProfile.Profile()
+    #profiler.enable()
     main()
-    profiler.disable()
-    stats = pstats.Stats(profiler).sort_stats('cumtime')
-    stats.print_stats()
+    #profiler.disable()
+    #stats = pstats.Stats(profiler).sort_stats('cumtime')
+    #stats.print_stats()
