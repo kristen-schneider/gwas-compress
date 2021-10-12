@@ -85,7 +85,7 @@ def compress_all_blocks(CODECS_LIST, COMPRESSION_DATA_TYPES, DATA_TYPE_BYTE_SIZE
 
     if len(block_sizes) < 2:
         #block_sizes.append(curr_block_size)
-        block_sizes.append(0)
+        block_sizes.append(curr_block_size)
 
     header_second_half = [block_header_ends, block_ends, block_sizes]
     return all_compressed_data,header_second_half

@@ -122,7 +122,7 @@ def main():
                 block_start_index = 0
                 block_end_index = BLOCK_SIZE
             
-            
+        print(decompressed_block)    
         reduced_columns = search.find_rows(decompressed_block, block_start_index, block_end_index)
         
         # for packed strings

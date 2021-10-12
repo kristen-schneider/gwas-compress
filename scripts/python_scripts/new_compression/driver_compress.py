@@ -107,6 +107,7 @@ def main():
                                                                     config_file.split('/')[-1].split('_')[0])
     compressed_data = header_second_half_info[0]
     header_second_half = header_second_half_info[1]
+    print(header_second_half)
     ############
     compress_data_END = datetime.now()
     compress_data_TIME = compress_data_END - compress_data_START
