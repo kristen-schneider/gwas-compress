@@ -58,7 +58,7 @@ def main():
     full_header_end = datetime.now()
     full_header_TIME = full_header_end-full_header_start
     print('file','full_header',full_header_TIME)
-    print(full_header_bytes) 
+    print(full_header) 
     # 2. RETRIVEING BLOCKS TO DECOMPRESS
     query_blocks_start = datetime.now()
     query_blocks = search.find_blocks(BLOCK_SIZE, DECOMPRESSION_START, DECOMPRESSION_END)

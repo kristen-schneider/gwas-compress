@@ -36,9 +36,12 @@ def compress_block(block, codecs_list, COMPRESSION_DATA_TYPES, DECOMPRESSION_DAT
     # block_header_bitstring = compress_column.column_compression_main(col_ends, block_header_codec,
     #                                                              1, 1, data_type_byte_sizes[1])
      
-    block_header.append(col_ends)
-    pos_offset_value_serialized = block_header[0].to_bytes(data_type_byte_sizes[1], byteorder='big', signed=True)
-    col_ends_serialized = serialize_body.serialize_list(col_ends, 1, data_type_byte_sizes[1])
-    block_header_serialized = pos_offset_value_serialized + col_ends_serialized
+    for c in col_ends: block_header.append(c)
+    print(block_header)
+    #block_header.append(col_ends)
+    #pos_offset_value_serialized = block_header[0].to_bytes(data_type_byte_sizes[1], byteorder='big', signed=True)
+    #col_ends_serialized = serialize_body.serialize_list(col_ends, 1, data_type_byte_sizes[1])
+    #block_header_serialized = pos_offset_value_serialized + col_ends_serialized
+    block_header_serialized = serialize_body.serialize_list(block_header, 1, data_type_byte_sizes[1])
     block_header_bitstring = compress.compress_bitstring(block_header_serialized, block_header_codec)
     return block_header_bitstring, block_bitstring

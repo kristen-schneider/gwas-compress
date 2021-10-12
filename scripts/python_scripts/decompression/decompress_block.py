@@ -42,15 +42,13 @@ def get_compressed_block_data(query_block_i, full_header,
     else:
         query_block_num_rows = block_sizes[1]
 
-    print(datetime.now())
     with open(compressed_file, 'rb') as r_file:
         all_compressed_data = r_file.read()
     r_file.close()
-    print(datetime.now())
 
     header_data = all_compressed_data[0:full_header_bytes]
     content_compressed_data = all_compressed_data[full_header_bytes:]
-    print(datetime.now())
+    
     # get correct block header and decompress and deserialize
     if query_block_i != 0:
         try:
@@ -61,8 +59,11 @@ def get_compressed_block_data(query_block_i, full_header,
         query_block_header_start = 0
     query_block_header_end = block_header_ends[query_block_i]
     query_block_header_bytes = content_compressed_data[query_block_header_start:query_block_header_end]
+    #pos_offset_bytes = query_block_header_bytes[0:4]
+    #dc_pos_offset_value = decompress.decompress_data(header_compression_type, pos_offset_bytes, 1) 
+    #print(dc_pos_offset_value)
     dc_query_block_header = decompress_column.decompress_single_column_standard(query_block_header_bytes,
-                                                                                num_columns,
+                                                                                num_columns + 1,
                                                                                 1, 1, data_type_byte_sizes[1], 0,
                                                                                 header_compression_type)
 
@@ -72,12 +73,18 @@ def get_compressed_block_data(query_block_i, full_header,
             query_block_num_rows]
 
 def decompress_single_block(dc_block_header, compessed_block, COMPRESSION_DATA_TYPES, decompression_data_types, query_block_num_rows, data_type_byte_sizes, codecs_list):
-    num_columns = len(dc_block_header)
+    
+    print(dc_block_header)
+    pos_offset_value = dc_block_header[0]
+    col_ends = dc_block_header[1:]
+    num_columns = len(col_ends)
+    print(pos_offset_value,col_ends)
+    
     dc_block = []
     start = 0
     for i in range(num_columns):
         decompress_column_start = datetime.now()
-        end = dc_block_header[i]
+        end = col_ends[i]
         col_compression_data_type = int(COMPRESSION_DATA_TYPES[i])
         col_decompression_data_type = int(decompression_data_types[i]) 
         compressed_column = compessed_block[start:end]
