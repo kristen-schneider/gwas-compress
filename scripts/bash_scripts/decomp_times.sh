@@ -1,7 +1,7 @@
 config_dir='/home/krsc0813/projects/gwas-compress/config_files/'
 decompression_dir='/home/krsc0813/projects/gwas-compress/scripts/python_scripts/decompression/'
-compressed_out_data='/home/krsc0813/projects/gwas-compress/gwas_files/out/full_file/'
-decompression_times_data='/home/krsc0813/projects/gwas-compress/plot_data/out/decompression_data/full_file_all_times/'
+compressed_out_data='/home/krsc0813/projects/gwas-compress/gwas_files/out/offset/'
+decompression_times_data='/home/krsc0813/projects/gwas-compress/plot_data/out/decompression_data/full_file_all_times/offset/'
 
 full_file='/home/krsc0813/projects/gwas-compress/gwas_files/in/prescriptions-thiamine-both_sexes_copy.tsv'
 full_file_gz='/home/krsc0813/projects/gwas-compress/gwas_files/in/prescriptions-thiamine-both_sexes_copy.tsv.gz'

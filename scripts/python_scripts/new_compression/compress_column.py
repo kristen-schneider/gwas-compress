@@ -35,6 +35,10 @@ def column_compression_main(column_i, column, column_codec,
             typed_column = offset_info[1]
     elif curr_compression_data_type == 2:
         typed_column = encode_as_float.encode_column_as_float(column, curr_decompression_data_type)
+        if column_i == 1:
+            offset_info = offset_pos.make_offset_column(typed_column)
+            offset_value = offset_info[0]
+            typed_column = offset_info[1] 
     elif curr_compression_data_type == 3:
         # funnel format data is read in as a string. all columns are strings by default.
         typed_column = column

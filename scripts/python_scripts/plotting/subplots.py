@@ -14,12 +14,6 @@ def main():
     s, t = get_dict_data(data_dir, col_groupings)
     uncompressed_data = get_size_uncompressed(uncompressed_file_sizes)
     plot_subplots(s, t, title, uncompressed_data)
-#def get_times():
-
-
-
-#def get_sizes():
-
 
 def get_dict_data(data_dir, col_groupings):
     col_groupings_data_sizes = {'chr':None,'pos':None,'ref/alt':None,'floats':None,'t/f':None} 
@@ -152,7 +146,6 @@ def get_size_data(f_path):
         try: config_sizes_dict[config].append(size)
         except KeyError: config_sizes_dict[config] = [size]
     return config_sizes_dict
-
 
 def get_time_data(f_path):
     f_open = open(f_path, 'r')

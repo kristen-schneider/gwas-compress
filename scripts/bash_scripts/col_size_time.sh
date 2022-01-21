@@ -1,6 +1,6 @@
-all_compression_dir='/home/krsc0813/projects/gwas-compress/plot_data/out/compression_data/all_data/full_file/'
-all_decompression_dir='/home/krsc0813/projects/gwas-compress/plot_data/out/decompression_data/full_file_all_times/'
-col_types_dir='/home/krsc0813/projects/gwas-compress/plot_data/out/data_by_columns/full_file/'
+all_compression_dir='/home/krsc0813/projects/gwas-compress/plot_data/out/compression_data/all_data/full_file/offset/'
+all_decompression_dir='/home/krsc0813/projects/gwas-compress/plot_data/out/decompression_data/full_file_all_times/offset/'
+col_types_dir='/home/krsc0813/projects/gwas-compress/plot_data/out/data_by_columns/full_file/offset/'
 
 for compression_data_file in `ls $all_compression_dir`
 do

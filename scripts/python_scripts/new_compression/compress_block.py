@@ -22,11 +22,15 @@ def compress_block(block, codecs_list, COMPRESSION_DATA_TYPES, DECOMPRESSION_DAT
         curr_data_type_byte_sizes = data_type_byte_sizes[curr_compression_data_type]
 
         
-        compressd_column_info = compress_column.column_compression_main(column_i, curr_column, curr_codec, curr_compression_data_type, curr_decompression_data_type, curr_data_type_byte_sizes, config_file_name)
-        pos_offset_value = compressd_column_info[0]
-        if pos_offset_value != None:
-            block_header.append(pos_offset_value)
-        compressed_column_bitstring = compressd_column_info[1]
+        compressed_column_info = compress_column.column_compression_main(column_i, curr_column, curr_codec, curr_compression_data_type, curr_decompression_data_type, curr_data_type_byte_sizes, config_file_name)
+        try: pos_offset_value = int(compressed_column_info[0])
+        except TypeError:
+            pos_offset_value = None
+        if pos_offset_value is not None:
+            block_header.append(0)
+            #withoffset
+            #block_header.append(pos_offset_value)
+        compressed_column_bitstring = compressed_column_info[1]
         
         # append column info to block info
         column_end += len(compressed_column_bitstring)
@@ -37,7 +41,6 @@ def compress_block(block, codecs_list, COMPRESSION_DATA_TYPES, DECOMPRESSION_DAT
     #                                                              1, 1, data_type_byte_sizes[1])
      
     for c in col_ends: block_header.append(c)
-    print(block_header)
     #block_header.append(col_ends)
     #pos_offset_value_serialized = block_header[0].to_bytes(data_type_byte_sizes[1], byteorder='big', signed=True)
     #col_ends_serialized = serialize_body.serialize_list(col_ends, 1, data_type_byte_sizes[1])
